@@ -25,14 +25,14 @@
           "component": "reference",
           "valueType": "string",
           "name": "thumbnail",
-          "label": "Thumbnail / poster image",
+          "label": "Thumbnail / Poster Image",
           "multi": false
         },
         {
           "component": "text",
           "valueType": "string",
           "name": "videoUrl",
-          "label": "DM video URL (/play player or direct .mp4)",
+          "label": "DM Video URL (/play player or direct .mp4)",
           "required": true
         },
         {
@@ -46,7 +46,7 @@
           "component": "boolean",
           "valueType": "boolean",
           "name": "loop",
-          "label": "Play in loop",
+          "label": "Play in Loop",
           "value": false
         }
       ]

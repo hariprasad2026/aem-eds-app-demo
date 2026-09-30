@@ -21,5 +21,6 @@ module.exports = {
     'xwalk/max-cells': ['error', {
       '*': 20,
     }],
+    'xwalk/no-orphan-collapsible-fields': 'off',
   },
 };

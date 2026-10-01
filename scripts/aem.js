@@ -638,50 +638,23 @@ function decorateBlocks(main) {
 // }
 
 async function loadHeader(header) {
-  const pageHeaderBlock = document.querySelector('main .tarun-header');
-  if (pageHeaderBlock) return;
-
-  const headerPath = (getMetadata('header') || '/blocks/tarun-header')
-    .replace(/(\.plain)?\.html$/, '');
-
-  const resp = await fetch(`${headerPath}.plain.html`);
+  const resp = await fetch('/blocks/tarun-header.plain.html');
 
   if (!resp.ok) {
-    // eslint-disable-next-line no-console
-    console.log('Failed to load header:', resp.status, resp.statusText);
     return;
   }
 
   const html = await resp.text();
-  const fragment = new DOMParser().parseFromString(html, 'text/html');
 
-  const headerBlock = fragment.querySelector('.tarun-header');
+  header.innerHTML = html;
 
-  if (!headerBlock) {
-    // eslint-disable-next-line no-console
-    console.error(`Header block not found in ${headerPath}`);
-    return;
+  const headerBlock = header.querySelector('.tarun-header');
+
+  if (headerBlock) {
+    decorateBlock(headerBlock);
+    await loadBlock(headerBlock);
   }
-
-  header.replaceChildren(document.importNode(headerBlock, true));
-
-  const resetMediaPath = (selector, attribute) => {
-    header.querySelectorAll(`${selector}[${attribute}^="./media_"]`).forEach((element) => {
-      const fragmentUrl = new URL(headerPath, window.location);
-      element[attribute] = new URL(element.getAttribute(attribute), fragmentUrl).href;
-    });
-  };
-
-  resetMediaPath('img', 'src');
-  resetMediaPath('source', 'srcset');
-
-  const loadedHeaderBlock = header.querySelector('.tarun-header');
-
-  decorateBlock(loadedHeaderBlock);
-  await loadBlock(loadedHeaderBlock);
 }
-
-export default loadHeader;
 
 /**
  * Loads a block named 'footer' into footer

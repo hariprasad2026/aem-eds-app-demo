@@ -8,7 +8,9 @@
           "page": {
             "resourceType": "core/franklin/components/button/v1/button",
             "template": {
-              "model": "button"
+              "model": "button",
+              "linkType": "primary",
+              "buttonStyle": "boxed"
             }
           }
         }
@@ -40,16 +42,40 @@
           "label": "Type",
           "options": [
             {
-              "name": "default",
+              "name": "Default",
               "value": ""
             },
             {
-              "name": "primary",
+              "name": "Primary",
               "value": "primary"
             },
             {
-              "name": "secondary",
+              "name": "Secondary",
               "value": "secondary"
+            },
+            {
+              "name": "Accent",
+              "value": "accent"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "buttonStyle",
+          "label": "Button style",
+          "value": "boxed",
+          "options": [
+            {
+              "name": "Box style",
+              "value": "boxed"
+            },
+            {
+              "name": "Without box",
+              "value": "no-box"
+            },
+            {
+              "name": "Curved box",
+              "value": "curved"
             }
           ]
         }

@@ -676,11 +676,6 @@ async function loadHeader(header) {
   resetMediaPath('source', 'srcset');
 
   const loadedHeaderBlock = header.querySelector('.tarun-header');
-  if (!loadedHeaderBlock) {
-    // eslint-disable-next-line no-console
-    console.error(`Loaded header block not found in ${headerPath}`);
-    return;
-  }
 
   decorateBlock(loadedHeaderBlock);
   await loadBlock(loadedHeaderBlock);

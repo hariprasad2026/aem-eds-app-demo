@@ -29,6 +29,7 @@
       "fragment",
       "hero",
       "industry-list",
+      "modal-v1",
       "quote",
       "search",
       "spotlight",
@@ -81,7 +82,11 @@
       "image",
       "button",
       "title",
-      "demo-card-column"
+      "demo-card-column",
+      "cards",
+      "dm-video",
+      "quote",
+      "text-with-link"
     ]
   },
   {

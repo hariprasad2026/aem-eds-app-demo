@@ -71,7 +71,11 @@
         "image",
         "button",
         "title",
-        "demo-card-column"
+        "demo-card-column",
+        "cards",
+        "dm-video",
+        "quote",
+        "text-with-link"
       ]
     }
   ]

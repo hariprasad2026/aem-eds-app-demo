@@ -1850,6 +1850,147 @@
     ]
   },
   {
+    "id": "modal-v1",
+    "fields": [
+      {
+        "component": "select",
+        "name": "variant",
+        "label": "Modal Variation",
+        "valueType": "string",
+        "value": "default",
+        "required": true,
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Image",
+            "value": "image"
+          },
+          {
+            "name": "Video",
+            "value": "video"
+          },
+          {
+            "name": "Content",
+            "value": "content"
+          },
+          {
+            "name": "Small",
+            "value": "small"
+          },
+          {
+            "name": "Large",
+            "value": "large"
+          },
+          {
+            "name": "Full Screen",
+            "value": "full-screen"
+          },
+          {
+            "name": "Right / Side",
+            "value": "side"
+          },
+          {
+            "name": "CTA",
+            "value": "cta"
+          },
+          {
+            "name": "Confirmation",
+            "value": "confirmation"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Description",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "eyebrow",
+        "label": "Eyebrow",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Content",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "video",
+        "label": "Video URL",
+        "description": "URL of the video or embedded media.",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "cta1Text",
+        "label": "Primary CTA Text",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "cta1",
+        "label": "Primary CTA Link",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "cta2Text",
+        "label": "Secondary CTA Text",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "cta2",
+        "label": "Secondary CTA Link",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "closeLabel",
+        "label": "Close Button Label",
+        "valueType": "string",
+        "value": "Close"
+      },
+      {
+        "component": "text",
+        "name": "triggerText",
+        "label": "Trigger Text",
+        "description": "Text displayed on the button that opens the modal.",
+        "valueType": "string",
+        "value": "Open Modal"
+      }
+    ]
+  },
+  {
     "id": "quote",
     "fields": [
       {

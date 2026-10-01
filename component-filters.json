@@ -19,6 +19,8 @@
       "cards",
       "carousel",
       "columns",
+      "demo-card-column",
+      "dm-scene7-template",
       "dm-video",
       "embedv1",
       "tarun-header",
@@ -72,7 +74,14 @@
       "text",
       "image",
       "button",
-      "title"
+      "title",
+      "demo-card-column"
+    ]
+  },
+  {
+    "id": "demo-card-column",
+    "components": [
+      "demo-card-column-item"
     ]
   },
   {

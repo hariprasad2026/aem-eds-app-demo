@@ -48,6 +48,20 @@
           "name": "loop",
           "label": "Play in Loop",
           "value": false
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "controls",
+          "label": "Show Controls",
+          "value": true
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "muted",
+          "label": "Muted",
+          "value": false
         }
       ]
     }

@@ -165,9 +165,9 @@ export default function decorate(block) {
 
   const loop = getAuthoredBoolean(block, 'loop', rows[3]);
 
-  const controls = rows.length > 4 ? getAuthoredBoolean(block, 'controls', rows[4]) : true;
+  const controls = getAuthoredBoolean(block, 'controls', rows[4]);
 
-  const muted = rows.length > 5 ? getAuthoredBoolean(block, 'muted', rows[5]) : false;
+  const muted = getAuthoredBoolean(block, 'muted', rows[5]);
 
   if (!rawVideoUrl) {
     return;

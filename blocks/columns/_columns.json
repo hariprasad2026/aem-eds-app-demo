@@ -70,7 +70,8 @@
         "text",
         "image",
         "button",
-        "title"
+        "title",
+        "demo-card-column"
       ]
     }
   ]

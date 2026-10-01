@@ -2627,94 +2627,65 @@
     ]
   },
   {
-    "id": "embedv1",
+    "id": "tarun-header",
     "fields": [
       {
         "component": "select",
-        "name": "type",
-        "label": "Embed Type",
-        "required": true,
+        "valueType": "string",
+        "name": "headerVariant",
+        "label": "Header Variant",
+        "value": "standard",
         "options": [
           {
-            "name": "Iframe",
-            "value": "iframe"
+            "name": "Standard",
+            "value": "standard"
           },
           {
-            "name": "YouTube",
-            "value": "youtube"
+            "name": "Compact",
+            "value": "compact"
           },
           {
-            "name": "Vimeo",
-            "value": "vimeo"
+            "name": "Dark",
+            "value": "dark"
           },
           {
-            "name": "Generic",
-            "value": "generic"
+            "name": "Centered",
+            "value": "centered"
           }
         ]
       },
       {
-        "component": "text",
+        "component": "reference",
         "valueType": "string",
-        "name": "url",
-        "label": "Embed URL",
-        "required": true
+        "name": "tcsLogo",
+        "label": "TCS Logo Image"
       },
       {
-        "component": "text",
+        "component": "text-input",
         "valueType": "string",
-        "name": "title",
-        "label": "Title"
+        "name": "tcsLogoLink",
+        "label": "TCS Logo Target URL",
+        "value": "/"
       },
       {
-        "component": "textarea",
+        "component": "reference",
         "valueType": "string",
-        "name": "caption",
-        "label": "Caption"
+        "name": "tataLogo",
+        "label": "Tata Logo Image"
       },
       {
-        "component": "select",
-        "name": "alignment",
-        "label": "Alignment",
-        "value": "center",
-        "options": [
-          {
-            "name": "Left",
-            "value": "left"
-          },
-          {
-            "name": "Center",
-            "value": "center"
-          },
-          {
-            "name": "Right",
-            "value": "right"
-          }
-        ]
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tataLogoLink",
+        "label": "Tata Logo Target URL",
+        "value": "https://www.tata.com"
       },
       {
-        "component": "select",
-        "name": "size",
-        "label": "Size",
-        "value": "large",
-        "options": [
-          {
-            "name": "Small",
-            "value": "small"
-          },
-          {
-            "name": "Medium",
-            "value": "medium"
-          },
-          {
-            "name": "Large",
-            "value": "large"
-          },
-          {
-            "name": "Full Width",
-            "value": "full-width"
-          }
-        ]
+        "component": "richtext",
+        "valueType": "string",
+        "name": "menu",
+        "label": "Navigation Links",
+        "description": "Add top-level links or a bulleted list for submenus."
       }
     ]
   },

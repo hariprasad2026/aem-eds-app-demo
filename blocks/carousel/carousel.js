@@ -1,5 +1,5 @@
 import { moveInstrumentation } from '../../scripts/scripts.js';
-import fetchPlaceholders from '../../scripts/placeholders.js';
+import { fetchPlaceholders } from '../../scripts/placeholders.js';
 import showSlide from '../../scripts/carousel-support.js';
 
 function updateActiveSlide(slide) {

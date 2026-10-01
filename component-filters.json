@@ -119,13 +119,6 @@
     }
   },
   {
-    "id": "spotlight",
-    "components": [
-      "spotlight-header",
-      "spotlight-card"
-    ]
-  },
-  {
     "id": "table",
     "components": [
       "table-row"

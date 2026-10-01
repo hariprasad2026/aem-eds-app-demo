@@ -742,51 +742,6 @@
           }
         },
         {
-          "title": "Spotlight",
-          "id": "spotlight",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Spotlight",
-                  "filter": "spotlight"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Spotlight Header",
-          "id": "spotlight-header",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "Spotlight Header",
-                  "model": "spotlight-header"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Spotlight Card",
-          "id": "spotlight-card",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "Spotlight Card",
-                  "model": "spotlight-card"
-                }
-              }
-            }
-          }
-        },
-        {
           "title": "Table",
           "id": "table",
           "plugins": {

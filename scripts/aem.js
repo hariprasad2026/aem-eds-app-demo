@@ -618,24 +618,70 @@ function decorateBlocks(main) {
 //   return loadBlock(headerBlock);
 // }
 
+// async function loadHeader(header) {
+//   const resp = await fetch('/header-v1.plain.html');
+
+//   if (!resp.ok) {
+//     return;
+//   }
+
+//   const html = await resp.text();
+
+//   header.innerHTML = html;
+
+//   const headerBlock = header.querySelector('.headerv1');
+
+//   if (headerBlock) {
+//     decorateBlock(headerBlock);
+//     await loadBlock(headerBlock);
+//   }
+// }
+
 async function loadHeader(header) {
-  const resp = await fetch('/header-v1.plain.html');
+  const pageHeaderBlock = document.querySelector('main .tharun-header');
+  if (pageHeaderBlock) return;
+
+  const headerPath = (getMetadata('header') || '/blocks/tharun-header')
+    .replace(/(\.plain)?\.html$/, '');
+
+  const resp = await fetch(`${headerPath}.plain.html`);
 
   if (!resp.ok) {
+    // eslint-disable-next-line no-console
+    console.log('Failed to load header:', resp.status, resp.statusText);
     return;
   }
 
   const html = await resp.text();
+  const fragment = new DOMParser().parseFromString(html, 'text/html');
 
-  header.innerHTML = html;
+  const headerBlock = fragment.querySelector('.tharun-header');
 
-  const headerBlock = header.querySelector('.headerv1');
-
-  if (headerBlock) {
-    decorateBlock(headerBlock);
-    await loadBlock(headerBlock);
+  if (!headerBlock) {
+    // eslint-disable-next-line no-console
+    console.error(`Header block not found in ${headerPath}`);
+    return;
   }
+
+  header.replaceChildren(document.importNode(headerBlock, true));
+
+  const resetMediaPath = (selector, attribute) => {
+    header.querySelectorAll(`${selector}[${attribute}^="./media_"]`).forEach((element) => {
+      const fragmentUrl = new URL(headerPath, window.location);
+      element[attribute] = new URL(element.getAttribute(attribute), fragmentUrl).href;
+    });
+  };
+
+  resetMediaPath('img', 'src');
+  resetMediaPath('source', 'srcset');
+
+  const loadedHeaderBlock = header.querySelector('.tharun-header');
+
+  decorateBlock(loadedHeaderBlock);
+  await loadBlock(loadedHeaderBlock);
 }
+
+export default loadHeader;
 
 /**
  * Loads a block named 'footer' into footer

@@ -1,1 +1,206 @@
-/* stylelint-disable no-empty-source */
+/* Hero Fragment */
+
+/* Style tab classes copied over from the source hero block (see fragment.js
+   applyHeroStyleClasses). Mirrors the color options defined in hero.css. */
+.hero-fragment.hero-bg-black,
+.hero-fragment.hero-bg-white,
+.hero-fragment.hero-bg-dark-gray,
+.hero-fragment.hero-bg-brand-red,
+.hero-fragment.hero-bg-brand-blue {
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.hero-fragment.hero-bg-black {
+  background-color: #000;
+}
+
+.hero-fragment.hero-bg-white {
+  background-color: #fff;
+}
+
+.hero-fragment.hero-bg-dark-gray {
+  background-color: #1a1a1a;
+}
+
+.hero-fragment.hero-bg-brand-red {
+  background-color: #c00;
+}
+
+.hero-fragment.hero-bg-brand-blue {
+  background-color: #0b5fff;
+}
+
+.hero-fragment.hero-text-white {
+  color: #fff;
+}
+
+.hero-fragment.hero-text-black {
+  color: #000;
+}
+
+.hero-fragment-image-text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.hero-fragment-media {
+  flex: 1;
+  width: 100%;
+}
+
+.hero-fragment-media picture,
+.hero-fragment-media img {
+  width: 100%;
+  display: block;
+  border-radius: 12px;
+}
+
+.hero-fragment-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hero-fragment-content .hero-title {
+  margin: 0;
+}
+
+.hero-fragment-content .hero-description {
+  margin: 0;
+}
+
+.hero-fragment-content .hero-link,
+.hero-fragment-content .hero-button {
+  display: inline-flex;
+  width: fit-content;
+}
+
+/* Text Only */
+
+.hero-fragment-text-only {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hero-fragment-text-only .hero-title {
+  margin: 0;
+}
+
+.hero-fragment-text-only .hero-description {
+  margin: 0;
+}
+
+.hero-fragment-text-only .hero-link,
+.hero-fragment-text-only .hero-button {
+  margin: 0 auto;
+}
+
+/* Desktop */
+
+@media (width >= 900px) {
+  .hero-fragment-image-text {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .hero-fragment-media,
+  .hero-fragment-content {
+    flex: 1;
+  }
+
+  .hero-fragment-media {
+    max-width: 50%;
+  }
+
+  .hero-fragment-content {
+    max-width: 50%;
+  }
+}
+
+.hero-fragment-bg-image {
+  min-height: 350px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 12px;
+}
+
+/* Without Media */
+
+.hero-fragment-without-media {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hero-fragment-without-media .hero-title {
+  margin: 0;
+}
+
+.hero-fragment-without-media .hero-description {
+  margin: 0;
+}
+
+.hero-fragment-without-media .hero-link,
+.hero-fragment-without-media .hero-button,
+.hero-fragment-without-media .hero-button-primary,
+.hero-fragment-without-media .hero-button-secondary,
+.hero-fragment-without-media .hero-banner-link {
+  width: fit-content;
+}
+
+/* Button Color Styles - MUST COME AFTER BUTTON BASE STYLES */
+
+.hero-fragment.hero-button-color-white .hero-button,
+.hero-fragment.hero-button-color-white .hero-button-primary {
+  background: #fff;
+  color: #000;
+}
+
+.hero-fragment.hero-button-color-black .hero-button,
+.hero-fragment.hero-button-color-black .hero-button-primary {
+  background: #000;
+  color: #fff;
+}
+
+.hero-fragment.hero-button-color-brand-red .hero-button,
+.hero-fragment.hero-button-color-brand-red .hero-button-primary {
+  background: #c00;
+  color: #fff;
+}
+
+.hero-fragment.hero-button-color-brand-blue .hero-button,
+.hero-fragment.hero-button-color-brand-blue .hero-button-primary {
+  background: #0b5fff;
+  color: #fff;
+}
+
+.hero-fragment.hero-button-color-white .hero-button-secondary {
+  border-color: #fff;
+  color: #fff;
+}
+
+.hero-fragment.hero-button-color-black .hero-button-secondary {
+  border-color: #000;
+  color: #000;
+}
+
+.hero-fragment.hero-button-color-brand-red .hero-button-secondary {
+  border-color: #c00;
+  color: #c00;
+}
+
+.hero-fragment.hero-button-color-brand-blue .hero-button-secondary {
+  border-color: #0b5fff;
+  color: #0b5fff;
+}

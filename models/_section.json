@@ -55,13 +55,17 @@
         "carousel",
         "columns",
         "dm-video",
-        "footer-sai",
+        "embedv1",
         "fragment",
         "hero",
         "industry-list",
+        "quote",
         "search",
         "spotlight",
-        "tabs-new"
+        "table",
+        "tabs-new",
+        "teaser-v2",
+        "text-with-link"
       ]
     }
   ]

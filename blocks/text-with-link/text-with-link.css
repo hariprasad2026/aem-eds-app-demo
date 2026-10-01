@@ -1,0 +1,283 @@
+.textwithlink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px;
+  background-color: #fff;
+}
+
+.textwithlink-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex: 1;
+}
+
+.textwithlink-title {
+  flex-shrink: 0;
+}
+
+.textwithlink-title h1,
+.textwithlink-title h2,
+.textwithlink-title h3,
+.textwithlink-title h4,
+.textwithlink-title p {
+  margin: 0;
+  font-family: inherit;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.03em;
+  color: #222;
+}
+
+.textwithlink-description {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: -0.005em;
+  color: #222;
+  white-space: nowrap;
+}
+
+.textwithlink-link {
+  margin-left: 20px;
+}
+
+.textwithlink-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #222;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.005em;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+.textwithlink-link a:link,
+.textwithlink-link a:visited,
+.textwithlink-link a:hover,
+.textwithlink-link a:focus,
+.textwithlink-link a:active {
+  color: #222;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+.textwithlink-link a *,
+.textwithlink-link a:link *,
+.textwithlink-link a:visited *,
+.textwithlink-link a:hover *,
+.textwithlink-link a:focus *,
+.textwithlink-link a:active * {
+  text-decoration: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+.link-text,
+.link-text:hover,
+.link-text:focus,
+.link-text:active {
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+.arrow,
+.arrow:hover,
+.arrow:focus,
+.arrow:active {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  margin-left: 2px;
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+.textwithlink.dark-navy {
+  background-color: rgb(32 41 60 / 100%);
+}
+
+.textwithlink.royal-blue {
+  background-color: rgb(70 115 219 / 100%);
+}
+
+.textwithlink.light-grey {
+  background-color: rgb(217 217 217 / 100%);
+}
+
+.textwithlink.white {
+  background-color: rgb(255 255 255 / 100%);
+}
+
+.textwithlink.black {
+  background-color: rgb(12 12 13 / 100%);
+}
+
+.textwithlink.off-white {
+  background-color: rgb(245 245 245 / 100%);
+}
+
+.textwithlink.dark-grey {
+  background-color: rgb(90 90 90 / 100%);
+}
+
+.textwithlink.light-blue {
+  background-color: rgb(167 200 241 / 100%);
+}
+
+/* White text for dark backgrounds */
+
+.textwithlink.dark-navy .textwithlink-title,
+.textwithlink.dark-navy .textwithlink-title *,
+.textwithlink.dark-navy .textwithlink-description,
+.textwithlink.dark-navy .textwithlink-link a,
+.textwithlink.dark-navy .link-text,
+.textwithlink.dark-navy .arrow,
+
+.textwithlink.royal-blue .textwithlink-title,
+.textwithlink.royal-blue .textwithlink-title *,
+.textwithlink.royal-blue .textwithlink-description,
+.textwithlink.royal-blue .textwithlink-link a,
+.textwithlink.royal-blue .link-text,
+.textwithlink.royal-blue .arrow,
+
+.textwithlink.black .textwithlink-title,
+.textwithlink.black .textwithlink-title *,
+.textwithlink.black .textwithlink-description,
+.textwithlink.black .textwithlink-link a,
+.textwithlink.black .link-text,
+.textwithlink.black .arrow,
+
+.textwithlink.dark-grey .textwithlink-title,
+.textwithlink.dark-grey .textwithlink-title *,
+.textwithlink.dark-grey .textwithlink-description,
+.textwithlink.dark-grey .textwithlink-link a,
+.textwithlink.dark-grey .link-text,
+.textwithlink.dark-grey .arrow {
+  color: #fff !important;
+}
+
+/* Text Colors */
+
+.textwithlink.dark-navy-text,
+.textwithlink.dark-navy-text .textwithlink-title,
+.textwithlink.dark-navy-text .textwithlink-title *,
+.textwithlink.dark-navy-text .textwithlink-description,
+.textwithlink.dark-navy-text .textwithlink-link a,
+.textwithlink.dark-navy-text .link-text,
+.textwithlink.dark-navy-text .arrow {
+  color: rgb(32 41 60 / 100%) !important;
+}
+
+.textwithlink.royal-blue-text,
+.textwithlink.royal-blue-text .textwithlink-title,
+.textwithlink.royal-blue-text .textwithlink-title *,
+.textwithlink.royal-blue-text .textwithlink-description,
+.textwithlink.royal-blue-text .textwithlink-link a,
+.textwithlink.royal-blue-text .link-text,
+.textwithlink.royal-blue-text .arrow {
+  color: rgb(70 115 219 / 100%) !important;
+}
+
+.textwithlink.light-grey-text,
+.textwithlink.light-grey-text .textwithlink-title,
+.textwithlink.light-grey-text .textwithlink-title *,
+.textwithlink.light-grey-text .textwithlink-description,
+.textwithlink.light-grey-text .textwithlink-link a,
+.textwithlink.light-grey-text .link-text,
+.textwithlink.light-grey-text .arrow {
+  color: rgb(217 217 217 / 100%) !important;
+}
+
+.textwithlink.white-text,
+.textwithlink.white-text .textwithlink-title,
+.textwithlink.white-text .textwithlink-title *,
+.textwithlink.white-text .textwithlink-description,
+.textwithlink.white-text .textwithlink-link a,
+.textwithlink.white-text .link-text,
+.textwithlink.white-text .arrow {
+  color: rgb(255 255 255 / 100%) !important;
+}
+
+.textwithlink.black-text,
+.textwithlink.black-text .textwithlink-title,
+.textwithlink.black-text .textwithlink-title *,
+.textwithlink.black-text .textwithlink-description,
+.textwithlink.black-text .textwithlink-link a,
+.textwithlink.black-text .link-text,
+.textwithlink.black-text .arrow {
+  color: rgb(12 12 13 / 100%) !important;
+}
+
+.textwithlink.off-white-text,
+.textwithlink.off-white-text .textwithlink-title,
+.textwithlink.off-white-text .textwithlink-title *,
+.textwithlink.off-white-text .textwithlink-description,
+.textwithlink.off-white-text .textwithlink-link a,
+.textwithlink.off-white-text .link-text,
+.textwithlink.off-white-text .arrow {
+  color: rgb(245 245 245 / 100%) !important;
+}
+
+.textwithlink.dark-grey-text,
+.textwithlink.dark-grey-text .textwithlink-title,
+.textwithlink.dark-grey-text .textwithlink-title *,
+.textwithlink.dark-grey-text .textwithlink-description,
+.textwithlink.dark-grey-text .textwithlink-link a,
+.textwithlink.dark-grey-text .link-text,
+.textwithlink.dark-grey-text .arrow {
+  color: rgb(90 90 90 / 100%) !important;
+}
+
+.textwithlink.light-blue-text,
+.textwithlink.light-blue-text .textwithlink-title,
+.textwithlink.light-blue-text .textwithlink-title *,
+.textwithlink.light-blue-text .textwithlink-description,
+.textwithlink.light-blue-text .textwithlink-link a,
+.textwithlink.light-blue-text .link-text,
+.textwithlink.light-blue-text .arrow {
+  color: rgb(167 200 241 / 100%) !important;
+}
+
+/* Mobile */
+
+@media (width <=768px) {
+  .textwithlink {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .textwithlink-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .textwithlink-title h1,
+  .textwithlink-title h2,
+  .textwithlink-title h3,
+  .textwithlink-title h4,
+  .textwithlink-title p {
+    font-size: 24px;
+  }
+
+  .textwithlink-description {
+    white-space: normal;
+  }
+
+  .textwithlink-link {
+    margin-left: 0;
+
+    /* background: #000; */
+  }
+}

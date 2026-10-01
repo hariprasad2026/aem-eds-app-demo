@@ -20,13 +20,17 @@
       "carousel",
       "columns",
       "dm-video",
-      "footer-sai",
+      "embedv1",
       "fragment",
       "hero",
       "industry-list",
+      "quote",
       "search",
       "spotlight",
-      "tabs-new"
+      "table",
+      "tabs-new",
+      "teaser-v2",
+      "text-with-link"
     ]
   },
   {
@@ -88,10 +92,45 @@
     ]
   },
   {
+    "id": "richtext",
+    "components": [
+      "richtext"
+    ],
+    "rte": {
+      "toolbar": {
+        "format": []
+      }
+    }
+  },
+  {
     "id": "spotlight",
     "components": [
       "spotlight-header",
       "spotlight-card"
+    ]
+  },
+  {
+    "id": "table",
+    "components": [
+      "table-row"
+    ]
+  },
+  {
+    "id": "table-2-columns",
+    "components": [
+      "table-col-2"
+    ]
+  },
+  {
+    "id": "table-3-columns",
+    "components": [
+      "table-col-3"
+    ]
+  },
+  {
+    "id": "table-4-columns",
+    "components": [
+      "table-col-4"
     ]
   },
   {

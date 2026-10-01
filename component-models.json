@@ -893,6 +893,98 @@
     ]
   },
   {
+    "id": "embedv1",
+    "fields": [
+      {
+        "component": "select",
+        "name": "type",
+        "label": "Embed Type",
+        "required": true,
+        "options": [
+          {
+            "name": "Iframe",
+            "value": "iframe"
+          },
+          {
+            "name": "YouTube",
+            "value": "youtube"
+          },
+          {
+            "name": "Vimeo",
+            "value": "vimeo"
+          },
+          {
+            "name": "Generic",
+            "value": "generic"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "url",
+        "label": "Embed URL",
+        "required": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "textarea",
+        "valueType": "string",
+        "name": "caption",
+        "label": "Caption"
+      },
+      {
+        "component": "select",
+        "name": "alignment",
+        "label": "Alignment",
+        "value": "center",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "size",
+        "label": "Size",
+        "value": "large",
+        "options": [
+          {
+            "name": "Small",
+            "value": "small"
+          },
+          {
+            "name": "Medium",
+            "value": "medium"
+          },
+          {
+            "name": "Large",
+            "value": "large"
+          },
+          {
+            "name": "Full Width",
+            "value": "full-width"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "footer-sai-hero",
     "fields": [
       {
@@ -1041,15 +1133,146 @@
     "id": "fragment",
     "fields": [
       {
+        "component": "select",
+        "name": "fragmentType",
+        "label": "Fragment Type",
+        "valueType": "string",
+        "value": "standard",
+        "options": [
+          {
+            "name": "Standard Fragment",
+            "value": "standard"
+          },
+          {
+            "name": "Hero Fragment",
+            "value": "hero"
+          }
+        ]
+      },
+      {
         "component": "aem-content",
         "name": "reference",
         "label": "Reference"
+      },
+      {
+        "component": "select",
+        "name": "heroLayout",
+        "label": "Hero Layout",
+        "valueType": "string",
+        "value": "full",
+        "condition": {
+          "===": [
+            {
+              "var": "fragmentType"
+            },
+            "hero"
+          ]
+        },
+        "options": [
+          {
+            "name": "Full Hero",
+            "value": "full"
+          },
+          {
+            "name": "Image + Text",
+            "value": "image-text"
+          },
+          {
+            "name": "Without Media",
+            "value": "without-media"
+          },
+          {
+            "name": "Text Only",
+            "value": "text-only"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "imagePosition",
+        "label": "Image Position",
+        "valueType": "string",
+        "value": "left",
+        "condition": {
+          "===": [
+            {
+              "var": "heroLayout"
+            },
+            "image-text"
+          ]
+        },
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
       }
     ]
   },
   {
     "id": "hero",
     "fields": [
+      {
+        "component": "select",
+        "name": "heroType",
+        "label": "Hero Type",
+        "valueType": "string",
+        "value": "split",
+        "options": [
+          {
+            "name": "Split Hero",
+            "value": "split"
+          },
+          {
+            "name": "Overlay Hero",
+            "value": "overlay"
+          },
+          {
+            "name": "Centered Hero",
+            "value": "centered"
+          },
+          {
+            "name": "Banner Hero",
+            "value": "banner"
+          }
+        ]
+      },
+      {
+        "component": "tab",
+        "name": "contentTab",
+        "label": "Content"
+      },
+      {
+        "component": "text",
+        "name": "overline",
+        "label": "Overline",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string"
+      },
+      {
+        "component": "textarea",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      },
       {
         "component": "reference",
         "valueType": "string",
@@ -1061,15 +1284,352 @@
         "component": "text",
         "valueType": "string",
         "name": "imageAlt",
-        "label": "Alt",
-        "value": ""
+        "label": "Image Alt"
       },
       {
-        "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text",
-        "valueType": "string"
+        "component": "text",
+        "name": "link1Text",
+        "label": "Link 1 Text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "link1Url",
+        "label": "Link 1 URL",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "link2Text",
+        "label": "Link 2 Text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "link2Url",
+        "label": "Link 2 URL",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "buttonText",
+        "label": "Button Text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "overlay"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "buttonUrl",
+        "label": "Button URL",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "overlay"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "primaryButtonText",
+        "label": "Primary Button Text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "centered"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "primaryButtonUrl",
+        "label": "Primary Button URL",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "centered"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "secondaryButtonText",
+        "label": "Secondary Button Text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "centered"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "secondaryButtonUrl",
+        "label": "Secondary Button URL",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "centered"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "bannerLinkText",
+        "label": "Banner Link Text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "banner"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "bannerLinkUrl",
+        "label": "Banner Link URL",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "banner"
+          ]
+        }
+      },
+      {
+        "component": "tab",
+        "name": "styleTab",
+        "label": "Style"
+      },
+      {
+        "component": "select",
+        "name": "titleType",
+        "label": "Title Tag",
+        "valueType": "string",
+        "value": "h1",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "backgroundColor",
+        "label": "Background Color",
+        "valueType": "string",
+        "value": "hero-bg-black",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        },
+        "options": [
+          {
+            "name": "Black",
+            "value": "hero-bg-black"
+          },
+          {
+            "name": "White",
+            "value": "hero-bg-white"
+          },
+          {
+            "name": "Dark Gray",
+            "value": "hero-bg-dark-gray"
+          },
+          {
+            "name": "Brand Red",
+            "value": "hero-bg-brand-red"
+          },
+          {
+            "name": "Brand Blue",
+            "value": "hero-bg-brand-blue"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "textColor",
+        "label": "Text Color",
+        "valueType": "string",
+        "value": "hero-text-white",
+        "options": [
+          {
+            "name": "White",
+            "value": "hero-text-white"
+          },
+          {
+            "name": "Black",
+            "value": "hero-text-black"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "buttonColor",
+        "label": "Button Color",
+        "valueType": "string",
+        "value": "hero-button-color-white",
+        "condition": {
+          "in": [
+            {
+              "var": "heroType"
+            },
+            [
+              "overlay",
+              "centered"
+            ]
+          ]
+        },
+        "options": [
+          {
+            "name": "White",
+            "value": "hero-button-color-white"
+          },
+          {
+            "name": "Black",
+            "value": "hero-button-color-black"
+          },
+          {
+            "name": "Brand Red",
+            "value": "hero-button-color-brand-red"
+          },
+          {
+            "name": "Brand Blue",
+            "value": "hero-button-color-brand-blue"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "imagePosition",
+        "label": "Image Position",
+        "valueType": "string",
+        "value": "hero-image-right",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        },
+        "options": [
+          {
+            "name": "Left",
+            "value": "hero-image-left"
+          },
+          {
+            "name": "Right",
+            "value": "hero-image-right"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "buttonPosition",
+        "label": "Button Position",
+        "valueType": "string",
+        "value": "hero-button-center",
+        "condition": {
+          "in": [
+            {
+              "var": "heroType"
+            },
+            [
+              "overlay",
+              "centered"
+            ]
+          ]
+        },
+        "options": [
+          {
+            "name": "Left",
+            "value": "hero-button-left"
+          },
+          {
+            "name": "Center",
+            "value": "hero-button-center"
+          },
+          {
+            "name": "Right",
+            "value": "hero-button-right"
+          }
+        ]
       }
     ]
   },
@@ -1124,6 +1684,205 @@
         "name": "link",
         "label": "Card Link",
         "description": "Add a link to the destination. The card uses the title as its accessible link label; the arrow is added automatically.",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "quote",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "quotation",
+        "value": "",
+        "label": "Quotation"
+      },
+      {
+        "component": "richtext",
+        "name": "attribution",
+        "value": "",
+        "label": "Attribution",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Description"
+      },
+      {
+        "component": "select",
+        "name": "layout",
+        "label": "Layout",
+        "valueType": "string",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Centered Quote",
+            "value": "centered"
+          },
+          {
+            "name": "Right Quote",
+            "value": "right"
+          },
+          {
+            "name": "Profile Quote",
+            "value": "profile"
+          },
+          {
+            "name": "Image Quote",
+            "value": "image"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "backgroundColor",
+        "label": "Background Color",
+        "valueType": "string",
+        "value": "white",
+        "options": [
+          {
+            "name": "Dark Navy",
+            "value": "dark-navy"
+          },
+          {
+            "name": "Royal Blue",
+            "value": "royal-blue"
+          },
+          {
+            "name": "Light Grey",
+            "value": "light-grey"
+          },
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          },
+          {
+            "name": "Off White",
+            "value": "off-white"
+          },
+          {
+            "name": "Dark Grey",
+            "value": "dark-grey"
+          },
+          {
+            "name": "Light Blue",
+            "value": "light-blue"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "textColor",
+        "label": "Text Color",
+        "valueType": "string",
+        "value": "black",
+        "options": [
+          {
+            "name": "Dark Navy",
+            "value": "dark-navy"
+          },
+          {
+            "name": "Royal Blue",
+            "value": "royal-blue"
+          },
+          {
+            "name": "Light Grey",
+            "value": "light-grey"
+          },
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          },
+          {
+            "name": "Off White",
+            "value": "off-white"
+          },
+          {
+            "name": "Dark Grey",
+            "value": "dark-grey"
+          },
+          {
+            "name": "Light Blue",
+            "value": "light-blue"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "quoteColor",
+        "label": "Quote Color",
+        "valueType": "string",
+        "value": "royal-blue",
+        "options": [
+          {
+            "name": "Dark Navy",
+            "value": "dark-navy"
+          },
+          {
+            "name": "Royal Blue",
+            "value": "royal-blue"
+          },
+          {
+            "name": "Light Grey",
+            "value": "light-grey"
+          },
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          },
+          {
+            "name": "Off White",
+            "value": "off-white"
+          },
+          {
+            "name": "Dark Grey",
+            "value": "dark-grey"
+          },
+          {
+            "name": "Light Blue",
+            "value": "light-blue"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "profileImage",
+        "label": "Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "profileText",
+        "label": "Image Text",
+        "valueType": "string",
         "value": ""
       }
     ]
@@ -1257,6 +2016,193 @@
     ]
   },
   {
+    "id": "table",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "value": "",
+        "label": "Table Variation",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Striped",
+            "value": "striped"
+          },
+          {
+            "name": "Bordered",
+            "value": "bordered"
+          },
+          {
+            "name": "No Header",
+            "value": "no-header"
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "Hoverable",
+            "value": "hoverable"
+          },
+          {
+            "name": "Comparison",
+            "value": "comparison"
+          },
+          {
+            "name": "Pricing",
+            "value": "pricing"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Responsive Cards",
+            "value": "responsive-cards"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "filter",
+        "label": "Columns",
+        "valueType": "string",
+        "value": "table",
+        "options": [
+          {
+            "name": "1 Column",
+            "value": "table"
+          },
+          {
+            "name": "2 Columns",
+            "value": "table-2-columns"
+          },
+          {
+            "name": "3 Columns",
+            "value": "table-3-columns"
+          },
+          {
+            "name": "4 Columns",
+            "value": "table-4-columns"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "name": "sortable",
+        "label": "Enable Sorting",
+        "value": false,
+        "valueType": "boolean"
+      },
+      {
+        "component": "boolean",
+        "name": "searchable",
+        "label": "Enable Search",
+        "value": false,
+        "valueType": "boolean"
+      },
+      {
+        "component": "boolean",
+        "name": "stickyHeader",
+        "label": "Enable Sticky Header",
+        "value": false,
+        "valueType": "boolean"
+      },
+      {
+        "component": "boolean",
+        "name": "pagination",
+        "label": "Enable Pagination",
+        "value": false,
+        "valueType": "boolean"
+      }
+    ]
+  },
+  {
+    "id": "table-row",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column1text",
+        "label": "Column 1"
+      }
+    ]
+  },
+  {
+    "id": "table-col-2",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column1text",
+        "label": "Column 1"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column2text",
+        "label": "Column 2"
+      }
+    ]
+  },
+  {
+    "id": "table-col-3",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column1text",
+        "label": "Column 1"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column2text",
+        "label": "Column 2"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column3text",
+        "label": "Column 3"
+      }
+    ]
+  },
+  {
+    "id": "table-col-4",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column1text",
+        "label": "Column 1"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column2text",
+        "label": "Column 2"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column3text",
+        "label": "Column 3"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column4text",
+        "label": "Column 4"
+      }
+    ]
+  },
+  {
     "id": "tabs-new",
     "fields": [
       {
@@ -1375,6 +2321,616 @@
         "name": "content_richtext",
         "value": "",
         "label": "Content"
+      }
+    ]
+  },
+  {
+    "id": "tarun-header",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "headerVariant",
+        "label": "Header Variant",
+        "value": "standard",
+        "options": [
+          {
+            "name": "Standard",
+            "value": "standard"
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Centered",
+            "value": "centered"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "tcsLogo",
+        "label": "TCS Logo Image"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tcsLogoLink",
+        "label": "TCS Logo Target URL",
+        "value": "/"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "tataLogo",
+        "label": "Tata Logo Image"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tataLogoLink",
+        "label": "Tata Logo Target URL",
+        "value": "https://www.tata.com"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "menu",
+        "label": "Navigation Links",
+        "description": "Add top-level links or a bulleted list for submenus."
+      }
+    ]
+  },
+  {
+    "id": "teaser-v2",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "fileReference",
+        "label": "Image",
+        "description": "The teaser image, min Xpx x Ypx...",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "fileReferenceAlt",
+        "value": "",
+        "label": "Image Description",
+        "description": "A descriptive text of the image will be shown as tooltip."
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Style",
+        "valueType": "string",
+        "required": true,
+        "maxSize": 25,
+        "options": [
+          {
+            "name": "Theme",
+            "children": [
+              {
+                "name": "Light",
+                "value": "light"
+              },
+              {
+                "name": "Dark",
+                "value": "dark"
+              },
+              {
+                "name": "Half Height",
+                "value": "half-height"
+              }
+            ]
+          },
+          {
+            "name": "Layout",
+            "children": [
+              {
+                "name": "Split (50/50)",
+                "value": "split"
+              },
+              {
+                "name": "Card (Floating Box)",
+                "value": "card"
+              },
+              {
+                "name": "Hero (Large)",
+                "value": "hero"
+              },
+              {
+                "name": "Image Left",
+                "value": "image-left"
+              },
+              {
+                "name": "Image Right",
+                "value": "image-right"
+              },
+              {
+                "name": "Image Top",
+                "value": "image-top"
+              }
+            ]
+          },
+          {
+            "name": "Image Style",
+            "children": [
+              {
+                "name": "Background Image",
+                "value": "image-background"
+              },
+              {
+                "name": "Contained Image",
+                "value": "image-contained"
+              }
+            ]
+          },
+          {
+            "name": "Image Width",
+            "children": [
+              {
+                "name": "30%",
+                "value": "image-width-30"
+              },
+              {
+                "name": "40%",
+                "value": "image-width-40"
+              },
+              {
+                "name": "50%",
+                "value": "image-width-50"
+              },
+              {
+                "name": "60%",
+                "value": "image-width-60"
+              },
+              {
+                "name": "70%",
+                "value": "image-width-70"
+              }
+            ]
+          },
+          {
+            "name": "Image Alignment",
+            "children": [
+              {
+                "name": "Top",
+                "value": "image-align-top"
+              },
+              {
+                "name": "Middle",
+                "value": "image-align-middle"
+              },
+              {
+                "name": "Bottom",
+                "value": "image-align-bottom"
+              }
+            ]
+          },
+          {
+            "name": "Alignment",
+            "children": [
+              {
+                "name": "Left",
+                "value": "left"
+              },
+              {
+                "name": "Right",
+                "value": "right"
+              },
+              {
+                "name": "Center",
+                "value": "center"
+              }
+            ]
+          },
+          {
+            "name": "Background Color",
+            "children": [
+              {
+                "name": "tcs Red",
+                "value": "tcs-background-red"
+              },
+              {
+                "name": "tcs Yellow",
+                "value": "tcs-background-yellow"
+              },
+              {
+                "name": "tcs Blue",
+                "value": "tcs-background-blue"
+              },
+              {
+                "name": "tcs Beige",
+                "value": "tcs-background-beige"
+              },
+              {
+                "name": "tcs Black",
+                "value": "tcs-background-black"
+              }
+            ]
+          },
+          {
+            "name": "Text Direction",
+            "children": [
+              {
+                "name": "Row",
+                "value": "text-row"
+              },
+              {
+                "name": "Column",
+                "value": "text-column"
+              }
+            ]
+          },
+          {
+            "name": "Text Horizontal Alignment",
+            "children": [
+              {
+                "name": "Left",
+                "value": "text-left"
+              },
+              {
+                "name": "Center",
+                "value": "text-center"
+              },
+              {
+                "name": "Right",
+                "value": "text-right"
+              }
+            ]
+          },
+          {
+            "name": "Text Vertical Alignment",
+            "children": [
+              {
+                "name": "Top",
+                "value": "text-top"
+              },
+              {
+                "name": "Middle",
+                "value": "text-middle"
+              },
+              {
+                "name": "Bottom",
+                "value": "text-bottom"
+              }
+            ]
+          },
+          {
+            "name": "CTA Direction",
+            "children": [
+              {
+                "name": "Row",
+                "value": "cta-row"
+              },
+              {
+                "name": "Column",
+                "value": "cta-column"
+              }
+            ]
+          },
+          {
+            "name": "CTA Alignment",
+            "children": [
+              {
+                "name": "Left",
+                "value": "cta-left"
+              },
+              {
+                "name": "Center",
+                "value": "cta-center"
+              },
+              {
+                "name": "Right",
+                "value": "cta-right"
+              }
+            ]
+          },
+          {
+            "name": "CTA Style",
+            "children": [
+              {
+                "name": "Default Button",
+                "value": "cta-default"
+              },
+              {
+                "name": "Pill Button",
+                "value": "cta-pill"
+              },
+              {
+                "name": "Text Link Arrow",
+                "value": "cta-link-arrow"
+              }
+            ]
+          },
+          {
+            "name": "CTA Color",
+            "children": [
+              {
+                "name": "Light",
+                "value": "cta-light"
+              },
+              {
+                "name": "Dark",
+                "value": "cta-dark"
+              },
+              {
+                "name": "TCS Red",
+                "value": "cta-red"
+              },
+              {
+                "name": "TCS Blue",
+                "value": "cta-blue"
+              },
+              {
+                "name": "TCS Yellow",
+                "value": "cta-yellow"
+              },
+              {
+                "name": "TCS Beige",
+                "value": "cta-beige"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrow",
+        "value": "",
+        "label": "Eyebrow",
+        "description": "Sets the small pre-title above the title."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Heading",
+        "description": "Sets the main title of the teaser."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "titleType",
+        "value": "h3",
+        "label": "Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "longDescr",
+        "value": "",
+        "label": "Long Description",
+        "description": "The description shown in Desktop and Tablet view."
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "shortDescr",
+        "value": "",
+        "label": "Short Description",
+        "description": "The description shown in Mobile view. If not set long text is used."
+      },
+      {
+        "component": "select",
+        "name": "cta1Type",
+        "value": "primary",
+        "label": "First CTA Type",
+        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1Text",
+        "value": "",
+        "label": "First CTA Text",
+        "description": "Text to be shown inside button."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1",
+        "value": "",
+        "label": "First CTA Link",
+        "description": "What link to open when clicking the button."
+      },
+      {
+        "component": "select",
+        "name": "cta2Type",
+        "value": "primary",
+        "label": "Second CTA Type",
+        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta2Text",
+        "value": "",
+        "label": "Second CTA Text",
+        "description": "Text to be shown inside button."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta2",
+        "value": "",
+        "label": "Second CTA Link",
+        "description": "What link to open when clicking the button."
+      }
+    ]
+  },
+  {
+    "id": "text-with-link",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "title",
+        "label": "Title",
+        "value": "",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "value": "",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaLabel",
+        "label": "CTA Label",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "aem-content",
+        "name": "ctaLink",
+        "label": "CTA Link",
+        "required": false
+      },
+      {
+        "component": "select",
+        "name": "backgroundColor",
+        "label": "Background Color",
+        "valueType": "string",
+        "value": "white",
+        "required": true,
+        "options": [
+          {
+            "name": "Dark Navy",
+            "value": "dark-navy"
+          },
+          {
+            "name": "Royal Blue",
+            "value": "royal-blue"
+          },
+          {
+            "name": "Light Grey",
+            "value": "light-grey"
+          },
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          },
+          {
+            "name": "Off White",
+            "value": "off-white"
+          },
+          {
+            "name": "Dark Grey",
+            "value": "dark-grey"
+          },
+          {
+            "name": "Light Blue",
+            "value": "light-blue"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "textColor",
+        "label": "Text Color",
+        "valueType": "string",
+        "value": "black",
+        "required": true,
+        "options": [
+          {
+            "name": "Dark Navy",
+            "value": "dark-navy"
+          },
+          {
+            "name": "Royal Blue",
+            "value": "royal-blue"
+          },
+          {
+            "name": "Light Grey",
+            "value": "light-grey"
+          },
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          },
+          {
+            "name": "Off White",
+            "value": "off-white"
+          },
+          {
+            "name": "Dark Grey",
+            "value": "dark-grey"
+          },
+          {
+            "name": "Light Blue",
+            "value": "light-blue"
+          }
+        ]
       }
     ]
   }

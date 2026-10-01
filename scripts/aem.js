@@ -658,7 +658,7 @@ async function loadFooter(footer) {
   const pageFooterBlock = document.querySelector('main .footer-sai');
   if (pageFooterBlock) return;
 
-  const footerPath = (getMetadata('footer') || '/praneeth').replace(/(\.plain)?\.html$/, '');
+  const footerPath = (getMetadata('footer') || '/blocks/footer-sai').replace(/(\.plain)?\.html$/, '');
   const resp = await fetch(`${footerPath}.plain.html`);
 
   if (!resp.ok) {

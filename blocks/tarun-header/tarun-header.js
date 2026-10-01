@@ -148,7 +148,7 @@ export default function decorate(block) {
     nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
     hamburgerButton.setAttribute('aria-expanded', expanded ? 'false' : 'true');
     hamburgerButton.setAttribute('aria-label', expanded ? 'Open menu' : 'Close menu');
-    document.body.style.overflowY = expanded && window.innerWidth < 1025 ? 'hidden' : '';
+    document.body.style.overflowY = expanded ? '' : 'hidden';
   });
   hamburgerWrapper.append(hamburgerButton);
 

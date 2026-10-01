@@ -638,10 +638,10 @@ function decorateBlocks(main) {
 // }
 
 async function loadHeader(header) {
-  const pageHeaderBlock = document.querySelector('main .tharun-header');
+  const pageHeaderBlock = document.querySelector('main .tarun-header');
   if (pageHeaderBlock) return;
 
-  const headerPath = (getMetadata('header') || '/blocks/tharun-header')
+  const headerPath = (getMetadata('header') || '/blocks/tarun-header')
     .replace(/(\.plain)?\.html$/, '');
 
   const resp = await fetch(`${headerPath}.plain.html`);
@@ -655,7 +655,7 @@ async function loadHeader(header) {
   const html = await resp.text();
   const fragment = new DOMParser().parseFromString(html, 'text/html');
 
-  const headerBlock = fragment.querySelector('.tharun-header');
+  const headerBlock = fragment.querySelector('.tarun-header');
 
   if (!headerBlock) {
     // eslint-disable-next-line no-console

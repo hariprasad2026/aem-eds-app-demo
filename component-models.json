@@ -746,6 +746,39 @@
         "multi": false
       },
       {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "theme",
+        "value": "default",
+        "label": "Card Theme",
+        "options": [
+          {
+            "name": "Default Light",
+            "value": "default"
+          },
+          {
+            "name": "Dark Charcoal",
+            "value": "dark"
+          },
+          {
+            "name": "Brand Accent Border",
+            "value": "highlight"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "badge",
+        "label": "Badge / Tag (e.g., FEATURED)"
+      },
+      {
         "component": "richtext",
         "name": "text",
         "value": "",

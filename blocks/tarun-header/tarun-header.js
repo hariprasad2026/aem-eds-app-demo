@@ -5,18 +5,22 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
  */
 function getProp(block, name, fallback = '') {
   const lower = name.toLowerCase();
+  const fieldOrder = ['headerVariant', 'tcsLogo', 'tcsLogoLink', 'tataLogo', 'tataLogoLink', 'menu'];
+
+  const getValue = (element) => {
+    if (!element) return '';
+    const image = element.matches('img') ? element : element.querySelector('picture img, img');
+    if (image) return image.getAttribute('src') || image.src;
+    const anchor = element.matches('a') ? element : element.querySelector('a');
+    if (anchor) return anchor.getAttribute('href') || anchor.textContent.trim();
+    return element.dataset.value || element.textContent.trim();
+  };
 
   // 1. Direct dataset or data-aue-prop lookup
   if (block.dataset[name] !== undefined) return block.dataset[name];
   if (block.dataset[lower] !== undefined) return block.dataset[lower];
   const attrElem = block.querySelector(`[data-aue-prop="${name}"], [data-aue-prop="${lower}"]`);
-  if (attrElem) {
-    const img = attrElem.matches('img') ? attrElem : attrElem.querySelector('picture img, img');
-    if (img) return img.src;
-    const anchor = attrElem.querySelector('a');
-    if (anchor) return anchor.getAttribute('href') || anchor.textContent.trim();
-    return attrElem.dataset.value || attrElem.textContent.trim();
-  }
+  if (attrElem) return getValue(attrElem);
 
   // 2. Table row fallback scanning
   const rows = [...block.children];
@@ -26,13 +30,16 @@ function getProp(block, name, fallback = '') {
     if (cols.length >= 2) {
       const key = cols[0].textContent.trim().toLowerCase().replace(/[-_]/g, '');
       if (key === lower.replace(/[-_]/g, '')) {
-        const img = cols[1].querySelector('img');
-        if (img) return img.src;
-        const anchor = cols[1].querySelector('a');
-        if (anchor) return anchor.getAttribute('href') || anchor.textContent.trim();
-        return cols[1].textContent.trim();
+        return getValue(cols[1]);
       }
     }
+  }
+
+  // 3. Published Universal Editor content stores model fields in row order.
+  const fieldIndex = fieldOrder.indexOf(name);
+  if (fieldIndex >= 0 && rows[fieldIndex]) {
+    const cols = [...rows[fieldIndex].children];
+    return getValue(cols.length > 1 ? cols[1] : rows[fieldIndex]) || fallback;
   }
 
   return fallback;
@@ -47,9 +54,14 @@ export default function decorate(block) {
     tataLogo: getProp(block, 'tataLogo'),
     tataLogoLink: getProp(block, 'tataLogoLink', 'https://www.tata.com'),
   };
+  const supportedVariants = ['standard', 'compact', 'dark', 'centered'];
+  if (!supportedVariants.includes(config.headerVariant)) config.headerVariant = 'standard';
 
   // 2. Extract Menu Content
-  const menuSource = block.querySelector('[data-aue-prop="menu"]') || block.querySelector('ul');
+  const menuRow = [...block.children][5];
+  const menuSource = block.querySelector('[data-aue-prop="menu"]')
+    || (menuRow && (menuRow.children[1] || menuRow))
+    || block.querySelector('ul');
   let navList = document.createElement('ul');
   navList.className = 'tarun-nav-list';
 

@@ -1,0 +1,200 @@
+.spotlight-container {
+  background-color: #fff;
+}
+
+.spotlight-wrapper {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* Override the site's default 1200px section width and horizontal padding. */
+main > .section > div.spotlight-wrapper {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1440px;
+  padding: 0;
+}
+
+.spotlight {
+  box-sizing: border-box;
+  min-height: 826px;
+  padding: 86px 80px 98px;
+  color: #1f1f1f;
+  background-color: #fff;
+}
+
+.spotlight p {
+  margin: 0;
+}
+
+.spotlight .spotlight-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 68px;
+}
+
+.spotlight .spotlight-heading {
+  font-family: var(--body-font-family);
+  font-size: clamp(32px, 3.5vw, 46px);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.spotlight .spotlight-view-all a:any-link {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 4px 32px 4px 0;
+  color: inherit;
+  background: none;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.3;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.spotlight .spotlight-view-all a::after,
+.spotlight .spotlight-card-link a::after {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  content: '\2192';
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.spotlight .spotlight-view-all a::after {
+  font-size: 25px;
+}
+
+.spotlight .spotlight-view-all a:hover,
+.spotlight .spotlight-view-all a:focus-visible {
+  color: #555;
+  background: none;
+  text-decoration: underline;
+}
+
+.spotlight .spotlight-card {
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 40px;
+  align-items: center;
+  column-gap: 24px;
+  min-height: 173px;
+  border-bottom: 1px solid #c6c6c6;
+  padding: 30px 0 32px;
+}
+
+.spotlight .spotlight-meta {
+  display: flex;
+  grid-column: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  align-self: end;
+  margin-bottom: 14px;
+}
+
+.spotlight .spotlight-category {
+  padding: 6px 12px;
+  background-color: #cedff4;
+  font-size: 11px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.spotlight .spotlight-eyebrow {
+  font-size: 11px;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.spotlight .spotlight-headline {
+  grid-column: 1;
+  align-self: start;
+  font-size: clamp(26px, 3vw, 38px);
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.spotlight .spotlight-card-link {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+
+.spotlight .spotlight-card-link a:any-link {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  color: inherit;
+  background: none;
+  font-size: 0;
+  text-decoration: none;
+}
+
+.spotlight .spotlight-card-link a::after {
+  right: 6px;
+  font-size: 36px;
+}
+
+.spotlight .spotlight-card:has(a:hover) .spotlight-headline,
+.spotlight .spotlight-card:has(a:focus-visible) .spotlight-headline {
+  text-decoration: underline;
+}
+
+.spotlight .spotlight-card-link a:focus-visible {
+  outline: 2px solid #1f1f1f;
+  outline-offset: -2px;
+}
+
+@media (width < 900px) {
+  .spotlight {
+    min-height: auto;
+    padding: 56px 24px;
+  }
+
+  .spotlight .spotlight-header {
+    margin-bottom: 44px;
+  }
+
+  .spotlight .spotlight-card {
+    min-height: 130px;
+    padding: 24px 0;
+  }
+}
+
+@media (width < 600px) {
+  .spotlight {
+    padding: 40px 20px;
+  }
+
+  .spotlight .spotlight-header {
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+
+  .spotlight .spotlight-view-all a:any-link {
+    font-size: 16px;
+  }
+
+  .spotlight .spotlight-card {
+    grid-template-columns: minmax(0, 1fr) 26px;
+    column-gap: 12px;
+  }
+
+  .spotlight .spotlight-card-link a::after {
+    font-size: 26px;
+  }
+}

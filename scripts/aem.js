@@ -17,7 +17,7 @@ function sampleRUM(checkpoint, data) {
   try {
     window.hlx = window.hlx || {};
     if (!window.hlx.rum || !window.hlx.rum.collector) {
-      sampleRUM.enhance = () => {};
+      sampleRUM.enhance = () => { };
       const params = new URLSearchParams(window.location.search);
       const { currentScript } = document;
       const rate = params.get('rum')
@@ -611,11 +611,30 @@ function decorateBlocks(main) {
  * @param {Element} header header element
  * @returns {Promise}
  */
+// async function loadHeader(header) {
+//   const headerBlock = buildBlock('header', '');
+//   header.append(headerBlock);
+//   decorateBlock(headerBlock);
+//   return loadBlock(headerBlock);
+// }
+
 async function loadHeader(header) {
-  const headerBlock = buildBlock('header', '');
-  header.append(headerBlock);
-  decorateBlock(headerBlock);
-  return loadBlock(headerBlock);
+  const resp = await fetch('/header-v1.plain.html');
+
+  if (!resp.ok) {
+    return;
+  }
+
+  const html = await resp.text();
+
+  header.innerHTML = html;
+
+  const headerBlock = header.querySelector('.headerv1');
+
+  if (headerBlock) {
+    decorateBlock(headerBlock);
+    await loadBlock(headerBlock);
+  }
 }
 
 /**
@@ -623,13 +642,54 @@ async function loadHeader(header) {
  * @param footer footer element
  * @returns {Promise}
  */
-async function loadFooter(footer) {
-  const footerBlock = buildBlock('footer', '');
-  footer.append(footerBlock);
-  decorateBlock(footerBlock);
-  return loadBlock(footerBlock);
-}
+// async function loadFooter(footer) {
+//   const footerBlock = buildBlock('footer', '');
+//   footer.append(footerBlock);
+//   decorateBlock(footerBlock);
+//   return loadBlock(footerBlock);
+// }
 
+/**
+ * Loads a block named 'footer' into footer
+  * @param footer footer element
+    * @returns { Promise }
+ */
+async function loadFooter(footer) {
+  const pageFooterBlock = document.querySelector('main .footer-sai');
+  if (pageFooterBlock) return;
+
+  const footerPath = (getMetadata('footer') || '/praneeth').replace(/(\.plain)?\.html$/, '');
+  const resp = await fetch(`${footerPath}.plain.html`);
+
+  if (!resp.ok) {
+    // eslint-disable-next-line no-console
+    console.log('Failed to load footer: ', resp.status, resp.statusText);
+    return;
+  }
+
+  const html = await resp.text();
+  const fragment = new DOMParser().parseFromString(html, 'text/html');
+  const footerBlock = fragment.querySelector('.footer-sai');
+  if (!footerBlock) {
+    // eslint-disable-next-line no-console
+    console.error(`Footer block not found in ${footerPath}`);
+    return;
+  }
+  footer.replaceChildren(document.importNode(footerBlock, true));
+
+  const resetMediaPath = (selector, attribute) => {
+    footer.querySelectorAll(`${selector}[${attribute}^="./media_"]`).forEach((element) => {
+      const fragmentUrl = new URL(footerPath, window.location);
+      element[attribute] = new URL(element.getAttribute(attribute), fragmentUrl).href;
+    });
+  };
+  resetMediaPath('img', 'src');
+  resetMediaPath('source', 'srcset');
+
+  const loadedFooterBlock = footer.querySelector('.footer-sai');
+  decorateBlock(loadedFooterBlock);
+  await loadBlock(loadedFooterBlock);
+}
 /**
  * Wait for Image.
  * @param {Element} section section element

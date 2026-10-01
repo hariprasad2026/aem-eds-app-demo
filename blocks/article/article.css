@@ -1,0 +1,597 @@
+/* ==========================================
+   ARTICLE BLOCK - BASE
+   ========================================== */
+
+.article .article-content {
+  padding: 50px;
+  margin-bottom: 40px;
+  border-radius: 12px;
+  background: var(--tcs-color-brand);
+}
+
+.article .article-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.article .title {
+  margin: 0 0 20px;
+  color: #050505;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.article .content {
+  margin: 0;
+  color: #050505;
+  line-height: 1.7;
+  overflow-wrap: break-word;
+}
+
+.article .article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.article .author,
+.article .publication-date {
+  font-weight: 500;
+}
+
+.article .author:not(:last-child)::after {
+  margin-left: 12px;
+  opacity: 0.5;
+}
+
+.article .publication-date {
+  opacity: 0.8;
+}
+
+/* ==========================================
+   FEATURED IMAGE
+   ========================================== */
+
+.article .featured-image {
+  margin-bottom: 24px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.article .featured-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* ==========================================
+   MAIN VARIATION
+   ========================================== */
+
+.article .article-content.main {
+  text-align: left;
+}
+
+.article .article-content.main .title {
+  font-size: 2.25rem;
+}
+
+.article .article-content.main .content {
+  font-size: 1.05rem;
+}
+
+/* ==========================================
+   SUMMARY VARIATION
+   ========================================== */
+
+.article .article-content.summary {
+  padding: 32px;
+  text-align: left;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.article .article-content.summary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgb(0 0 0 / 15%);
+}
+
+.article .article-content.summary .title {
+  margin-bottom: 12px;
+  font-size: 1.6rem;
+}
+
+.article .article-content.summary .content {
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.article .article-content.left {
+  text-align: left;
+}
+
+.article .article-content.center {
+  text-align: center;
+}
+
+.article .article-content.right {
+  text-align: right;
+}
+
+.article .article-content.left .featured-image {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.article .article-content.center .featured-image {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.article .article-content.right .featured-image {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.article .article-content.left .article-meta {
+  justify-content: flex-start;
+}
+
+.article .article-content.center .article-meta {
+  justify-content: center;
+}
+
+.article .article-content.right .article-meta {
+  justify-content: flex-end;
+}
+
+/* ==========================================
+   SPLIT VARIATION
+   ========================================== */
+
+.article .article-content.split:where(.has-image) .article-wrapper {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  align-items: center;
+  gap: 48px;
+}
+
+.article .article-content.split .featured-image {
+  margin: 0;
+}
+
+.article .article-content.split .featured-image img {
+  height: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.article .article-content.split .title {
+  font-size: 2rem;
+}
+
+/* ==========================================
+   HERO VARIATION
+   ========================================== */
+
+.article .article-content.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 520px;
+  padding: 80px 60px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.article .article-content.hero .article-wrapper {
+  width: 100%;
+  max-width: 900px;
+}
+
+.article .article-content.hero .article-body {
+  position: relative;
+  z-index: 2;
+}
+
+.article .article-content.hero .title {
+  margin-bottom: 24px;
+  font-size: 3.25rem;
+}
+
+.article .article-content.hero .article-meta {
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.article .article-content.hero .content {
+  max-width: 760px;
+  margin: 0 auto;
+  font-size: 1.15rem;
+}
+
+.article .article-content.hero:where(.has-image) {
+  background: #050505;
+}
+
+.article .article-content.hero:where(.has-image)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgb(0 0 0 / 45%) 0%, rgb(0 0 0 / 75%) 100%);
+}
+
+.article .article-content.hero:where(.has-image) .featured-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  margin: 0;
+  border-radius: 0;
+}
+
+.article .article-content.hero:where(.has-image) .featured-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+.article .article-content.hero:where(.has-image) .title,
+.article .article-content.hero:where(.has-image) .content,
+.article .article-content.hero:where(.has-image) .article-meta {
+  color: #fff;
+}
+
+/* ==========================================
+   CARD VARIATION
+   ========================================== */
+
+.article .article-content.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 8%);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.article .article-content.card:hover,
+.article .article-content.card:focus-within {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgb(0 0 0 / 14%);
+}
+
+.article .article-content.card .article-wrapper {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.article .article-content.card .featured-image {
+  margin: 0;
+  border-radius: 0;
+}
+
+.article .article-content.card .featured-image img {
+  border-radius: 0;
+  aspect-ratio: 16 / 9;
+}
+
+.article .article-content.card .article-body {
+  padding: 20px;
+}
+
+.article .article-content.card .title {
+  margin-bottom: 12px;
+  font-size: 1.35rem;
+}
+
+.article .article-content.card .article-meta {
+  margin-bottom: 12px;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.article .article-content.card .content {
+  color: #444;
+  font-size: 0.95rem;
+}
+
+@media (width >= 769px) {
+  .article .article-content.card {
+    max-width: 640px;
+  }
+
+  .article .article-content.card.center {
+    margin-inline: auto;
+  }
+
+  .article .article-content.card.right {
+    margin-left: auto;
+  }
+
+  .article .article-content.card .article-body {
+    padding: 28px 32px;
+  }
+
+  .article .article-content.card .title {
+    font-size: 1.6rem;
+  }
+}
+
+/* ==========================================
+   MINIMAL VARIATION
+   ========================================== */
+
+.article .article-content.minimal {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.article .article-content.minimal .article-wrapper {
+  max-width: 760px;
+}
+
+.article .article-content.minimal:where(.left) .article-wrapper {
+  margin-left: 0;
+}
+
+.article .article-content.minimal:where(.right) .article-wrapper {
+  margin-right: 0;
+}
+
+.article .article-content.minimal .featured-image {
+  margin-bottom: 32px;
+  border-radius: 0;
+}
+
+.article .article-content.minimal .featured-image img {
+  border-radius: 0;
+}
+
+.article .article-content.minimal .title {
+  margin-bottom: 12px;
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.article .article-content.minimal .article-meta {
+  margin-bottom: 28px;
+  color: #666;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.article .article-content.minimal .content {
+  color: #222;
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+/* ==========================================
+   SPOTLIGHT VARIATION
+   ========================================== */
+
+.article .article-content.spotlight {
+  padding: 56px;
+  border-top: 6px solid var(--tcs-color-brand, #050505);
+  background: linear-gradient(135deg, #fff 0%, #f4f4f4 100%);
+  box-shadow: 0 20px 40px rgb(0 0 0 / 12%);
+}
+
+.article .article-content.spotlight:where(.has-image) .article-wrapper {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 56px;
+}
+
+.article .article-content.spotlight .featured-image {
+  margin: 0;
+  box-shadow: 0 12px 24px rgb(0 0 0 / 18%);
+}
+
+.article .article-content.spotlight .featured-image img {
+  aspect-ratio: 4 / 3;
+}
+
+.article .article-content.spotlight .title {
+  margin-bottom: 20px;
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.article .article-content.spotlight .article-meta {
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.article .article-content.spotlight .content {
+  padding: 16px 20px;
+  border-left: 4px solid var(--tcs-color-brand, #050505);
+  background: rgb(0 0 0 / 4%);
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.article .article-content.spotlight.right .content {
+  border-right: 4px solid var(--tcs-color-brand, #050505);
+  border-left: 0;
+}
+
+.article .article-content.spotlight.center .content {
+  border-top: 4px solid var(--tcs-color-brand, #050505);
+  border-left: 0;
+}
+
+/* ==========================================
+   REDUCED MOTION
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .article .article-content.summary,
+  .article .article-content.card {
+    transition: none;
+  }
+
+  .article .article-content.summary:hover,
+  .article .article-content.card:hover,
+  .article .article-content.card:focus-within {
+    transform: none;
+  }
+}
+
+/* ==========================================
+   TABLET
+   ========================================== */
+
+@media (width <= 1024px) {
+  .article .article-content {
+    padding: 40px;
+  }
+
+  .article .article-content.main .title {
+    font-size: 2rem;
+  }
+
+  .article .article-content.split:where(.has-image) .article-wrapper,
+  .article .article-content.spotlight:where(.has-image) .article-wrapper {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .article .article-content.split .featured-image img,
+  .article .article-content.spotlight .featured-image img {
+    aspect-ratio: 16 / 9;
+  }
+
+  .article .article-content.hero {
+    min-height: 420px;
+    padding: 60px 40px;
+  }
+
+  .article .article-content.hero .title {
+    font-size: 2.5rem;
+  }
+
+  .article .article-content.spotlight {
+    padding: 40px;
+  }
+
+  .article .article-content.spotlight .title {
+    font-size: 2.4rem;
+  }
+}
+
+/* ==========================================
+   MOBILE
+   ========================================== */
+
+@media (width <= 768px) {
+  .article .article-content {
+    padding: 24px;
+  }
+
+  .article .article-content.main .title,
+  .article .article-content.summary .title {
+    font-size: 1.5rem;
+  }
+
+  .article .article-content.main .content,
+  .article .article-content.summary .content {
+    font-size: 1rem;
+  }
+
+  .article .article-meta {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .article .author:not(:last-child)::after {
+    content: "";
+  }
+
+  .article .article-content.hero {
+    min-height: 360px;
+    padding: 48px 24px;
+  }
+
+  .article .article-content.hero .title {
+    font-size: 2rem;
+  }
+
+  .article .article-content.hero .article-meta {
+    align-items: center;
+  }
+
+  .article .article-content.hero .content,
+  .article .article-content.spotlight .content,
+  .article .article-content.minimal .content {
+    font-size: 1rem;
+  }
+
+  .article .article-content.spotlight {
+    padding: 24px;
+  }
+
+  .article .article-content.spotlight .title {
+    font-size: 1.9rem;
+  }
+
+  .article .article-content.minimal .title,
+  .article .article-content.split .title {
+    font-size: 1.6rem;
+  }
+}
+
+/* ==========================================
+   SMALL MOBILE
+   ========================================== */
+
+@media (width <= 480px) {
+  .article .article-content {
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .article .article-content.main .title,
+  .article .article-content.summary .title {
+    font-size: 1.3rem;
+  }
+
+  .article .article-content.hero .title,
+  .article .article-content.spotlight .title {
+    font-size: 1.6rem;
+  }
+
+  .article .article-content.card .article-body {
+    padding: 16px;
+  }
+
+  .article .content {
+    font-size: 0.95rem;
+  }
+
+  .article .featured-image {
+    margin-bottom: 16px;
+  }
+}

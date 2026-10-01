@@ -47,11 +47,21 @@
         "image",
         "button",
         "title",
-        "hero",
-        "dm-video",
+        "accordion",
+        "article",
+        "blog-list",
+        "canvas-search-hero",
         "cards",
+        "carousel",
         "columns",
-        "fragment"
+        "dm-video",
+        "footer-sai",
+        "fragment",
+        "hero",
+        "industry-list",
+        "search",
+        "spotlight",
+        "tabs-new"
       ]
     }
   ]

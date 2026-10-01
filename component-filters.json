@@ -12,17 +12,46 @@
       "image",
       "button",
       "title",
-      "hero",
-      "dm-video",
+      "accordion",
+      "article",
+      "blog-list",
+      "canvas-search-hero",
       "cards",
+      "carousel",
       "columns",
-      "fragment"
+      "dm-video",
+      "footer-sai",
+      "fragment",
+      "hero",
+      "industry-list",
+      "search",
+      "spotlight",
+      "tabs-new"
+    ]
+  },
+  {
+    "id": "accordion",
+    "components": [
+      "accordion-item"
+    ]
+  },
+  {
+    "id": "canvas-search-hero",
+    "components": [
+      "canvas-search-hero-settings",
+      "canvas-search-hero-cta"
     ]
   },
   {
     "id": "cards",
     "components": [
       "card"
+    ]
+  },
+  {
+    "id": "carousel",
+    "components": [
+      "carousel-item"
     ]
   },
   {
@@ -38,6 +67,37 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "footer-sai",
+    "components": [
+      "footer-sai-hero",
+      "footer-sai-nav-item",
+      "footer-sai-legal-item",
+      "footer-sai-tcs-logo",
+      "footer-sai-tata-logo",
+      "canvas-search-hero-settings"
+    ]
+  },
+  {
+    "id": "industry-list",
+    "components": [
+      "industry-list-header",
+      "industry-list-card"
+    ]
+  },
+  {
+    "id": "spotlight",
+    "components": [
+      "spotlight-header",
+      "spotlight-card"
+    ]
+  },
+  {
+    "id": "tabs-new",
+    "components": [
+      "tabs-item"
     ]
   }
 ]

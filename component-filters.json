@@ -108,13 +108,6 @@
     ]
   },
   {
-    "id": "industry-list",
-    "components": [
-      "industry-list-header",
-      "industry-list-card"
-    ]
-  },
-  {
     "id": "richtext",
     "components": [
       "richtext"

@@ -46,7 +46,7 @@ function createButton(text, href, secondary = false) {
   }
 
   button.className = `${CLASS_PREFIX}-button${secondary ? ` ${CLASS_PREFIX}-button-secondary` : ''
-    }`;
+  }`;
 
   button.textContent = text;
 
@@ -152,7 +152,7 @@ function createModalDOM(data) {
   const variantClass = getVariantClass(variant);
 
   dialog.className = `${CLASS_PREFIX}-dialog${variantClass ? ` ${variantClass}` : ''
-    }`;
+  }`;
 
   dialog.setAttribute('role', 'dialog');
   dialog.setAttribute('aria-modal', 'true');

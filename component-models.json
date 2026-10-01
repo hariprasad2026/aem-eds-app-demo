@@ -2627,65 +2627,94 @@
     ]
   },
   {
-    "id": "tarun-header",
+    "id": "embedv1",
     "fields": [
       {
         "component": "select",
-        "valueType": "string",
-        "name": "headerVariant",
-        "label": "Header Variant",
-        "value": "standard",
+        "name": "type",
+        "label": "Embed Type",
+        "required": true,
         "options": [
           {
-            "name": "Standard",
-            "value": "standard"
+            "name": "Iframe",
+            "value": "iframe"
           },
           {
-            "name": "Compact",
-            "value": "compact"
+            "name": "YouTube",
+            "value": "youtube"
           },
           {
-            "name": "Dark",
-            "value": "dark"
+            "name": "Vimeo",
+            "value": "vimeo"
           },
           {
-            "name": "Centered",
-            "value": "centered"
+            "name": "Generic",
+            "value": "generic"
           }
         ]
       },
       {
-        "component": "reference",
+        "component": "text",
         "valueType": "string",
-        "name": "tcsLogo",
-        "label": "TCS Logo Image"
+        "name": "url",
+        "label": "Embed URL",
+        "required": true
       },
       {
-        "component": "text-input",
+        "component": "text",
         "valueType": "string",
-        "name": "tcsLogoLink",
-        "label": "TCS Logo Target URL",
-        "value": "/"
+        "name": "title",
+        "label": "Title"
       },
       {
-        "component": "reference",
+        "component": "textarea",
         "valueType": "string",
-        "name": "tataLogo",
-        "label": "Tata Logo Image"
+        "name": "caption",
+        "label": "Caption"
       },
       {
-        "component": "text-input",
-        "valueType": "string",
-        "name": "tataLogoLink",
-        "label": "Tata Logo Target URL",
-        "value": "https://www.tata.com"
+        "component": "select",
+        "name": "alignment",
+        "label": "Alignment",
+        "value": "center",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
       },
       {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "menu",
-        "label": "Navigation Links",
-        "description": "Add top-level links or a bulleted list for submenus."
+        "component": "select",
+        "name": "size",
+        "label": "Size",
+        "value": "large",
+        "options": [
+          {
+            "name": "Small",
+            "value": "small"
+          },
+          {
+            "name": "Medium",
+            "value": "medium"
+          },
+          {
+            "name": "Large",
+            "value": "large"
+          },
+          {
+            "name": "Full Width",
+            "value": "full-width"
+          }
+        ]
       }
     ]
   },

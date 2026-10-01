@@ -1,159 +1,281 @@
-import { createOptimizedPicture } from '../../scripts/aem.js';
+import { moveInstrumentation } from '../../scripts/scripts.js';
 
-/**
- * Helper to safely extract property elements or child values
- */
-function getProp(block, name, fallback = '') {
-  const lower = name.toLowerCase();
-  const fieldOrder = ['headerVariant', 'tcsLogo', 'tcsLogoLink', 'tataLogo', 'tataLogoLink', 'menu'];
-
-  const getValue = (element) => {
-    if (!element) return '';
-    const image = element.matches('img') ? element : element.querySelector('picture img, img');
-    if (image) return image.getAttribute('src') || image.src;
-    const anchor = element.matches('a') ? element : element.querySelector('a');
-    if (anchor) return anchor.getAttribute('href') || anchor.textContent.trim();
-    return element.dataset.value || element.textContent.trim();
-  };
-
-  // 1. Direct dataset or data-aue-prop lookup
-  if (block.dataset[name] !== undefined) return block.dataset[name];
-  if (block.dataset[lower] !== undefined) return block.dataset[lower];
-  const attrElem = block.querySelector(`[data-aue-prop="${name}"], [data-aue-prop="${lower}"]`);
-  if (attrElem) return getValue(attrElem);
-
-  // 2. Table row fallback scanning
-  const rows = [...block.children];
-  for (let index = 0; index < rows.length; index += 1) {
-    const row = rows[index];
-    const cols = [...row.children];
-    if (cols.length >= 2) {
-      const key = cols[0].textContent.trim().toLowerCase().replace(/[-_]/g, '');
-      if (key === lower.replace(/[-_]/g, '')) {
-        return getValue(cols[1]);
-      }
-    }
+function asText(value) {
+  if (!value) {
+    return '';
   }
 
-  // 3. Published Universal Editor content stores model fields in row order.
-  const fieldIndex = fieldOrder.indexOf(name);
-  if (fieldIndex >= 0 && rows[fieldIndex]) {
-    const cols = [...rows[fieldIndex].children];
-    return getValue(cols.length > 1 ? cols[1] : rows[fieldIndex]) || fallback;
+  if (typeof value === 'string') {
+    return value.trim();
   }
 
-  return fallback;
+  return (value.textContent || '').trim();
 }
 
-export default function decorate(block) {
-  // 1. Extract Basic Properties
-  const config = {
-    headerVariant: getProp(block, 'headerVariant', 'standard').toLowerCase(),
-    tcsLogo: getProp(block, 'tcsLogo'),
-    tcsLogoLink: getProp(block, 'tcsLogoLink', '/'),
-    tataLogo: getProp(block, 'tataLogo'),
-    tataLogoLink: getProp(block, 'tataLogoLink', 'https://www.tata.com'),
+function getCellValue(cell) {
+  if (!cell) {
+    return '';
+  }
+
+  const anchor = cell.querySelector?.('a');
+
+  if (anchor) {
+    return anchor.getAttribute('href') || anchor.textContent.trim();
+  }
+
+  const iframe = cell.querySelector?.('iframe');
+
+  if (iframe) {
+    return iframe.getAttribute('src') || '';
+  }
+
+  if (cell.href) {
+    return cell.href;
+  }
+
+  return asText(cell);
+}
+
+function detectTypeFromUrl(url) {
+  if (!url) {
+    return '';
+  }
+
+  if (/(youtube\.com|youtu\.be)/i.test(url)) {
+    return 'youtube';
+  }
+
+  if (/vimeo\.com/i.test(url)) {
+    return 'vimeo';
+  }
+
+  return 'iframe';
+}
+
+function normalizeType(value, url) {
+  const type = (value || '').trim().toLowerCase();
+
+  const supported = [
+    'iframe',
+    'youtube',
+    'vimeo',
+    'generic',
+  ];
+
+  if (supported.includes(type)) {
+    return type;
+  }
+
+  return detectTypeFromUrl(url);
+}
+
+function normalizeAlignment(value) {
+  const alignment = (value || '').trim().toLowerCase();
+
+  return ['left', 'center', 'right'].includes(alignment)
+    ? alignment
+    : 'center';
+}
+
+function normalizeSize(value) {
+  const size = (value || '').trim().toLowerCase();
+
+  return [
+    'small',
+    'medium',
+    'large',
+    'full-width',
+  ].includes(size)
+    ? size
+    : 'large';
+}
+
+function buildYouTubeEmbed(url) {
+  const match = url.match(
+    /(?:v=|\.be\/|embed\/|shorts\/)([\w-]{11})/i,
+  );
+
+  return match
+    ? `https://www.youtube.com/embed/${match[1]}`
+    : url;
+}
+
+function buildVimeoEmbed(url) {
+  const match = url.match(
+    /vimeo\.com\/(?:video\/)?(\d+)/i,
+  );
+
+  return match
+    ? `https://player.vimeo.com/video/${match[1]}`
+    : url;
+}
+
+function createElement(tagName, className, text) {
+  const element = document.createElement(tagName);
+  element.className = className;
+
+  if (text) {
+    element.textContent = text;
+  }
+
+  return element;
+}
+
+function normalizeBlock(block) {
+  const data = {
+    type: '',
+    url: '',
+    title: '',
+    caption: '',
+    alignment: 'center',
+    size: 'large',
   };
-  const supportedVariants = ['standard', 'compact', 'dark', 'centered'];
-  if (!supportedVariants.includes(config.headerVariant)) config.headerVariant = 'standard';
 
-  // 2. Extract Menu Content
-  const menuRow = [...block.children][5];
-  const menuSource = block.querySelector('[data-aue-prop="menu"]')
-    || (menuRow && (menuRow.children[1] || menuRow))
-    || block.querySelector('ul');
-  let navList = document.createElement('ul');
-  navList.className = 'tarun-nav-list';
+  let titleCell = null;
+  let captionCell = null;
 
-  if (menuSource) {
-    const ul = menuSource.querySelector('ul') || menuSource;
-    if (ul.tagName === 'UL') {
-      navList = ul.cloneNode(true);
-      navList.className = 'tarun-nav-list';
-    } else {
-      menuSource.querySelectorAll('a[href]').forEach((link) => {
-        const item = document.createElement('li');
-        item.append(link.cloneNode(true));
-        navList.append(item);
-      });
-    }
+  const rows = [...block.children];
+
+  const cells = rows.map(
+    (row) => row.firstElementChild || row,
+  );
+
+  const [
+    typeCell,
+    urlCell,
+    titleValueCell,
+    captionValueCell,
+    alignmentCell,
+    sizeCell,
+  ] = cells;
+
+  data.type = asText(typeCell);
+  data.url = getCellValue(urlCell);
+  data.title = asText(titleValueCell);
+  data.caption = asText(captionValueCell);
+
+  if (alignmentCell) {
+    data.alignment = asText(alignmentCell);
   }
 
-  // 3. Rebuild Clean Block DOM
+  if (sizeCell) {
+    data.size = asText(sizeCell);
+  }
+
+  titleCell = titleValueCell;
+  captionCell = captionValueCell;
+
+  data.type = normalizeType(data.type, data.url);
+  data.alignment = normalizeAlignment(data.alignment);
+  data.size = normalizeSize(data.size);
+
+  return {
+    data,
+    titleCell,
+    captionCell,
+  };
+}
+
+function createFrame(data) {
+  let src = data.url;
+
+  if (data.type === 'youtube') {
+    src = buildYouTubeEmbed(data.url);
+  } else if (data.type === 'vimeo') {
+    src = buildVimeoEmbed(data.url);
+  }
+
+  const iframe = document.createElement('iframe');
+
+  iframe.className = 'embed-iframe';
+  iframe.src = src;
+  iframe.title = data.title || 'Embedded content';
+  iframe.loading = 'lazy';
+  iframe.allowFullscreen = true;
+  iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+
+  iframe.allow = [
+    'accelerometer',
+    'autoplay',
+    'clipboard-write',
+    'encrypted-media',
+    'gyroscope',
+    'picture-in-picture',
+    'web-share',
+  ].join('; ');
+
+  return iframe;
+}
+
+export default async function decorate(block) {
+  const {
+    data,
+    titleCell,
+    captionCell,
+  } = normalizeBlock(block);
+
+  if (!data.url) {
+    block.classList.add('embed-empty');
+
+    const placeholder = document.createElement('div');
+    placeholder.className = 'embed-placeholder';
+
+    const message = document.createElement('p');
+    message.className = 'embed-empty-message';
+    message.textContent = 'Please provide an embed URL.';
+
+    placeholder.append(message);
+    block.replaceChildren(placeholder);
+
+    return;
+  }
+
   block.textContent = '';
-  block.classList.remove('variant-standard', 'variant-compact', 'variant-dark', 'variant-centered');
-  block.classList.add(`variant-${config.headerVariant}`);
 
-  const navWrapper = document.createElement('div');
-  navWrapper.className = 'tarun-nav-wrapper';
+  const wrapper = document.createElement('figure');
 
-  const nav = document.createElement('nav');
-  nav.id = 'tarun-nav';
-  nav.setAttribute('aria-expanded', 'false');
+  wrapper.className = [
+    'embed',
+    data.type,
+    data.alignment,
+    data.size,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
-  // TCS Logo
-  const brandPrimary = document.createElement('div');
-  brandPrimary.className = 'nav-brand-primary';
-  const primaryAnchor = document.createElement('a');
-  primaryAnchor.href = config.tcsLogoLink;
+  const frameWrapper = document.createElement('div');
+  frameWrapper.className = 'embed-frame';
 
-  if (config.tcsLogo) {
-    primaryAnchor.append(createOptimizedPicture(
-      config.tcsLogo,
-      'Tata Consultancy Services',
-      false,
-      [{ width: '300' }],
-    ));
-  } else {
-    primaryAnchor.textContent = 'TCS';
+  frameWrapper.append(createFrame(data));
+  wrapper.append(frameWrapper);
+
+  if (data.title) {
+    const title = createElement(
+      'figcaption',
+      'embed-title',
+      data.title,
+    );
+
+    if (titleCell) {
+      moveInstrumentation(titleCell, title);
+    }
+
+    wrapper.append(title);
   }
-  brandPrimary.append(primaryAnchor);
 
-  // Navigation Links
-  const navSections = document.createElement('div');
-  navSections.className = 'nav-sections';
-  navSections.append(navList);
+  if (data.caption) {
+    const caption = createElement(
+      'figcaption',
+      'embed-caption',
+      data.caption,
+    );
 
-  // Tata Logo
-  const brandSecondary = document.createElement('div');
-  brandSecondary.className = 'nav-brand-secondary';
-  const secondaryAnchor = document.createElement('a');
-  secondaryAnchor.href = config.tataLogoLink;
-  secondaryAnchor.target = '_blank';
-  secondaryAnchor.rel = 'noopener noreferrer';
+    if (captionCell) {
+      moveInstrumentation(captionCell, caption);
+    }
 
-  if (config.tataLogo) {
-    secondaryAnchor.append(createOptimizedPicture(
-      config.tataLogo,
-      'TATA Group',
-      false,
-      [{ width: '160' }],
-    ));
-  } else {
-    secondaryAnchor.textContent = 'TATA';
+    wrapper.append(caption);
   }
-  brandSecondary.append(secondaryAnchor);
 
-  // Mobile Hamburger Toggle
-  const hamburgerWrapper = document.createElement('div');
-  hamburgerWrapper.className = 'nav-hamburger';
-  const hamburgerButton = document.createElement('button');
-  hamburgerButton.type = 'button';
-  hamburgerButton.setAttribute('aria-controls', 'tarun-nav');
-  hamburgerButton.setAttribute('aria-label', 'Open menu');
-  hamburgerButton.setAttribute('aria-expanded', 'false');
-  hamburgerButton.innerHTML = '<span class="nav-hamburger-icon"></span>';
-  hamburgerButton.addEventListener('click', () => {
-    const expanded = nav.getAttribute('aria-expanded') === 'true';
-    nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-    hamburgerButton.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-    hamburgerButton.setAttribute('aria-label', expanded ? 'Open menu' : 'Close menu');
-    document.body.style.overflowY = expanded ? '' : 'hidden';
-  });
-  hamburgerWrapper.append(hamburgerButton);
-
-  // Assemble
-  nav.append(hamburgerWrapper, brandPrimary, navSections, brandSecondary);
-  navWrapper.append(nav);
-  block.append(navWrapper);
+  block.append(wrapper);
 }

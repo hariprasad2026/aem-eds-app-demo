@@ -24,6 +24,7 @@
       "dm-video",
       "embedv1",
       "form",
+      "form-variations",
       "tarun-header",
       "footer-sai",
       "fragment",
@@ -189,6 +190,17 @@
       "tnc",
       "wizard",
       "range"
+    ]
+  },
+  {
+    "id": "form-variations",
+    "components": [
+      "field-text",
+      "field-select",
+      "field-textarea",
+      "field-checkbox",
+      "contact-card",
+      "field-submit"
     ]
   }
 ]

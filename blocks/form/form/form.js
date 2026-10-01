@@ -1,4 +1,4 @@
-import { createOptimizedPicture, loadCSS } from '../../scripts/aem.js';
+import { createOptimizedPicture, loadCSS } from '../../../scripts/aem.js';
 import transferRepeatableDOM, { insertAddButton, insertRemoveButton } from './components/repeat/repeat.js';
 import {
   emailPattern, getSubmitBaseUrl, SUBMISSION_SERVICE, SUPPORTED_SUBMISSION_ACTION_TYPES,
@@ -481,6 +481,7 @@ function addRequestContextToForm(formDef) {
         formDef.properties.queryParams[key?.toLowerCase()] = value;
       });
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.warn('Error reading URL parameters:', e);
     }
 
@@ -495,6 +496,7 @@ function addRequestContextToForm(formDef) {
         }
       });
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.warn('Error reading cookies:', e);
     }
   }
@@ -508,6 +510,7 @@ function loadFormCustomStyles(formDef) {
       const stylePath = style.startsWith('/') ? style : `/${style}`;
       loadCSS(`${base}${stylePath}`);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to load form CSS:', error);
     }
   }

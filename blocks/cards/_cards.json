@@ -30,7 +30,6 @@
             { "name": "image", "selector": "div:nth-child(1)>picture>img[src]" },
             { "name": "imageAlt", "selector": "div:nth-child(1)>picture>img[alt]" },
             { "name": "theme", "selector": "div:nth-child(2) [data-theme]" },
-            { "name": "badge", "selector": "div:nth-child(2)>p:first-child" },
             { "name": "text", "selector": "div:nth-child(2)" }
           ]
         },
@@ -83,12 +82,6 @@
               "value": "highlight"
             }
           ]
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "badge",
-          "label": "Badge / Tag (e.g., FEATURED)"
         },
         {
           "component": "richtext",

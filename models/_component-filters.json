@@ -10,5 +10,8 @@
   },
   {
     "...": "../blocks/*/_*.json#/filters"
+  },
+  {
+    "...": "../blocks/form/form/_form.json#/filters"
   }
 ]

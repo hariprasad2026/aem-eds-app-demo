@@ -15,6 +15,8 @@
  
 .tarun-header nav#tarun-nav {
   box-sizing: border-box;
+  position: relative;
+  z-index: 20;
   margin: 0 auto;
   max-width: 1440px;
   height: 124px;
@@ -117,6 +119,7 @@
     width: 22px;
     height: 2px;
     background-color: #1e1e1e;
+    transition: transform 0.2s ease, background-color 0.2s ease;
   }
  
   .tarun-header.variant-centered .nav-hamburger-icon::before,
@@ -133,14 +136,40 @@
     top: 4px;
   }
  
+  .tarun-header.variant-centered nav#tarun-nav[aria-expanded="true"] .nav-hamburger-icon {
+    background-color: transparent;
+  }
+ 
+  .tarun-header.variant-centered nav#tarun-nav[aria-expanded="true"] .nav-hamburger-icon::before {
+    transform: translateY(0) rotate(45deg);
+  }
+ 
+  .tarun-header.variant-centered nav#tarun-nav[aria-expanded="true"] .nav-hamburger-icon::after {
+    transform: translateY(0) rotate(-45deg);
+  }
+ 
   .tarun-header.variant-centered .nav-sections {
     display: none;
-    margin-left: auto;
-    margin-right: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    margin: 0;
+    padding: 24px 80px;
+    box-sizing: border-box;
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 8px 16px rgb(0 0 0 / 10%);
   }
  
   .tarun-header.variant-centered nav#tarun-nav[aria-expanded="true"] .nav-sections {
-    display: flex;
+    display: block;
+  }
+ 
+  .tarun-header.variant-centered .nav-sections .tarun-nav-list {
+    justify-content: center;
+    gap: 2.5rem;
   }
  
   .tarun-header.variant-centered .nav-brand-primary {
@@ -176,6 +205,16 @@
     transform: none;
   }
  
+  .tarun-header.variant-centered nav#tarun-nav {
+    justify-content: flex-start;
+    gap: 12px;
+  }
+ 
+  .tarun-header.variant-centered .nav-hamburger {
+    display: block;
+    flex: 0 0 auto;
+  }
+ 
   .tarun-header .nav-brand-primary img {
     width: 100px;
     height: 24px;
@@ -185,14 +224,24 @@
     display: none;
   }
  
+  .tarun-header.variant-centered .nav-brand-secondary {
+    display: block;
+    margin-left: auto;
+  }
+ 
+  .tarun-header.variant-centered .nav-brand-secondary img {
+    width: 42px;
+    height: 36px;
+  }
+ 
   .tarun-header .nav-sections {
     display: none;
-    position: fixed;
-    top: 64px;
+    position: absolute;
+    top: 100%;
     left: 0;
     z-index: 10;
     width: 100%;
-    height: calc(100dvh - 64px);
+    max-height: calc(100dvh - 64px);
     background: #fff;
     padding: 2rem;
     box-sizing: border-box;
@@ -200,9 +249,12 @@
     overscroll-behavior: contain;
   }
  
+  .tarun-header.variant-centered .nav-sections {
+    top: 100%;
+  }
+ 
   .tarun-header.variant-compact .nav-sections {
-    top: 56px;
-    height: calc(100dvh - 56px);
+    max-height: calc(100dvh - 56px);
   }
  
   .tarun-header .nav-sections .tarun-nav-list {
@@ -238,6 +290,7 @@
     width: 22px;
     height: 2px;
     background-color: #1e1e1e;
+    transition: transform 0.2s ease, background-color 0.2s ease;
   }
  
   .tarun-header .nav-hamburger-icon::before {
@@ -264,24 +317,33 @@
 }
  
 /* Dark theme overrides must follow responsive base colors. */
-.tarun-header.variant-dark .tarun-nav-wrapper {
+.tarun-header.variant-dark .tarun-nav-wrapper,
+.tarun-header[data-variant="dark"] .tarun-nav-wrapper {
   background-color: #1e1e1e;
   border-bottom-color: #333;
 }
  
+.tarun-header[data-variant="dark"] .nav-brand-primary a,
+.tarun-header[data-variant="dark"] .nav-brand-secondary a,
 .tarun-header.variant-dark .nav-brand-primary a,
 .tarun-header.variant-dark .nav-brand-secondary a,
-.tarun-header.variant-dark nav#tarun-nav .nav-sections a {
-  color: #fff;
+.tarun-header.variant-dark nav#tarun-nav .nav-sections a,
+.tarun-header[data-variant="dark"] nav#tarun-nav .nav-sections a,
+.tarun-header.variant-dark nav#tarun-nav .nav-sections li,
+.tarun-header[data-variant="dark"] nav#tarun-nav .nav-sections li {
+  color: #fff !important;
 }
  
-.tarun-header.variant-dark .nav-sections {
+.tarun-header.variant-dark .nav-sections,
+.tarun-header[data-variant="dark"] .nav-sections {
   background-color: #1e1e1e;
 }
  
 .tarun-header.variant-dark .nav-hamburger-icon,
 .tarun-header.variant-dark .nav-hamburger-icon::before,
-.tarun-header.variant-dark .nav-hamburger-icon::after {
+.tarun-header.variant-dark .nav-hamburger-icon::after,
+.tarun-header[data-variant="dark"] .nav-hamburger-icon,
+.tarun-header[data-variant="dark"] .nav-hamburger-icon::before,
+.tarun-header[data-variant="dark"] .nav-hamburger-icon::after {
   background-color: #fff;
 }
- 

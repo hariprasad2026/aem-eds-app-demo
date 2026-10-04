@@ -1146,6 +1146,54 @@
     ]
   },
   {
+    "id": "footer-sai",
+    "fields": [
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Footer Theme",
+        "valueType": "string",
+        "required": false,
+        "maxSize": 1,
+        "options": [
+          {
+            "name": "Theme",
+            "children": [
+              {
+                "name": "Dark",
+                "value": "footer-sai-theme-dark"
+              },
+              {
+                "name": "Soft White",
+                "value": "footer-sai-theme-soft-white"
+              },
+              {
+                "name": "Powder Blue",
+                "value": "footer-sai-theme-powder-blue"
+              },
+              {
+                "name": "Sage Green",
+                "value": "footer-sai-theme-sage-green"
+              },
+              {
+                "name": "Blush Pink",
+                "value": "footer-sai-theme-blush-pink"
+              },
+              {
+                "name": "Lavender",
+                "value": "footer-sai-theme-lavender"
+              },
+              {
+                "name": "Warm Cream",
+                "value": "footer-sai-theme-warm-cream"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "footer-sai-hero",
     "fields": [
       {
@@ -1795,61 +1843,6 @@
     ]
   },
   {
-    "id": "industry-list-header",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "heading",
-        "label": "Heading",
-        "value": "Deep expertise, across industries"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "exploreLink",
-        "label": "Explore All Link",
-        "description": "Add a linked 'Explore all Industries' label. The arrow is added automatically.",
-        "value": ""
-      }
-    ]
-  },
-  {
-    "id": "industry-list-card",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "number",
-        "label": "Number",
-        "description": "Optional. Leave blank to number cards automatically as 01, 02, 03, etc.",
-        "value": ""
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
-        "label": "Title",
-        "value": "Banking"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "description",
-        "label": "Description",
-        "value": "Building the Intelligent, Trusted Bank"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "link",
-        "label": "Card Link",
-        "description": "Add a link to the destination. The card uses the title as its accessible link label; the arrow is added automatically.",
-        "value": ""
-      }
-    ]
-  },
-  {
     "id": "modal-v1",
     "fields": [
       {
@@ -2264,60 +2257,6 @@
     ]
   },
   {
-    "id": "spotlight-header",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
-        "label": "Heading",
-        "value": "Latest News"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "viewAllLink",
-        "label": "View All Link",
-        "description": "Add a linked 'View all' label; the arrow is decorative.",
-        "value": ""
-      }
-    ]
-  },
-  {
-    "id": "spotlight-card",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "category",
-        "label": "Category Tag",
-        "value": "Event"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "eyebrow",
-        "label": "Small Tagline",
-        "value": "Executive Leadership"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "headline",
-        "label": "Headline",
-        "value": "Join us at the Enterprise Intelligence Summit 2027"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "link",
-        "label": "Card Link",
-        "description": "Add a link to the destination. The headline is displayed as the card text and the entire card is clickable.",
-        "value": ""
-      }
-    ]
-  },
-  {
     "id": "table",
     "fields": [
       {
@@ -2627,94 +2566,65 @@
     ]
   },
   {
-    "id": "embedv1",
+    "id": "tarun-header",
     "fields": [
       {
         "component": "select",
-        "name": "type",
-        "label": "Embed Type",
-        "required": true,
+        "valueType": "string",
+        "name": "headerVariant",
+        "label": "Header Variant",
+        "value": "standard",
         "options": [
           {
-            "name": "Iframe",
-            "value": "iframe"
+            "name": "Standard",
+            "value": "standard"
           },
           {
-            "name": "YouTube",
-            "value": "youtube"
+            "name": "Compact",
+            "value": "compact"
           },
           {
-            "name": "Vimeo",
-            "value": "vimeo"
+            "name": "Dark",
+            "value": "dark"
           },
           {
-            "name": "Generic",
-            "value": "generic"
+            "name": "Centered",
+            "value": "centered"
           }
         ]
       },
       {
-        "component": "text",
+        "component": "reference",
         "valueType": "string",
-        "name": "url",
-        "label": "Embed URL",
-        "required": true
+        "name": "tcsLogo",
+        "label": "TCS Logo Image"
       },
       {
-        "component": "text",
+        "component": "text-input",
         "valueType": "string",
-        "name": "title",
-        "label": "Title"
+        "name": "tcsLogoLink",
+        "label": "TCS Logo Target URL",
+        "value": "/"
       },
       {
-        "component": "textarea",
+        "component": "reference",
         "valueType": "string",
-        "name": "caption",
-        "label": "Caption"
+        "name": "tataLogo",
+        "label": "Tata Logo Image"
       },
       {
-        "component": "select",
-        "name": "alignment",
-        "label": "Alignment",
-        "value": "center",
-        "options": [
-          {
-            "name": "Left",
-            "value": "left"
-          },
-          {
-            "name": "Center",
-            "value": "center"
-          },
-          {
-            "name": "Right",
-            "value": "right"
-          }
-        ]
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tataLogoLink",
+        "label": "Tata Logo Target URL",
+        "value": "https://www.tata.com"
       },
       {
-        "component": "select",
-        "name": "size",
-        "label": "Size",
-        "value": "large",
-        "options": [
-          {
-            "name": "Small",
-            "value": "small"
-          },
-          {
-            "name": "Medium",
-            "value": "medium"
-          },
-          {
-            "name": "Large",
-            "value": "large"
-          },
-          {
-            "name": "Full Width",
-            "value": "full-width"
-          }
-        ]
+        "component": "richtext",
+        "valueType": "string",
+        "name": "menu",
+        "label": "Navigation Links",
+        "description": "Add top-level links or a bulleted list for submenus."
       }
     ]
   },
@@ -7970,6 +7880,221 @@
         "name": "tooltip",
         "label": "Short description",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "form-variations",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "formTitle",
+        "label": "Form Title / Heading"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "formDescription",
+        "label": "Form Description"
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Theme & Style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Dark Theme",
+            "value": "dark"
+          },
+          {
+            "name": "Light Theme",
+            "value": "light"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "field-text",
+    "fields": [
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Field Name / ID (e.g. firstName)",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "label",
+        "label": "Field Label (e.g. First name)",
+        "required": true
+      },
+      {
+        "component": "select",
+        "name": "type",
+        "label": "Input Type",
+        "value": "text",
+        "options": [
+          {
+            "name": "Text",
+            "value": "text"
+          },
+          {
+            "name": "Email",
+            "value": "email"
+          },
+          {
+            "name": "Tel",
+            "value": "tel"
+          }
+        ]
+      },
+      {
+        "component": "checkbox",
+        "name": "required",
+        "label": "Mandatory Field (*)"
+      },
+      {
+        "component": "text",
+        "name": "dependsOn",
+        "label": "Show Only If Dropdown Value Equals (Case 1)"
+      }
+    ]
+  },
+  {
+    "id": "field-select",
+    "fields": [
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Dropdown ID (e.g. sector or region)",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "label",
+        "label": "Dropdown Label (e.g. Sector)",
+        "required": true
+      },
+      {
+        "component": "checkbox",
+        "name": "required",
+        "label": "Mandatory Field (*)"
+      },
+      {
+        "component": "text",
+        "name": "options",
+        "label": "Options (Comma Separated e.g. Technology, Sport, Asia Pacific, India)"
+      },
+      {
+        "component": "text",
+        "name": "dependsOn",
+        "label": "Show Only If Dropdown Value Equals (Case 1)"
+      }
+    ]
+  },
+  {
+    "id": "field-textarea",
+    "fields": [
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Field ID (e.g. feedback)",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "label",
+        "label": "Field Label (e.g. How can we help you?)",
+        "required": true
+      },
+      {
+        "component": "number",
+        "name": "maxLength",
+        "label": "Max Character Limit",
+        "value": 1500
+      },
+      {
+        "component": "checkbox",
+        "name": "required",
+        "label": "Mandatory Field (*)"
+      },
+      {
+        "component": "text",
+        "name": "dependsOn",
+        "label": "Show Only If Dropdown Value Equals (Case 1)"
+      }
+    ]
+  },
+  {
+    "id": "field-checkbox",
+    "fields": [
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Checkbox ID (e.g. consent)",
+        "required": true
+      },
+      {
+        "component": "richtext",
+        "name": "label",
+        "label": "Consent Text / Disclaimer",
+        "required": true
+      },
+      {
+        "component": "checkbox",
+        "name": "required",
+        "label": "Mandatory Field (*)"
+      },
+      {
+        "component": "text",
+        "name": "dependsOn",
+        "label": "Show Only If Dropdown Value Equals (Case 1)"
+      }
+    ]
+  },
+  {
+    "id": "contact-card",
+    "fields": [
+      {
+        "component": "text",
+        "name": "region",
+        "label": "Target Dropdown Match Value (e.g. India)",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "contactName",
+        "label": "Contact Name (e.g. Iris Tham)",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "emails",
+        "label": "Emails (Comma Separated)"
+      },
+      {
+        "component": "text",
+        "name": "phones",
+        "label": "Phones (Comma Separated)"
+      }
+    ]
+  },
+  {
+    "id": "field-submit",
+    "fields": [
+      {
+        "component": "text",
+        "name": "label",
+        "label": "Button Label",
+        "value": "Send"
+      },
+      {
+        "component": "text",
+        "name": "dependsOn",
+        "label": "Show Only If Dropdown Value Equals (Case 1)"
       }
     ]
   }

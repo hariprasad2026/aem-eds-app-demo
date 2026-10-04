@@ -10,9 +10,9 @@ const escapeHtml = (value = '') => String(value)
 const DISPLAY_FIELDS = [
   'title',
   'author',
-  'publicationdate',
+  'publicationDate',
   'content',
-  'featuredimage',
+  'featuredImage',
 ];
 
 function getFallbackArticle(block) {
@@ -128,9 +128,9 @@ function renderArticle({
     title, author, date, content, image,
   } = article;
 
-  const showImage = showField('featuredimage') && image;
+  const showImage = showField('featuredImage') && image;
   const showAuthor = showField('author') && author;
-  const showDate = showField('publicationdate') && date;
+  const showDate = showField('publicationDate') && date;
 
   const imageMarkup = showImage
     ? `<div class="featured-image">
@@ -175,7 +175,7 @@ export default async function decorate(block) {
   const aempublishurl = getAEMPublish();
   const aemauthorurl = getAEMAuthor();
 
-  const persistedquery = '/graphql/execute.json/tcsdemopartnersandboxprogram/ArticleByPath';
+  const persistedquery = '/graphql/execute.json/aem-eds-xwalk/ArticleByPath';
 
   const sourceLink = block.querySelector('a[href]');
 

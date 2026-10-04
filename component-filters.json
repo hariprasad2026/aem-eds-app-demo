@@ -24,6 +24,7 @@
       "dm-video",
       "embedv1",
       "form",
+      "form-variations",
       "tarun-header",
       "footer-sai",
       "fragment",
@@ -107,13 +108,6 @@
     ]
   },
   {
-    "id": "industry-list",
-    "components": [
-      "industry-list-header",
-      "industry-list-card"
-    ]
-  },
-  {
     "id": "richtext",
     "components": [
       "richtext"
@@ -123,13 +117,6 @@
         "format": []
       }
     }
-  },
-  {
-    "id": "spotlight",
-    "components": [
-      "spotlight-header",
-      "spotlight-card"
-    ]
   },
   {
     "id": "table",
@@ -189,6 +176,17 @@
       "tnc",
       "wizard",
       "range"
+    ]
+  },
+  {
+    "id": "form-variations",
+    "components": [
+      "field-text",
+      "field-select",
+      "field-textarea",
+      "field-checkbox",
+      "contact-card",
+      "field-submit"
     ]
   }
 ]

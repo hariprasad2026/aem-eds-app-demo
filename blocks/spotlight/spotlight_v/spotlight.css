@@ -27,6 +27,8 @@ main > .section > div.spotlight-wrapper {
   margin: 0;
 }
 
+/* Header */
+
 .spotlight .spotlight-header {
   display: flex;
   align-items: center;
@@ -79,6 +81,8 @@ main > .section > div.spotlight-wrapper {
   text-decoration: underline;
 }
 
+/* Spotlight card */
+
 .spotlight .spotlight-card {
   position: relative;
   box-sizing: border-box;
@@ -90,6 +94,8 @@ main > .section > div.spotlight-wrapper {
   border-bottom: 1px solid #c6c6c6;
   padding: 30px 0 32px;
 }
+
+/* Metadata */
 
 .spotlight .spotlight-meta {
   display: flex;
@@ -115,6 +121,8 @@ main > .section > div.spotlight-wrapper {
   text-transform: uppercase;
 }
 
+/* Headline */
+
 .spotlight .spotlight-headline {
   grid-column: 1;
   align-self: start;
@@ -122,6 +130,8 @@ main > .section > div.spotlight-wrapper {
   font-weight: 400;
   line-height: 1.25;
 }
+
+/* Card link */
 
 .spotlight .spotlight-card-link {
   grid-column: 2;
@@ -149,15 +159,130 @@ main > .section > div.spotlight-wrapper {
   font-size: 36px;
 }
 
+.spotlight .spotlight-card-link a:focus-visible {
+  outline: 2px solid #1f1f1f;
+  outline-offset: -2px;
+}
+
+.spotlight.compact .spotlight-headline {
+  font-size: clamp(22px, 2.4vw, 30px);
+}
+
+.spotlight.no-metadata .spotlight-headline {
+  align-self: center;
+}
+
+.spotlight.featured-first .spotlight-featured-card .spotlight-headline {
+  font-size: clamp(32px, 3.6vw, 48px);
+}
+
+/* Hover */
+
 .spotlight .spotlight-card:has(a:hover) .spotlight-headline,
 .spotlight .spotlight-card:has(a:focus-visible) .spotlight-headline {
   text-decoration: underline;
 }
 
-.spotlight .spotlight-card-link a:focus-visible {
-  outline: 2px solid #1f1f1f;
-  outline-offset: -2px;
+/* =========================================
+   COMPACT VARIATION
+   ========================================= */
+
+.spotlight.compact {
+  min-height: 0;
+  padding-top: 56px;
+  padding-bottom: 64px;
 }
+
+.spotlight.compact .spotlight-header {
+  margin-bottom: 36px;
+}
+
+.spotlight.compact .spotlight-card {
+  min-height: 120px;
+  padding: 18px 0 20px;
+}
+
+
+
+/* =========================================
+   NO METADATA VARIATION
+   ========================================= */
+
+.spotlight.no-metadata .spotlight-meta {
+  display: none;
+}
+
+.spotlight.no-metadata .spotlight-card {
+  min-height: 140px;
+  align-items: center;
+}
+
+
+
+/* =========================================
+   FEATURED FIRST VARIATION
+   ========================================= */
+
+.spotlight.featured-first .spotlight-featured-card {
+  min-height: 240px;
+  border-bottom: 0;
+  padding: 36px 40px;
+  background-color: #edf3fa;
+}
+
+
+
+.spotlight.featured-first .spotlight-featured-card .spotlight-card-link a::after {
+  font-size: 40px;
+}
+
+/* =========================================
+   DARK THEME VARIATION
+   ========================================= */
+
+.spotlight-container:has(.spotlight.dark),
+.spotlight.dark {
+  background-color: #171d27;
+}
+
+.spotlight.dark {
+  color: #f7f9fc;
+}
+
+.spotlight.dark .spotlight-card {
+  border-bottom-color: #677182;
+}
+
+.spotlight.dark .spotlight-category {
+  background-color: #cedff4;
+  color: #171d27;
+}
+
+.spotlight.dark .spotlight-view-all a:hover,
+.spotlight.dark .spotlight-view-all a:focus-visible {
+  color: #cedff4;
+}
+
+.spotlight.dark .spotlight-card-link a:focus-visible {
+  outline-color: #fff;
+}
+
+/* =========================================
+   DARK + FEATURED FIRST
+   ========================================= */
+
+.spotlight.dark.featured-first .spotlight-featured-card {
+  background-color: #252d3a;
+}
+
+.spotlight.dark.featured-first .spotlight-featured-card .spotlight-category {
+  background-color: #cedff4;
+  color: #171d27;
+}
+
+/* =========================================
+   TABLET
+   ========================================= */
 
 @media (width < 900px) {
   .spotlight {
@@ -173,7 +298,28 @@ main > .section > div.spotlight-wrapper {
     min-height: 130px;
     padding: 24px 0;
   }
+
+  .spotlight.compact {
+    padding: 40px 24px;
+  }
+
+  .spotlight.compact .spotlight-card {
+    min-height: 100px;
+  }
+
+  .spotlight.no-metadata .spotlight-card {
+    min-height: 110px;
+  }
+
+  .spotlight.featured-first .spotlight-featured-card {
+    min-height: 180px;
+    padding: 28px 24px;
+  }
 }
+
+/* =========================================
+   MOBILE
+   ========================================= */
 
 @media (width < 600px) {
   .spotlight {
@@ -196,5 +342,26 @@ main > .section > div.spotlight-wrapper {
 
   .spotlight .spotlight-card-link a::after {
     font-size: 26px;
+  }
+
+  .spotlight.compact {
+    padding: 32px 20px;
+  }
+
+  .spotlight.no-metadata .spotlight-card {
+    min-height: 100px;
+  }
+
+  .spotlight.featured-first .spotlight-featured-card {
+    min-height: 150px;
+    padding: 24px 20px;
+  }
+
+  .spotlight.featured-first .spotlight-featured-card .spotlight-headline {
+    font-size: 28px;
+  }
+
+  .spotlight.featured-first .spotlight-featured-card .spotlight-card-link a::after {
+    font-size: 30px;
   }
 }

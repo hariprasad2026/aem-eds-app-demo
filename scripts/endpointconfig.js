@@ -2,6 +2,7 @@ function normalizeBaseUrl(value, fallback = '') {
   if (!value || typeof value !== 'string') {
     return fallback;
   }
+<<<<<<< HEAD
 
   return value.trim().replace(/\/+$/, '');
 }
@@ -15,28 +16,55 @@ function getConfigValue(key, fallback = '') {
   return normalizeBaseUrl(value, fallback);
 }
 
+=======
+  return value.trim().replace(/\/+$/, '');
+}
+ 
+function getConfigValue(key, fallback = '') {
+  const config = typeof window !== 'undefined' ? window.hlx?.config : undefined;
+  const value = config?.[key] ?? fallback;
+  return normalizeBaseUrl(value, fallback);
+}
+ 
+// Endpoint configuration functions
+>>>>>>> 163f7942858369954c2951900063d8c10e1fc84d
 function getAEMPublish() {
   return getConfigValue(
     'aem.publish',
     typeof window !== 'undefined' ? window.location.origin : '',
   );
 }
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 163f7942858369954c2951900063d8c10e1fc84d
 function getAEMAuthor() {
   return getConfigValue(
     'aem.author',
     typeof window !== 'undefined' ? window.location.origin : '',
   );
 }
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 163f7942858369954c2951900063d8c10e1fc84d
 function isUniversalEditorMode() {
   if (typeof window === 'undefined' || typeof document === 'undefined') {
     return false;
   }
+<<<<<<< HEAD
 
   const params = new URLSearchParams(window.location.search);
   const wcmmode = params.get('wcmmode');
 
+=======
+ 
+  const params = new URLSearchParams(window.location.search);
+  const wcmmode = params.get('wcmmode');
+ 
+>>>>>>> 163f7942858369954c2951900063d8c10e1fc84d
   return (
     document.documentElement.classList.contains('adobe-ue-edit')
     || wcmmode === 'edit'
@@ -45,14 +73,24 @@ function isUniversalEditorMode() {
     || window.location.pathname.includes('/editor')
   );
 }
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 163f7942858369954c2951900063d8c10e1fc84d
 function isDocumentAuthoringMode() {
   if (typeof window === 'undefined' || typeof document === 'undefined') {
     return false;
   }
+<<<<<<< HEAD
 
   const params = new URLSearchParams(window.location.search);
 
+=======
+ 
+  const params = new URLSearchParams(window.location.search);
+ 
+>>>>>>> 163f7942858369954c2951900063d8c10e1fc84d
   return (
     document.documentElement.classList.contains('da-live')
     || document.body?.dataset?.daLive === 'true'
@@ -62,11 +100,19 @@ function isDocumentAuthoringMode() {
     || params.has('adobe_authoring')
   );
 }
+<<<<<<< HEAD
 
 function isAuthoringMode() {
   return isUniversalEditorMode() || isDocumentAuthoringMode();
 }
 
+=======
+ 
+function isAuthoringMode() {
+  return isUniversalEditorMode() || isDocumentAuthoringMode();
+}
+ 
+>>>>>>> 163f7942858369954c2951900063d8c10e1fc84d
 export {
   getAEMPublish,
   getAEMAuthor,
@@ -74,3 +120,8 @@ export {
   isDocumentAuthoringMode,
   isAuthoringMode,
 };
+<<<<<<< HEAD
+=======
+ 
+ 
+>>>>>>> 163f7942858369954c2951900063d8c10e1fc84d

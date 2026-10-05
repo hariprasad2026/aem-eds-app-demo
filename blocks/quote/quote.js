@@ -37,6 +37,8 @@ export default async function decorate(block) {
       layout = 'profile';
     } else if (value.includes('image')) {
       layout = 'image';
+    } else if (value.includes('big')) {
+      layout = 'big';
     } else if (value.includes('center')) {
       layout = 'centered';
     } else if (value.includes('right')) {

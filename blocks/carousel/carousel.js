@@ -32,6 +32,11 @@ function updateActiveSlide(slide) {
 
 export { showSlide };
 
+function getActiveSlideIndex(block) {
+  const activeSlide = Number.parseInt(block.dataset.activeSlide, 10);
+  return Number.isNaN(activeSlide) ? 0 : activeSlide;
+}
+
 function bindEvents(block) {
   const slideIndicators = block.querySelector('.carousel-slide-indicators');
   if (!slideIndicators) return;
@@ -44,10 +49,10 @@ function bindEvents(block) {
   });
 
   block.querySelector('.slide-prev').addEventListener('click', () => {
-    showSlide(block, parseInt(block.dataset.activeSlide, 10) - 1);
+    showSlide(block, getActiveSlideIndex(block) - 1);
   });
   block.querySelector('.slide-next').addEventListener('click', () => {
-    showSlide(block, parseInt(block.dataset.activeSlide, 10) + 1);
+    showSlide(block, getActiveSlideIndex(block) + 1);
   });
 
   const slideObserver = new IntersectionObserver(
@@ -166,6 +171,7 @@ export default async function decorate(block) {
   block.prepend(container);
 
   if (!isSingleSlide) {
+    updateActiveSlide(slidesWrapper.querySelector('.carousel-slide'));
     bindEvents(block);
   }
 }

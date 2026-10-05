@@ -194,6 +194,7 @@ function decorateSplitHero(block, titleType) {
 
     media.append(optimizedPicture);
   }
+
   return [content, media];
 }
 
@@ -244,7 +245,6 @@ function decorateOverlayHero(block, titleType) {
 /** variant-3 */
 function decorateCenteredHero(block, titleType) {
   const fields = getContent(block);
-
   const content = document.createElement('div');
   content.className = 'hero-centered-content';
 
@@ -360,7 +360,9 @@ export default function decorate(block) {
   const fields = getContent(block);
   const heroType = fields.heroType || 'split';
   const titleType = fields.titleType || 'h1';
+
   const { textColor } = fields;
+
   const { backgroundColor } = fields;
   const { buttonColor } = fields;
   const { imagePosition } = fields;
@@ -405,6 +407,7 @@ export default function decorate(block) {
   block.textContent = '';
 
   block.classList.add(`hero-${heroType}`);
+
   if (textColor) block.classList.add(textColor);
   if (backgroundColor) block.classList.add(backgroundColor);
   if (buttonColor) block.classList.add(buttonColor);

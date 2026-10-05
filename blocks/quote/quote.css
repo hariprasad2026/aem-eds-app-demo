@@ -1,10 +1,11 @@
 .quote blockquote {
   margin: 0 auto;
   max-width: 900px;
-  padding: 16px 8px;
+  padding: 48px;
   background-color: var(--quote-bg, transparent);
   color: var(--quote-text, inherit);
   border-radius: 16px;
+  box-sizing: border-box;
 }
 
 .quote .quote-content {
@@ -14,7 +15,7 @@
 
 @media (width >=900px) {
   .quote blockquote {
-    padding: 16px 8px;
+    padding: 48px;
   }
 }
 
@@ -251,4 +252,87 @@
 
 .quote blockquote.right .quote-profile {
   justify-content: flex-end;
+}
+
+/* Big Quote Layout */
+
+/* Big Quote Layout */
+.quote blockquote.big {
+  max-width: 1200px;
+  padding: 64px 80px;
+  background-color: var(--quote-bg, transparent);
+  border-radius: 16px;
+  box-sizing: border-box;
+}
+
+.quote blockquote.big .quote-content {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Big opening quote */
+.quote blockquote.big .quote-content::before {
+  content: "❝";
+  display: block;
+  font-size: 96px;
+  line-height: 0.8;
+  margin-bottom: 32px;
+  color: var(--quote-color, rgb(70 115 219 / 100%));
+}
+
+/* Hide default small quotes */
+.quote blockquote.big .quote-quotation p:first-child::before,
+.quote blockquote.big .quote-quotation p:last-child::after {
+  content: none;
+}
+
+/* Big closing quote */
+.quote blockquote.big .quote-quotation::after {
+  content: "❞";
+  display: block;
+  font-size: 96px;
+  line-height: 0.8;
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: right;
+  color: var(--quote-color, rgb(70 115 219 / 100%));
+}
+
+.quote blockquote.big .quote-quotation {
+  max-width: 1200px;
+  font-size: 28px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--quote-color, rgb(70 115 219 / 100%));
+}
+
+.quote blockquote.big .quote-attribution {
+  max-width: 1200px;
+  margin-top: 0;
+  padding-top: 8px;
+  border-top: 1px solid rgb(0 0 0 / 10%);
+  font-size: 20px;
+  line-height: 1.4;
+  color: var(--quote-text, #0c0c0d);
+}
+
+@media (width <=768px) {
+  .quote blockquote.big {
+    padding: 24px;
+  }
+
+  .quote blockquote.big .quote-content::before {
+    font-size: 56px;
+    margin-bottom: 16px;
+  }
+
+  .quote blockquote.big .quote-quotation {
+    font-size: 22px;
+    line-height: 1.4;
+  }
+
+  .quote blockquote.big .quote-attribution {
+    font-size: 16px;
+  }
 }

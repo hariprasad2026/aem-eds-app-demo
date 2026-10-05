@@ -100,6 +100,12 @@ function applyHeroStyleClasses(block, hero) {
   block.classList.add(...styleClasses);
 }
 
+function getHeroRow(block, index) {
+  return block.children[index]?.firstElementChild
+    || block.children[index]
+    || null;
+}
+
 /**
  * Full Hero
  */
@@ -124,12 +130,14 @@ function renderImageTextHero(block, fragment, imagePosition) {
 
   const bgImage = hero.style.backgroundImage;
 
-  const title = hero.querySelector('.hero-title');
+  const title = getHeroRow(hero, 2)?.querySelector('h1')
+    || hero.querySelector('.hero-title');
 
-  const description = hero.querySelector('.hero-description');
+  const description = hero.querySelector('.hero-description')
+    || hero.querySelector('p');
 
-  const cta = hero.querySelector(
-    '.hero-link.hero-button, .hero-button-primary, .hero-button-secondary, .hero-banner-link',
+  const ctas = hero.querySelectorAll(
+    '.hero-link, .hero-button-primary, .hero-button-secondary, .hero-banner-link, a',
   );
 
   const wrapper = document.createElement('div');
@@ -156,9 +164,9 @@ function renderImageTextHero(block, fragment, imagePosition) {
     content.append(description.cloneNode(true));
   }
 
-  if (cta) {
+  ctas.forEach((cta) => {
     content.append(cta.cloneNode(true));
-  }
+  });
 
   if (imagePosition === 'right') {
     wrapper.append(content);
@@ -183,12 +191,14 @@ function renderWithoutMediaHero(block, fragment) {
 
   applyHeroStyleClasses(block, hero);
 
-  const title = hero.querySelector('.hero-title');
+  const title = getHeroRow(hero, 2)?.querySelector('h1')
+    || hero.querySelector('.hero-title');
 
-  const description = hero.querySelector('.hero-description');
+  const description = hero.querySelector('.hero-description')
+    || hero.querySelector('p');
 
-  const cta = hero.querySelector(
-    '.hero-link.hero-button, .hero-button-primary, .hero-button-secondary, .hero-banner-link',
+  const ctas = hero.querySelectorAll(
+    '.hero-link, .hero-button-primary, .hero-button-secondary, .hero-banner-link, a',
   );
 
   const wrapper = document.createElement('div');
@@ -202,9 +212,9 @@ function renderWithoutMediaHero(block, fragment) {
     wrapper.append(description.cloneNode(true));
   }
 
-  if (cta) {
+  ctas.forEach((cta) => {
     wrapper.append(cta.cloneNode(true));
-  }
+  });
 
   block.replaceChildren(wrapper);
 }
@@ -220,9 +230,11 @@ function renderTextOnlyHero(block, fragment) {
 
   applyHeroStyleClasses(block, hero);
 
-  const title = hero.querySelector('.hero-title');
+  const title = getHeroRow(hero, 2)?.querySelector('h1')
+    || hero.querySelector('.hero-title');
 
-  const description = hero.querySelector('.hero-description');
+  const description = hero.querySelector('.hero-description')
+    || hero.querySelector('p');
 
   const wrapper = document.createElement('div');
   wrapper.className = 'hero-fragment-text-only';

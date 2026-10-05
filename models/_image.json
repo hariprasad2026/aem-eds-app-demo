@@ -7,7 +7,10 @@
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/image/v1/image",
-            "template": {}
+            "template": {
+              "imageVariant": "default",
+              "imageBackground": "none"
+            }
           }
         }
       }
@@ -27,6 +30,54 @@
           "component": "text",
           "name": "imageAlt",
           "label": "Alt Text"
+        },
+        {
+          "component": "select",
+          "name": "imageVariant",
+          "label": "Image variation",
+          "value": "default",
+          "options": [
+            {
+              "name": "Default",
+              "value": "default"
+            },
+            {
+              "name": "Rounded corners",
+              "value": "rounded"
+            },
+            {
+              "name": "Bordered frame",
+              "value": "bordered"
+            },
+            {
+              "name": "Shadowed",
+              "value": "shadow"
+            },
+            {
+              "name": "Full width",
+              "value": "full-width"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "imageBackground",
+          "label": "Background",
+          "value": "none",
+          "options": [
+            {
+              "name": "No background",
+              "value": "none"
+            },
+            {
+              "name": "Light background",
+              "value": "light"
+            },
+            {
+              "name": "Dark background",
+              "value": "dark"
+            }
+          ]
         }
       ]
     }

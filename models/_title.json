@@ -8,7 +8,9 @@
           "page": {
             "resourceType": "core/franklin/components/title/v1/title",
             "template": {
-              "model": "title"
+              "model": "title",
+              "titleType": "h2",
+              "titleVariant": "default"
             }
           }
         }
@@ -52,6 +54,50 @@
             {
               "name": "h6",
               "value": "h6"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "titleVariant",
+          "label": "Title variation",
+          "value": "default",
+          "options": [
+            {
+              "name": "Default",
+              "value": "default"
+            },
+            {
+              "name": "With background color",
+              "value": "with-background"
+            },
+            {
+              "name": "Without background color",
+              "value": "no-background"
+            },
+            {
+              "name": "Background image",
+              "value": "image-background"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "alignment",
+          "label": "Alignment",
+          "value": "left",
+          "options": [
+            {
+              "name": "Left",
+              "value": "left"
+            },
+            {
+              "name": "Center",
+              "value": "center"
+            },
+            {
+              "name": "Right",
+              "value": "right"
             }
           ]
         }

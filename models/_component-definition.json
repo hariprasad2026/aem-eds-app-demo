@@ -33,6 +33,12 @@
       "components": [
         {
           "...": "../blocks/*/_*.json#/definitions"
+        },
+        {
+          "...": "../blocks/form/form/_form.json#/definitions"
+        },
+        {
+          "...": "../blocks/form-variations/form-variations/_form-variations.json#/definitions"
         }
       ]
     }

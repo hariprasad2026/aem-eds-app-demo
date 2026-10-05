@@ -24,17 +24,50 @@
           "component": "text",
           "valueType": "number",
           "name": "columns",
-          "value": "",
+          "value": "2",
           "label": "Columns"
         },
         {
           "component": "text",
           "valueType": "number",
           "name": "rows",
-          "value": "",
+          "value": "1",
           "label": "Rows"
+        },
+        {
+          "component": "select",
+          "name": "layout",
+          "label": "Layout variant",
+          "value": "default",
+          "options": [
+            {
+              "name": "Default Equal Grid",
+              "value": "default"
+            },
+            {
+              "name": "Stacked Left (Design 1)",
+              "value": "stacked-left"
+            },
+            {
+              "name": "Stacked Right (Design 2)",
+              "value": "stacked-right"
+            },
+            {
+              "name": "Image and copy",
+              "value": "image-copy"
+            },
+            {
+              "name": "Text and links",
+              "value": "text-links"
+            }
+          ]
         }
       ]
+    },
+    {
+      "id": "column",
+      "title": "Column",
+      "fields": []
     }
   ],
   "filters": [
@@ -50,7 +83,9 @@
         "text",
         "image",
         "button",
-        "title"
+        "title",
+        "quote",
+        "demo-card-column-item"
       ]
     }
   ]

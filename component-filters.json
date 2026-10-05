@@ -12,16 +12,62 @@
       "image",
       "button",
       "title",
-      "hero",
+      "accordion",
+      "article",
+      "blog-list",
+      "canvas-search-hero",
       "cards",
+      "carousel",
       "columns",
-      "fragment"
+      "demo-card-column",
+      "dm-scene7-template",
+      "dm-video",
+      "embedv1",
+      "form",
+      "form-variations",
+      "tarun-header",
+      "footer-sai",
+      "fragment",
+      "hero",
+      "industry-list",
+      "modal-v1",
+      "quote",
+      "search",
+      "spotlight",
+      "table",
+      "tabs-new",
+      "teaser-v2",
+      "text-with-link"
+    ]
+  },
+  {
+    "id": "accordion",
+    "components": [
+      "accordion-item"
+    ],
+    "rte": {
+      "toolbar": {
+        "format": []
+      }
+    }
+  },
+  {
+    "id": "canvas-search-hero",
+    "components": [
+      "canvas-search-hero-settings",
+      "canvas-search-hero-cta"
     ]
   },
   {
     "id": "cards",
     "components": [
       "card"
+    ]
+  },
+  {
+    "id": "carousel",
+    "components": [
+      "carousel-item"
     ]
   },
   {
@@ -36,7 +82,108 @@
       "text",
       "image",
       "button",
-      "title"
+      "title",
+      "quote",
+      "demo-card-column-item"
+    ]
+  },
+  {
+    "id": "demo-card-column",
+    "components": [
+      "demo-card-column-item"
+    ]
+  },
+  {
+    "id": "footer-sai",
+    "components": [
+      "footer-sai-hero",
+      "footer-sai-nav-item",
+      "footer-sai-legal-item",
+      "footer-sai-tcs-logo",
+      "footer-sai-tata-logo",
+      "canvas-search-hero-settings"
+    ]
+  },
+  {
+    "id": "richtext",
+    "components": [
+      "richtext"
+    ],
+    "rte": {
+      "toolbar": {
+        "format": []
+      }
+    }
+  },
+  {
+    "id": "table",
+    "components": [
+      "table-row"
+    ]
+  },
+  {
+    "id": "table-2-columns",
+    "components": [
+      "table-col-2"
+    ]
+  },
+  {
+    "id": "table-3-columns",
+    "components": [
+      "table-col-3"
+    ]
+  },
+  {
+    "id": "table-4-columns",
+    "components": [
+      "table-col-4"
+    ]
+  },
+  {
+    "id": "tabs-new",
+    "components": [
+      "tabs-item"
+    ]
+  },
+  {
+    "id": "form",
+    "components": [
+      "captcha",
+      "checkbox",
+      "checkbox-group",
+      "date-input",
+      "drop-down",
+      "email",
+      "file-input",
+      "form-accordion",
+      "form-button",
+      "form-fragment",
+      "form-image",
+      "form-modal",
+      "form-reset-button",
+      "form-submit-button",
+      "number-input",
+      "panel",
+      "password",
+      "plain-text",
+      "radio-group",
+      "rating",
+      "telephone-input",
+      "text-input",
+      "tnc",
+      "wizard",
+      "range"
+    ]
+  },
+  {
+    "id": "form-variations",
+    "components": [
+      "field-text",
+      "field-select",
+      "field-textarea",
+      "field-checkbox",
+      "contact-card",
+      "field-submit"
     ]
   }
 ]

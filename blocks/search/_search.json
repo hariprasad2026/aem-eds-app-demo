@@ -1,0 +1,113 @@
+{
+  "definitions": [
+    {
+      "title": "Search",
+      "id": "search",
+      "plugins": {
+        "da": {
+          "rows": 2,
+          "columns": 1,
+          "fields": [
+            {
+              "name": "index",
+              "selector": "div:nth-child(1)>div"
+            },
+            {
+              "name": "classes",
+              "selector": "div:nth-child(2)>div>ul"
+            }
+          ]
+        },
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Search",
+              "model": "search",
+              "filter": "search",
+              "index": "/query-index.json",
+              "classes": ["minimal", "full-width"]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "search",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "index",
+          "label": "Index",
+          "description": "Path to the query index file (e.g., /query-index.json)."
+        },
+        {
+          "component": "multiselect",
+          "name": "classes",
+          "label": "Options & Variations",
+          "valueType": "string",
+          "required": false,
+          "maxSize": 4,
+          "options": [
+            {
+              "name": "1. Search Style (Layout)",
+              "children": [
+                {
+                  "name": "Minimal (Input Only)",
+                  "value": "minimal"
+                },
+                {
+                  "name": "Hero Banner Search",
+                  "value": "hero-search"
+                }
+              ]
+            },
+            {
+              "name": "2. Display Width",
+              "children": [
+                {
+                  "name": "Container Width",
+                  "value": "container-width"
+                },
+                {
+                  "name": "Full Width",
+                  "value": "full-width"
+                }
+              ]
+            },
+            {
+              "name": "3. Results Display",
+              "children": [
+                {
+                  "name": "Dropdown Instant Results",
+                  "value": "results-dropdown"
+                },
+                {
+                  "name": "In-Page Grid Results",
+                  "value": "results-grid"
+                }
+              ]
+            },
+            {
+              "name": "4. Color Theme",
+              "children": [
+                {
+                  "name": "Light Theme",
+                  "value": "theme-light"
+                },
+                {
+                  "name": "Dark Theme",
+                  "value": "theme-dark"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

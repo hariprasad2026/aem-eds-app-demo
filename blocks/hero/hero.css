@@ -1,37 +1,370 @@
 .hero-container .hero-wrapper {
-  max-width: unset;
+  max-width: 1440px;
+  margin: 0 auto;
   padding: 0;
 }
 
 .hero {
-  position: relative;
+  background-color: #000;
+  color: #fff;
+}
+
+/* Style tab: background color options */
+.hero.hero-bg-black {
+  background-color: #000;
+}
+
+.hero.hero-bg-white {
+  background-color: #fff;
+}
+
+.hero.hero-bg-dark-gray {
+  background-color: #1a1a1a;
+}
+
+.hero.hero-bg-brand-red {
+  background-color: #c00;
+}
+
+.hero.hero-bg-brand-blue {
+  background-color: #0b5fff;
+}
+
+/* Style tab: text color options (overline, title, description, links only) */
+.hero.hero-text-white {
+  color: #fff;
+}
+
+.hero.hero-text-black {
+  color: #000;
+}
+
+/* Style tab: button color options (Overlay + Centered variants, independent of text color) */
+.hero.hero-button-color-white .hero-button {
+  background: #fff;
+  color: #000;
+}
+
+.hero.hero-button-color-black .hero-button {
+  background: #000;
+  color: #fff;
+}
+
+.hero.hero-button-color-brand-red .hero-button {
+  background: #c00;
+  color: #fff;
+}
+
+.hero.hero-button {
+  background: white;
+  color: #000;
+}
+
+.hero.hero-button-color-white .hero-button-primary {
+  background: #fff;
+  color: #000;
+}
+
+.hero.hero-button-color-black .hero-button-primary {
+  background: #000;
+  color: #fff;
+}
+
+.hero.hero-button-color-brand-red .hero-button-primary {
+  background: #c00;
+  color: #fff;
+}
+
+.hero.hero-button-color-brand-blue .hero-button-primary {
+  background: #0b5fff;
+  color: #fff;
+}
+
+.hero.hero-button-color-white .hero-button-secondary {
+  border-color: #fff;
+  color: #fff;
+}
+
+.hero.hero-button-color-black .hero-button-secondary {
+  border-color: #000;
+  color: #000;
+}
+
+.hero.hero-button-color-brand-red .hero-button-secondary {
+  border-color: #c00;
+  color: #c00;
+}
+
+.hero.hero-button-color-brand-blue .hero-button-secondary {
+  border-color: #0b5fff;
+  color: #0b5fff;
+}
+
+/* Variant 1: Split Hero (text column + image column) */
+.hero.hero-split {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.hero.hero-split .hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
   padding: 40px 24px;
-  min-height: 300px;
+  color: inherit;
+  order: 1;
 }
 
-.hero h1 {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  color: #bf2828;
+.hero.hero-split .hero-overline {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.7;
 }
 
-.hero picture {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  object-fit: cover;
-  box-sizing: border-box;
+.hero.hero-split .hero-title {
+  margin: 0;
+  font-size: 28px;
 }
 
-.hero img {
-  object-fit: cover;
+.hero.hero-split .hero-description {
+  margin: 0;
+  font-size: 16px;
+  opacity: 0.85;
+}
+
+.hero.hero-split .hero-links {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+}
+
+.hero.hero-split .hero-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid currentcolor;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.hero.hero-split .hero-media {
+  display: flex;
+  order: 2;
+}
+
+.hero.hero-split .hero-media picture,
+.hero.hero-split .hero-media img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+}
+
+/* Style tab: image position (Split Hero only). Content is order 1 (default,
+   "right" image position) and swaps with the media column when "left" is
+   selected. Uses flex order so it also applies to the stacked mobile layout
+   (image on top vs. image below the text). */
+.hero.hero-split.hero-image-left .hero-content {
+  order: 2;
+}
+
+.hero.hero-split.hero-image-left .hero-media {
+  order: 1;
 }
 
 @media (width >= 900px) {
-  .hero {
-    padding: 40px 32px;
+  .hero.hero-split {
+    flex-direction: row;
   }
+
+  .hero.hero-split .hero-content,
+  .hero.hero-split .hero-media {
+    flex: 1 1 50%;
+  }
+
+  .hero.hero-split .hero-content {
+    padding: 60px;
+  }
+}
+
+/* Variant 2 : Overlay Hero */
+
+.hero.hero-overlay {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+}
+
+.hero.hero-overlay .hero-overlay-content {
+  max-width: 700px;
+  padding: 60px;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.hero.hero-overlay .hero-title {
+  margin: 0 0 24px;
+}
+
+.hero.hero-overlay .hero-description {
+  margin-bottom: 32px;
+}
+
+.hero.hero-overlay .hero-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  text-decoration: none;
+  border: none;
+  align-self: flex-start;
+}
+
+.hero.hero-overlay .hero-link-arrow {
+  display: none;
+}
+
+/* Variant 3 : Centered Hero */
+
+.hero.hero-centered {
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero.hero-centered .hero-centered-content {
+  max-width: 800px;
+  padding: 60px 24px;
+}
+
+.hero.hero-centered .hero-title {
+  margin-bottom: 24px;
+}
+
+.hero.hero-centered .hero-description {
+  margin-bottom: 32px;
+}
+
+.hero.hero-centered .hero-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.hero.hero-centered .hero-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+  padding: 14px 28px;
+  border-radius: 30px;
+  text-decoration: none;
+}
+
+.hero.hero-centered .hero-button-secondary {
+  border: 1px solid;
+  background: transparent;
+}
+
+.hero.hero-centered .hero-link-arrow {
+  display: none;
+}
+
+/* Style tab: button position (Overlay + Centered variants). Placed last so
+   these higher-specificity overrides always win over each variant's base
+   .hero-button/.hero-actions rules above, regardless of source order. */
+.hero.hero-overlay.hero-button-center .hero-button {
+  align-self: center;
+}
+
+.hero.hero-overlay.hero-button-right .hero-button {
+  align-self: flex-end;
+}
+
+.hero.hero-centered.hero-button-left .hero-actions {
+  justify-content: flex-start;
+}
+
+.hero.hero-centered.hero-button-right .hero-actions {
+  justify-content: flex-end;
+}
+
+.hero.hero-banner {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  aspect-ratio: 1895 / 598;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+
+.hero.hero-banner .hero-banner-content {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(300px, 2fr) auto;
+  gap: 32px;
+  align-items: center;
+  padding: 0 48px;
+  box-sizing: border-box;
+}
+
+.hero.hero-banner .hero-title {
+  margin: 0;
+}
+
+.hero.hero-banner .hero-description {
+  margin: 0;
+  max-width: 400px;
+}
+
+.hero.hero-banner .hero-banner-link {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+@media (width <= 900px) {
+  .hero.hero-banner {
+    aspect-ratio: auto;
+    min-height: 260px;
+  }
+
+  .hero.hero-banner .hero-banner-content {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 220px 500px auto;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  padding: 0 48px;
+  box-sizing: border-box;
+}
+
+  .hero.hero-banner .hero-banner-link {
+  justify-self: end;
+  white-space: nowrap;
+}
 }

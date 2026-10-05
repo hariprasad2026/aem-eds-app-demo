@@ -1,31 +1,43 @@
 export default function decorate(block) {
-  const rows = [...block.children];
+  // 1. Get layout property from XWalk dataset attribute or fallback to inner text
 
-  if (!rows.length) {
-    return;
+  const layoutAttr = block.dataset.layout || '';
+
+  if (layoutAttr) {
+    const layoutClass = `columns-variant-${layoutAttr.toLowerCase().trim()}`;
+
+    block.classList.add(layoutClass);
   }
 
+  const rows = [...block.children];
+
+  if (!rows.length) return;
+
   const columnCount = rows[0].children.length;
+
   block.classList.add(`columns-${columnCount}-cols`);
 
   rows.forEach((row) => {
+    row.classList.add('columns-row');
+
     const columns = [...row.children];
 
     columns.forEach((column) => {
       column.classList.add('columns-col');
 
       const picture = column.querySelector('picture');
+
       const heading = column.querySelector('h1, h2, h3, h4, h5, h6');
+
       const list = column.querySelector('ul, ol');
 
-      if (picture) {
-        const pictureWrapper = picture.closest('div');
-        if (pictureWrapper && pictureWrapper.children.length === 1) {
-          pictureWrapper.classList.add('columns-img-col');
-        }
+      const hasBlock = column.querySelector('[class*="block"]');
+
+      if (picture && column.children.length === 1) {
+        column.classList.add('columns-img-col');
       }
 
-      if (heading || list || column.querySelector('p')) {
+      if (heading || list || hasBlock || column.querySelector('p')) {
         column.classList.add('columns-text-col');
       }
 
@@ -37,21 +49,29 @@ export default function decorate(block) {
 
           if (!link.querySelector('.columns-link-arrow')) {
             const arrow = document.createElement('span');
+
             arrow.className = 'columns-link-arrow';
+
             arrow.setAttribute('aria-hidden', 'true');
+
             arrow.textContent = '→';
+
             link.appendChild(arrow);
           }
         });
       }
     });
 
-    if (columns.length === 2) {
+    // Handle standard two-column automatic variant detection if no explicit layout selected
+
+    if (columns.length === 2 && !layoutAttr) {
       const [firstCol, secondCol] = columns;
+
       const firstColumnHasImage = firstCol.querySelector('picture');
+
       const secondColumnHasHeading = secondCol.querySelector('h1, h2, h3, h4, h5, h6');
+
       const secondColumnHasList = secondCol.querySelector('ul, ol');
-      const secondColumnHasTextAfterList = secondCol.querySelector('p:last-of-type');
 
       if (firstColumnHasImage && secondColumnHasHeading) {
         block.classList.add('columns-variant-image-copy');
@@ -59,10 +79,6 @@ export default function decorate(block) {
 
       if (secondColumnHasList && secondCol.querySelector('p')) {
         block.classList.add('columns-variant-content-links');
-      }
-
-      if (secondColumnHasList && secondColumnHasTextAfterList) {
-        block.classList.add('columns-variant-followup-copy');
       }
     }
   });

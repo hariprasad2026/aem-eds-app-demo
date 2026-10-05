@@ -19,15 +19,17 @@
       "cards",
       "carousel",
       "columns",
+      "content-cards",
       "demo-card-column",
       "dm-scene7-template",
       "dm-video",
       "embedv1",
+      "footer",
+      "footer-sai",
       "form",
       "form-variations",
-      "tarun-header",
-      "footer-sai",
       "fragment",
+      "header",
       "hero",
       "industry-list",
       "modal-v1",
@@ -36,6 +38,7 @@
       "spotlight",
       "table",
       "tabs-new",
+      "tarun-header",
       "teaser-v2",
       "text-with-link"
     ]
@@ -83,11 +86,14 @@
       "image",
       "button",
       "title",
-      "demo-card-column",
-      "cards",
-      "dm-video",
       "quote",
-      "text-with-link"
+      "demo-card-column-item"
+    ]
+  },
+  {
+    "id": "content-cards",
+    "components": [
+      "content-card-item"
     ]
   },
   {
@@ -146,6 +152,61 @@
     "id": "tabs-new",
     "components": [
       "tabs-item"
+    ]
+  },
+  {
+    "id": "form-variations",
+    "components": [
+      "field-text",
+      "field-select",
+      "field-textarea",
+      "field-checkbox",
+      "contact-card",
+      "field-submit"
+    ]
+  },
+  {
+    "id": "form",
+    "components": [
+      "captcha",
+      "checkbox",
+      "checkbox-group",
+      "date-input",
+      "drop-down",
+      "email",
+      "file-input",
+      "form-accordion",
+      "form-button",
+      "form-fragment",
+      "form-image",
+      "form-modal",
+      "form-reset-button",
+      "form-submit-button",
+      "number-input",
+      "panel",
+      "password",
+      "plain-text",
+      "radio-group",
+      "rating",
+      "telephone-input",
+      "text-input",
+      "tnc",
+      "wizard",
+      "range"
+    ]
+  },
+  {
+    "id": "industry-list",
+    "components": [
+      "industry-list-header",
+      "industry-list-card"
+    ]
+  },
+  {
+    "id": "spotlight",
+    "components": [
+      "spotlight-header",
+      "spotlight-card"
     ]
   },
   {

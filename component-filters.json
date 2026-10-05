@@ -19,15 +19,17 @@
       "cards",
       "carousel",
       "columns",
+      "content-cards",
       "demo-card-column",
       "dm-scene7-template",
       "dm-video",
       "embedv1",
+      "footer",
+      "footer-sai",
       "form",
       "form-variations",
-      "tarun-header",
-      "footer-sai",
       "fragment",
+      "header",
       "hero",
       "industry-list",
       "modal-v1",
@@ -36,6 +38,7 @@
       "spotlight",
       "table",
       "tabs-new",
+      "tarun-header",
       "teaser-v2",
       "text-with-link"
     ]
@@ -85,6 +88,12 @@
       "title",
       "quote",
       "demo-card-column-item"
+    ]
+  },
+  {
+    "id": "content-cards",
+    "components": [
+      "content-card-item"
     ]
   },
   {

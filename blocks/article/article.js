@@ -177,18 +177,8 @@ export default async function decorate(block) {
 
   const persistedquery = '/graphql/execute.json/aem-eds-xwalk/ArticleByPath';
 
-  const sourceLink = block.querySelector('a[href]');
-
-  const authoredArticlePath = normalizeArticlePath(getFieldValue(block, 1));
-
-  const rawArticlePath = sourceLink
-    ? new URL(sourceLink.href, window.location.origin).pathname
-    : authoredArticlePath;
-
   const articlepath = normalizeArticlePath(
-    rawArticlePath
-    || block.dataset?.path
-    || '',
+    getFieldValue(block, 1),
   );
 
   const variationname = getSafeClass(
@@ -221,9 +211,7 @@ export default async function decorate(block) {
     return;
   }
 
-  const baseUrl = window.location.origin.includes('author')
-    ? aemauthorurl
-    : aempublishurl;
+  const baseUrl = window.location.origin;
 
   const url = `${baseUrl}${persistedquery};path=${articlepath};variation=${variationname};ts=${Date.now()}`;
 

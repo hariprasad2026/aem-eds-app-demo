@@ -155,6 +155,61 @@
     ]
   },
   {
+    "id": "form-variations",
+    "components": [
+      "field-text",
+      "field-select",
+      "field-textarea",
+      "field-checkbox",
+      "contact-card",
+      "field-submit"
+    ]
+  },
+  {
+    "id": "form",
+    "components": [
+      "captcha",
+      "checkbox",
+      "checkbox-group",
+      "date-input",
+      "drop-down",
+      "email",
+      "file-input",
+      "form-accordion",
+      "form-button",
+      "form-fragment",
+      "form-image",
+      "form-modal",
+      "form-reset-button",
+      "form-submit-button",
+      "number-input",
+      "panel",
+      "password",
+      "plain-text",
+      "radio-group",
+      "rating",
+      "telephone-input",
+      "text-input",
+      "tnc",
+      "wizard",
+      "range"
+    ]
+  },
+  {
+    "id": "industry-list",
+    "components": [
+      "industry-list-header",
+      "industry-list-card"
+    ]
+  },
+  {
+    "id": "spotlight",
+    "components": [
+      "spotlight-header",
+      "spotlight-card"
+    ]
+  },
+  {
     "id": "form",
     "components": [
       "captcha",

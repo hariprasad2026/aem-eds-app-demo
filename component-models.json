@@ -1968,6 +1968,95 @@
     ]
   },
   {
+    "id": "industry-list",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "classes",
+        "label": "Variation",
+        "value": "",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "No Description",
+            "value": "no-description"
+          },
+          {
+            "name": "Dark Theme",
+            "value": "dark"
+          },
+          {
+            "name": "Featured Industry",
+            "value": "featured-industry"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "industry-list-header",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "label": "Heading",
+        "value": "Deep expertise, across industries"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "exploreLink",
+        "label": "Explore All Link",
+        "description": "Add a linked 'Explore all Industries' label. The arrow is added automatically.",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "industry-list-card",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "number",
+        "label": "Number",
+        "description": "Optional. Leave blank to number cards automatically as 01, 02, 03, etc.",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "value": "Banking"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description",
+        "value": "Building the Intelligent, Trusted Bank"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "link",
+        "label": "Card Link",
+        "description": "Add a link to the destination. The card uses the title as its accessible link label; the arrow is added automatically.",
+        "value": ""
+      }
+    ]
+  },
+  {
     "id": "modal-v1",
     "fields": [
       {
@@ -2378,6 +2467,94 @@
             ]
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "spotlight",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "classes",
+        "label": "Variation",
+        "value": "",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "No Metadata",
+            "value": "no-metadata"
+          },
+          {
+            "name": "Featured First",
+            "value": "featured-first"
+          },
+          {
+            "name": "Dark Theme",
+            "value": "dark"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "spotlight-header",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Heading",
+        "value": "Latest News"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "viewAllLink",
+        "label": "View All Link",
+        "description": "Add a linked 'View all' label; the arrow is decorative.",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "spotlight-card",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "category",
+        "label": "Category Tag",
+        "value": "Event"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrow",
+        "label": "Small Tagline",
+        "value": "Executive Leadership"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "headline",
+        "label": "Headline",
+        "value": "Join us at the Enterprise Intelligence Summit 2027"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "link",
+        "label": "Card Link",
+        "description": "Add a link to the destination. The headline is displayed as the card text and the entire card is clickable.",
+        "value": ""
       }
     ]
   },
@@ -8220,183 +8397,6 @@
         "name": "tooltip",
         "label": "Short description",
         "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "industry-list",
-    "fields": [
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "classes",
-        "label": "Variation",
-        "value": "",
-        "options": [
-          {
-            "name": "Default",
-            "value": ""
-          },
-          {
-            "name": "Compact",
-            "value": "compact"
-          },
-          {
-            "name": "No Description",
-            "value": "no-description"
-          },
-          {
-            "name": "Dark Theme",
-            "value": "dark"
-          },
-          {
-            "name": "Featured Industry",
-            "value": "featured-industry"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "industry-list-header",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "heading",
-        "label": "Heading",
-        "value": "Deep expertise, across industries"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "exploreLink",
-        "label": "Explore All Link",
-        "description": "Add a linked 'Explore all Industries' label. The arrow is added automatically.",
-        "value": ""
-      }
-    ]
-  },
-  {
-    "id": "industry-list-card",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "number",
-        "label": "Number",
-        "description": "Optional. Leave blank to number cards automatically as 01, 02, 03, etc.",
-        "value": ""
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
-        "label": "Title",
-        "value": "Banking"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "description",
-        "label": "Description",
-        "value": "Building the Intelligent, Trusted Bank"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "link",
-        "label": "Card Link",
-        "description": "Add a link to the destination. The card uses the title as its accessible link label; the arrow is added automatically.",
-        "value": ""
-      }
-    ]
-  },
-  {
-    "id": "spotlight",
-    "fields": [
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "classes",
-        "label": "Variation",
-        "value": "",
-        "options": [
-          {
-            "name": "Default",
-            "value": ""
-          },
-          {
-            "name": "Compact",
-            "value": "compact"
-          },
-          {
-            "name": "No Metadata",
-            "value": "no-metadata"
-          },
-          {
-            "name": "Featured First",
-            "value": "featured-first"
-          },
-          {
-            "name": "Dark Theme",
-            "value": "dark"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "spotlight-header",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
-        "label": "Heading",
-        "value": "Latest News"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "viewAllLink",
-        "label": "View All Link",
-        "description": "Add a linked 'View all' label; the arrow is decorative.",
-        "value": ""
-      }
-    ]
-  },
-  {
-    "id": "spotlight-card",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "category",
-        "label": "Category Tag",
-        "value": "Event"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "eyebrow",
-        "label": "Small Tagline",
-        "value": "Executive Leadership"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "headline",
-        "label": "Headline",
-        "value": "Join us at the Enterprise Intelligence Summit 2027"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "link",
-        "label": "Card Link",
-        "description": "Add a link to the destination. The headline is displayed as the card text and the entire card is clickable.",
-        "value": ""
       }
     ]
   },

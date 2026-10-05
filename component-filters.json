@@ -114,6 +114,13 @@
     ]
   },
   {
+    "id": "industry-list",
+    "components": [
+      "industry-list-header",
+      "industry-list-card"
+    ]
+  },
+  {
     "id": "richtext",
     "components": [
       "richtext"
@@ -123,6 +130,13 @@
         "format": []
       }
     }
+  },
+  {
+    "id": "spotlight",
+    "components": [
+      "spotlight-header",
+      "spotlight-card"
+    ]
   },
   {
     "id": "table",
@@ -193,20 +207,6 @@
       "tnc",
       "wizard",
       "range"
-    ]
-  },
-  {
-    "id": "industry-list",
-    "components": [
-      "industry-list-header",
-      "industry-list-card"
-    ]
-  },
-  {
-    "id": "spotlight",
-    "components": [
-      "spotlight-header",
-      "spotlight-card"
     ]
   },
   {

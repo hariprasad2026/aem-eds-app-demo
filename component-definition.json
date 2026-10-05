@@ -635,6 +635,52 @@
           }
         },
         {
+          "title": "Industry List",
+          "id": "industry-list",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Industry List",
+                  "model": "industry-list",
+                  "filter": "industry-list"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Industry List Header",
+          "id": "industry-list-header",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Industry List Header",
+                  "model": "industry-list-header"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Industry List Card",
+          "id": "industry-list-card",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Industry List Card",
+                  "model": "industry-list-card"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Modal V1",
           "id": "modal-v1",
           "plugins": {
@@ -768,6 +814,52 @@
                     "minimal",
                     "full-width"
                   ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Spotlight",
+          "id": "spotlight",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Spotlight",
+                  "model": "spotlight",
+                  "filter": "spotlight"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Spotlight Header",
+          "id": "spotlight-header",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Spotlight Header",
+                  "model": "spotlight-header"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Spotlight Card",
+          "id": "spotlight-card",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Spotlight Card",
+                  "model": "spotlight-card"
                 }
               }
             }
@@ -1617,98 +1709,6 @@
                     "fieldType": "panel",
                     "sling:resourceType": "core/fd/components/form/panelcontainer/v1/panelcontainer"
                   }
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Industry List",
-          "id": "industry-list",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Industry List",
-                  "model": "industry-list",
-                  "filter": "industry-list"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Industry List Header",
-          "id": "industry-list-header",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "Industry List Header",
-                  "model": "industry-list-header"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Industry List Card",
-          "id": "industry-list-card",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "Industry List Card",
-                  "model": "industry-list-card"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Spotlight",
-          "id": "spotlight",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Spotlight",
-                  "model": "spotlight",
-                  "filter": "spotlight"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Spotlight Header",
-          "id": "spotlight-header",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "Spotlight Header",
-                  "model": "spotlight-header"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Spotlight Card",
-          "id": "spotlight-card",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "Spotlight Card",
-                  "model": "spotlight-card"
                 }
               }
             }

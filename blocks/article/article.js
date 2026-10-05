@@ -227,6 +227,8 @@ export default async function decorate(block) {
 
   const url = `${baseUrl}${persistedquery};path=${articlepath};variation=${variationname};ts=${Date.now()}`;
 
+  console.log(url);
+
   let cfReq = getFallbackArticle(block);
 
   try {

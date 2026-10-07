@@ -3,6 +3,11 @@
     "id": "page-metadata",
     "fields": [
       {
+        "component": "tab",
+        "name": "basic",
+        "label": "Basic"
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "jcr:title",
@@ -15,11 +20,270 @@
         "label": "Description"
       },
       {
+        "component": "select",
+        "valueType": "string",
+        "name": "template",
+        "label": "Page Template",
+        "description": "Drives template-specific metadata models such as landing-metadata and article-metadata.",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Landing",
+            "value": "landing"
+          },
+          {
+            "name": "Article",
+            "value": "article"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "theme",
+        "label": "Theme Classes",
+        "description": "Comma-separated theme classes added to the page body."
+      },
+      {
+        "component": "tab",
+        "name": "seo",
+        "label": "SEO"
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "keywords",
         "multi": true,
         "label": "Keywords"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "canonical-url",
+        "label": "Canonical URL"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "robots",
+        "label": "Robots",
+        "value": "index,follow",
+        "options": [
+          {
+            "name": "index,follow",
+            "value": "index,follow"
+          },
+          {
+            "name": "noindex,follow",
+            "value": "noindex,follow"
+          },
+          {
+            "name": "index,nofollow",
+            "value": "index,nofollow"
+          },
+          {
+            "name": "noindex,nofollow",
+            "value": "noindex,nofollow"
+          }
+        ]
+      },
+      {
+        "component": "tab",
+        "name": "themeContext",
+        "label": "Theme Context"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "theme-brand",
+        "label": "Brand",
+        "value": "tcs",
+        "options": [
+          {
+            "name": "TCS",
+            "value": "tcs"
+          },
+          {
+            "name": "Horizon",
+            "value": "horizon"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "theme-locale",
+        "label": "Locale",
+        "value": "en-us"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "theme-mode",
+        "label": "Mode",
+        "value": "light",
+        "options": [
+          {
+            "name": "Light",
+            "value": "light"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "theme-audience",
+        "label": "Audience",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Enterprise",
+            "value": "enterprise"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "theme-template",
+        "label": "Template Theme",
+        "description": "Optional theme key consumed by scripts/theme-context.js."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "theme-page",
+        "label": "Page Theme",
+        "description": "Optional page theme key consumed by scripts/theme-context.js."
+      },
+      {
+        "component": "tab",
+        "name": "eds",
+        "label": "EDS"
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "hide-header",
+        "label": "Hide Header"
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "hide-footer",
+        "label": "Hide Footer"
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "hide-breadcrumb",
+        "label": "Hide Breadcrumb"
+      }
+    ]
+  },
+  {
+    "id": "landing-metadata",
+    "fields": [
+      {
+        "component": "tab",
+        "name": "hero",
+        "label": "Hero"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "hero-variant",
+        "label": "Hero Variant",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Split",
+            "value": "split"
+          },
+          {
+            "name": "Full Bleed",
+            "value": "full-bleed"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "suppress-auto-hero",
+        "label": "Suppress Auto Hero"
+      },
+      {
+        "component": "tab",
+        "name": "campaign",
+        "label": "Campaign"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "journey-stage",
+        "label": "Journey Stage"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "lead-form-id",
+        "label": "Lead Form ID"
+      }
+    ]
+  },
+  {
+    "id": "article-metadata",
+    "fields": [
+      {
+        "component": "tab",
+        "name": "article",
+        "label": "Article"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "author",
+        "label": "Author"
+      },
+      {
+        "component": "date-time",
+        "valueType": "date",
+        "name": "publish-date",
+        "label": "Publish Date"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "read-time",
+        "label": "Read Time"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "article-category",
+        "label": "Category"
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "suppress-article-header",
+        "label": "Suppress Article Header"
       }
     ]
   },

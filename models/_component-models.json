@@ -21,6 +21,9 @@
     "...": "../blocks/*/_*.json#/models"
   },
   {
+    "...": "../blocks/*/*/_*.json#/models"
+  },
+  {
     "...": "../blocks/form/form/_form.json#/models"
   },
   {

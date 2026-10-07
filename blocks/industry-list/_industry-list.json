@@ -77,6 +77,10 @@
             {
               "name": "Featured Industry",
               "value": "featured-industry"
+            },
+            {
+              "name": "No Number",
+              "value": "no-number"
             }
           ]
         }

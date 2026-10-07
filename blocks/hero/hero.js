@@ -5,40 +5,6 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 // Mirrors the model's field order (`tab` separators are UI-only and do not
 // produce a row), used as a resilient fallback when `data-aue-prop` isn't
 // present (e.g. on the published/preview site, outside the editor canvas).
-const FIELD_ORDER = [
-  'heroType',
-  'overline',
-  'title',
-  'description',
-  'image',
-  'imageAlt',
-  'link1Text',
-  'link1Url',
-  'link2Text',
-  'link2Url',
-  'titleType',
-  'buttonText',
-  'buttonUrl',
-  'primaryButtonText',
-  'primaryButtonUrl',
-  'secondaryButtonText',
-  'secondaryButtonUrl',
-  'bannerLinkText',
-  'bannerLinkUrl',
-  'backgroundColor',
-  'textColor',
-  'buttonColor',
-  'imagePosition',
-  'buttonPosition',
-];
-
-// const STYLE_FIELDS = [
-//   'backgroundColor',
-//   'textColor',
-//   'buttonColor',
-//   'imagePosition',
-//   'buttonPosition',
-// ];
 
 // Every class that decorate() may add to the block based on authored style
 // fields. Must be stripped before re-applying so that re-decorating the same
@@ -56,34 +22,66 @@ function resetDynamicClasses(block) {
 }
 
 function getFieldElement(block, name) {
-  const byProp = block.querySelector(`[data-aue-prop="${name}"]`);
-
-  if (byProp) {
-    return byProp;
-  }
-
-  const index = FIELD_ORDER.indexOf(name);
-
-  if (index === -1) {
-    return null;
-  }
-
-  const row = block.children[index];
-
-  return row?.querySelector('p, h1, h2, h3, h4, h5, h6, a, img')
-    || row?.firstElementChild
-    || row
-    || null;
+  return block.querySelector(`[data-aue-prop="${name}"]`);
 }
 
 function getText(block, name) {
   const field = getFieldElement(block, name);
 
-  if (field) {
-    return field.textContent?.trim() || '';
-  }
+  return field?.textContent?.trim() || '';
+}
 
-  return '';
+function getContent(block) {
+  const rows = [...block.children];
+
+  return {
+    heroType: rows[0]?.textContent?.trim(),
+
+    overline: rows[1]?.querySelector('[data-aue-prop="overline"]'),
+
+    title: rows[2]?.querySelector('[data-aue-prop="title"]')
+      || rows[2]?.querySelector('h1, h2, h3, h4, h5, h6'),
+    titleType: rows[11]?.textContent?.trim(),
+
+    description: rows[3]?.querySelector('p'),
+
+    image: rows[4]?.querySelector('img'),
+
+    link1Text: rows[5]?.querySelector('[data-aue-prop="link1Text"]')
+      || rows[5]?.querySelector('p'),
+    link1Url: rows[6]?.querySelector('a'),
+
+    link2Text: rows[7]?.querySelector('[data-aue-prop="link2Text"]')
+      || rows[7]?.querySelector('p'),
+    link2Url: rows[8]?.querySelector('a'),
+
+    buttonText: rows[9]?.querySelector('[data-aue-prop="buttonText"]')
+      || rows[9]?.querySelector('p'),
+    buttonUrl: rows[10]?.querySelector('a'),
+
+    primaryButtonText: rows[11]?.querySelector('[data-aue-prop="primaryButtonText"]')
+      || rows[11]?.querySelector('p'),
+    primaryButtonUrl: rows[12]?.querySelector('a')
+      || rows[12]?.querySelector('p'),
+
+    secondaryButtonText: rows[13]?.querySelector('[data-aue-prop="secondaryButtonText"]')
+      || rows[13]?.querySelector('p'),
+    secondaryButtonUrl: rows[14]?.querySelector('a')
+      || rows[14]?.querySelector('p'),
+
+    bannerLinkText: block.querySelector(
+      '[data-aue-prop="bannerLinkText"]',
+    ) || rows[15]?.querySelector('p'),
+
+    bannerLinkUrl: [...block.querySelectorAll('a')]
+      .find((a) => a.closest('.button-container')),
+
+    backgroundColor: rows[17]?.textContent?.trim(),
+    textColor: rows[18]?.textContent?.trim(),
+    buttonColor: rows[19]?.textContent?.trim(),
+    imagePosition: rows[20]?.textContent?.trim(),
+    buttonPosition: rows[21]?.textContent?.trim(),
+  };
 }
 
 // function getStyleValue(block, fallbackIndex) {
@@ -92,22 +90,25 @@ function getText(block, name) {
 //     ?.trim();
 // }
 
-function buildLink(block, textName, urlName) {
-  const textEl = getFieldElement(block, textName);
-  const urlEl = getFieldElement(block, urlName);
+function buildLink(textEl, urlEl) {
   const text = textEl?.textContent?.trim();
-  const url = urlEl?.textContent?.trim();
 
-  if (!text && !url) return null;
+  const url = urlEl?.href
+    || urlEl?.textContent?.trim();
+
+  if (!text && !url) {
+    return null;
+  }
 
   const link = document.createElement('a');
+
   link.className = 'hero-link';
   link.href = url || '#';
 
   link.innerHTML = `
-      <span class="hero-link-label">${text || url}</span>
-      <span class="hero-link-arrow" aria-hidden="true">&rarr;</span>
-    `;
+    <span class="hero-link-label">${text || url}</span>
+    <span class="hero-link-arrow" aria-hidden="true">&rarr;</span>
+  `;
 
   if (textEl) {
     moveInstrumentation(textEl, link);
@@ -117,7 +118,8 @@ function buildLink(block, textName, urlName) {
 }
 
 function buildHeading(block, titleType) {
-  const titleEl = getFieldElement(block, 'title');
+  const titleEl = getFieldElement(block, 'title')
+    || block.children[2]?.querySelector('h1, h2, h3, h4, h5, h6');
   if (!titleEl?.textContent?.trim()) return null;
 
   const tag = /^h[1-6]$/.test(titleType) ? titleType : 'h1';
@@ -134,9 +136,9 @@ function buildHeading(block, titleType) {
  * Layout: text column (overline, title, description, links) + image column
  */
 function decorateSplitHero(block, titleType) {
+  const fields = getContent(block);
   const content = document.createElement('div');
   content.className = 'hero-content';
-
   const overline = getFieldElement(block, 'overline');
   if (overline?.textContent?.trim()) {
     overline.classList.add('hero-overline');
@@ -146,20 +148,20 @@ function decorateSplitHero(block, titleType) {
   const heading = buildHeading(block, titleType);
   if (heading) content.append(heading);
 
-  const descriptionEl = getFieldElement(block, 'description');
+  const descriptionEl = fields.description;
 
   if (descriptionEl?.textContent?.trim()) {
     const description = document.createElement('div');
+
     description.className = 'hero-description';
     description.innerHTML = descriptionEl.innerHTML;
 
-    moveInstrumentation(descriptionEl, description);
     content.append(description);
   }
 
   const links = [
-    buildLink(block, 'link1Text', 'link1Url'),
-    buildLink(block, 'link2Text', 'link2Url'),
+    buildLink(fields.link1Text, fields.link1Url),
+    buildLink(fields.link2Text, fields.link2Url),
   ].filter(Boolean);
 
   if (links.length) {
@@ -198,6 +200,8 @@ function decorateSplitHero(block, titleType) {
 
 /** variant-2 */
 function decorateOverlayHero(block, titleType) {
+  const fields = getContent(block);
+
   const content = document.createElement('div');
   content.className = 'hero-overlay-content';
 
@@ -207,19 +211,21 @@ function decorateOverlayHero(block, titleType) {
     content.append(heading);
   }
 
-  const descriptionEl = getFieldElement(block, 'description');
+  const descriptionEl = fields.description;
 
   if (descriptionEl?.textContent?.trim()) {
     const description = document.createElement('div');
+
     description.className = 'hero-description';
     description.innerHTML = descriptionEl.innerHTML;
-
-    moveInstrumentation(descriptionEl, description);
 
     content.append(description);
   }
 
-  const button = buildLink(block, 'buttonText', 'buttonUrl');
+  const button = buildLink(
+    fields.buttonText,
+    fields.buttonUrl,
+  );
 
   if (button) {
     button.classList.add('hero-button');
@@ -238,6 +244,7 @@ function decorateOverlayHero(block, titleType) {
 
 /** variant-3 */
 function decorateCenteredHero(block, titleType) {
+  const fields = getContent(block);
   const content = document.createElement('div');
   content.className = 'hero-centered-content';
 
@@ -247,14 +254,12 @@ function decorateCenteredHero(block, titleType) {
     content.append(heading);
   }
 
-  const descriptionEl = getFieldElement(block, 'description');
+  const descriptionEl = fields.description;
 
   if (descriptionEl?.textContent?.trim()) {
     const description = document.createElement('div');
     description.className = 'hero-description';
     description.innerHTML = descriptionEl.innerHTML;
-
-    moveInstrumentation(descriptionEl, description);
 
     content.append(description);
   }
@@ -263,15 +268,13 @@ function decorateCenteredHero(block, titleType) {
   actions.className = 'hero-actions';
 
   const primaryButton = buildLink(
-    block,
-    'primaryButtonText',
-    'primaryButtonUrl',
+    fields.primaryButtonText,
+    fields.primaryButtonUrl,
   );
 
   const secondaryButton = buildLink(
-    block,
-    'secondaryButtonText',
-    'secondaryButtonUrl',
+    fields.secondaryButtonText,
+    fields.secondaryButtonUrl,
   );
 
   if (primaryButton) {
@@ -279,6 +282,7 @@ function decorateCenteredHero(block, titleType) {
       'hero-button',
       'hero-button-primary',
     );
+
     actions.append(primaryButton);
   }
 
@@ -287,6 +291,7 @@ function decorateCenteredHero(block, titleType) {
       'hero-button',
       'hero-button-secondary',
     );
+
     actions.append(secondaryButton);
   }
 
@@ -306,6 +311,7 @@ function decorateCenteredHero(block, titleType) {
 
 /** variant-4 */
 function decorateBannerHero(block, titleType) {
+  const fields = getContent(block);
   const content = document.createElement('div');
   content.className = 'hero-banner-content';
 
@@ -315,36 +321,28 @@ function decorateBannerHero(block, titleType) {
     content.append(heading);
   }
 
-  const descriptionEl = getFieldElement(block, 'description');
+  const descriptionEl = fields.description;
 
   if (descriptionEl?.textContent?.trim()) {
     const description = document.createElement('div');
     description.className = 'hero-description';
     description.innerHTML = descriptionEl.innerHTML;
 
-    moveInstrumentation(descriptionEl, description);
-
     content.append(description);
   }
 
-  const link = document.createElement('a');
+  const text = fields.bannerLinkText?.textContent?.trim();
+  const url = fields.bannerLinkUrl?.href;
 
-  const text = getText(block, 'bannerLinkText');
-  const url = getText(block, 'bannerLinkUrl');
+  const link = document.createElement('a');
 
   link.className = 'hero-banner-link';
   link.href = url || '#';
 
-  if (text) {
-    link.innerHTML = `
-        <span>${text}</span>
-        <span>&rarr;</span>
-      `;
-  } else {
-    link.innerHTML = `
-        <span>&rarr;</span>
-      `;
-  }
+  link.innerHTML = `
+    <span>${text || 'Link'}</span>
+    <span>&rarr;</span>
+  `;
 
   content.append(link);
 
@@ -359,26 +357,16 @@ function decorateBannerHero(block, titleType) {
 }
 
 export default function decorate(block) {
-  const heroType = getText(block, 'heroType') || 'split';
-  const titleType = getText(block, 'titleType') || 'h1';
+  const fields = getContent(block);
+  const heroType = fields.heroType || 'split';
+  const titleType = fields.titleType || 'h1';
 
-  const textColor = getText(block, 'textColor');
+  const { textColor } = fields;
 
-  const backgroundColor = heroType === 'split'
-    ? getText(block, 'backgroundColor')
-    : null;
-
-  const buttonColor = ['overlay', 'centered'].includes(heroType)
-    ? getText(block, 'buttonColor')
-    : null;
-
-  const imagePosition = heroType === 'split'
-    ? getText(block, 'imagePosition')
-    : null;
-
-  const buttonPosition = ['overlay', 'centered'].includes(heroType)
-    ? getText(block, 'buttonPosition')
-    : null;
+  const { backgroundColor } = fields;
+  const { buttonColor } = fields;
+  const { imagePosition } = fields;
+  const { buttonPosition } = fields;
 
   // Additional variants (variant 2, variant 3, ...) can branch here based on heroType.
   let fragments;
@@ -405,7 +393,6 @@ export default function decorate(block) {
     // Never leave the raw authoring markup (e.g. an oversized, unstyled
     // image) on the page if a single field is malformed/unexpected.
     // eslint-disable-next-line no-console
-    console.error('hero: failed to decorate variant', heroType, error);
     fragments = [];
   }
 

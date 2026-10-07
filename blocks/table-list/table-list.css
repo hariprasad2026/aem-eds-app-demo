@@ -1,0 +1,638 @@
+/* stylelint-disable no-descending-specificity */
+
+.table-list-container {
+  background-color: #fff;
+}
+
+.table-list-wrapper {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* Bypass the site's 1200px section width and section padding. */
+main > .section > div.table-list-wrapper {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1440px;
+  padding: 0;
+}
+
+.table-list {
+  box-sizing: border-box;
+  padding: 80px 80px 100px;
+  background-color: #fff;
+  color: #1f1f1f;
+}
+
+.table-list p {
+  margin: 0;
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.table-list .table-list-header {
+  box-sizing: border-box;
+  display: flex;
+  min-height: 67px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+.table-list .table-list-heading {
+  font-family: var(--body-font-family);
+  font-size: clamp(32px, 3.5vw, 46px);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.table-list .table-list-explore a:any-link {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 4px 32px 4px 0;
+  background: none;
+  color: inherit;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.3;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.table-list .table-list-explore a::after {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  content: '\2192';
+  font-size: 25px;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.table-list .table-list-explore a:hover,
+.table-list .table-list-explore a:focus-visible {
+  background: none;
+  color: #555;
+  text-decoration: underline;
+}
+
+/* =========================================
+   DEFAULT CARD
+   ========================================= */
+
+.table-list .table-list-card {
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 0.9fr) minmax(0, 1.8fr) 36px;
+  min-height: 108px;
+  align-items: center;
+  border-bottom: 1px solid #777;
+  padding: 16px 0;
+}
+
+.table-list .table-list-number {
+  color: #c7c7c7;
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.table-list .table-list-title {
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.table-list .table-list-description {
+  padding: 0 20px;
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+/* =========================================
+   CARD LINK
+   ========================================= */
+
+.table-list .table-list-link a:any-link {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-size: 0;
+  text-decoration: none;
+}
+
+.table-list .table-list-link a::after {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  content: '\2197';
+  font-size: 32px;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.table-list .table-list-link a:focus-visible {
+  outline: 2px solid #1f1f1f;
+  outline-offset: -2px;
+}
+
+/* =========================================
+   HOVER
+   ========================================= */
+
+.table-list .table-list-card:has(a:hover) .table-list-title,
+.table-list .table-list-card:has(a:focus-visible) .table-list-title {
+  text-decoration: underline;
+}
+
+/* =========================================
+   COMPACT
+   ========================================= */
+
+.table-list.compact {
+  padding-top: 56px;
+  padding-bottom: 64px;
+}
+
+.table-list.compact .table-list-header {
+  margin-bottom: 36px;
+}
+
+.table-list.compact .table-list-card {
+  min-height: 76px;
+  padding: 10px 0;
+}
+
+.table-list.compact .table-list-title,
+.table-list.compact .table-list-number {
+  font-size: 30px;
+}
+
+.table-list.compact .table-list-description {
+  font-size: 18px;
+}
+
+/* =========================================
+   NO DESCRIPTION
+   ========================================= */
+
+.table-list.no-description .table-list-description {
+  display: none;
+}
+
+.table-list.no-description .table-list-title {
+  grid-column: 2 / 4;
+}
+
+/* =========================================
+   DARK THEME
+   ========================================= */
+
+.table-list-container:has(.table-list.dark),
+.table-list.dark {
+  background-color: #171d27;
+}
+
+.table-list.dark {
+  color: #f7f9fc;
+}
+
+.table-list.dark .table-list-card {
+  border-bottom-color: #677182;
+}
+
+.table-list.dark .table-list-number {
+  color: #aab8cc;
+}
+
+.table-list.dark .table-list-explore a:hover,
+.table-list.dark .table-list-explore a:focus-visible {
+  color: #cedff4;
+}
+
+.table-list.dark .table-list-link a:focus-visible {
+  outline-color: #fff;
+}
+
+/* =========================================
+   FEATURED INDUSTRY
+   ========================================= */
+
+.table-list.featured-industry .table-list-card-featured {
+  position: relative;
+  margin-bottom: 8px;
+  border: 0;
+  border-radius: 4px;
+  padding: 28px 24px;
+  background-color: #f2f4f7;
+}
+
+.table-list.featured-industry .table-list-card-featured::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  content: '';
+  background-color: #1f1f1f;
+}
+
+.table-list.featured-industry .table-list-card-featured .table-list-number {
+  color: #777;
+}
+
+.table-list.featured-industry .table-list-card-featured .table-list-title {
+  font-weight: 500;
+}
+
+.table-list.featured-industry .table-list-card-featured .table-list-description {
+  font-size: 23px;
+}
+
+.table-list.featured-industry .table-list-card-featured .table-list-link a::after {
+  font-size: 36px;
+}
+
+/* Featured + Dark */
+
+.table-list.dark.featured-industry .table-list-card-featured {
+  background-color: #252d3a;
+}
+
+.table-list.dark.featured-industry .table-list-card-featured::before {
+  background-color: #f7f9fc;
+}
+
+.table-list.dark.featured-industry .table-list-card-featured .table-list-number {
+  color: #aab8cc;
+}
+
+/* =========================================
+   NO NUMBER
+   ========================================= */
+
+.table-list.no-number .table-list-number {
+  display: none;
+}
+
+.table-list.no-number .table-list-title {
+  grid-column: 1 / 3;
+}
+
+/* =========================================
+   DESCRIPTION FIRST
+   ========================================= */
+
+/*
+ * Desktop layout:
+ *
+ * Description       Number       Brand / Title       Link
+ *
+ * Risk free         01           TwinX™              ↗
+ * business
+ * experimentation
+ * and decision
+ * making
+ *
+ * All four columns have equal width.
+ */
+
+.table-list.description-first .table-list-card {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  min-height: 170px;
+  align-items: center;
+  padding: 28px 0;
+}
+
+/* Description - Column 1 */
+
+.table-list.description-first .table-list-description {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  padding: 0 30px 0 0;
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+/* Number - Column 2 */
+
+.table-list.description-first .table-list-number {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  margin: 0;
+  padding-left: 20px;
+  color: #c7c7c7;
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+/* Brand / Title - Column 3 */
+
+.table-list.description-first .table-list-title {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center;
+  padding-right: 20px;
+  font-size: clamp(48px, 5vw, 82px);
+  font-weight: 400;
+  line-height: 1;
+  text-align: right;
+}
+
+/* Link - Column 4 */
+
+.table-list.description-first .table-list-link {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+/* =========================================
+   DESCRIPTION FIRST + COMPACT
+   ========================================= */
+
+.table-list.compact.description-first .table-list-card {
+  min-height: 130px;
+  padding: 20px 0;
+}
+
+.table-list.compact.description-first .table-list-description {
+  font-size: 18px;
+}
+
+.table-list.compact.description-first .table-list-title {
+  font-size: clamp(40px, 4vw, 64px);
+}
+
+.table-list.compact.description-first .table-list-number {
+  font-size: 26px;
+}
+
+/* =========================================
+   DESCRIPTION FIRST + DARK
+   ========================================= */
+
+.table-list.dark.description-first .table-list-number {
+  color: #aab8cc;
+}
+
+/* =========================================
+   DESCRIPTION FIRST + NO NUMBER
+   ========================================= */
+
+.table-list.no-number.description-first .table-list-number {
+  display: none;
+}
+
+.table-list.no-number.description-first .table-list-description {
+  grid-column: 1;
+}
+
+.table-list.no-number.description-first .table-list-title {
+  grid-column: 2 / 4;
+}
+
+.table-list.no-number.description-first .table-list-link {
+  grid-column: 4;
+}
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (width < 900px) {
+  .table-list {
+    min-height: auto;
+    padding: 56px 24px;
+  }
+
+  .table-list .table-list-header {
+    margin-bottom: 44px;
+  }
+
+  .table-list .table-list-card {
+    grid-template-columns: 48px minmax(0, 1fr) 32px;
+    gap: 4px 8px;
+  }
+
+  .table-list .table-list-title {
+    font-size: 30px;
+  }
+
+  .table-list .table-list-number {
+    font-size: 30px;
+  }
+
+  .table-list .table-list-description {
+    grid-column: 2;
+    grid-row: 2;
+    padding: 0;
+    font-size: 18px;
+  }
+
+  .table-list.compact {
+    padding: 40px 24px;
+  }
+
+  .table-list.compact .table-list-card {
+    min-height: 76px;
+  }
+
+  .table-list.no-description .table-list-title {
+    grid-column: 2;
+  }
+
+  .table-list.featured-industry .table-list-card-featured {
+    padding: 24px 20px;
+  }
+
+  /* =========================================
+     DESCRIPTION FIRST - TABLET
+     ========================================= */
+
+  .table-list.description-first .table-list-card {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    min-height: 150px;
+    gap: 8px;
+    padding: 24px 0;
+  }
+
+  .table-list.description-first .table-list-description {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    padding-right: 12px;
+    font-size: 18px;
+  }
+
+  .table-list.description-first .table-list-number {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    padding-left: 8px;
+    font-size: 26px;
+  }
+
+  .table-list.description-first .table-list-title {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: center;
+    padding-right: 8px;
+    font-size: clamp(36px, 4vw, 56px);
+    text-align: right;
+  }
+
+  .table-list.description-first .table-list-link {
+    grid-column: 4;
+    grid-row: 1;
+  }
+
+  /* No Number + Description First */
+
+  .table-list.no-number.description-first .table-list-description {
+    grid-column: 1;
+  }
+
+  .table-list.no-number.description-first .table-list-title {
+    grid-column: 2 / 4;
+  }
+
+  .table-list.no-number.description-first .table-list-link {
+    grid-column: 4;
+  }
+}
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (width < 600px) {
+  .table-list {
+    padding: 40px 20px;
+  }
+
+  .table-list .table-list-header {
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+
+  .table-list .table-list-explore a:any-link {
+    font-size: 16px;
+  }
+
+  .table-list .table-list-card {
+    grid-template-columns: 40px minmax(0, 1fr) 24px;
+    min-height: 108px;
+  }
+
+  .table-list .table-list-title,
+  .table-list .table-list-number {
+    font-size: 24px;
+  }
+
+  .table-list .table-list-link a::after {
+    font-size: 25px;
+  }
+
+  .table-list.compact {
+    padding: 32px 20px;
+  }
+
+  .table-list.compact .table-list-title,
+  .table-list.compact .table-list-number {
+    font-size: 22px;
+  }
+
+  .table-list.compact .table-list-description {
+    font-size: 16px;
+  }
+
+  /* =========================================
+     DESCRIPTION FIRST - MOBILE
+     ========================================= */
+
+  .table-list.description-first .table-list-card {
+    grid-template-columns: minmax(0, 1fr) 28px;
+    min-height: 180px;
+    gap: 8px 12px;
+    padding: 24px 0;
+  }
+
+  .table-list.description-first .table-list-description {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    padding: 0;
+    font-size: 17px;
+  }
+
+  .table-list.description-first .table-list-number {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+  }
+
+  .table-list.description-first .table-list-title {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start;
+    padding: 0;
+    font-size: clamp(34px, 10vw, 48px);
+    line-height: 1.05;
+    text-align: left;
+  }
+
+  .table-list.description-first .table-list-link {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .table-list.description-first .table-list-link a::after {
+    font-size: 25px;
+  }
+
+  /* No Number + Description First */
+
+  .table-list.no-number.description-first .table-list-description {
+    grid-column: 1;
+  }
+
+  .table-list.no-number.description-first .table-list-title {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .table-list.no-number.description-first .table-list-link {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  /* Featured Industry */
+
+  .table-list.featured-industry .table-list-card-featured {
+    padding: 20px 16px;
+  }
+
+  .table-list.featured-industry .table-list-card-featured .table-list-description {
+    font-size: 18px;
+  }
+}

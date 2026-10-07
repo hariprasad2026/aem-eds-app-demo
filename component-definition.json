@@ -13,7 +13,8 @@
                 "resourceType": "core/franklin/components/text/v1/text",
                 "template": {
                   "textStyle": "default",
-                  "alignment": "left"
+                  "alignment": "left",
+                  "filter": "ritchtext"
                 }
               }
             }

@@ -1,35 +1,38 @@
 /* stylelint-disable max-line-length */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&family=Montserrat:wght@400;700&family=Noto+Sans:wght@400;700&family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700&family=Roboto+Condensed:wght@400;700&family=Source+Sans+3:wght@400;700&display=swap');
 
+@font-face {
+  font-family: roboto-condensed;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/roboto-condensed-bold.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
+@font-face {
+  font-family: roboto;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/roboto-bold.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
-.rte-font-aptos { font-family: Aptos, sans-serif; }
-.rte-font-aptos-display { font-family: 'Aptos Display', sans-serif; }
-.rte-font-arial { font-family: Arial, sans-serif; }
-.rte-font-arial-black { font-family: 'Arial Black', sans-serif; }
-.rte-font-calibri { font-family: Calibri, sans-serif; }
-.rte-font-cambria { font-family: Cambria, serif; }
-.rte-font-candara { font-family: Candara, sans-serif; }
-.rte-font-comic-sans-ms { font-family: 'Comic Sans MS', cursive; }
-.rte-font-consolas { font-family: Consolas, monospace; }
-.rte-font-constantia { font-family: Constantia, serif; }
-.rte-font-courier-new { font-family: 'Courier New', monospace; }
-.rte-font-georgia { font-family: Georgia, serif; }
-.rte-font-helvetica { font-family: Helvetica, Arial, sans-serif; }
-.rte-font-impact { font-family: Impact, sans-serif; }
-.rte-font-lato { font-family: Lato, sans-serif; }
-.rte-font-lucida-console { font-family: 'Lucida Console', monospace; }
-.rte-font-lucida-sans-unicode { font-family: 'Lucida Sans Unicode', sans-serif; }
-.rte-font-merriweather { font-family: Merriweather, Georgia, serif; }
-.rte-font-montserrat { font-family: Montserrat, sans-serif; }
-.rte-font-noto-sans { font-family: 'Noto Sans', sans-serif; }
-.rte-font-noto-serif { font-family: 'Noto Serif', serif; }
-.rte-font-open-sans { font-family: 'Open Sans', sans-serif; }
-.rte-font-palatino-linotype { font-family: 'Palatino Linotype', serif; }
-.rte-font-roboto { font-family: Roboto, sans-serif; }
-.rte-font-roboto-condensed { font-family: 'Roboto Condensed', sans-serif; }
-.rte-font-segoe-ui { font-family: 'Segoe UI', sans-serif; }
-.rte-font-source-sans-3 { font-family: 'Source Sans 3', sans-serif; }
-.rte-font-tahoma { font-family: Tahoma, sans-serif; }
-.rte-font-times-new-roman { font-family: 'Times New Roman', serif; }
-.rte-font-trebuchet-ms { font-family: 'Trebuchet MS', sans-serif; }
-.rte-font-verdana { font-family: Verdana, sans-serif; }
+@font-face {
+  font-family: roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/roboto-medium.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: roboto;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/roboto-regular.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

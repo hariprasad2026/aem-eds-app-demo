@@ -12,8 +12,6 @@
               "page": {
                 "resourceType": "core/franklin/components/text/v1/text",
                 "template": {
-                  "textStyle": "default",
-                  "alignment": "left",
                   "filter": "ritchtext"
                 }
               }

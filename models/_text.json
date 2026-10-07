@@ -8,8 +8,6 @@
           "page": {
             "resourceType": "core/franklin/components/text/v1/text",
             "template": {
-              "textStyle": "default",
-              "alignment": "left",
               "filter": "ritchtext"
             }
           }
@@ -24,77 +22,9 @@
         {
           "component": "richtext",
           "name": "text",
-          "value": "",
           "label": "Text",
+          "value": "",
           "valueType": "string"
-        },
-        {
-          "component": "select",
-          "name": "textStyle",
-          "label": "Text variation",
-          "value": "default",
-          "options": [
-            {
-              "name": "Default",
-              "value": "default"
-            },
-            {
-              "name": "Lead copy",
-              "value": "lead"
-            },
-            {
-              "name": "Muted text",
-              "value": "muted"
-            },
-            {
-              "name": "Highlight",
-              "value": "highlight"
-            },
-            {
-              "name": "Small text",
-              "value": "small"
-            }
-          ]
-        },
-        {
-          "component": "select",
-          "name": "backgroundType",
-          "label": "Background",
-          "value": "none",
-          "options": [
-            {
-              "name": "No background",
-              "value": "none"
-            },
-            {
-              "name": "Light background",
-              "value": "light"
-            },
-            {
-              "name": "Accent background",
-              "value": "accent"
-            }
-          ]
-        },
-        {
-          "component": "select",
-          "name": "alignment",
-          "label": "Alignment",
-          "value": "left",
-          "options": [
-            {
-              "name": "Left",
-              "value": "left"
-            },
-            {
-              "name": "Center",
-              "value": "center"
-            },
-            {
-              "name": "Right",
-              "value": "right"
-            }
-          ]
         }
       ]
     }

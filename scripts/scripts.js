@@ -10,6 +10,7 @@ import {
   loadSections,
   loadCSS,
 } from './aem.js';
+import { applyThemeContext } from './theme-context.js';
 
 /**
  * Moves all the attributes from a given elmenet to another given element.
@@ -127,7 +128,7 @@ export function decorateMain(main) {
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
-  document.documentElement.lang = 'en';
+  await applyThemeContext();
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {

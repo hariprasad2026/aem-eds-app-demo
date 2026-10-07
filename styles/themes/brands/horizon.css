@@ -1,0 +1,7 @@
+:root[data-brand="horizon"] {
+  --color-brand-primary: #0f766e;
+  --color-brand-primary-hover: #115e59;
+  --color-brand-accent-surface: var(--color-cyan-100);
+  --color-link: var(--color-brand-primary);
+  --color-link-hover: var(--color-brand-primary-hover);
+}

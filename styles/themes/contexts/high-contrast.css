@@ -1,0 +1,11 @@
+:root[data-contrast="more"] {
+  --color-bg-page: #fff;
+  --color-bg-surface: #fff;
+  --color-bg-subtle: #fff;
+  --color-border-default: #000;
+  --color-text-primary: #000;
+  --color-heading: #000;
+  --color-link: #0032cc;
+  --color-link-hover: #001f80;
+  --color-focus-ring: #000;
+}

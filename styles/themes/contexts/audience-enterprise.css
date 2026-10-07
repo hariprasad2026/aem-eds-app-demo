@@ -1,0 +1,4 @@
+:root[data-audience="enterprise"] {
+  --radius-md: 0.75rem;
+  --button-radius: 0.5rem;
+}

@@ -1,0 +1,8 @@
+:root,
+:root[data-brand="tcs"] {
+  --color-brand-primary: #2f6ce5;
+  --color-brand-primary-hover: #1d4ed8;
+  --color-brand-accent-surface: #e8f0ff;
+  --color-link: var(--color-brand-primary);
+  --color-link-hover: var(--color-brand-primary-hover);
+}

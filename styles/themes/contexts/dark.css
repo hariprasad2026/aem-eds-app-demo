@@ -1,0 +1,13 @@
+:root[data-mode="dark"] {
+  --color-bg-page: #0b1220;
+  --color-bg-subtle: #111827;
+  --color-bg-surface: #162033;
+  --color-bg-emphasis: #1e293b;
+  --color-border-default: #334155;
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #cbd5e1;
+  --color-heading: #f8fafc;
+  --color-text-inverse: #0b1220;
+  --shadow-sm: 0 4px 16px rgb(2 6 23 / 45%);
+  --shadow-md: 0 12px 28px rgb(2 6 23 / 60%);
+}

@@ -1,1 +1,4 @@
-/* add global styles that can be loaded post LCP here */
+/* optional theme variants loaded after LCP */
+@import url('./themes/contexts/dark.css');
+@import url('./themes/contexts/high-contrast.css');
+@import url('./themes/locales/rtl.css');

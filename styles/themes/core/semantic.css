@@ -1,0 +1,42 @@
+:root {
+  /* base */
+  --color-bg-page: var(--color-white);
+  --color-bg-subtle: var(--color-slate-50);
+  --color-bg-surface: var(--color-white);
+  --color-bg-emphasis: var(--color-slate-100);
+  --color-border-default: var(--color-slate-200);
+
+  /* content */
+  --color-text-primary: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-600);
+  --color-text-inverse: var(--color-white);
+  --color-heading: var(--color-slate-950);
+
+  /* brand */
+  --color-brand-primary: var(--color-blue-600);
+  --color-brand-primary-hover: var(--color-blue-700);
+  --color-brand-accent-surface: var(--color-blue-100);
+
+  /* links */
+  --color-link: var(--color-brand-primary);
+  --color-link-hover: var(--color-brand-primary-hover);
+
+  /* states */
+  --color-focus-ring: var(--color-brand-primary);
+
+  /* typography aliases */
+  --font-family-body: var(--font-family-sans);
+  --font-family-title: var(--font-family-heading);
+  --font-size-body: var(--font-size-200);
+  --font-size-body-compact: var(--font-size-100);
+  --font-size-lead: var(--font-size-300);
+  --font-size-h1: var(--font-size-700);
+  --font-size-h2: var(--font-size-600);
+  --font-size-h3: var(--font-size-500);
+  --font-size-h4: var(--font-size-400);
+
+  /* controls */
+  --button-radius: var(--radius-pill);
+  --button-padding-inline: var(--space-6);
+  --button-padding-block: var(--space-2);
+}

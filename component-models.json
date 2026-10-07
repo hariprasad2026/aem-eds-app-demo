@@ -7572,6 +7572,103 @@
     ]
   },
   {
+    "id": "table-list",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "classes",
+        "label": "Variation",
+        "value": "",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "No Description",
+            "value": "no-description"
+          },
+          {
+            "name": "Dark Theme",
+            "value": "dark"
+          },
+          {
+            "name": "Featured Industry",
+            "value": "featured-industry"
+          },
+          {
+            "name": "No Number",
+            "value": "no-number"
+          },
+          {
+            "name": "Description First",
+            "value": "description-first"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table-list-header",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "label": "Heading",
+        "value": "Our transformation solutions"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "exploreLink",
+        "label": "Explore All Link",
+        "description": "Add a linked 'See all Products & Platforms' label. The arrow is added automatically.",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "table-list-card",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "number",
+        "label": "Number",
+        "description": "Optional. Leave blank to number cards automatically as 01, 02, 03, etc.",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "value": "TwinX"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description",
+        "value": "Risk free business experimentation and decision making"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "link",
+        "label": "Card Link",
+        "description": "Add a link to the destination. The card uses the title as its accessible link label; the arrow is added automatically.",
+        "value": ""
+      }
+    ]
+  },
+  {
     "id": "table",
     "fields": [
       {

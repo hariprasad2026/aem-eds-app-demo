@@ -38,6 +38,7 @@
       "search",
       "spotlight",
       "table",
+      "table-list",
       "tabs-new",
       "tarun-header",
       "teaser-v2",
@@ -167,6 +168,13 @@
     "components": [
       "spotlight-header",
       "spotlight-card"
+    ]
+  },
+  {
+    "id": "table-list",
+    "components": [
+      "table-list-header",
+      "table-list-card"
     ]
   },
   {

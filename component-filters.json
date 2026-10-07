@@ -171,13 +171,6 @@
     ]
   },
   {
-    "id": "table-list",
-    "components": [
-      "table-list-header",
-      "table-list-card"
-    ]
-  },
-  {
     "id": "table",
     "components": [
       "table-row"

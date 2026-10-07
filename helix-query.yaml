@@ -22,7 +22,7 @@ indices:
         value: attribute(el, "content")
       tags:
         select: head > meta[name="cq-tags"]
-        value: attribute(el, "content")
+        values: attribute(el, "content")
       persona:
         select: head > meta[name="persona"]
         value: attribute(el, "content")

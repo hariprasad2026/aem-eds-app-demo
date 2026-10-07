@@ -32,6 +32,10 @@ function toDisplayName(blockName) {
     .join(' ');
 }
 
+function getPlaceholderLabel(blockName) {
+  return toDisplayName(blockName);
+}
+
 function hasRenderableContent(block) {
   const contentNodes = [...block.childNodes].filter((node) => {
     if (node.nodeType === Node.TEXT_NODE) return node.textContent.trim();
@@ -62,20 +66,24 @@ function injectPlaceholderStyles() {
       border-radius: 0.5rem;
       background: var(--color-bg-subtle, #f8fafc);
       padding: 0.75rem;
+      overflow: hidden;
     }
 
     .block[data-ue-empty="true"]::before {
       content: attr(data-ue-placeholder);
-      display: inline-flex;
+      position: absolute;
+      inset: 0;
+      display: flex;
       align-items: center;
       justify-content: center;
       inline-size: 100%;
-      min-block-size: 1.5rem;
+      block-size: 100%;
       color: var(--color-text-secondary, #475569);
       font-size: 0.875rem;
       line-height: 1.4;
       text-align: center;
       pointer-events: none;
+      padding: 0.75rem;
     }
 
     .block .${PLACEHOLDER_CLASS} {
@@ -99,7 +107,7 @@ function applyBlockPlaceholders(container = document) {
     }
 
     block.dataset.ueEmpty = 'true';
-    block.dataset.uePlaceholder = toDisplayName(getBlockName(block));
+    block.dataset.uePlaceholder = getPlaceholderLabel(getBlockName(block));
     existingPlaceholder?.remove();
   });
 }

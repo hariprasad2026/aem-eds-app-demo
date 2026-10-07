@@ -2272,6 +2272,17 @@
     ]
   },
   {
+    "id": "intro-statement",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Statement Text",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
     "id": "medium-list",
     "fields": [
       {
@@ -3067,6 +3078,41 @@
         "label": "Card Link",
         "description": "Add a link to the destination. The headline is displayed as the card text and the entire card is clickable.",
         "value": ""
+      }
+    ]
+  },
+  {
+    "id": "statistics-list",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Text",
+        "value": "",
+        "valueType": "string",
+        "filter": "richtext"
+      },
+      {
+        "component": "container",
+        "name": "statsList",
+        "label": "Stats",
+        "multi": true,
+        "fields": [
+          {
+            "component": "text",
+            "name": "title",
+            "label": "Title",
+            "value": "",
+            "valueType": "string"
+          },
+          {
+            "component": "text",
+            "name": "value",
+            "label": "Statistic",
+            "value": "",
+            "valueType": "string"
+          }
+        ]
       }
     ]
   },

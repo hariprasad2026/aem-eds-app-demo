@@ -12,7 +12,7 @@
               "page": {
                 "resourceType": "core/franklin/components/text/v1/text",
                 "template": {
-                  "filter": "ritchtext"
+                  "filter": "richtext"
                 }
               }
             }

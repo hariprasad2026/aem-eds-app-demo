@@ -19,11 +19,5 @@
   },
   {
     "...": "../blocks/*/_*.json#/models"
-  },
-  {
-    "...": "../blocks/form/form/_form.json#/models"
-  },
-  {
-    "...": "../blocks/form-variations/form-variations/_form-variations.json#/models"
   }
 ]

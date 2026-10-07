@@ -24,6 +24,14 @@ function getBlockName(block) {
   return blockName || 'block';
 }
 
+function toDisplayName(blockName) {
+  return blockName
+    .split('-')
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+}
+
 function hasRenderableContent(block) {
   const contentNodes = [...block.childNodes].filter((node) => {
     if (node.nodeType === Node.TEXT_NODE) return node.textContent.trim();
@@ -50,26 +58,28 @@ function injectPlaceholderStyles() {
     .block[data-ue-empty="true"] {
       position: relative;
       min-block-size: 3rem;
-    }
-
-    .block .${PLACEHOLDER_CLASS} {
-      display: none;
-    }
-
-    .block[data-ue-empty="true"] .${PLACEHOLDER_CLASS} {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
       border: 1px dashed var(--color-border-default, #cbd5e1);
       border-radius: 0.5rem;
+      background: var(--color-bg-subtle, #f8fafc);
       padding: 0.75rem;
+    }
+
+    .block[data-ue-empty="true"]::before {
+      content: attr(data-ue-placeholder);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      inline-size: 100%;
+      min-block-size: 1.5rem;
       color: var(--color-text-secondary, #475569);
       font-size: 0.875rem;
       line-height: 1.4;
       text-align: center;
-      background: var(--color-bg-subtle, #f8fafc);
       pointer-events: none;
+    }
+
+    .block .${PLACEHOLDER_CLASS} {
+      display: none !important;
     }
   `;
   document.head.append(style);
@@ -83,16 +93,14 @@ function applyBlockPlaceholders(container = document) {
     const existingPlaceholder = block.querySelector(`:scope > .${PLACEHOLDER_CLASS}`);
     if (hasRenderableContent(block)) {
       block.removeAttribute('data-ue-empty');
+      block.removeAttribute('data-ue-placeholder');
       existingPlaceholder?.remove();
       return;
     }
 
     block.dataset.ueEmpty = 'true';
-    if (existingPlaceholder) return;
-    const placeholder = document.createElement('p');
-    placeholder.className = PLACEHOLDER_CLASS;
-    placeholder.textContent = `Add content to ${getBlockName(block)} block`;
-    block.append(placeholder);
+    block.dataset.uePlaceholder = toDisplayName(getBlockName(block));
+    existingPlaceholder?.remove();
   });
 }
 

@@ -6,17 +6,13 @@ indices:
       - "/**"
     exclude:
       - "/**.json"
-      - "/**.xml"
-      - "/blocks/**"
-      - "/tools/**"
-      - "/nav"
     target: /query-index.json
     properties:
       title:
         select: head > title
         value: textContent(el)
       description:
-        select: head > meta[name="description"], head > meta[property="og:description"]
+        select: head > meta[name="description"]
         value: attribute(el, "content")
       image:
         select: head > meta[property="og:image"]
@@ -25,8 +21,8 @@ indices:
         select: head > meta[property="og:image:alt"]
         value: attribute(el, "content")
       tags:
-        select: head > meta[name="tags"], head > meta[name="cq-tags"], head > meta[name="keywords"]
-        values: attribute(el, "content")
+        select: head > meta[name="cq-tags"]
+        value: attribute(el, "content")
       persona:
         select: head > meta[name="persona"]
         value: attribute(el, "content")

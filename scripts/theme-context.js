@@ -106,7 +106,7 @@ function applyRootAttributes(context) {
   }
 }
 
-export async function applyThemeContext() {
+async function applyThemeContext() {
   const context = getContext();
   applyRootAttributes(context);
 
@@ -123,3 +123,6 @@ export async function applyThemeContext() {
 
   await Promise.all(loaders);
 }
+
+export { applyThemeContext };
+export default applyThemeContext;

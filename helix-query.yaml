@@ -1,11 +1,11 @@
 version: 1
-
+ 
 indices:
   pages:
     include:
-      - '/**'
+      - "/**"
     exclude:
-      - '/**.json'
+      - "/**.json"
     target: /query-index.json
     properties:
       title:
@@ -13,6 +13,21 @@ indices:
         value: textContent(el)
       description:
         select: head > meta[name="description"]
+        value: attribute(el, "content")
+      image:
+        select: head > meta[property="og:image"]
+        value: attribute(el, "content")
+      imageAlt:
+        select: head > meta[property="og:image:alt"]
+        value: attribute(el, "content")
+      tags:
+        select: head > meta[name="cq-tags"]
+        value: attribute(el, "content")
+      persona:
+        select: head > meta[name="persona"]
+        value: attribute(el, "content")
+      intent:
+        select: head > meta[name="intent"]
         value: attribute(el, "content")
       lastModified:
         select: none

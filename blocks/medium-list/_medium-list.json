@@ -27,10 +27,22 @@
           "value": "children",
           "valueType": "string",
           "options": [
-            { "name": "Child Pages", "value": "children" },
-            { "name": "Fixed List", "value": "fixed" },
-            { "name": "Search", "value": "search" },
-            { "name": "Tags", "value": "tags" }
+            {
+              "name": "Child Pages",
+              "value": "children"
+            },
+            {
+              "name": "Fixed List",
+              "value": "fixed"
+            },
+            {
+              "name": "Search",
+              "value": "search"
+            },
+            {
+              "name": "Tags",
+              "value": "tags"
+            }
           ]
         },
         {
@@ -40,7 +52,14 @@
           "description": "Folder path to list children from (e.g. /news). Defaults to current page if empty.",
           "value": "",
           "valueType": "string",
-          "condition": { "==": [{ "var": "listType" }, "children"] }
+          "condition": {
+            "==": [
+              {
+                "var": "listType"
+              },
+              "children"
+            ]
+          }
         },
         {
           "component": "number",
@@ -48,7 +67,14 @@
           "label": "Maximum Items",
           "value": "5",
           "valueType": "number",
-          "condition": { "==": [{ "var": "listType" }, "children"] }
+          "condition": {
+            "==": [
+              {
+                "var": "listType"
+              },
+              "children"
+            ]
+          }
         },
         {
           "component": "select",
@@ -57,10 +83,23 @@
           "value": "title",
           "valueType": "string",
           "options": [
-            { "name": "Title", "value": "title" },
-            { "name": "Last Modified", "value": "modified" }
+            {
+              "name": "Title",
+              "value": "title"
+            },
+            {
+              "name": "Last Modified",
+              "value": "modified"
+            }
           ],
-          "condition": { "==": [{ "var": "listType" }, "children"] }
+          "condition": {
+            "==": [
+              {
+                "var": "listType"
+              },
+              "children"
+            ]
+          }
         },
         {
           "component": "select",
@@ -69,10 +108,23 @@
           "value": "ascending",
           "valueType": "string",
           "options": [
-            { "name": "Ascending (A-Z / Oldest)", "value": "ascending" },
-            { "name": "Descending (Z-A / Newest)", "value": "descending" }
+            {
+              "name": "Ascending (A-Z / Oldest)",
+              "value": "ascending"
+            },
+            {
+              "name": "Descending (Z-A / Newest)",
+              "value": "descending"
+            }
           ],
-          "condition": { "==": [{ "var": "listType" }, "children"] }
+          "condition": {
+            "==": [
+              {
+                "var": "listType"
+              },
+              "children"
+            ]
+          }
         },
         {
           "component": "richtext",
@@ -81,7 +133,15 @@
           "description": "Add a bulleted list of links with optional text directly in the editor.",
           "value": "",
           "valueType": "string",
-          "condition": { "==": [{ "var": "listType" }, "fixed"] }
+          "condition": {
+            "==": [
+              {
+                "var": "listType"
+              },
+              "fixed"
+            ]
+          },
+          "filter": "richtext"
         },
         {
           "component": "text",
@@ -90,7 +150,14 @@
           "description": "Keywords to match against title or description.",
           "value": "",
           "valueType": "string",
-          "condition": { "==": [{ "var": "listType" }, "search"] }
+          "condition": {
+            "==": [
+              {
+                "var": "listType"
+              },
+              "search"
+            ]
+          }
         },
         {
           "component": "text",
@@ -99,7 +166,14 @@
           "description": "Optional folder path to scope the search (e.g. /news).",
           "value": "",
           "valueType": "string",
-          "condition": { "==": [{ "var": "listType" }, "search"] }
+          "condition": {
+            "==": [
+              {
+                "var": "listType"
+              },
+              "search"
+            ]
+          }
         },
         {
           "component": "number",
@@ -107,7 +181,14 @@
           "label": "Maximum Items",
           "value": "5",
           "valueType": "number",
-          "condition": { "==": [{ "var": "listType" }, "search"] }
+          "condition": {
+            "==": [
+              {
+                "var": "listType"
+              },
+              "search"
+            ]
+          }
         },
         {
           "component": "aem-tag",
@@ -116,7 +197,14 @@
           "description": "e.g. cloud, platform, security",
           "value": "",
           "valueType": "string",
-          "condition": { "==": [{ "var": "listType" }, "tags"] }
+          "condition": {
+            "==": [
+              {
+                "var": "listType"
+              },
+              "tags"
+            ]
+          }
         },
         {
           "component": "text",
@@ -125,7 +213,14 @@
           "description": "Optional path to scope tagged pages.",
           "value": "",
           "valueType": "string",
-          "condition": { "==": [{ "var": "listType" }, "tags"] }
+          "condition": {
+            "==": [
+              {
+                "var": "listType"
+              },
+              "tags"
+            ]
+          }
         },
         {
           "component": "select",
@@ -134,10 +229,23 @@
           "value": "any",
           "valueType": "string",
           "options": [
-            { "name": "Any Tag (Match ≥1)", "value": "any" },
-            { "name": "All Tags (Match All)", "value": "all" }
+            {
+              "name": "Any Tag (Match \u22651)",
+              "value": "any"
+            },
+            {
+              "name": "All Tags (Match All)",
+              "value": "all"
+            }
           ],
-          "condition": { "==": [{ "var": "listType" }, "tags"] }
+          "condition": {
+            "==": [
+              {
+                "var": "listType"
+              },
+              "tags"
+            ]
+          }
         },
         {
           "component": "number",
@@ -145,7 +253,14 @@
           "label": "Maximum Items",
           "value": "5",
           "valueType": "number",
-          "condition": { "==": [{ "var": "listType" }, "tags"] }
+          "condition": {
+            "==": [
+              {
+                "var": "listType"
+              },
+              "tags"
+            ]
+          }
         },
         {
           "component": "select",
@@ -154,8 +269,14 @@
           "value": "true",
           "valueType": "string",
           "options": [
-            { "name": "Yes", "value": "true" },
-            { "name": "No", "value": "false" }
+            {
+              "name": "Yes",
+              "value": "true"
+            },
+            {
+              "name": "No",
+              "value": "false"
+            }
           ]
         },
         {
@@ -165,8 +286,14 @@
           "value": "true",
           "valueType": "string",
           "options": [
-            { "name": "Yes", "value": "true" },
-            { "name": "No", "value": "false" }
+            {
+              "name": "Yes",
+              "value": "true"
+            },
+            {
+              "name": "No",
+              "value": "false"
+            }
           ]
         },
         {
@@ -176,8 +303,14 @@
           "value": "false",
           "valueType": "string",
           "options": [
-            { "name": "Yes", "value": "true" },
-            { "name": "No", "value": "false" }
+            {
+              "name": "Yes",
+              "value": "true"
+            },
+            {
+              "name": "No",
+              "value": "false"
+            }
           ]
         }
       ]

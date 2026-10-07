@@ -54,7 +54,8 @@
           "name": "content_text",
           "value": "",
           "label": "Text",
-          "valueType": "string"
+          "valueType": "string",
+          "filter": "richtext"
         },
         {
           "component": "select",
@@ -62,9 +63,18 @@
           "name": "content_align",
           "label": "Horizontal Alignment",
           "options": [
-            { "name": "Left", "value": "left" },
-            { "name": "Center", "value": "center" },
-            { "name": "Right", "value": "right" }
+            {
+              "name": "Left",
+              "value": "left"
+            },
+            {
+              "name": "Center",
+              "value": "center"
+            },
+            {
+              "name": "Right",
+              "value": "right"
+            }
           ]
         },
         {
@@ -73,9 +83,18 @@
           "name": "content_valign",
           "label": "Vertical Alignment",
           "options": [
-            { "name": "Top", "value": "top" },
-            { "name": "Middle", "value": "middle" },
-            { "name": "Bottom", "value": "bottom" }
+            {
+              "name": "Top",
+              "value": "top"
+            },
+            {
+              "name": "Middle",
+              "value": "middle"
+            },
+            {
+              "name": "Bottom",
+              "value": "bottom"
+            }
           ]
         }
       ]
@@ -84,7 +103,9 @@
   "filters": [
     {
       "id": "carousel",
-      "components": ["carousel-item"]
+      "components": [
+        "carousel-item"
+      ]
     }
   ]
 }

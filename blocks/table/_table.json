@@ -202,7 +202,8 @@
           "component": "richtext",
           "valueType": "string",
           "name": "column1text",
-          "label": "Column 1"
+          "label": "Column 1",
+          "filter": "richtext"
         }
       ]
     },
@@ -213,13 +214,15 @@
           "component": "richtext",
           "valueType": "string",
           "name": "column1text",
-          "label": "Column 1"
+          "label": "Column 1",
+          "filter": "richtext"
         },
         {
           "component": "richtext",
           "valueType": "string",
           "name": "column2text",
-          "label": "Column 2"
+          "label": "Column 2",
+          "filter": "richtext"
         }
       ]
     },
@@ -230,19 +233,22 @@
           "component": "richtext",
           "valueType": "string",
           "name": "column1text",
-          "label": "Column 1"
+          "label": "Column 1",
+          "filter": "richtext"
         },
         {
           "component": "richtext",
           "valueType": "string",
           "name": "column2text",
-          "label": "Column 2"
+          "label": "Column 2",
+          "filter": "richtext"
         },
         {
           "component": "richtext",
           "valueType": "string",
           "name": "column3text",
-          "label": "Column 3"
+          "label": "Column 3",
+          "filter": "richtext"
         }
       ]
     },
@@ -253,25 +259,29 @@
           "component": "richtext",
           "valueType": "string",
           "name": "column1text",
-          "label": "Column 1"
+          "label": "Column 1",
+          "filter": "richtext"
         },
         {
           "component": "richtext",
           "valueType": "string",
           "name": "column2text",
-          "label": "Column 2"
+          "label": "Column 2",
+          "filter": "richtext"
         },
         {
           "component": "richtext",
           "valueType": "string",
           "name": "column3text",
-          "label": "Column 3"
+          "label": "Column 3",
+          "filter": "richtext"
         },
         {
           "component": "richtext",
           "valueType": "string",
           "name": "column4text",
-          "label": "Column 4"
+          "label": "Column 4",
+          "filter": "richtext"
         }
       ]
     }

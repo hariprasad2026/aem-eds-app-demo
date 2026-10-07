@@ -180,7 +180,8 @@
         "name": "text",
         "label": "Text",
         "value": "",
-        "valueType": "string"
+        "valueType": "string",
+        "filter": "richtext"
       }
     ]
   },
@@ -284,7 +285,8 @@
         "name": "text",
         "value": "",
         "label": "Text",
-        "valueType": "string"
+        "valueType": "string",
+        "filter": "richtext"
       },
       {
         "component": "select",
@@ -709,7 +711,8 @@
         "name": "text",
         "value": "",
         "label": "Text",
-        "valueType": "string"
+        "valueType": "string",
+        "filter": "richtext"
       }
     ]
   },
@@ -735,7 +738,8 @@
         "name": "content_text",
         "value": "",
         "label": "Text",
-        "valueType": "string"
+        "valueType": "string",
+        "filter": "richtext"
       },
       {
         "component": "select",
@@ -921,13 +925,15 @@
         "component": "richtext",
         "name": "description",
         "label": "Description / Summary",
-        "valueType": "string"
+        "valueType": "string",
+        "filter": "richtext"
       },
       {
         "component": "richtext",
         "name": "stats",
         "label": "Stats List / Author Info",
-        "valueType": "string"
+        "valueType": "string",
+        "filter": "richtext"
       },
       {
         "component": "text",
@@ -1027,13 +1033,15 @@
         "component": "richtext",
         "name": "description",
         "label": "Description / Summary",
-        "valueType": "string"
+        "valueType": "string",
+        "filter": "richtext"
       },
       {
         "component": "richtext",
         "name": "stats",
         "label": "Stats List / Author Info",
-        "valueType": "string"
+        "valueType": "string",
+        "filter": "richtext"
       },
       {
         "component": "aem-content",
@@ -1408,7 +1416,8 @@
         "component": "richtext",
         "valueType": "string",
         "name": "formDescription",
-        "label": "Form Description"
+        "label": "Form Description",
+        "filter": "richtext"
       },
       {
         "component": "multiselect",
@@ -1553,7 +1562,8 @@
         "component": "richtext",
         "name": "label",
         "label": "Consent Text / Disclaimer",
-        "required": true
+        "required": true,
+        "filter": "richtext"
       },
       {
         "component": "checkbox",
@@ -2164,7 +2174,8 @@
         "name": "exploreLink",
         "label": "Explore All Link",
         "description": "Add a linked 'Explore all Industries' label. The arrow is added automatically.",
-        "value": ""
+        "value": "",
+        "filter": "richtext"
       }
     ]
   },
@@ -2199,7 +2210,8 @@
         "name": "link",
         "label": "Card Link",
         "description": "Add a link to the destination. The card uses the title as its accessible link label; the arrow is added automatically.",
-        "value": ""
+        "value": "",
+        "filter": "richtext"
       }
     ]
   },
@@ -2337,7 +2349,8 @@
             },
             "fixed"
           ]
-        }
+        },
+        "filter": "richtext"
       },
       {
         "component": "text",
@@ -2597,7 +2610,8 @@
         "name": "content",
         "label": "Content",
         "valueType": "string",
-        "value": ""
+        "value": "",
+        "filter": "richtext"
       },
       {
         "component": "text",
@@ -2660,28 +2674,32 @@
         "valueType": "string",
         "name": "quotation",
         "value": "",
-        "label": "Quotation"
+        "label": "Quotation",
+        "filter": "richtext"
       },
       {
         "component": "richtext",
         "name": "attribution",
         "value": "",
         "label": "Attribution",
-        "valueType": "string"
+        "valueType": "string",
+        "filter": "richtext"
       },
       {
         "component": "richtext",
         "valueType": "string",
         "name": "title",
         "value": "",
-        "label": "Title"
+        "label": "Title",
+        "filter": "richtext"
       },
       {
         "component": "richtext",
         "valueType": "string",
         "name": "description",
         "value": "",
-        "label": "Description"
+        "label": "Description",
+        "filter": "richtext"
       },
       {
         "component": "select",
@@ -2975,7 +2993,8 @@
         "name": "viewAllLink",
         "label": "View All Link",
         "description": "Add a linked 'View all' label; the arrow is decorative.",
-        "value": ""
+        "value": "",
+        "filter": "richtext"
       }
     ]
   },
@@ -3009,7 +3028,8 @@
         "name": "link",
         "label": "Card Link",
         "description": "Add a link to the destination. The headline is displayed as the card text and the entire card is clickable.",
-        "value": ""
+        "value": "",
+        "filter": "richtext"
       }
     ]
   },
@@ -3106,7 +3126,8 @@
         "name": "exploreLink",
         "label": "Explore All Link",
         "description": "Add a linked 'See all Products & Platforms' label. The arrow is added automatically.",
-        "value": ""
+        "value": "",
+        "filter": "richtext"
       }
     ]
   },
@@ -3126,7 +3147,8 @@
         "valueType": "string",
         "name": "title",
         "label": "Title",
-        "value": "TwinX"
+        "value": "TwinX",
+        "filter": "richtext"
       },
       {
         "component": "text",
@@ -3141,7 +3163,8 @@
         "name": "link",
         "label": "Card Link",
         "description": "Add a link to the destination. The card uses the title as its accessible link label; the arrow is added automatically.",
-        "value": ""
+        "value": "",
+        "filter": "richtext"
       }
     ]
   },
@@ -3259,7 +3282,8 @@
         "component": "richtext",
         "valueType": "string",
         "name": "column1text",
-        "label": "Column 1"
+        "label": "Column 1",
+        "filter": "richtext"
       }
     ]
   },
@@ -3270,13 +3294,15 @@
         "component": "richtext",
         "valueType": "string",
         "name": "column1text",
-        "label": "Column 1"
+        "label": "Column 1",
+        "filter": "richtext"
       },
       {
         "component": "richtext",
         "valueType": "string",
         "name": "column2text",
-        "label": "Column 2"
+        "label": "Column 2",
+        "filter": "richtext"
       }
     ]
   },
@@ -3287,19 +3313,22 @@
         "component": "richtext",
         "valueType": "string",
         "name": "column1text",
-        "label": "Column 1"
+        "label": "Column 1",
+        "filter": "richtext"
       },
       {
         "component": "richtext",
         "valueType": "string",
         "name": "column2text",
-        "label": "Column 2"
+        "label": "Column 2",
+        "filter": "richtext"
       },
       {
         "component": "richtext",
         "valueType": "string",
         "name": "column3text",
-        "label": "Column 3"
+        "label": "Column 3",
+        "filter": "richtext"
       }
     ]
   },
@@ -3310,25 +3339,29 @@
         "component": "richtext",
         "valueType": "string",
         "name": "column1text",
-        "label": "Column 1"
+        "label": "Column 1",
+        "filter": "richtext"
       },
       {
         "component": "richtext",
         "valueType": "string",
         "name": "column2text",
-        "label": "Column 2"
+        "label": "Column 2",
+        "filter": "richtext"
       },
       {
         "component": "richtext",
         "valueType": "string",
         "name": "column3text",
-        "label": "Column 3"
+        "label": "Column 3",
+        "filter": "richtext"
       },
       {
         "component": "richtext",
         "valueType": "string",
         "name": "column4text",
-        "label": "Column 4"
+        "label": "Column 4",
+        "filter": "richtext"
       }
     ]
   },
@@ -3450,7 +3483,8 @@
         "valueType": "string",
         "name": "content_richtext",
         "value": "",
-        "label": "Content"
+        "label": "Content",
+        "filter": "richtext"
       }
     ]
   },
@@ -3513,7 +3547,8 @@
         "valueType": "string",
         "name": "menu",
         "label": "Navigation Links",
-        "description": "Add top-level links or a bulleted list for submenus."
+        "description": "Add top-level links or a bulleted list for submenus.",
+        "filter": "richtext"
       }
     ]
   },
@@ -3867,7 +3902,8 @@
         "name": "longDescr",
         "value": "",
         "label": "Long Description",
-        "description": "The description shown in Desktop and Tablet view."
+        "description": "The description shown in Desktop and Tablet view.",
+        "filter": "richtext"
       },
       {
         "component": "richtext",
@@ -3875,7 +3911,8 @@
         "name": "shortDescr",
         "value": "",
         "label": "Short Description",
-        "description": "The description shown in Mobile view. If not set long text is used."
+        "description": "The description shown in Mobile view. If not set long text is used.",
+        "filter": "richtext"
       },
       {
         "component": "select",
@@ -3956,14 +3993,16 @@
         "label": "Title",
         "value": "",
         "valueType": "string",
-        "required": true
+        "required": true,
+        "filter": "richtext"
       },
       {
         "component": "richtext",
         "name": "description",
         "label": "Description",
         "value": "",
-        "valueType": "string"
+        "valueType": "string",
+        "filter": "richtext"
       },
       {
         "component": "text",

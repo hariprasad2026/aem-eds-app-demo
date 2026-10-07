@@ -10,7 +10,7 @@
             "template": {
               "name": "Footer Sai",
               "filter": "footer-sai",
-              "model":"footer-sai"
+              "model": "footer-sai"
             }
           }
         }
@@ -107,13 +107,34 @@
             {
               "name": "Theme",
               "children": [
-                { "name": "Dark", "value": "footer-sai-theme-dark" },
-                { "name": "Soft White", "value": "footer-sai-theme-soft-white" },
-                { "name": "Powder Blue", "value": "footer-sai-theme-powder-blue" },
-                { "name": "Sage Green", "value": "footer-sai-theme-sage-green" },
-                { "name": "Blush Pink", "value": "footer-sai-theme-blush-pink" },
-                { "name": "Lavender", "value": "footer-sai-theme-lavender" },
-                { "name": "Warm Cream", "value": "footer-sai-theme-warm-cream" }
+                {
+                  "name": "Dark",
+                  "value": "footer-sai-theme-dark"
+                },
+                {
+                  "name": "Soft White",
+                  "value": "footer-sai-theme-soft-white"
+                },
+                {
+                  "name": "Powder Blue",
+                  "value": "footer-sai-theme-powder-blue"
+                },
+                {
+                  "name": "Sage Green",
+                  "value": "footer-sai-theme-sage-green"
+                },
+                {
+                  "name": "Blush Pink",
+                  "value": "footer-sai-theme-blush-pink"
+                },
+                {
+                  "name": "Lavender",
+                  "value": "footer-sai-theme-lavender"
+                },
+                {
+                  "name": "Warm Cream",
+                  "value": "footer-sai-theme-warm-cream"
+                }
               ]
             }
           ]

@@ -47,7 +47,8 @@
           "name": "text",
           "value": "",
           "label": "Text",
-          "valueType": "string"
+          "valueType": "string",
+          "filter": "richtext"
         },
         {
           "component": "select",

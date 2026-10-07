@@ -25,7 +25,7 @@
           "component": "text",
           "name": "image",
           "label": "Scene7 template URL",
-          "description": "Paste the full Dynamic Media image template URL (…/is/image/…?…). Use this text field (not custom-asset) if the site rewrites Scene7 links before block JS runs. Approach B, not mediabus.",
+          "description": "Paste the full Dynamic Media image template URL (\u2026/is/image/\u2026?\u2026). Use this text field (not custom-asset) if the site rewrites Scene7 links before block JS runs. Approach B, not mediabus.",
           "valueType": "string",
           "value": ""
         },

@@ -130,7 +130,8 @@
           "component": "richtext",
           "valueType": "string",
           "name": "formDescription",
-          "label": "Form Description"
+          "label": "Form Description",
+          "filter": "richtext"
         },
         {
           "component": "multiselect",
@@ -138,8 +139,14 @@
           "label": "Theme & Style",
           "valueType": "string",
           "options": [
-            { "name": "Dark Theme", "value": "dark" },
-            { "name": "Light Theme", "value": "light" }
+            {
+              "name": "Dark Theme",
+              "value": "dark"
+            },
+            {
+              "name": "Light Theme",
+              "value": "light"
+            }
           ]
         }
       ]
@@ -147,66 +154,184 @@
     {
       "id": "field-text",
       "fields": [
-        { "component": "text", "name": "name", "label": "Field Name / ID (e.g. firstName)", "required": true },
-        { "component": "text", "name": "label", "label": "Field Label (e.g. First name)", "required": true },
+        {
+          "component": "text",
+          "name": "name",
+          "label": "Field Name / ID (e.g. firstName)",
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "label",
+          "label": "Field Label (e.g. First name)",
+          "required": true
+        },
         {
           "component": "select",
           "name": "type",
           "label": "Input Type",
           "value": "text",
           "options": [
-            { "name": "Text", "value": "text" },
-            { "name": "Email", "value": "email" },
-            { "name": "Tel", "value": "tel" }
+            {
+              "name": "Text",
+              "value": "text"
+            },
+            {
+              "name": "Email",
+              "value": "email"
+            },
+            {
+              "name": "Tel",
+              "value": "tel"
+            }
           ]
         },
-        { "component": "checkbox", "name": "required", "label": "Mandatory Field (*)" },
-        { "component": "text", "name": "dependsOn", "label": "Show Only If Dropdown Value Equals (Case 1)" }
+        {
+          "component": "checkbox",
+          "name": "required",
+          "label": "Mandatory Field (*)"
+        },
+        {
+          "component": "text",
+          "name": "dependsOn",
+          "label": "Show Only If Dropdown Value Equals (Case 1)"
+        }
       ]
     },
     {
       "id": "field-select",
       "fields": [
-        { "component": "text", "name": "name", "label": "Dropdown ID (e.g. sector or region)", "required": true },
-        { "component": "text", "name": "label", "label": "Dropdown Label (e.g. Sector)", "required": true },
-        { "component": "checkbox", "name": "required", "label": "Mandatory Field (*)" },
-        { "component": "text", "name": "options", "label": "Options (Comma Separated e.g. Technology, Sport, Asia Pacific, India)" },
-        { "component": "text", "name": "dependsOn", "label": "Show Only If Dropdown Value Equals (Case 1)" }
+        {
+          "component": "text",
+          "name": "name",
+          "label": "Dropdown ID (e.g. sector or region)",
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "label",
+          "label": "Dropdown Label (e.g. Sector)",
+          "required": true
+        },
+        {
+          "component": "checkbox",
+          "name": "required",
+          "label": "Mandatory Field (*)"
+        },
+        {
+          "component": "text",
+          "name": "options",
+          "label": "Options (Comma Separated e.g. Technology, Sport, Asia Pacific, India)"
+        },
+        {
+          "component": "text",
+          "name": "dependsOn",
+          "label": "Show Only If Dropdown Value Equals (Case 1)"
+        }
       ]
     },
     {
       "id": "field-textarea",
       "fields": [
-        { "component": "text", "name": "name", "label": "Field ID (e.g. feedback)", "required": true },
-        { "component": "text", "name": "label", "label": "Field Label (e.g. How can we help you?)", "required": true },
-        { "component": "number", "name": "maxLength", "label": "Max Character Limit", "value": 1500 },
-        { "component": "checkbox", "name": "required", "label": "Mandatory Field (*)" },
-        { "component": "text", "name": "dependsOn", "label": "Show Only If Dropdown Value Equals (Case 1)" }
+        {
+          "component": "text",
+          "name": "name",
+          "label": "Field ID (e.g. feedback)",
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "label",
+          "label": "Field Label (e.g. How can we help you?)",
+          "required": true
+        },
+        {
+          "component": "number",
+          "name": "maxLength",
+          "label": "Max Character Limit",
+          "value": 1500
+        },
+        {
+          "component": "checkbox",
+          "name": "required",
+          "label": "Mandatory Field (*)"
+        },
+        {
+          "component": "text",
+          "name": "dependsOn",
+          "label": "Show Only If Dropdown Value Equals (Case 1)"
+        }
       ]
     },
     {
       "id": "field-checkbox",
       "fields": [
-        { "component": "text", "name": "name", "label": "Checkbox ID (e.g. consent)", "required": true },
-        { "component": "richtext", "name": "label", "label": "Consent Text / Disclaimer", "required": true },
-        { "component": "checkbox", "name": "required", "label": "Mandatory Field (*)" },
-        { "component": "text", "name": "dependsOn", "label": "Show Only If Dropdown Value Equals (Case 1)" }
+        {
+          "component": "text",
+          "name": "name",
+          "label": "Checkbox ID (e.g. consent)",
+          "required": true
+        },
+        {
+          "component": "richtext",
+          "name": "label",
+          "label": "Consent Text / Disclaimer",
+          "required": true,
+          "filter": "richtext"
+        },
+        {
+          "component": "checkbox",
+          "name": "required",
+          "label": "Mandatory Field (*)"
+        },
+        {
+          "component": "text",
+          "name": "dependsOn",
+          "label": "Show Only If Dropdown Value Equals (Case 1)"
+        }
       ]
     },
     {
       "id": "contact-card",
       "fields": [
-        { "component": "text", "name": "region", "label": "Target Dropdown Match Value (e.g. India)", "required": true },
-        { "component": "text", "name": "contactName", "label": "Contact Name (e.g. Iris Tham)", "required": true },
-        { "component": "text", "name": "emails", "label": "Emails (Comma Separated)" },
-        { "component": "text", "name": "phones", "label": "Phones (Comma Separated)" }
+        {
+          "component": "text",
+          "name": "region",
+          "label": "Target Dropdown Match Value (e.g. India)",
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "contactName",
+          "label": "Contact Name (e.g. Iris Tham)",
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "emails",
+          "label": "Emails (Comma Separated)"
+        },
+        {
+          "component": "text",
+          "name": "phones",
+          "label": "Phones (Comma Separated)"
+        }
       ]
     },
     {
       "id": "field-submit",
       "fields": [
-        { "component": "text", "name": "label", "label": "Button Label", "value": "Send" },
-        { "component": "text", "name": "dependsOn", "label": "Show Only If Dropdown Value Equals (Case 1)" }
+        {
+          "component": "text",
+          "name": "label",
+          "label": "Button Label",
+          "value": "Send"
+        },
+        {
+          "component": "text",
+          "name": "dependsOn",
+          "label": "Show Only If Dropdown Value Equals (Case 1)"
+        }
       ]
     }
   ],

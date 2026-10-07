@@ -165,7 +165,8 @@
           "valueType": "string",
           "name": "content_richtext",
           "value": "",
-          "label": "Content"
+          "label": "Content",
+          "filter": "richtext"
         }
       ]
     }

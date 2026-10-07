@@ -98,7 +98,8 @@
           "name": "viewAllLink",
           "label": "View All Link",
           "description": "Add a linked 'View all' label; the arrow is decorative.",
-          "value": ""
+          "value": "",
+          "filter": "richtext"
         }
       ]
     },
@@ -132,7 +133,8 @@
           "name": "link",
           "label": "Card Link",
           "description": "Add a link to the destination. The headline is displayed as the card text and the entire card is clickable.",
-          "value": ""
+          "value": "",
+          "filter": "richtext"
         }
       ]
     }

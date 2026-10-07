@@ -131,7 +131,14 @@
           "name": "overline",
           "label": "Overline",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "split"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "split"
+            ]
+          }
         },
         {
           "component": "text",
@@ -163,84 +170,168 @@
           "name": "link1Text",
           "label": "Link 1 Text",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "split"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "split"
+            ]
+          }
         },
         {
           "component": "text",
           "name": "link1Url",
           "label": "Link 1 URL",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "split"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "split"
+            ]
+          }
         },
         {
           "component": "text",
           "name": "link2Text",
           "label": "Link 2 Text",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "split"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "split"
+            ]
+          }
         },
         {
           "component": "text",
           "name": "link2Url",
           "label": "Link 2 URL",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "split"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "split"
+            ]
+          }
         },
         {
           "component": "text",
           "name": "buttonText",
           "label": "Button Text",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "overlay"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "overlay"
+            ]
+          }
         },
         {
           "component": "text",
           "name": "buttonUrl",
           "label": "Button URL",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "overlay"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "overlay"
+            ]
+          }
         },
         {
           "component": "text",
           "name": "primaryButtonText",
           "label": "Primary Button Text",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "centered"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "centered"
+            ]
+          }
         },
         {
           "component": "text",
           "name": "primaryButtonUrl",
           "label": "Primary Button URL",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "centered"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "centered"
+            ]
+          }
         },
         {
           "component": "text",
           "name": "secondaryButtonText",
           "label": "Secondary Button Text",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "centered"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "centered"
+            ]
+          }
         },
         {
           "component": "text",
           "name": "secondaryButtonUrl",
           "label": "Secondary Button URL",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "centered"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "centered"
+            ]
+          }
         },
         {
           "component": "text",
           "name": "bannerLinkText",
           "label": "Banner Link Text",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "banner"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "banner"
+            ]
+          }
         },
         {
           "component": "text",
           "name": "bannerLinkUrl",
           "label": "Banner Link URL",
           "valueType": "string",
-          "condition": { "===": [{ "var": "heroType" }, "banner"] }
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "banner"
+            ]
+          }
         },
         {
           "component": "tab",
@@ -254,10 +345,22 @@
           "valueType": "string",
           "value": "h1",
           "options": [
-            { "name": "H1", "value": "h1" },
-            { "name": "H2", "value": "h2" },
-            { "name": "H3", "value": "h3" },
-            { "name": "H4", "value": "h4" }
+            {
+              "name": "H1",
+              "value": "h1"
+            },
+            {
+              "name": "H2",
+              "value": "h2"
+            },
+            {
+              "name": "H3",
+              "value": "h3"
+            },
+            {
+              "name": "H4",
+              "value": "h4"
+            }
           ]
         },
         {
@@ -350,7 +453,7 @@
             }
           ]
         },
-       {
+        {
           "component": "select",
           "name": "imagePosition",
           "label": "Image Position",
@@ -412,4 +515,3 @@
   ],
   "filters": []
 }
-

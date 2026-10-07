@@ -98,7 +98,8 @@
           "name": "exploreLink",
           "label": "Explore All Link",
           "description": "Add a linked 'Explore all Industries' label. The arrow is added automatically.",
-          "value": ""
+          "value": "",
+          "filter": "richtext"
         }
       ]
     },
@@ -133,7 +134,8 @@
           "name": "link",
           "label": "Card Link",
           "description": "Add a link to the destination. The card uses the title as its accessible link label; the arrow is added automatically.",
-          "value": ""
+          "value": "",
+          "filter": "richtext"
         }
       ]
     }

@@ -9,282 +9,469 @@
           "label": "Basic"
         },
         {
-          "component": "text",
-          "valueType": "string",
-          "name": "jcr:title",
-          "label": "Title"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "jcr:description",
-          "label": "Description"
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "template",
-          "label": "Page Template",
-          "description": "Drives template-specific metadata models such as landing-metadata and article-metadata.",
-          "value": "default",
-          "options": [
+          "component": "container",
+          "name": "title-tags",
+          "label": "Title and Tags",
+          "collapsible": true,
+          "fields": [
             {
-              "name": "Default",
-              "value": "default"
+              "component": "text",
+              "valueType": "string",
+              "name": "title",
+              "label": "Title"
             },
             {
-              "name": "Landing",
-              "value": "landing"
-            },
-            {
-              "name": "Article",
-              "value": "article"
+              "component": "aem-tag",
+              "valueType": "string",
+              "name": "cq:tags",
+              "label": "Tags"
             }
           ]
         },
         {
-          "component": "text",
-          "valueType": "string",
-          "name": "theme",
-          "label": "Theme Classes",
-          "description": "Comma-separated theme classes added to the page body."
+          "component": "container",
+          "name": "metadata-title-descriptions",
+          "label": "Metadata, Title and Descriptions",
+          "collapsible": true,
+          "fields": [
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "page-title",
+              "label": "Page Title"
+            },
+            {
+              "component": "boolean",
+              "valueType": "boolean",
+              "name": "insert-title",
+              "label": "Insert Title"
+            },
+            {
+              "component": "textarea",
+              "valueType": "string",
+              "name": "description",
+              "label": "Description"
+            },
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "keywords",
+              "multi": true,
+              "label": "Keywords"
+            }
+          ]
         },
         {
           "component": "tab",
+          "name": "advanced",
+          "label": "Advanced"
+        },
+        {
+          "component": "container",
+          "name": "settings",
+          "label": "Settings",
+          "collapsible": true,
+          "fields": [
+            {
+              "component": "select",
+              "valueType": "string",
+              "name": "language",
+              "label": "Language",
+              "value": "en-us",
+              "options": [
+                {
+                  "name": "English (en-us)",
+                  "value": "en-us"
+                },
+                {
+                  "name": "English (en)",
+                  "value": "en"
+                },
+                {
+                  "name": "French (fr)",
+                  "value": "fr"
+                }
+              ]
+            },
+            {
+              "component": "boolean",
+              "valueType": "boolean",
+              "name": "language-root",
+              "label": "Language Root"
+            },
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "alias",
+              "label": "Alias"
+            }
+          ]
+        },
+        {
+          "component": "container",
+          "name": "configurations",
+          "label": "Configurations",
+          "collapsible": true,
+          "fields": [
+            {
+              "component": "boolean",
+              "valueType": "boolean",
+              "name": "inherited-from-parent",
+              "label": "Inherited from Parent",
+              "description": "Applies to child pages when enabled."
+            },
+            {
+              "component": "aem-content",
+              "valueType": "string",
+              "name": "cloud-configurations",
+              "label": "Cloud Configurations",
+              "validation": {
+                "rootPath": "/conf"
+              }
+            }
+          ]
+        },
+        {
+          "component": "container",
+          "name": "template-settings",
+          "label": "Template Settings",
+          "collapsible": true,
+          "fields": [
+            {
+              "component": "container",
+              "name": "allowed-templates",
+              "label": "Allowed Templates",
+              "multi": true,
+              "fields": [
+                {
+                  "component": "text",
+                  "valueType": "string",
+                  "name": "template-path",
+                  "label": "Template Path"
+                }
+              ]
+            },
+            {
+              "component": "boolean",
+              "valueType": "boolean",
+              "name": "use-page-as-template",
+              "label": "Page as Template"
+            }
+          ]
+        },
+        {
+          "component": "container",
           "name": "seo",
-          "label": "SEO"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "keywords",
-          "multi": true,
-          "label": "Keywords"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "canonical-url",
-          "label": "Canonical URL"
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "robots",
-          "label": "Robots",
-          "value": "index,follow",
-          "options": [
+          "label": "SEO",
+          "collapsible": true,
+          "fields": [
             {
-              "name": "index,follow",
-              "value": "index,follow"
+              "component": "aem-content",
+              "valueType": "string",
+              "name": "canonical-url",
+              "label": "Canonical URL",
+              "validation": {
+                "rootPath": "/content"
+              }
             },
             {
-              "name": "noindex,follow",
-              "value": "noindex,follow"
-            },
-            {
-              "name": "index,nofollow",
-              "value": "index,nofollow"
-            },
-            {
-              "name": "noindex,nofollow",
-              "value": "noindex,nofollow"
+              "component": "multiselect",
+              "name": "robots-tags",
+              "label": "Robots Tags",
+              "options": [
+                {
+                  "name": "Index",
+                  "value": "index"
+                },
+                {
+                  "name": "No Index",
+                  "value": "noindex"
+                },
+                {
+                  "name": "Follow",
+                  "value": "follow"
+                },
+                {
+                  "name": "No Follow",
+                  "value": "nofollow"
+                },
+                {
+                  "name": "No Archive",
+                  "value": "noarchive"
+                },
+                {
+                  "name": "No Snippet",
+                  "value": "nosnippet"
+                }
+              ]
             }
           ]
         },
         {
           "component": "tab",
-          "name": "themeContext",
-          "label": "Theme Context"
+          "name": "image",
+          "label": "Image"
         },
         {
-          "component": "select",
-          "valueType": "string",
-          "name": "theme-brand",
-          "label": "Brand",
-          "value": "tcs",
-          "options": [
+          "component": "container",
+          "name": "image-props",
+          "label": "Image",
+          "collapsible": true,
+          "fields": [
             {
-              "name": "TCS",
-              "value": "tcs"
+              "component": "reference",
+              "name": "image-path",
+              "label": "Image Path",
+              "multi": false
             },
             {
-              "name": "Horizon",
-              "value": "horizon"
+              "component": "text",
+              "name": "image-alt",
+              "label": "Alt Text"
             }
           ]
         },
         {
-          "component": "text",
-          "valueType": "string",
-          "name": "theme-locale",
-          "label": "Locale",
-          "value": "en-us"
+          "component": "tab",
+          "name": "permissions",
+          "label": "Permissions"
         },
         {
-          "component": "select",
-          "valueType": "string",
-          "name": "theme-mode",
-          "label": "Mode",
-          "value": "light",
-          "options": [
+          "component": "container",
+          "name": "permissions-settings",
+          "label": "Permissions",
+          "collapsible": true,
+          "fields": [
             {
-              "name": "Light",
-              "value": "light"
-            },
-            {
-              "name": "Dark",
-              "value": "dark"
+              "component": "text",
+              "valueType": "string",
+              "name": "permissions-note",
+              "label": "Permissions Note",
+              "description": "Managed by AEM standard page access and template restrictions."
             }
           ]
         },
         {
-          "component": "select",
-          "valueType": "string",
-          "name": "theme-audience",
-          "label": "Audience",
-          "value": "default",
-          "options": [
+          "component": "tab",
+          "name": "tcs-metadata",
+          "label": "TCS MetaData"
+        },
+        {
+          "component": "container",
+          "name": "page-properties",
+          "label": "Page Properties",
+          "collapsible": true,
+          "fields": [
             {
-              "name": "Default",
-              "value": "default"
-            },
-            {
-              "name": "Enterprise",
-              "value": "enterprise"
+              "component": "select",
+              "valueType": "string",
+              "name": "page-type",
+              "label": "Page Type",
+              "value": "default",
+              "options": [
+                {
+                  "name": "Default",
+                  "value": "default"
+                },
+                {
+                  "name": "Landing",
+                  "value": "landing"
+                },
+                {
+                  "name": "Article",
+                  "value": "article"
+                },
+                {
+                  "name": "Story",
+                  "value": "story"
+                }
+              ]
             }
           ]
         },
         {
-          "component": "text",
-          "valueType": "string",
-          "name": "theme-template",
-          "label": "Template Theme",
-          "description": "Optional theme key consumed by scripts/theme-context.js."
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "theme-page",
-          "label": "Page Theme",
-          "description": "Optional page theme key consumed by scripts/theme-context.js."
-        },
-        {
-          "component": "tab",
-          "name": "eds",
-          "label": "EDS"
-        },
-        {
-          "component": "boolean",
-          "valueType": "boolean",
-          "name": "hide-header",
-          "label": "Hide Header"
-        },
-        {
-          "component": "boolean",
-          "valueType": "boolean",
-          "name": "hide-footer",
-          "label": "Hide Footer"
-        },
-        {
-          "component": "boolean",
-          "valueType": "boolean",
-          "name": "hide-breadcrumb",
-          "label": "Hide Breadcrumb"
-        }
-      ]
-    },
-    {
-      "id": "landing-metadata",
-      "fields": [
-        {
-          "component": "tab",
-          "name": "hero",
-          "label": "Hero"
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "hero-variant",
-          "label": "Hero Variant",
-          "value": "default",
-          "options": [
+          "component": "container",
+          "name": "tcs-image",
+          "label": "Image",
+          "collapsible": true,
+          "fields": [
             {
-              "name": "Default",
-              "value": "default"
+              "component": "reference",
+              "name": "icon-image",
+              "label": "Icon Image",
+              "multi": false
             },
             {
-              "name": "Split",
-              "value": "split"
-            },
-            {
-              "name": "Full Bleed",
-              "value": "full-bleed"
+              "component": "text",
+              "valueType": "string",
+              "name": "icon-alt-text",
+              "label": "Alt Text"
             }
           ]
         },
         {
-          "component": "boolean",
-          "valueType": "boolean",
-          "name": "suppress-auto-hero",
-          "label": "Suppress Auto Hero"
+          "component": "container",
+          "name": "tcs-seo",
+          "label": "SEO",
+          "collapsible": true,
+          "fields": [
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "og-title",
+              "label": "OG Title"
+            },
+            {
+              "component": "textarea",
+              "valueType": "string",
+              "name": "og-keywords",
+              "label": "OG Keywords"
+            },
+            {
+              "component": "textarea",
+              "valueType": "string",
+              "name": "og-description",
+              "label": "OG Description"
+            }
+          ]
         },
         {
-          "component": "tab",
-          "name": "campaign",
-          "label": "Campaign"
+          "component": "container",
+          "name": "story-properties",
+          "label": "Story Properties",
+          "collapsible": true,
+          "fields": [
+            {
+              "component": "aem-tag",
+              "valueType": "string",
+              "name": "story-tags",
+              "label": "Story Tags"
+            },
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "story-title",
+              "label": "Story Title"
+            },
+            {
+              "component": "richtext",
+              "name": "story-description",
+              "label": "Story Description",
+              "valueType": "string"
+            },
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "story-link-title",
+              "label": "Story Link Title"
+            },
+            {
+              "component": "aem-content",
+              "valueType": "string",
+              "name": "story-link-path",
+              "label": "Story Link Path",
+              "validation": {
+                "rootPath": "/content"
+              }
+            },
+            {
+              "component": "select",
+              "valueType": "string",
+              "name": "story-link-type",
+              "label": "Story Link Type",
+              "value": "default",
+              "options": [
+                {
+                  "name": "Default",
+                  "value": "default"
+                },
+                {
+                  "name": "Open in New Window",
+                  "value": "new-window"
+                }
+              ]
+            },
+            {
+              "component": "select",
+              "valueType": "string",
+              "name": "story-link-style",
+              "label": "Story Link Style",
+              "value": "default",
+              "options": [
+                {
+                  "name": "Default",
+                  "value": "default"
+                },
+                {
+                  "name": "Primary",
+                  "value": "primary"
+                },
+                {
+                  "name": "Secondary",
+                  "value": "secondary"
+                }
+              ]
+            }
+          ]
         },
         {
-          "component": "text",
-          "valueType": "string",
-          "name": "journey-stage",
-          "label": "Journey Stage"
+          "component": "container",
+          "name": "author-info",
+          "label": "Author Info",
+          "collapsible": true,
+          "fields": [
+            {
+              "component": "reference",
+              "name": "author-image",
+              "label": "Author Image",
+              "multi": false
+            },
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "author-image-alt-text",
+              "label": "Author Image Alt Text"
+            },
+            {
+              "component": "richtext",
+              "name": "designation-location",
+              "label": "Designation & Location",
+              "valueType": "string"
+            }
+          ]
         },
         {
-          "component": "text",
-          "valueType": "string",
-          "name": "lead-form-id",
-          "label": "Lead Form ID"
-        }
-      ]
-    },
-    {
-      "id": "article-metadata",
-      "fields": [
-        {
-          "component": "tab",
-          "name": "article",
-          "label": "Article"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "author",
-          "label": "Author"
-        },
-        {
-          "component": "date-time",
-          "valueType": "date",
-          "name": "publish-date",
-          "label": "Publish Date"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "read-time",
-          "label": "Read Time"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "article-category",
-          "label": "Category"
-        },
-        {
-          "component": "boolean",
-          "valueType": "boolean",
-          "name": "suppress-article-header",
-          "label": "Suppress Article Header"
+          "component": "container",
+          "name": "engagement",
+          "label": "Engagement",
+          "collapsible": true,
+          "fields": [
+            {
+              "component": "boolean",
+              "valueType": "boolean",
+              "name": "social-share",
+              "label": "Social Share"
+            },
+            {
+              "component": "date-time",
+              "valueType": "date",
+              "name": "publish-date",
+              "label": "Publish Date"
+            },
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "time-to-read",
+              "label": "Time to Read Content",
+              "description": "If a value exists, business logic can show the listen-audio icon."
+            },
+            {
+              "component": "boolean",
+              "valueType": "boolean",
+              "name": "download",
+              "label": "Download"
+            }
+          ]
         }
       ]
     }

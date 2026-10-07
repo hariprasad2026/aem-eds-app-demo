@@ -1,0 +1,4 @@
+:root[data-page-theme="next-screen-453-39628"] {
+  /* keep page file thin; only unique deltas that differ from template */
+  --container-max-width: 76rem;
+}

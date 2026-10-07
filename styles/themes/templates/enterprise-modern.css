@@ -1,0 +1,24 @@
+:root[data-template-theme="enterprise-modern"] {
+  /* template-level visual contract for modern enterprise layouts */
+  --color-brand-primary: #1f5fe0;
+  --color-brand-primary-hover: #1649b0;
+  --color-brand-accent-surface: #eaf1ff;
+
+  --color-bg-subtle: #f6f8fc;
+  --color-bg-emphasis: #e9eef8;
+
+  --font-size-h1: clamp(2rem, 4vw, 3.25rem);
+  --font-size-h2: clamp(1.625rem, 3vw, 2.5rem);
+  --font-size-h3: clamp(1.25rem, 2.25vw, 1.875rem);
+
+  --radius-md: 0.75rem;
+  --shadow-sm: 0 6px 20px rgb(15 23 42 / 10%);
+  --shadow-md: 0 14px 36px rgb(15 23 42 / 14%);
+}
+
+:root[data-template-theme="enterprise-modern"] .section[data-background="dark"],
+:root[data-template-theme="enterprise-modern"] .section-dark {
+  --heading-color: #f8fbff;
+  --text-color: #e8efff;
+  --background-color: #0d1f46;
+}

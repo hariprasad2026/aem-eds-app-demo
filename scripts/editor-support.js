@@ -12,6 +12,90 @@ import { decorateButtons, decorateMain } from './scripts.js';
 
 let promiseChanges$ = Promise.resolve();
 
+const PLACEHOLDER_STYLE_ID = 'ue-block-placeholder-styles';
+const PLACEHOLDER_CLASS = 'ue-block-placeholder';
+
+function isAuthoringMode() {
+  return window.self !== window.top && !!document.querySelector('[data-aue-resource]');
+}
+
+function getBlockName(block) {
+  const [blockName] = [...block.classList].filter((className) => className !== 'block');
+  return blockName || 'block';
+}
+
+function hasRenderableContent(block) {
+  const contentNodes = [...block.childNodes].filter((node) => {
+    if (node.nodeType === Node.TEXT_NODE) return node.textContent.trim();
+    if (node.nodeType !== Node.ELEMENT_NODE) return false;
+    return !node.classList.contains(PLACEHOLDER_CLASS);
+  });
+
+  if (!contentNodes.length) return false;
+
+  return contentNodes.some((node) => {
+    if (node.nodeType === Node.TEXT_NODE) return node.textContent.trim();
+    if (node.matches('img,picture,video,iframe,svg,canvas,form,table,ul,ol,blockquote,pre,h1,h2,h3,h4,h5,h6,p,a,button')) {
+      return true;
+    }
+    return !!node.textContent.trim() || node.children.length > 0;
+  });
+}
+
+function injectPlaceholderStyles() {
+  if (document.getElementById(PLACEHOLDER_STYLE_ID)) return;
+  const style = document.createElement('style');
+  style.id = PLACEHOLDER_STYLE_ID;
+  style.textContent = `
+    .block[data-ue-empty="true"] {
+      position: relative;
+      min-block-size: 3rem;
+    }
+
+    .block .${PLACEHOLDER_CLASS} {
+      display: none;
+    }
+
+    .block[data-ue-empty="true"] .${PLACEHOLDER_CLASS} {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      border: 1px dashed var(--color-border-default, #cbd5e1);
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      color: var(--color-text-secondary, #475569);
+      font-size: 0.875rem;
+      line-height: 1.4;
+      text-align: center;
+      background: var(--color-bg-subtle, #f8fafc);
+      pointer-events: none;
+    }
+  `;
+  document.head.append(style);
+}
+
+function applyBlockPlaceholders(container = document) {
+  if (!isAuthoringMode()) return;
+  injectPlaceholderStyles();
+
+  container.querySelectorAll('.block').forEach((block) => {
+    const existingPlaceholder = block.querySelector(`:scope > .${PLACEHOLDER_CLASS}`);
+    if (hasRenderableContent(block)) {
+      block.removeAttribute('data-ue-empty');
+      existingPlaceholder?.remove();
+      return;
+    }
+
+    block.dataset.ueEmpty = 'true';
+    if (existingPlaceholder) return;
+    const placeholder = document.createElement('p');
+    placeholder.className = PLACEHOLDER_CLASS;
+    placeholder.textContent = `Add content to ${getBlockName(block)} block`;
+    block.append(placeholder);
+  });
+}
+
 async function applyChanges(event) {
   await promiseChanges$;
 
@@ -42,6 +126,7 @@ async function applyChanges(event) {
       element.insertAdjacentElement('afterend', newMain);
       decorateMain(newMain);
       decorateRichtext(newMain);
+      applyBlockPlaceholders(newMain);
       await loadSections(newMain);
       element.remove();
       newMain.style.display = null;
@@ -61,6 +146,7 @@ async function applyChanges(event) {
         decorateIcons(newBlock);
         decorateBlock(newBlock);
         decorateRichtext(newBlock);
+        applyBlockPlaceholders(newBlock.parentElement || document);
         await loadBlock(newBlock);
         block.remove();
         newBlock.style.display = null;
@@ -80,6 +166,7 @@ async function applyChanges(event) {
           decorateRichtext(newSection);
           decorateSections(parentElement);
           decorateBlocks(parentElement);
+          applyBlockPlaceholders(parentElement);
           await loadSections(parentElement);
           element.remove();
           newSection.style.display = null;
@@ -88,6 +175,7 @@ async function applyChanges(event) {
           decorateButtons(parentElement);
           decorateIcons(parentElement);
           decorateRichtext(parentElement);
+          applyBlockPlaceholders(parentElement);
         }
         return true;
       }
@@ -118,7 +206,11 @@ attachEventListeners(document.querySelector('main'));
 // decorate rich text
 // this has to happen after decorateMain(), and everythime decorateBlocks() is called
 decorateRichtext();
+applyBlockPlaceholders(document.querySelector('main') || document);
 // in cases where the block decoration is not done in one synchronous iteration we need to listen
 // for new richtext-instrumented elements. this happens for example when using experimentation.
-const observer = new MutationObserver(() => decorateRichtext());
-observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: true });
+const observer = new MutationObserver(() => {
+  decorateRichtext();
+  applyBlockPlaceholders(document.querySelector('main') || document);
+});
+observer.observe(document, { attributeFilter: ['data-richtext-prop'], childList: true, subtree: true });

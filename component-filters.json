@@ -17,13 +17,18 @@
           "italic",
           "underline",
           "strike",
-          "code_inline"
+          "code_inline",
+          "text_color"
         ],
         "alignment": [
           "left",
           "center",
           "right",
           "justify"
+        ],
+        "direction": [
+          "ltr",
+          "rtl"
         ],
         "indentation": [
           "indent",
@@ -60,15 +65,20 @@
           "clean_unsupported_tags",
           "paste_text"
         ],
+        "advanced": [
+          "classes"
+        ],
         "sections": [
           "format",
           "blocks",
           "alignment",
+          "direction",
           "list",
           "indentation",
           "insert",
           "sr_script",
-          "editor"
+          "editor",
+          "advanced"
         ]
       },
       "actions": {
@@ -88,6 +98,131 @@
           "showTableProperties": true,
           "showRowProperties": true,
           "showCellProperties": true
+        },
+        "classes": {
+          "label": "Typography",
+          "options": [
+            {
+              "value": "rte-font-aptos",
+              "label": "Aptos"
+            },
+            {
+              "value": "rte-font-arial",
+              "label": "Arial"
+            },
+            {
+              "value": "rte-font-arial-black",
+              "label": "Arial Black"
+            },
+            {
+              "value": "rte-font-calibri",
+              "label": "Calibri"
+            },
+            {
+              "value": "rte-font-cambria",
+              "label": "Cambria"
+            },
+            {
+              "value": "rte-font-candara",
+              "label": "Candara"
+            },
+            {
+              "value": "rte-font-comic-sans-ms",
+              "label": "Comic Sans MS"
+            },
+            {
+              "value": "rte-font-consolas",
+              "label": "Consolas"
+            },
+            {
+              "value": "rte-font-constantia",
+              "label": "Constantia"
+            },
+            {
+              "value": "rte-font-courier-new",
+              "label": "Courier New"
+            },
+            {
+              "value": "rte-font-franklin-gothic-medium",
+              "label": "Franklin Gothic Medium"
+            },
+            {
+              "value": "rte-font-garamond",
+              "label": "Garamond"
+            },
+            {
+              "value": "rte-font-georgia",
+              "label": "Georgia"
+            },
+            {
+              "value": "rte-font-helvetica",
+              "label": "Helvetica"
+            },
+            {
+              "value": "rte-font-impact",
+              "label": "Impact"
+            },
+            {
+              "value": "rte-font-lato",
+              "label": "Lato"
+            },
+            {
+              "value": "rte-font-merriweather",
+              "label": "Merriweather"
+            },
+            {
+              "value": "rte-font-montserrat",
+              "label": "Montserrat"
+            },
+            {
+              "value": "rte-font-noto-sans",
+              "label": "Noto Sans"
+            },
+            {
+              "value": "rte-font-noto-serif",
+              "label": "Noto Serif"
+            },
+            {
+              "value": "rte-font-open-sans",
+              "label": "Open Sans"
+            },
+            {
+              "value": "rte-font-palatino-linotype",
+              "label": "Palatino Linotype"
+            },
+            {
+              "value": "rte-font-roboto",
+              "label": "Roboto"
+            },
+            {
+              "value": "rte-font-roboto-condensed",
+              "label": "Roboto Condensed"
+            },
+            {
+              "value": "rte-font-segoe-ui",
+              "label": "Segoe UI"
+            },
+            {
+              "value": "rte-font-source-sans-3",
+              "label": "Source Sans 3"
+            },
+            {
+              "value": "rte-font-tahoma",
+              "label": "Tahoma"
+            },
+            {
+              "value": "rte-font-times-new-roman",
+              "label": "Times New Roman"
+            },
+            {
+              "value": "rte-font-trebuchet-ms",
+              "label": "Trebuchet MS"
+            },
+            {
+              "value": "rte-font-verdana",
+              "label": "Verdana"
+            }
+          ]
         }
       }
     }

@@ -222,11 +222,10 @@ function createLink(item, className) {
   return link;
 }
 
-function createPill(item, onSelect, isExpanded = false) {
+function createPill(item, onSelect) {
   const button = document.createElement('button');
   button.className = 'dock-pill-btn';
   button.type = 'button';
-  button.setAttribute('aria-expanded', String(isExpanded));
   button.textContent = item.label;
   button.addEventListener('click', () => onSelect(item, button));
 
@@ -237,7 +236,7 @@ function createPill(item, onSelect, isExpanded = false) {
   return button;
 }
 
-function createLevel(items, className, onSelect, expandedItem = null) {
+function createLevel(items, className, onSelect) {
   const list = document.createElement('ul');
   list.className = `dock-list ${className}`;
 
@@ -245,7 +244,7 @@ function createLevel(items, className, onSelect, expandedItem = null) {
     const listItem = document.createElement('li');
     listItem.className = 'dock-item';
     if (item.children.length) {
-      listItem.append(createPill(item, onSelect, item === expandedItem));
+      listItem.append(createPill(item, onSelect));
     } else if (item.link) {
       listItem.append(createLink(item, 'dock-pill-btn single-link'));
     } else {
@@ -279,14 +278,6 @@ function createThirdLevelPanel(item) {
   return panel;
 }
 
-/**
- * The floating canvas dock should remain visible while scrolling, matching the required UX.
- * The previous hide-on-scroll behavior is intentionally disabled.
- */
-function setupScrollDockObserver() {
-  // Intentionally no-op to keep the dock fixed and floating while the page scrolls.
-}
-
 function decorateNavigationDock(container, taxonomy, config) {
   const currentPath = window.location.pathname;
   const {
@@ -298,7 +289,6 @@ function decorateNavigationDock(container, taxonomy, config) {
   let activeL2 = initialActiveL2;
 
   container.className = 'navigation-dock-wrapper floating-bottom-dock';
-  container.dataset.motionType = config.navigationMotion;
 
   const dock = document.createElement('div');
   dock.className = 'dock-inner-wrapper';
@@ -307,7 +297,6 @@ function decorateNavigationDock(container, taxonomy, config) {
   hamburger.className = 'dock-hamburger-btn';
   hamburger.type = 'button';
   hamburger.setAttribute('aria-label', 'Toggle Menu');
-  hamburger.setAttribute('aria-expanded', String(Boolean(activeL1)));
   hamburger.innerHTML = '<span aria-hidden="true"></span>';
 
   const canvasForm = createCanvasForm(config);
@@ -335,7 +324,7 @@ function decorateNavigationDock(container, taxonomy, config) {
       activeL2 = activeL2 === item ? null : item;
       render();
       button.blur();
-    }, activeL2));
+    }));
 
     if (activeL2?.children.length) {
       const panel = createThirdLevelPanel(activeL2);
@@ -349,15 +338,12 @@ function decorateNavigationDock(container, taxonomy, config) {
   hamburger.addEventListener('click', () => {
     activeL1 = activeL1 ? null : taxonomy[0];
     activeL2 = null;
-    hamburger.setAttribute('aria-expanded', String(Boolean(activeL1)));
     render();
   });
 
   dock.append(hamburger, canvasForm);
   container.append(dock, nav);
   render();
-
-  setupScrollDockObserver();
 }
 
 export default async function decorate(block) {
@@ -387,6 +373,7 @@ export default async function decorate(block) {
   block.dataset.navigationMotion = config.navigationMotion;
   block.dataset.canvasMotion = config.canvasMotion;
 
+  /* 1. Top Header Bar */
   const navWrapper = document.createElement('div');
   navWrapper.className = 'tcs-nav-wrapper';
 
@@ -423,8 +410,18 @@ export default async function decorate(block) {
   navWrapper.append(nav);
   block.append(navWrapper);
 
+  /* Keep the fixed dock outside section wrappers. */
+  let telePortContainer = document.querySelector('body > .tcs-header-dock-global');
+  if (!telePortContainer) {
+    telePortContainer = document.createElement('div');
+    telePortContainer.className = 'tcs-header tcs-header-dock-global';
+    document.body.append(telePortContainer);
+  } else {
+    telePortContainer.textContent = '';
+  }
+
   const navDockContainer = document.createElement('div');
-  block.append(navDockContainer);
+  telePortContainer.append(navDockContainer);
 
   const rawIndex = await fetchQueryIndex();
   const taxonomy = buildTaxonomyFromIndex(rawIndex, config.navRootPath, config.navDepth);

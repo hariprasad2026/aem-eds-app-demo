@@ -13,11 +13,8 @@ export default async function decorate(block) {
   const quotationText = quotation?.textContent.trim() || '';
 
   const colors = {
-    'dark-navy': 'rgba(32, 41, 60, 1)',
-    'royal-blue': 'rgba(70, 115, 219, 1)',
     'light-grey': 'rgba(217, 217, 217, 1)',
     white: 'rgba(255, 255, 255, 1)',
-    black: 'rgba(12, 12, 13, 1)',
     'off-white': 'rgba(245, 245, 245, 1)',
     'dark-grey': 'rgba(90, 90, 90, 1)',
     'light-blue': 'rgba(167, 200, 241, 1)',

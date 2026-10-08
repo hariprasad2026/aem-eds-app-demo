@@ -1,135 +1,119 @@
 {
-  "definitions": [
-    {
-      "title": "Quotes",
-      "id": "quotes",
-      "plugins": {
-        "xwalk": {
-          "page": {
-            "resourceType": "core/franklin/components/block/v1/block",
-            "template": {
-              "name": "Quotes",
-              "model": "quotes"
+    "definitions": [
+        {
+            "title": "Quotes",
+            "id": "quotes",
+            "plugins": {
+                "xwalk": {
+                    "page": {
+                        "resourceType": "core/franklin/components/block/v1/block",
+                        "template": {
+                            "name": "Quotes",
+                            "model": "quotes"
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-  ],
-  "models": [
-    {
-      "id": "quotes",
-      "fields": [
+    ],
+    "models": [
         {
-          "component": "text",
-          "name": "eyebrow",
-          "label": "Eyebrow",
-          "valueType": "string",
-          "value": ""
-        },
+            "id": "quotes",
+            "fields": [
+                {
+                    "component": "text",
+                    "name": "eyebrow",
+                    "label": "Eyebrow",
+                    "valueType": "string",
+                    "value": ""
+                },
+                {
+                    "component": "richtext",
+                    "valueType": "string",
+                    "name": "title",
+                    "value": "",
+                    "label": "Title"
+                },
+                {
+                    "component": "richtext",
+                    "valueType": "string",
+                    "name": "quotation",
+                    "value": "",
+                    "label": "Quotation"
+                },
+                {
+                    "component": "select",
+                    "name": "layout",
+                    "label": "Layout",
+                    "valueType": "string",
+                    "value": "image",
+                    "options": [
+                        {
+                            "name": "Default",
+                            "value": "image"
+                        }
+                    ]
+                },
+                {
+                    "component": "select",
+                    "name": "backgroundColor",
+                    "label": "Background Color",
+                    "valueType": "string",
+                    "value": "white",
+                    "options": [
+                        {
+                            "name": "Light Grey",
+                            "value": "light-grey"
+                        },
+                        {
+                            "name": "Off White",
+                            "value": "off-white"
+                        },
+                        {
+                            "name": "Dark Grey",
+                            "value": "dark-grey"
+                        },
+                        {
+                            "name": "Light Blue",
+                            "value": "light-blue"
+                        }
+                    ]
+                },
+                {
+                    "component": "reference",
+                    "name": "profileImage",
+                    "label": "Image",
+                    "valueType": "string",
+                    "multi": false
+                },
+                {
+                    "component": "text",
+                    "name": "imageAltText",
+                    "label": "Image Alt Text",
+                    "valueType": "string",
+                    "value": ""
+                },
+                {
+                    "component": "richtext",
+                    "name": "authorDetails",
+                    "label": "Author Details",
+                    "valueType": "string",
+                    "value": ""
+                }
+            ]
+        }
+    ],
+    "filters": [
         {
-          "component": "richtext",
-          "valueType": "string",
-          "name": "title",
-          "value": "",
-          "label": "Title"
-        },
-        {
-          "component": "richtext",
-          "valueType": "string",
-          "name": "quotation",
-          "value": "",
-          "label": "Quotation"
-        },
-        {
-          "component": "select",
-          "name": "layout",
-          "label": "Layout",
-          "valueType": "string",
-          "value": "image",
-          "options": [
-            {
-              "name": "Default",
-              "value": "image"
+            "id": "richtext",
+            "components": [
+                "richtext"
+            ],
+            "rte": {
+                "toolbar": {
+                    "format": []
+                }
             }
-          ]
-        },
-        {
-          "component": "select",
-          "name": "backgroundColor",
-          "label": "Background Color",
-          "valueType": "string",
-          "value": "white",
-          "options": [
-            {
-              "name": "Dark Navy",
-              "value": "dark-navy"
-            },
-            {
-              "name": "Royal Blue",
-              "value": "royal-blue"
-            },
-            {
-              "name": "Light Grey",
-              "value": "light-grey"
-            },
-            {
-              "name": "White",
-              "value": "white"
-            },
-            {
-              "name": "Black",
-              "value": "black"
-            },
-            {
-              "name": "Off White",
-              "value": "off-white"
-            },
-            {
-              "name": "Dark Grey",
-              "value": "dark-grey"
-            },
-            {
-              "name": "Light Blue",
-              "value": "light-blue"
-            }
-          ]
-        },
-        {
-          "component": "reference",
-          "name": "profileImage",
-          "label": "Image",
-          "valueType": "string",
-          "multi": false
-        },
-        {
-          "component": "text",
-          "name": "imageAltText",
-          "label": "Image Alt Text",
-          "valueType": "string",
-          "value": ""
-        },
-        {
-          "component": "richtext",
-          "name": "authorDetails",
-          "label": "Author Details",
-          "valueType": "string",
-          "value": ""
         }
-      ]
-    }
-  ],
-  "filters": [
-    {
-      "id": "richtext",
-      "components": [
-        "richtext"
-      ],
-      "rte": {
-        "toolbar": {
-          "format": []
-        }
-      }
-    }
-  ]
+    ]
 }

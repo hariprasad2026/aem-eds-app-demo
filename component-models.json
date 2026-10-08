@@ -3229,24 +3229,8 @@
         "value": "white",
         "options": [
           {
-            "name": "Dark Navy",
-            "value": "dark-navy"
-          },
-          {
-            "name": "Royal Blue",
-            "value": "royal-blue"
-          },
-          {
             "name": "Light Grey",
             "value": "light-grey"
-          },
-          {
-            "name": "White",
-            "value": "white"
-          },
-          {
-            "name": "Black",
-            "value": "black"
           },
           {
             "name": "Off White",

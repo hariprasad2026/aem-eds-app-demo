@@ -55,10 +55,26 @@
   min-height: 134px;
 }
 
+.statistics-list .statistics-item:nth-child(1) {
+  flex-basis: 283px;
+}
+
+.statistics-list .statistics-item:nth-child(2) {
+  flex-basis: 245px;
+}
+
+.statistics-list .statistics-item:nth-child(3) {
+  flex-basis: 163px;
+}
+
+.statistics-list .statistics-item:nth-child(4) {
+  flex-basis: 256px;
+}
+
 .statistics-list .stat-title {
   color: #1f1f1f;
   font-family: Inter, sans-serif;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 400;
   line-height: 1.4;
   overflow-wrap: anywhere;
@@ -75,8 +91,8 @@
 }
 
 .statistics-list .statistics-item:nth-child(3) .stat-value {
-  font-size: 52px;
-  line-height: 1.2;
+  font-size: 80px;
+  line-height: 96px;
 }
 
 @media (width <= 900px) {

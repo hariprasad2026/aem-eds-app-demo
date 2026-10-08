@@ -100,7 +100,7 @@
           "showCellProperties": true
         },
         "classes": {
-          "label": "Typography",
+          "label": "Typography style",
           "options": [
             {
               "value": "rte-font-aptos",
@@ -111,10 +111,6 @@
               "label": "Arial"
             },
             {
-              "value": "rte-font-arial-black",
-              "label": "Arial Black"
-            },
-            {
               "value": "rte-font-calibri",
               "label": "Calibri"
             },
@@ -123,72 +119,16 @@
               "label": "Cambria"
             },
             {
-              "value": "rte-font-candara",
-              "label": "Candara"
-            },
-            {
-              "value": "rte-font-comic-sans-ms",
-              "label": "Comic Sans MS"
+              "value": "rte-font-courier-new",
+              "label": "Courier New"
             },
             {
               "value": "rte-font-consolas",
               "label": "Consolas"
             },
             {
-              "value": "rte-font-constantia",
-              "label": "Constantia"
-            },
-            {
-              "value": "rte-font-courier-new",
-              "label": "Courier New"
-            },
-            {
-              "value": "rte-font-franklin-gothic-medium",
-              "label": "Franklin Gothic Medium"
-            },
-            {
-              "value": "rte-font-garamond",
-              "label": "Garamond"
-            },
-            {
               "value": "rte-font-georgia",
               "label": "Georgia"
-            },
-            {
-              "value": "rte-font-helvetica",
-              "label": "Helvetica"
-            },
-            {
-              "value": "rte-font-impact",
-              "label": "Impact"
-            },
-            {
-              "value": "rte-font-lato",
-              "label": "Lato"
-            },
-            {
-              "value": "rte-font-merriweather",
-              "label": "Merriweather"
-            },
-            {
-              "value": "rte-font-montserrat",
-              "label": "Montserrat"
-            },
-            {
-              "value": "rte-font-noto-sans",
-              "label": "Noto Sans"
-            },
-            {
-              "value": "rte-font-noto-serif",
-              "label": "Noto Serif"
-            },
-            {
-              "value": "rte-font-open-sans",
-              "label": "Open Sans"
-            },
-            {
-              "value": "rte-font-palatino-linotype",
-              "label": "Palatino Linotype"
             },
             {
               "value": "rte-font-roboto",
@@ -199,20 +139,12 @@
               "label": "Roboto Condensed"
             },
             {
-              "value": "rte-font-segoe-ui",
-              "label": "Segoe UI"
-            },
-            {
-              "value": "rte-font-source-sans-3",
-              "label": "Source Sans 3"
+              "value": "rte-font-times-new-roman",
+              "label": "Times New Roman"
             },
             {
               "value": "rte-font-tahoma",
               "label": "Tahoma"
-            },
-            {
-              "value": "rte-font-times-new-roman",
-              "label": "Times New Roman"
             },
             {
               "value": "rte-font-trebuchet-ms",
@@ -221,6 +153,58 @@
             {
               "value": "rte-font-verdana",
               "label": "Verdana"
+            },
+            {
+              "value": "rte-google-font-705",
+              "label": "Inter"
+            },
+            {
+              "value": "rte-google-font-825",
+              "label": "Lato"
+            },
+            {
+              "value": "rte-google-font-953",
+              "label": "Merriweather"
+            },
+            {
+              "value": "rte-google-font-998",
+              "label": "Montserrat"
+            },
+            {
+              "value": "rte-google-font-1278",
+              "label": "Nunito"
+            },
+            {
+              "value": "rte-google-font-1293",
+              "label": "Open Sans"
+            },
+            {
+              "value": "rte-google-font-1301",
+              "label": "Oswald"
+            },
+            {
+              "value": "rte-google-font-1353",
+              "label": "Playfair Display"
+            },
+            {
+              "value": "rte-google-font-1478",
+              "label": "Poppins"
+            },
+            {
+              "value": "rte-google-font-1523",
+              "label": "Raleway"
+            },
+            {
+              "value": "rte-google-font-1721",
+              "label": "Source Sans 3"
+            },
+            {
+              "value": "rte-google-font-1837",
+              "label": "Ubuntu"
+            },
+            {
+              "value": "rte-google-font-1899",
+              "label": "Work Sans"
             }
           ]
         }
@@ -247,6 +231,7 @@
       "embedv1",
       "form-variations",
       "tarun-header",
+      "tcs-header",
       "footer-sai",
       "fragment",
       "hero",
@@ -359,6 +344,12 @@
     "components": [
       "spotlight-header",
       "spotlight-card"
+    ]
+  },
+  {
+    "id": "statistics-list",
+    "components": [
+      "statistics-list-item"
     ]
   },
   {

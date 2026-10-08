@@ -1,0 +1,157 @@
+{
+  "definitions": [
+    {
+      "title": "TCS Header",
+      "id": "tcs-header",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "TCS Header",
+              "model": "tcs-header"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "tcs-header",
+      "fields": [
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "headerVariant",
+          "label": "Header Variant",
+          "value": "standard",
+          "options": [
+            { "name": "Standard", "value": "standard" },
+            { "name": "Compact", "value": "compact" },
+            { "name": "Dark", "value": "dark" },
+            { "name": "Centered", "value": "centered" }
+          ]
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "tcsLogo",
+          "label": "TCS Logo Image"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "tcsLogoLink",
+          "label": "TCS Logo Target URL",
+          "value": "/"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "tataLogo",
+          "label": "Tata Logo Image"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "tataLogoLink",
+          "label": "Tata Logo Target URL",
+          "value": "https://www.tata.com"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "tcsLogoAlt",
+          "label": "TCS Logo Alt Text",
+          "value": "Tata Consultancy Services"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "tataLogoAlt",
+          "label": "Tata Logo Alt Text",
+          "value": "TATA Group"
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "navigationMotion",
+          "label": "Navigation Motion Type",
+          "value": "slide",
+          "options": [
+            { "name": "Slide", "value": "slide" },
+            { "name": "Fade", "value": "fade" },
+            { "name": "None", "value": "none" }
+          ]
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "navRootPath",
+          "label": "Nav Root Path",
+          "value": "/"
+        },
+        {
+          "component": "number-input",
+          "valueType": "number",
+          "name": "navDepth",
+          "label": "Nav Depth",
+          "value": 3,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "canvasPlaceholder",
+          "label": "Canvas Search Placeholder",
+          "value": "Ask us a question"
+        },
+        {
+          "component": "checkbox",
+          "valueType": "boolean",
+          "name": "showCanvasSearchIcon",
+          "label": "Show Canvas Search Icon",
+          "value": true
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "canvasActionUrl",
+          "label": "Canvas Search Target URL",
+          "value": "/search"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "canvasNavRootPath",
+          "label": "Canvas Nav Root Path",
+          "value": "/"
+        },
+        {
+          "component": "number-input",
+          "valueType": "number",
+          "name": "canvasNavDepth",
+          "label": "Canvas Nav Depth",
+          "value": 3,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "canvasMotion",
+          "label": "Canvas Motion Type",
+          "value": "slide",
+          "options": [
+            { "name": "Slide", "value": "slide" },
+            { "name": "Fade", "value": "fade" },
+            { "name": "None", "value": "none" }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

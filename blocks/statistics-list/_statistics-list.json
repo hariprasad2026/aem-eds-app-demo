@@ -10,7 +10,24 @@
             "template": {
               "name": "Statistics List",
               "model": "statistics-list",
-              "filter": "richtext"
+              "filter": "statistics-list"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Statistic",
+      "id": "statistics-list-item",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Statistic",
+              "model": "statistics-list-item",
+              "title": "Title",
+              "value": "Value"
             }
           }
         }
@@ -28,31 +45,33 @@
           "value": "",
           "valueType": "string",
           "filter": "richtext"
+        }
+      ]
+    },
+    {
+      "id": "statistics-list-item",
+      "fields": [
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Title",
+          "value": "",
+          "valueType": "string"
         },
         {
-          "component": "container",
-          "name": "statsList",
-          "label": "Stats",
-          "multi": true,
-          "fields": [
-            {
-              "component": "text",
-              "name": "title",
-              "label": "Title",
-              "value": "",
-              "valueType": "string"
-            },
-            {
-              "component": "text",
-              "name": "value",
-              "label": "Statistic",
-              "value": "",
-              "valueType": "string"
-            }
-          ]
+          "component": "text",
+          "name": "value",
+          "label": "Statistic",
+          "value": "",
+          "valueType": "string"
         }
       ]
     }
   ],
-  "filters": []
+  "filters": [
+    {
+      "id": "statistics-list",
+      "components": ["statistics-list-item"]
+    }
+  ]
 }

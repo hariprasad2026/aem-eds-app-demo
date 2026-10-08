@@ -24,7 +24,6 @@
             "template": {
               "name": "Search",
               "model": "search",
-              "filter": "search",
               "index": "/query-index.json",
               "classes": [
                 "minimal",

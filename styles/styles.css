@@ -18,6 +18,7 @@
   --text-color: #131313;
   --link-color: #3b63fb;
   --link-hover-color: #1d3ecf;
+  --overlay-background-color:lightgrey;
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback, sans-serif;
@@ -36,8 +37,10 @@
   --heading-font-size-s: 24px;
   --heading-font-size-xs: 22px;
 
-  /* nav height */
+  /* nav heights */
   --nav-height: 64px;
+  --breadcrumbs-height: 34px;
+  --header-height: var(--nav-height);
 }
 
 /* fallback fonts */
@@ -84,8 +87,197 @@ body.appear {
   display: block;
 }
 
+.rte-font-aptos {
+  font-family: Aptos, Calibri, Arial, sans-serif;
+}
+
+.rte-font-arial {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.rte-font-calibri {
+  font-family: Calibri, Carlito, Arial, sans-serif;
+}
+
+.rte-font-cambria {
+  font-family: Cambria, Georgia, serif;
+}
+
+.rte-font-courier-new {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.rte-font-consolas {
+  font-family: Consolas, 'Courier New', monospace;
+}
+
+.rte-font-georgia {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.rte-font-roboto {
+  font-family: var(--body-font-family);
+}
+
+.rte-font-roboto-condensed {
+  font-family: var(--heading-font-family);
+}
+
+.rte-font-times-new-roman {
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.rte-font-tahoma {
+  font-family: Tahoma, Geneva, sans-serif;
+}
+
+.rte-font-trebuchet-ms {
+  font-family: 'Trebuchet MS', Arial, sans-serif;
+}
+
+.rte-font-verdana {
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+.rte-size-8pt { font-size: 8pt; }
+.rte-size-9pt { font-size: 9pt; }
+.rte-size-10pt { font-size: 10pt; }
+.rte-size-11pt { font-size: 11pt; }
+.rte-size-12pt { font-size: 12pt; }
+.rte-size-14pt { font-size: 14pt; }
+.rte-size-16pt { font-size: 16pt; }
+.rte-size-18pt { font-size: 18pt; }
+.rte-size-20pt { font-size: 20pt; }
+.rte-size-22pt { font-size: 22pt; }
+.rte-size-24pt { font-size: 24pt; }
+.rte-size-26pt { font-size: 26pt; }
+.rte-size-28pt { font-size: 28pt; }
+.rte-size-36pt { font-size: 36pt; }
+.rte-size-48pt { font-size: 48pt; }
+.rte-size-72pt { font-size: 72pt; }
+
+.rte-aptos-12,
+.rte-aptos-16,
+.rte-aptos-24,
+.rte-aptos-32 {
+  font-family: Aptos, Arial, sans-serif;
+}
+
+.rte-aptos-12,
+.rte-roboto-12 {
+  font-size: 12px;
+}
+
+.rte-aptos-16,
+.rte-roboto-16 {
+  font-size: 16px;
+}
+
+.rte-aptos-24,
+.rte-roboto-24,
+.rte-serif-24 {
+  font-size: 24px;
+}
+
+.rte-aptos-32,
+.rte-roboto-32,
+.rte-roboto-condensed-32 {
+  font-size: 32px;
+}
+
+.rte-roboto-12,
+.rte-roboto-14,
+.rte-roboto-16,
+.rte-roboto-20,
+.rte-roboto-24,
+.rte-roboto-32 {
+  font-family: var(--body-font-family);
+}
+
+.rte-roboto-14,
+.rte-monospace-14 {
+  font-size: 14px;
+}
+
+.rte-roboto-20 {
+  font-size: 20px;
+}
+
+.rte-roboto-condensed-16,
+.rte-roboto-condensed-24,
+.rte-roboto-condensed-32 {
+  font-family: var(--heading-font-family);
+}
+
+.rte-roboto-condensed-16,
+.rte-monospace-16 {
+  font-size: 16px;
+}
+
+.rte-roboto-condensed-24 {
+  font-size: 24px;
+}
+
+.rte-serif-16,
+.rte-serif-24 {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.rte-serif-16 {
+  font-size: 16px;
+}
+
+.rte-monospace-14,
+.rte-monospace-16 {
+  font-family: Consolas, 'Courier New', monospace;
+}
+
+.rte-type-body-small {
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.rte-type-body {
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.rte-type-body-large {
+  font-family: var(--body-font-family);
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.rte-type-heading {
+  font-family: var(--heading-font-family);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.rte-type-heading-large {
+  font-family: var(--heading-font-family);
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.rte-type-serif {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.rte-type-monospace {
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
 header {
-  height: var(--nav-height);
+  height: var(--header-height);
 }
 
 header .header,
@@ -96,6 +288,12 @@ footer .footer {
 header .header[data-block-status="loaded"],
 footer .footer[data-block-status="loaded"] {
   visibility: visible;
+}
+
+@media (width >= 900px) {
+  body[data-breadcrumbs] {
+    --header-height: calc(var(--nav-height) + var(--breadcrumbs-height));
+  }
 }
 
 h1,
@@ -226,37 +424,6 @@ main img {
   height: 100%;
   width: 100%;
 }
-
-.rte-font-aptos, .rte-font-aptos * { font-family: Aptos, sans-serif !important; }
-.rte-font-arial, .rte-font-arial * { font-family: Arial, sans-serif !important; }
-.rte-font-arial-black, .rte-font-arial-black * { font-family: 'Arial Black', sans-serif !important; }
-.rte-font-calibri, .rte-font-calibri * { font-family: Calibri, sans-serif !important; }
-.rte-font-cambria, .rte-font-cambria * { font-family: Cambria, serif !important; }
-.rte-font-candara, .rte-font-candara * { font-family: Candara, sans-serif !important; }
-.rte-font-comic-sans-ms, .rte-font-comic-sans-ms * { font-family: 'Comic Sans MS', cursive !important; }
-.rte-font-consolas, .rte-font-consolas * { font-family: Consolas, monospace !important; }
-.rte-font-constantia, .rte-font-constantia * { font-family: Constantia, serif !important; }
-.rte-font-courier-new, .rte-font-courier-new * { font-family: 'Courier New', monospace !important; }
-.rte-font-franklin-gothic-medium, .rte-font-franklin-gothic-medium * { font-family: 'Franklin Gothic Medium', Arial, sans-serif !important; }
-.rte-font-garamond, .rte-font-garamond * { font-family: Garamond, 'Times New Roman', serif !important; }
-.rte-font-georgia, .rte-font-georgia * { font-family: Georgia, serif !important; }
-.rte-font-helvetica, .rte-font-helvetica * { font-family: Helvetica, Arial, sans-serif !important; }
-.rte-font-impact, .rte-font-impact * { font-family: Impact, sans-serif !important; }
-.rte-font-lato, .rte-font-lato * { font-family: Lato, sans-serif !important; }
-.rte-font-merriweather, .rte-font-merriweather * { font-family: Merriweather, Georgia, serif !important; }
-.rte-font-montserrat, .rte-font-montserrat * { font-family: Montserrat, sans-serif !important; }
-.rte-font-noto-sans, .rte-font-noto-sans * { font-family: 'Noto Sans', sans-serif !important; }
-.rte-font-noto-serif, .rte-font-noto-serif * { font-family: 'Noto Serif', serif !important; }
-.rte-font-open-sans, .rte-font-open-sans * { font-family: 'Open Sans', sans-serif !important; }
-.rte-font-palatino-linotype, .rte-font-palatino-linotype * { font-family: 'Palatino Linotype', serif !important; }
-.rte-font-roboto, .rte-font-roboto * { font-family: Roboto, sans-serif !important; }
-.rte-font-roboto-condensed, .rte-font-roboto-condensed * { font-family: 'Roboto Condensed', sans-serif !important; }
-.rte-font-segoe-ui, .rte-font-segoe-ui * { font-family: 'Segoe UI', sans-serif !important; }
-.rte-font-source-sans-3, .rte-font-source-sans-3 * { font-family: 'Source Sans 3', sans-serif !important; }
-.rte-font-tahoma, .rte-font-tahoma * { font-family: Tahoma, sans-serif !important; }
-.rte-font-times-new-roman, .rte-font-times-new-roman * { font-family: 'Times New Roman', serif !important; }
-.rte-font-trebuchet-ms, .rte-font-trebuchet-ms * { font-family: 'Trebuchet MS', sans-serif !important; }
-.rte-font-verdana, .rte-font-verdana * { font-family: Verdana, sans-serif !important; }
 
 /* sections */
 main > .section {

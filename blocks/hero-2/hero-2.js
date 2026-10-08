@@ -120,7 +120,7 @@ export default function decorate(block) {
     label.textContent = content.ctaTitle;
 
     const arrow = document.createElement('img');
-    arrow.src = '/content/dam/2026/39/energeticowl21611/icons/arrow 14x14.svg';
+    arrow.src = '/content/dam/aem-eds-xwalk/hero/icons/arrow 14x14.svg';
     arrow.alt = '';
     arrow.className = 'hero2-cta-arrow';
 

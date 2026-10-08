@@ -27,7 +27,8 @@
               "name": "Statistic",
               "model": "statistics-list-item",
               "title": "Title",
-              "value": "Value"
+              "value": "Value",
+              "filter": "richtext"
             }
           }
         }

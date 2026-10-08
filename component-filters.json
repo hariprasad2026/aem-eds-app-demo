@@ -42,6 +42,7 @@
       "statistics-list",
       "table",
       "table-list",
+      "teaser-v1",
       "title-with-column",
       "tabs-new",
       "teaser-v2",
@@ -202,6 +203,12 @@
     "id": "tabs-new",
     "components": [
       "tabs-item"
+    ]
+  },
+  {
+    "id": "teaser-v1-children",
+    "components": [
+      "teaser-v1-link"
     ]
   },
   {

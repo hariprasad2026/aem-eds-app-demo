@@ -657,6 +657,202 @@
     ]
   },
   {
+    "id": "canvas",
+    "fields": [
+      {
+        "component": "container",
+        "name": "commonFields",
+        "label": "Common Fields",
+        "collapsible": false,
+        "fields": [
+          {
+            "component": "select",
+            "name": "canvasType",
+            "label": "Canvas Type",
+            "value": "search",
+            "options": [
+              {
+                "name": "Search Canvas",
+                "value": "search"
+              },
+              {
+                "name": "Intent Canvas",
+                "value": "intent"
+              }
+            ]
+          },
+          {
+            "component": "text",
+            "name": "canvasSearchWatermark",
+            "label": "Canvas Search Watermark"
+          },
+          {
+            "component": "reference",
+            "name": "canvasMicrophoneIcon",
+            "label": "Canvas Microphone Icon"
+          },
+          {
+            "component": "reference",
+            "name": "canvasMenuIcon",
+            "label": "Canvas Menu Icon"
+          },
+          {
+            "component": "select",
+            "name": "motionType",
+            "label": "Motion Type",
+            "value": "none",
+            "options": [
+              {
+                "name": "None",
+                "value": "none"
+              },
+              {
+                "name": "Fade",
+                "value": "fade"
+              },
+              {
+                "name": "Slide Up",
+                "value": "slide-up"
+              }
+            ]
+          },
+          {
+            "component": "select",
+            "name": "canvasStyle",
+            "label": "Canvas Style",
+            "value": "default",
+            "options": [
+              {
+                "name": "Default",
+                "value": "default"
+              },
+              {
+                "name": "Floating Sticky",
+                "value": "floating-sticky"
+              }
+            ]
+          },
+          {
+            "component": "text",
+            "name": "canvasTitle",
+            "label": "Canvas Title"
+          },
+          {
+            "component": "richtext",
+            "name": "canvasDescription",
+            "label": "Canvas Description"
+          }
+        ]
+      },
+      {
+        "component": "container",
+        "name": "searchCanvasSettings",
+        "label": "Search Canvas Settings",
+        "collapsible": false,
+        "condition": {
+          "==": [
+            {
+              "var": "canvasType"
+            },
+            "search"
+          ]
+        },
+        "fields": [
+          {
+            "component": "checkbox",
+            "name": "showNavigation",
+            "label": "Show Navigation",
+            "value": true
+          },
+          {
+            "component": "checkbox",
+            "name": "showMicrophone",
+            "label": "Show Microphone",
+            "value": true
+          },
+          {
+            "component": "aem-content",
+            "name": "canvasNavRootPath",
+            "label": "Canvas Nav Root Path"
+          },
+          {
+            "component": "number",
+            "name": "canvasNavDepth",
+            "label": "Canvas Nav Depth",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "component": "container",
+        "name": "intentCanvasSettings",
+        "label": "Intent Canvas Settings",
+        "collapsible": false,
+        "condition": {
+          "==": [
+            {
+              "var": "canvasType"
+            },
+            "intent"
+          ]
+        },
+        "fields": [
+          {
+            "component": "checkbox",
+            "name": "enableSearch",
+            "label": "Enable Search",
+            "value": true
+          },
+          {
+            "component": "checkbox",
+            "name": "showNavigation",
+            "label": "Show Navigation",
+            "value": true
+          },
+          {
+            "component": "checkbox",
+            "name": "showMicrophone",
+            "label": "Show Microphone",
+            "value": true
+          },
+          {
+            "component": "number",
+            "name": "maximumOptions",
+            "label": "Maximum Options",
+            "value": 5
+          },
+          {
+            "component": "select",
+            "name": "optionsType",
+            "label": "Options Type",
+            "value": "default",
+            "options": [
+              {
+                "name": "Default",
+                "value": "default"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "canvas-option",
+    "fields": [
+      {
+        "component": "text",
+        "name": "optionLabel",
+        "label": "Option Label"
+      },
+      {
+        "component": "text",
+        "name": "optionLink",
+        "label": "Option Link"
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {

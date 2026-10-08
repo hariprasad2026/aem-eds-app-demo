@@ -1,0 +1,375 @@
+/* =======================================
+   CANVAS
+======================================= */
+
+.canvas {
+  width: 100%;
+  position: relative;
+}
+
+/* =======================================
+   SEARCH BAR
+======================================= */
+
+.canvas-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  width: 100%;
+  max-width: 812px;
+  margin-inline: auto;
+}
+
+.canvas-nav-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  z-index: 30;
+  width: min(320px, 80vw);
+  background: rgb(255 255 255 / 95%);
+  border: 1px solid #d9d9d9;
+  border-radius: 16px;
+  box-shadow: 0 18px 30px rgb(20 32 52 / 12%);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+}
+
+.canvas-nav-panel.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.canvas-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+}
+
+.canvas-nav-item {
+  margin: 0;
+}
+
+.canvas-nav-item a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #0c0c0d;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.canvas-nav-item a:hover {
+  background: #f4f7ff;
+}
+
+/* =======================================
+   MENU BUTTON
+======================================= */
+
+.canvas-menu-btn {
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 2px solid #494c4d;
+  background: rgb(255 255 255 / 60%);
+  backdrop-filter: blur(13px);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* =======================================
+   SEARCH CONTAINER
+======================================= */
+
+.canvas-search-container {
+  width: 710px;
+  max-width: 100%;
+  height: 96px;
+  flex: 1;
+  border-radius: 58px;
+  border: 2px solid #494c4d;
+  background: rgb(255 255 255 / 60%);
+  backdrop-filter: blur(40px);
+  box-sizing: border-box;
+  padding: 16px 28px;
+}
+
+.canvas-search-input {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.canvas-placeholder {
+  color: #8d8d8d;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+.canvas-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* =======================================
+   MIC BUTTON
+======================================= */
+
+.canvas-mic-btn {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.canvas-menu-btn img,
+.canvas-mic-btn img {
+  display: block;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+/* =======================================
+   SUBMIT BUTTON
+======================================= */
+
+.canvas-submit-btn {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: #4673db;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+/* =======================================
+   FLOATING STICKY
+======================================= */
+
+.canvas-floating-sticky {
+  position: sticky;
+  top: 16px;
+  z-index: 20;
+}
+
+/* =======================================
+   INTENT CANVAS
+======================================= */
+
+.canvas-intent {
+  position: relative;
+  min-height: 755px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 120px 24px;
+}
+
+.canvas-intent-content {
+  width: 1280px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+/* =======================================
+   TITLE
+======================================= */
+
+.canvas-title {
+  margin: 0;
+  max-width: 1120px;
+  text-align: center;
+  color: #0c0c0d;
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+
+/* =======================================
+   DESCRIPTION
+======================================= */
+
+.canvas-description {
+  max-width: 812px;
+  text-align: center;
+  color: #0c0c0d;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 160%;
+}
+
+/* =======================================
+   INTENT SEARCH SLOT
+======================================= */
+
+.canvas-search-slot {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* =======================================
+   PILLS
+======================================= */
+
+.canvas-options {
+  width: 100%;
+  max-width: 920px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.canvas-option-pill {
+  min-height: 53px;
+  padding: 12px 32px;
+  border-radius: 999px;
+  border: 1px solid #d8d8d8;
+  background: #fff;
+  color: #0c0c0d;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 160%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.canvas-option-pill:hover {
+  border-color: #4673db;
+  background: #f4f7ff;
+}
+
+/* =======================================
+   GLOWS
+======================================= */
+
+.canvas-glow {
+  position: absolute;
+  pointer-events: none;
+}
+
+.canvas-glow-yellow {
+  width: 451px;
+  height: 322px;
+  left: 80px;
+  bottom: -40px;
+  background: #e8b931;
+  opacity: 0.4;
+  filter: blur(222px);
+}
+
+.canvas-glow-blue {
+  width: 538px;
+  height: 384px;
+  right: 80px;
+  bottom: -40px;
+  background: #4673db;
+  opacity: 0.4;
+  filter: blur(222px);
+}
+
+/* =======================================
+   RESPONSIVE
+======================================= */
+
+@media (width <= 1024px) {
+  .canvas-intent {
+    padding: 80px 24px;
+  }
+
+  .canvas-title {
+    font-size: 32px;
+  }
+
+  .canvas-description {
+    font-size: 16px;
+  }
+
+  .canvas-search-container {
+    width: 100%;
+  }
+}
+
+@media (width <= 768px) {
+  .canvas-search {
+    gap: 12px;
+  }
+
+  .canvas-menu-btn {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+  }
+
+  .canvas-search-container {
+    height: 68px;
+    padding: 10px 16px;
+  }
+
+  .canvas-placeholder {
+    font-size: 16px;
+  }
+
+  .canvas-controls {
+    gap: 8px;
+  }
+
+  .canvas-submit-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .canvas-menu-btn img,
+  .canvas-mic-btn img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .canvas-title {
+    font-size: 28px;
+  }
+
+  .canvas-option-pill {
+    width: 100%;
+  }
+
+  .canvas-glow-yellow,
+  .canvas-glow-blue {
+    display: none;
+  }
+}

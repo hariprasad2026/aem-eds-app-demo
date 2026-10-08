@@ -16,7 +16,6 @@
               "page": {
                 "resourceType": "core/franklin/components/text/v1/text",
                 "template": {
-                  "model": "text",
                   "filter": "richtext"
                 }
               }

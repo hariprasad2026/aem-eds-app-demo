@@ -51,13 +51,14 @@
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+  max-width: 100%;
   min-height: 134px;
 }
 
 .statistics-list .stat-title {
   color: #1f1f1f;
   font-family: Inter, sans-serif;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 400;
   line-height: 1.4;
   overflow-wrap: anywhere;
@@ -70,14 +71,15 @@
   font-weight: 400;
   line-height: 116px;
   overflow-wrap: anywhere;
+  white-space: nowrap;
 }
 
 .statistics-list .statistics-item:nth-child(3) .stat-value {
-  font-size: 80px;
-  line-height: 96px;
+  font-size: 52px;
+  line-height: 1.2;
 }
 
-@media (width <= 1100px) {
+@media (width <= 900px) {
   .statistics-list {
     min-height: 0;
     padding: 120px 40px;

@@ -94,6 +94,9 @@
         "italic": {
           "tag": "em"
         },
+        "strike": {
+          "tag": "del"
+        },
         "image": {
           "wrapInPicture": true
         },

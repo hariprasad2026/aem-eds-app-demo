@@ -14,15 +14,15 @@
       "toolbar": {
         "format": ["bold", "italic", "underline", "strike", "code_inline", "text_color"],
         "alignment": ["left", "center", "right", "justify"],
-        "direction": ["ltr", "rtl"],
+        "direction": ["rtl", "ltr"],
         "indentation": ["indent", "outdent"],
         "blocks": ["paragraph", "h1", "h2", "h3", "h4", "h5", "h6", "code_block", "blockquote"],
         "list": ["bullet_list", "ordered_list"],
         "insert": ["link", "unlink", "image", "table", "special_characters"],
         "sr_script": ["superscript", "subscript"],
-        "editor": ["removeformat", "clean_unsupported_tags", "paste_text"],
+        "editor": ["removeformat", "clean_unsupported_tags", "paste_text", "fullscreen", "find_and_replace"],
         "advanced": ["classes"],
-        "sections": ["format", "blocks", "alignment", "list", "indentation", "insert", "sr_script", "editor", "advanced"]
+        "sections": ["format", "blocks", "alignment", "direction", "list", "indentation", "insert", "sr_script", "editor", "advanced"]
       },
       "actions": {
         "bold": {

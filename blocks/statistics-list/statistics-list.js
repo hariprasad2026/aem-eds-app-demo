@@ -5,7 +5,8 @@ const getText = (node) => {
 
 const readStats = (block) => {
   const children = Array.from(block.children || []);
-  const heading = getText(children[0]) || '';
+  const headingRow = children[0];
+  const heading = headingRow?.firstElementChild || headingRow;
   const rawStats = [];
 
   const rows = children.slice(1).flatMap((row) => Array.from(row.children || []));
@@ -26,21 +27,50 @@ const readStats = (block) => {
 export default function decorate(block) {
   const { heading, stats } = readStats(block);
 
-  if (!heading && !stats.length) return;
+  if (!getText(heading) && !stats.length) return;
 
-  block.innerHTML = `
-    <div class="statistics-list-wrapper">
-      <div class="statistics-content">
-        <h2 class="statistics-heading">${heading}</h2>
-        <div class="statistics-grid">
-          ${stats.map(({ title, value }) => `
-            <div class="statistics-item">
-              <div class="stat-title">${title}</div>
-              <div class="stat-value">${value}</div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    </div>
-  `;
+  const wrapper = document.createElement('div');
+  wrapper.className = 'statistics-list-wrapper';
+
+  const content = document.createElement('div');
+  content.className = 'statistics-content';
+
+  if (getText(heading)) {
+    const headingElement = document.createElement('div');
+    headingElement.className = 'statistics-heading';
+    headingElement.setAttribute('role', 'heading');
+    headingElement.setAttribute('aria-level', '2');
+
+    const headingParagraph = heading.children.length === 1
+      && heading.firstElementChild.tagName === 'P'
+      ? heading.firstElementChild
+      : heading;
+    Array.from(headingParagraph.childNodes).forEach((node) => {
+      headingElement.append(node.cloneNode(true));
+    });
+
+    content.append(headingElement);
+  }
+
+  const grid = document.createElement('div');
+  grid.className = 'statistics-grid';
+  stats.forEach(({ title, value }) => {
+    const item = document.createElement('div');
+    item.className = 'statistics-item';
+
+    const titleElement = document.createElement('div');
+    titleElement.className = 'stat-title';
+    titleElement.textContent = title;
+
+    const valueElement = document.createElement('div');
+    valueElement.className = 'stat-value';
+    valueElement.textContent = value;
+
+    item.append(titleElement, valueElement);
+    grid.append(item);
+  });
+
+  content.append(grid);
+  wrapper.append(content);
+  block.replaceChildren(wrapper);
 }

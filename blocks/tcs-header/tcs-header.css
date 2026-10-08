@@ -5,16 +5,16 @@
   height: 124px;
 }
 
-.tcs-header .tcs-nav-placeholder {
-  height: 124px;
+.tcs-header:not(.tcs-header-dock-global) {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #fff;
 }
 
 .tcs-header .tcs-nav-wrapper {
-  position: fixed;
-  z-index: 1000;
-  top: 0;
-  right: 0;
-  left: 0;
+  position: relative;
+  z-index: 10;
   width: 100%;
   background-color: #fff;
   border-bottom: 1px solid #e0e0e0;
@@ -65,10 +65,6 @@
   padding-bottom: 20px;
 }
 
-.tcs-header.variant-compact .tcs-nav-placeholder {
-  height: 80px;
-}
-
 .tcs-header.variant-compact .nav-brand-primary img {
   width: 112px;
   height: 28px;
@@ -83,10 +79,6 @@
     height: 64px;
   }
 
-  .tcs-header .tcs-nav-placeholder {
-    height: 64px;
-  }
-
   .tcs-header nav#tcs-nav {
     height: 64px;
     padding: 12px 20px;
@@ -96,10 +88,6 @@
     height: 56px;
     padding-top: 8px;
     padding-bottom: 8px;
-  }
-
-  .tcs-header.variant-compact .tcs-nav-placeholder {
-    height: 56px;
   }
 
   .tcs-header .nav-brand-primary img {
@@ -131,7 +119,7 @@
    ========================================================================== */
 body > .tcs-header-dock-global {
   position: static !important;
-  height: 160px !important;
+  height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
   overflow: visible !important;
@@ -142,22 +130,20 @@ body > .tcs-header-dock-global {
 }
 
 .tcs-header .floating-bottom-dock {
-  position: fixed !important;
-  z-index: 99999 !important;
-  right: 0 !important;
-  bottom: 24px !important;
-  left: 50% !important;
+  position: relative !important;
+  z-index: 20 !important;
+  inset: auto !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   gap: 12px !important;
-  width: min(1280px, calc(100vw - 48px)) !important;
-  margin: 0 !important;
+  width: min(1280px, 100%) !important;
+  margin: 0 auto !important;
   padding: 0 !important;
-  pointer-events: none !important;
+  pointer-events: auto !important;
   opacity: 1 !important;
   visibility: visible !important;
-  transform: translateX(-50%) translateY(0) !important;
+  transform: none !important;
 }
 
 .tcs-header .floating-bottom-dock::before {
@@ -178,11 +164,11 @@ body > .tcs-header-dock-global {
 .tcs-header .dock-hamburger-btn {
   position: relative;
   display: inline-flex;
-  flex: 0 0 58px;
+  flex: 0 0 52px;
   align-items: center;
   justify-content: center;
-  width: 58px;
-  height: 58px;
+  width: 52px;
+  height: 52px;
   padding: 0;
   border: 1.5px solid #4a4a4a;
   border-radius: 50%;
@@ -213,19 +199,18 @@ body > .tcs-header-dock-global {
 .tcs-header .dock-canvas-form {
   display: flex;
   align-items: center;
-  width: min(530px, calc(100vw - 90px));
-  height: 72px;
-  padding: 5px 7px 5px 22px;
-  border: 2px solid #555b62;
-  border-radius: 36px;
-  background: linear-gradient(110deg, #fff 0%, #f8f9fa 100%);
-  box-shadow: 0 3px 12px rgb(0 0 0 / 8%);
+  width: min(580px, calc(100vw - 100px));
+  height: 52px;
+  padding: 4px 6px 4px 24px;
+  border: 1.5px solid #4a4a4a;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 5%);
   box-sizing: border-box;
 }
 
 .tcs-header .dock-canvas-input {
   flex: 1;
-  min-width: 0;
   border: none;
   background: transparent;
   color: #202426;
@@ -234,24 +219,22 @@ body > .tcs-header-dock-global {
 }
 
 .tcs-header .dock-canvas-input::placeholder {
-  color: #a1a5aa;
-  opacity: 1;
+  color: #9aa0a6;
 }
 
 /* Mic & Submit Action Buttons */
 .tcs-header .dock-canvas-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 
 .tcs-header .dock-mic-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 40px;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border: none;
   background: transparent;
   color: #3c4043;
@@ -260,22 +243,17 @@ body > .tcs-header-dock-global {
 }
 
 .tcs-header .dock-mic-btn svg {
-  width: 22px;
-  height: 22px;
-  fill: none;
-  stroke: currentcolor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  width: 20px;
+  height: 20px;
+  fill: currentcolor;
 }
 
 .tcs-header .dock-submit-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 40px;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border: none;
   border-radius: 50%;
   background: #4878f6;
@@ -496,7 +474,6 @@ body > .tcs-header-dock-global {
 
 @media (width <= 900px) {
   .tcs-header .floating-bottom-dock {
-    bottom: 16px !important;
     padding: 0 12px !important;
   }
 
@@ -505,15 +482,8 @@ body > .tcs-header-dock-global {
   }
 
   .tcs-header .dock-canvas-form {
-    width: calc(100vw - 88px);
-    height: 62px;
-    padding-left: 18px;
-  }
-
-  .tcs-header .dock-hamburger-btn {
-    flex-basis: 52px;
-    width: 52px;
-    height: 52px;
+    width: calc(100vw - 78px);
+    padding-left: 16px;
   }
 
   .tcs-header .dock-megamenu-panel {

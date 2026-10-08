@@ -410,8 +410,18 @@ export default async function decorate(block) {
   navWrapper.append(nav);
   block.append(navWrapper);
 
+  /* Keep the fixed dock outside section wrappers. */
+  let telePortContainer = document.querySelector('body > .tcs-header-dock-global');
+  if (!telePortContainer) {
+    telePortContainer = document.createElement('div');
+    telePortContainer.className = 'tcs-header tcs-header-dock-global';
+    document.body.append(telePortContainer);
+  } else {
+    telePortContainer.textContent = '';
+  }
+
   const navDockContainer = document.createElement('div');
-  block.append(navDockContainer);
+  telePortContainer.append(navDockContainer);
 
   const rawIndex = await fetchQueryIndex();
   const taxonomy = buildTaxonomyFromIndex(rawIndex, config.navRootPath, config.navDepth);

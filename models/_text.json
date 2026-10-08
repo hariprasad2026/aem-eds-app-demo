@@ -29,8 +29,7 @@
           "name": "text",
           "label": "Text",
           "value": "",
-          "valueType": "string",
-          "filter": "richtext"
+          "valueType": "string"
         }
       ]
     }

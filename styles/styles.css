@@ -231,6 +231,9 @@ main img {
 .rte-font-aptos-display { font-family: 'Aptos Display', sans-serif !important; }
 .rte-font-arial { font-family: Arial, sans-serif !important; }
 .rte-font-arial-black { font-family: 'Arial Black', sans-serif !important; }
+.rte-font-arial-narrow { font-family: 'Arial Narrow', Arial, sans-serif !important; }
+.rte-font-baskerville { font-family: Baskerville, 'Baskerville Old Face', serif !important; }
+.rte-font-book-antiqua { font-family: 'Book Antiqua', Palatino, serif !important; }
 .rte-font-calibri { font-family: Calibri, sans-serif !important; }
 .rte-font-cambria { font-family: Cambria, serif !important; }
 .rte-font-candara { font-family: Candara, sans-serif !important; }
@@ -238,20 +241,29 @@ main img {
 .rte-font-consolas { font-family: Consolas, monospace !important; }
 .rte-font-constantia { font-family: Constantia, serif !important; }
 .rte-font-courier-new { font-family: 'Courier New', monospace !important; }
+.rte-font-franklin-gothic-medium { font-family: 'Franklin Gothic Medium', Arial, sans-serif !important; }
+.rte-font-garamond { font-family: Garamond, 'Times New Roman', serif !important; }
 .rte-font-georgia { font-family: Georgia, serif !important; }
+.rte-font-geneva { font-family: Geneva, Tahoma, sans-serif !important; }
+.rte-font-gill-sans { font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif !important; }
 .rte-font-helvetica { font-family: Helvetica, Arial, sans-serif !important; }
+.rte-font-helvetica-neue { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important; }
 .rte-font-impact { font-family: Impact, sans-serif !important; }
 .rte-font-lato { font-family: Lato, sans-serif !important; }
 .rte-font-lucida-console { font-family: 'Lucida Console', monospace !important; }
 .rte-font-lucida-sans-unicode { font-family: 'Lucida Sans Unicode', sans-serif !important; }
 .rte-font-merriweather { font-family: Merriweather, Georgia, serif !important; }
+.rte-font-monaco { font-family: Monaco, Consolas, monospace !important; }
 .rte-font-montserrat { font-family: Montserrat, sans-serif !important; }
 .rte-font-noto-sans { font-family: 'Noto Sans', sans-serif !important; }
 .rte-font-noto-serif { font-family: 'Noto Serif', serif !important; }
 .rte-font-open-sans { font-family: 'Open Sans', sans-serif !important; }
+.rte-font-optima { font-family: Optima, 'Segoe UI', sans-serif !important; }
+.rte-font-palatino { font-family: Palatino, 'Palatino Linotype', serif !important; }
 .rte-font-palatino-linotype { font-family: 'Palatino Linotype', serif !important; }
 .rte-font-roboto { font-family: Roboto, sans-serif !important; }
 .rte-font-roboto-condensed { font-family: 'Roboto Condensed', sans-serif !important; }
+.rte-font-rockwell { font-family: Rockwell, 'Courier Bold', serif !important; }
 .rte-font-segoe-ui { font-family: 'Segoe UI', sans-serif !important; }
 .rte-font-source-sans-3 { font-family: 'Source Sans 3', sans-serif !important; }
 .rte-font-tahoma { font-family: Tahoma, sans-serif !important; }

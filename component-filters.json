@@ -9,229 +9,7 @@
     "id": "richtext",
     "components": [
       "richtext"
-    ],
-    "rte": {
-      "toolbar": {
-        "format": [
-          "bold",
-          "italic",
-          "underline",
-          "strike",
-          "code_inline",
-          "text_color"
-        ],
-        "alignment": [
-          "left",
-          "center",
-          "right",
-          "justify"
-        ],
-        "direction": [
-          "rtl",
-          "ltr"
-        ],
-        "indentation": [
-          "indent",
-          "outdent"
-        ],
-        "blocks": [
-          "paragraph",
-          "h1",
-          "h2",
-          "h3",
-          "h4",
-          "h5",
-          "h6",
-          "code_block",
-          "blockquote"
-        ],
-        "list": [
-          "bullet_list",
-          "ordered_list"
-        ],
-        "insert": [
-          "link",
-          "unlink",
-          "image",
-          "table",
-          "special_characters"
-        ],
-        "sr_script": [
-          "superscript",
-          "subscript"
-        ],
-        "editor": [
-          "removeformat",
-          "clean_unsupported_tags",
-          "paste_text",
-          "fullscreen",
-          "find_and_replace"
-        ],
-        "advanced": [
-          "classes"
-        ],
-        "sections": [
-          "format",
-          "blocks",
-          "alignment",
-          "direction",
-          "list",
-          "indentation",
-          "insert",
-          "sr_script",
-          "editor",
-          "advanced"
-        ]
-      },
-      "actions": {
-        "bold": {
-          "tag": "strong"
-        },
-        "italic": {
-          "tag": "em"
-        },
-        "strike": {
-          "tag": "del"
-        },
-        "image": {
-          "wrapInPicture": true
-        },
-        "table": {
-          "showTableProperties": true,
-          "showRowProperties": true,
-          "showCellProperties": true
-        },
-        "classes": {
-          "label": "Typography style",
-          "options": [
-            {
-              "value": "rte-font-aptos",
-              "label": "Aptos"
-            },
-            {
-              "value": "rte-font-aptos-display",
-              "label": "Aptos Display"
-            },
-            {
-              "value": "rte-font-arial",
-              "label": "Arial"
-            },
-            {
-              "value": "rte-font-arial-black",
-              "label": "Arial Black"
-            },
-            {
-              "value": "rte-font-calibri",
-              "label": "Calibri"
-            },
-            {
-              "value": "rte-font-cambria",
-              "label": "Cambria"
-            },
-            {
-              "value": "rte-font-candara",
-              "label": "Candara"
-            },
-            {
-              "value": "rte-font-comic-sans-ms",
-              "label": "Comic Sans MS"
-            },
-            {
-              "value": "rte-font-consolas",
-              "label": "Consolas"
-            },
-            {
-              "value": "rte-font-constantia",
-              "label": "Constantia"
-            },
-            {
-              "value": "rte-font-courier-new",
-              "label": "Courier New"
-            },
-            {
-              "value": "rte-font-georgia",
-              "label": "Georgia"
-            },
-            {
-              "value": "rte-font-helvetica",
-              "label": "Helvetica"
-            },
-            {
-              "value": "rte-font-impact",
-              "label": "Impact"
-            },
-            {
-              "value": "rte-font-lato",
-              "label": "Lato"
-            },
-            {
-              "value": "rte-font-lucida-console",
-              "label": "Lucida Console"
-            },
-            {
-              "value": "rte-font-lucida-sans-unicode",
-              "label": "Lucida Sans Unicode"
-            },
-            {
-              "value": "rte-font-merriweather",
-              "label": "Merriweather"
-            },
-            {
-              "value": "rte-font-montserrat",
-              "label": "Montserrat"
-            },
-            {
-              "value": "rte-font-noto-sans",
-              "label": "Noto Sans"
-            },
-            {
-              "value": "rte-font-noto-serif",
-              "label": "Noto Serif"
-            },
-            {
-              "value": "rte-font-open-sans",
-              "label": "Open Sans"
-            },
-            {
-              "value": "rte-font-palatino-linotype",
-              "label": "Palatino Linotype"
-            },
-            {
-              "value": "rte-font-roboto",
-              "label": "Roboto"
-            },
-            {
-              "value": "rte-font-roboto-condensed",
-              "label": "Roboto Condensed"
-            },
-            {
-              "value": "rte-font-segoe-ui",
-              "label": "Segoe UI"
-            },
-            {
-              "value": "rte-font-source-sans-3",
-              "label": "Source Sans 3"
-            },
-            {
-              "value": "rte-font-tahoma",
-              "label": "Tahoma"
-            },
-            {
-              "value": "rte-font-times-new-roman",
-              "label": "Times New Roman"
-            },
-            {
-              "value": "rte-font-trebuchet-ms",
-              "label": "Trebuchet MS"
-            },
-            {
-              "value": "rte-font-verdana",
-              "label": "Verdana"
-            }
-          ]
-        }
-      }
-    }
+    ]
   },
   {
     "id": "section",
@@ -275,12 +53,7 @@
     "id": "accordion",
     "components": [
       "accordion-item"
-    ],
-    "rte": {
-      "toolbar": {
-        "format": []
-      }
-    }
+    ]
   },
   {
     "id": "canvas-search-hero",
@@ -360,15 +133,10 @@
     ]
   },
   {
-    "id": "richtext",
+    "id": "quote-richtext",
     "components": [
       "richtext"
-    ],
-    "rte": {
-      "toolbar": {
-        "format": []
-      }
-    }
+    ]
   },
   {
     "id": "spotlight",

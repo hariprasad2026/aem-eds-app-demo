@@ -2674,7 +2674,7 @@
         "name": "quotation",
         "value": "",
         "label": "Quotation",
-        "filter": "richtext"
+        "filter": "quote-richtext"
       },
       {
         "component": "richtext",
@@ -2682,7 +2682,7 @@
         "value": "",
         "label": "Attribution",
         "valueType": "string",
-        "filter": "richtext"
+        "filter": "quote-richtext"
       },
       {
         "component": "richtext",
@@ -2690,7 +2690,7 @@
         "name": "title",
         "value": "",
         "label": "Title",
-        "filter": "richtext"
+        "filter": "quote-richtext"
       },
       {
         "component": "richtext",
@@ -2698,7 +2698,7 @@
         "name": "description",
         "value": "",
         "label": "Description",
-        "filter": "richtext"
+        "filter": "quote-richtext"
       },
       {
         "component": "select",

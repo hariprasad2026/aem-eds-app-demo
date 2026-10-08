@@ -5,22 +5,22 @@
   box-sizing: border-box;
   place-items: center;
   overflow: hidden;
-  padding: 160px 80px;
-  color: #0c0c0d;
+  padding: var(--spacing-6xl) var(--container-gutter);
+  color: var(--text-color);
   background:
     radial-gradient(ellipse 225px 161px at 25% 24%, rgb(232 185 49 / 40%), transparent 100%),
     radial-gradient(ellipse 182px 130px at 63% 43%, rgb(70 115 219 / 40%), transparent 100%),
-    #fff;
+    var(--background-color);
 }
 
 .canvas-search-hero-content.theme-dark {
-  color: #fff;
-  background: #17191d;
+  color: var(--text-color);
+  background: var(--background-color);
 }
 
 .canvas-search-hero-content.theme-image {
-  color: #171717;
-  background: #fff;
+  color: var(--text-color);
+  background: var(--background-color);
 }
 
 .canvas-search-hero-background {
@@ -45,7 +45,7 @@
   flex-direction: column;
   align-items: center;
   width: min(100%, 1280px);
-  gap: 40px;
+  gap: var(--spacing-2xl);
   text-align: center;
 }
 
@@ -54,28 +54,22 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  gap: 40px;
+  gap: var(--spacing-2xl);
   text-align: center;
 }
 
 .canvas-search-hero-heading {
   width: min(100%, 880px);
   margin: 0;
-  font-family: roboto, Arial, sans-serif;
-  font-size: 48px;
-  font-weight: 400;
-  line-height: 1.2;
 }
 
 .canvas-search-hero-heading.font-roboto-condensed {
-  font-family: roboto-condensed, roboto, Arial, sans-serif;
+  font-family: var(--font-family-eyebrow);
 }
 
 .canvas-search-hero-description {
   width: min(100%, 812px);
   margin: 0;
-  font-size: 20px;
-  line-height: 1.6;
 }
 
 .canvas-search-hero-search {
@@ -84,30 +78,30 @@
   width: min(100%, 566px);
   height: 72px;
   box-sizing: border-box;
-  gap: 16px;
-  padding: 12px;
-  border: 2px solid #e6e6e6;
-  border-radius: 58px;
-  background: rgb(255 255 255 / 40%);
+  gap: var(--spacing-m);
+  padding: var(--spacing-xs);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  background: var(--surface-color);
 }
 
 .canvas-search-hero-content.theme-dark .canvas-search-hero-search {
   border-color: rgb(255 255 255 / 40%);
-  background: rgb(0 0 0 / 24%);
+  background: var(--color-black-40);
 }
 
 .canvas-search-hero-search input {
   flex: 1;
   min-width: 0;
   height: 48px;
-  padding: 4px 12px;
+  padding: var(--spacing-xxs) var(--spacing-s);
   border: 0;
   outline: 0;
   background: transparent;
   color: inherit;
   font: inherit;
-  font-size: 16px;
-  font-weight: 300;
+  font-size: var(--body-font-size-s);
+  font-weight: var(--font-weight-regular);
 }
 
 .canvas-search-hero-search input::placeholder {
@@ -140,77 +134,25 @@
   display: flex;
   flex-wrap: wrap;
   place-content: center;
-  gap: 12px;
+  gap: var(--spacing-s);
   width: min(100%, 900px);
-}
-
-.canvas-search-hero-content .canvas-search-hero-cta:any-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
-  box-sizing: border-box;
-  padding: 8px 24px;
-  border: 1px solid #e6e6e6;
-  border-radius: 9999px;
-  background: #fff;
-  color: #0c0c0d;
-  font-size: 20px;
-  line-height: 1.6;
-  text-decoration: none;
-  transition: background-color 160ms ease, border-color 160ms ease;
-}
-
-.theme-dark .canvas-search-hero-cta:any-link {
-  border-color: rgb(255 255 255 / 26%);
-  background: rgb(255 255 255 / 12%);
-  color: #fff;
-}
-
-.canvas-search-hero-content .canvas-search-hero-cta:any-link:hover,
-.canvas-search-hero-content .canvas-search-hero-cta:any-link:focus-visible {
-  border-color: rgb(70 70 70 / 24%);
-  background: #f7f7f7;
-  color: #0c0c0d;
-  text-decoration: none;
 }
 
 .canvas-search-hero-cta.is-empty {
   border-style: dashed;
 }
 
-.theme-dark .canvas-search-hero-cta:any-link:hover,
-.theme-dark .canvas-search-hero-cta:any-link:focus-visible {
-  background: rgb(255 255 255 / 22%);
-  color: #fff;
-  text-decoration: none;
-}
-
 @media (width <= 600px) {
   .canvas-search-hero-content {
     min-height: 580px;
-    padding: 88px 20px;
+    padding: var(--spacing-5xl) var(--spacing-l);
   }
 
   .canvas-search-hero-inner {
-    gap: 32px;
+    gap: var(--spacing-xl);
   }
 
   .canvas-search-hero-settings {
-    gap: 28px;
-  }
-
-  .canvas-search-hero-heading {
-    font-size: 34px;
-  }
-
-  .canvas-search-hero-description {
-    font-size: 16px;
-  }
-
-  .canvas-search-hero-content .canvas-search-hero-cta:any-link {
-    min-height: 44px;
-    padding: 6px 18px;
-    font-size: 16px;
+    gap: var(--spacing-l);
   }
 }

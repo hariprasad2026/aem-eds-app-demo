@@ -79,7 +79,7 @@ function createCta(label, href, row) {
     .some(({ name }) => name.startsWith('data-aue-'));
   if (!label && !isAuthoringItem) return null;
   const link = document.createElement('a');
-  link.className = 'canvas-search-hero-cta';
+  link.className = 'canvas-search-hero-cta button primary';
   link.textContent = label || 'Add CTA label';
   link.href = href || '#';
   if (!label) link.classList.add('is-empty');
@@ -138,7 +138,7 @@ export default function decorate(block) {
   settingsContent.className = 'canvas-search-hero-settings';
   if (settingsRow) moveInstrumentation(settingsRow, settingsContent);
   const heading = document.createElement('h1');
-  heading.className = `canvas-search-hero-heading font-${settings.headingFont === 'roboto-condensed' ? 'roboto-condensed' : 'roboto'}`;
+  heading.className = `canvas-search-hero-heading display-1-semi font-${settings.headingFont === 'roboto-condensed' ? 'roboto-condensed' : 'roboto'}`;
   heading.textContent = settings.heading || '';
   settingsContent.appendChild(heading);
 

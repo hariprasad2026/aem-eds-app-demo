@@ -3638,7 +3638,7 @@
         "label": "Text",
         "value": "",
         "valueType": "string",
-        "filter": "statistics-list-richtext"
+        "filter": "richtext"
       }
     ]
   },

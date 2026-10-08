@@ -45,7 +45,7 @@
           "label": "Text",
           "value": "",
           "valueType": "string",
-          "filter": "statistics-list-richtext"
+          "filter": "richtext"
         }
       ]
     },
@@ -73,10 +73,6 @@
     {
       "id": "statistics-list",
       "components": ["statistics-list-item"]
-    },
-    {
-      "...": "../../models/_component-filters.json#/richtext",
-      "id": "statistics-list-richtext"
     }
   ]
 }

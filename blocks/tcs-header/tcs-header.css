@@ -108,41 +108,47 @@
 }
 
 /* ==========================================================================
-   PERMANENTLY FIXED FLOATING BOTTOM DOCK & CANVAS
+   FLOATING BOTTOM DOCK WITH CANVAS SEARCH
    ========================================================================== */
-body > .tcs-header-dock-global {
-  position: static !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: visible !important;
-}
-
 .tcs-header .navigation-dock-wrapper {
   overflow: visible !important;
 }
 
 .tcs-header .floating-bottom-dock {
   position: fixed !important;
-  z-index: 99999 !important;
-  right: 0 !important;
-  bottom: 24px !important;
-  left: 50% !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  gap: 12px !important;
-  width: min(1280px, calc(100vw - 48px)) !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  z-index: 9999;
+  right: 0;
+  bottom: 0;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: min(1280px, calc(100vw - 48px));
+  padding: 0 0 20px;
+  pointer-events: none;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hidden state when scrolled over .tcs-canvas */
+.tcs-header .navigation-dock-wrapper.dock-hidden {
+  opacity: 0 !important;
   pointer-events: none !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: translateX(-50%) translateY(0) !important;
+  transform: translateX(-50%) translateY(30px) !important;
 }
 
 .tcs-header .floating-bottom-dock::before {
-  display: none;
+  position: absolute;
+  z-index: -1;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: min(48vh, 440px);
+  background: linear-gradient(180deg, rgb(255 255 255 / 0%) 0%, rgb(255 255 255 / 84%) 62%, #fff 100%);
+  content: '';
+  pointer-events: none;
 }
 
 .tcs-header .dock-inner-wrapper {
@@ -469,8 +475,7 @@ body > .tcs-header-dock-global {
 
 @media (width <= 900px) {
   .tcs-header .floating-bottom-dock {
-    bottom: 16px !important;
-    padding: 0 12px !important;
+    padding: 0 12px 12px;
   }
 
   .tcs-header .dock-inner-wrapper {

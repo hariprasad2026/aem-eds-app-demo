@@ -1,0 +1,124 @@
+.form-variations.block {
+  background-color: #0b0c10;
+  color: #fff;
+  padding: 40px 24px;
+  font-family: Roboto, sans-serif;
+  display: block;
+  min-height: 150px;
+}
+
+.form-variations-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 16px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.form-variations-group.half-width {
+  flex: 1 1 calc(50% - 8px);
+  min-width: 250px;
+}
+
+.form-variations-group.full-width {
+  flex: 1 1 100%;
+}
+
+.hidden-field {
+  display: none !important;
+}
+
+.form-variations-group label:not(.checkbox-label) {
+  display: block;
+  font-size: 0.85rem;
+  color: #a0a0a0;
+  margin-bottom: 6px;
+}
+
+.form-variations-group input[type="text"],
+.form-variations-group input[type="email"],
+.form-variations-group input[type="tel"],
+.form-variations-group select,
+.form-variations-group textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #333;
+  color: #fff;
+  padding: 10px 0;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.form-variations-group select option {
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+.textarea-group {
+  position: relative;
+}
+
+.textarea-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.char-counter {
+  position: absolute;
+  right: 0;
+  bottom: -20px;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+.checkbox-label input {
+  margin-top: 3px;
+  accent-color: #fff;
+}
+
+.form-variations-contact-card {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #222;
+  width: 100%;
+}
+
+.form-variations-contact-card .contact-name {
+  font-size: 1.25rem;
+  color: #7b9acc;
+  margin-bottom: 12px;
+}
+
+.form-variations-contact-card .contact-link {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-variations-contact-card .contact-link a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.submit-btn {
+  background-color: #e0e0e0;
+  color: #000;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}

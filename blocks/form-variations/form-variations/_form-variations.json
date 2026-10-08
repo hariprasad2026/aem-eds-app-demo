@@ -1,0 +1,226 @@
+{
+  "definitions": [
+    {
+      "title": "Form Variations",
+      "id": "form-variations",
+      "plugins": {
+        "da": {
+          "rows": 1,
+          "columns": 1,
+          "fields": [
+            {
+              "name": "classes",
+              "selector": "div:nth-child(1)>div>ul"
+            }
+          ]
+        },
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Form Variations",
+              "model": "form-variations"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Text Input Field",
+      "id": "field-text",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Text Input Field",
+              "model": "field-text"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Dropdown / Select Field",
+      "id": "field-select",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Dropdown / Select Field",
+              "model": "field-select"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Textarea Field",
+      "id": "field-textarea",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Textarea Field",
+              "model": "field-textarea"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Consent Checkbox Field",
+      "id": "field-checkbox",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Consent Checkbox Field",
+              "model": "field-checkbox"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Contact Card Output",
+      "id": "contact-card",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Contact Card Output",
+              "model": "contact-card"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Submit Button",
+      "id": "field-submit",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Submit Button",
+              "model": "field-submit"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "form-variations",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "formTitle",
+          "label": "Form Title / Heading"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "formDescription",
+          "label": "Form Description"
+        },
+        {
+          "component": "multiselect",
+          "name": "classes",
+          "label": "Theme & Style",
+          "valueType": "string",
+          "options": [
+            { "name": "Dark Theme", "value": "dark" },
+            { "name": "Light Theme", "value": "light" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "field-text",
+      "fields": [
+        { "component": "text", "name": "name", "label": "Field Name / ID (e.g. firstName)", "required": true },
+        { "component": "text", "name": "label", "label": "Field Label (e.g. First name)", "required": true },
+        {
+          "component": "select",
+          "name": "type",
+          "label": "Input Type",
+          "value": "text",
+          "options": [
+            { "name": "Text", "value": "text" },
+            { "name": "Email", "value": "email" },
+            { "name": "Tel", "value": "tel" }
+          ]
+        },
+        { "component": "checkbox", "name": "required", "label": "Mandatory Field (*)" },
+        { "component": "text", "name": "dependsOn", "label": "Show Only If Dropdown Value Equals (Case 1)" }
+      ]
+    },
+    {
+      "id": "field-select",
+      "fields": [
+        { "component": "text", "name": "name", "label": "Dropdown ID (e.g. sector or region)", "required": true },
+        { "component": "text", "name": "label", "label": "Dropdown Label (e.g. Sector)", "required": true },
+        { "component": "checkbox", "name": "required", "label": "Mandatory Field (*)" },
+        { "component": "text", "name": "options", "label": "Options (Comma Separated e.g. Technology, Sport, Asia Pacific, India)" },
+        { "component": "text", "name": "dependsOn", "label": "Show Only If Dropdown Value Equals (Case 1)" }
+      ]
+    },
+    {
+      "id": "field-textarea",
+      "fields": [
+        { "component": "text", "name": "name", "label": "Field ID (e.g. feedback)", "required": true },
+        { "component": "text", "name": "label", "label": "Field Label (e.g. How can we help you?)", "required": true },
+        { "component": "number", "name": "maxLength", "label": "Max Character Limit", "value": 1500 },
+        { "component": "checkbox", "name": "required", "label": "Mandatory Field (*)" },
+        { "component": "text", "name": "dependsOn", "label": "Show Only If Dropdown Value Equals (Case 1)" }
+      ]
+    },
+    {
+      "id": "field-checkbox",
+      "fields": [
+        { "component": "text", "name": "name", "label": "Checkbox ID (e.g. consent)", "required": true },
+        { "component": "richtext", "name": "label", "label": "Consent Text / Disclaimer", "required": true },
+        { "component": "checkbox", "name": "required", "label": "Mandatory Field (*)" },
+        { "component": "text", "name": "dependsOn", "label": "Show Only If Dropdown Value Equals (Case 1)" }
+      ]
+    },
+    {
+      "id": "contact-card",
+      "fields": [
+        { "component": "text", "name": "region", "label": "Target Dropdown Match Value (e.g. India)", "required": true },
+        { "component": "text", "name": "contactName", "label": "Contact Name (e.g. Iris Tham)", "required": true },
+        { "component": "text", "name": "emails", "label": "Emails (Comma Separated)" },
+        { "component": "text", "name": "phones", "label": "Phones (Comma Separated)" }
+      ]
+    },
+    {
+      "id": "field-submit",
+      "fields": [
+        { "component": "text", "name": "label", "label": "Button Label", "value": "Send" },
+        { "component": "text", "name": "dependsOn", "label": "Show Only If Dropdown Value Equals (Case 1)" }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "form-variations",
+      "components": [
+        "field-text",
+        "field-select",
+        "field-textarea",
+        "field-checkbox",
+        "contact-card",
+        "field-submit"
+      ]
+    }
+  ]
+}

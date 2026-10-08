@@ -10,5 +10,11 @@
   },
   {
     "...": "../blocks/*/_*.json#/filters"
+  },
+  {
+    "...": "../blocks/form/form/_form.json#/filters"
+  },
+  {
+    "...": "../blocks/form-variations/form-variations/_form-variations.json#/filters"
   }
 ]

@@ -1791,6 +1791,166 @@
     ]
   },
   {
+    "id": "hero2",
+    "fields": [
+      {
+        "component": "fieldset",
+        "name": "imageSection",
+        "label": "Image Section"
+      },
+      {
+        "component": "reference",
+        "name": "heroIcon",
+        "label": "Icon"
+      },
+      {
+        "component": "text",
+        "name": "heroIconAlt",
+        "label": "Icon Image Alt Text"
+      },
+      {
+        "component": "select",
+        "name": "heroImageType",
+        "label": "Hero Image Type",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Lotto",
+            "value": "lotto"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "heroLottoImagePath",
+        "label": "Hero Lotto Image Path"
+      },
+      {
+        "component": "text",
+        "name": "heroImageAlt",
+        "label": "Hero Image Alt Text"
+      },
+      {
+        "component": "select",
+        "name": "heroView",
+        "label": "Hero View",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          }
+        ]
+      },
+      {
+        "component": "fieldset",
+        "name": "contentSection",
+        "label": "Content Section"
+      },
+      {
+        "component": "text",
+        "name": "eyebrowText",
+        "label": "Eyebrow"
+      },
+      {
+        "component": "textarea",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "fieldset",
+        "name": "linkSection",
+        "label": "Link Section"
+      },
+      {
+        "component": "text",
+        "name": "ctaTitle",
+        "label": "CTA Title"
+      },
+      {
+        "component": "text",
+        "name": "ctaLink",
+        "label": "CTA Link"
+      },
+      {
+        "component": "select",
+        "name": "ctaLinkType",
+        "label": "CTA Link Type",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Open In New Window",
+            "value": "new-window"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "ctaView",
+        "label": "CTA View",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "fieldset",
+        "name": "styleSection",
+        "label": "Style"
+      },
+      {
+        "component": "select",
+        "name": "alignment",
+        "label": "Alignment",
+        "options": [
+          {
+            "name": "Top",
+            "value": "top"
+          },
+          {
+            "name": "Middle",
+            "value": "middle"
+          },
+          {
+            "name": "Bottom",
+            "value": "bottom"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "bgColor",
+        "label": "BG Color",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "hero",
     "fields": [
       {

@@ -128,7 +128,8 @@ export default function decorate(block) {
       const fieldName = SETTING_FIELDS.includes(property)
         ? property
         : SETTING_FIELDS[settingFieldIndex];
-      settings[fieldName] = values[0];
+      const [value] = values;
+      settings[fieldName] = value;
       settingFieldIndex += 1;
     }
   });

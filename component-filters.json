@@ -54,7 +54,6 @@
   {
     "id": "canvas-search-hero",
     "components": [
-      "canvas-search-hero-settings",
       "canvas-search-hero-cta"
     ]
   },

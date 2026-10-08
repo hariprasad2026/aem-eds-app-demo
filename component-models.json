@@ -1060,6 +1060,115 @@
     ]
   },
   {
+    "id": "canvas-search-hero",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "label": "Heading",
+        "value": "What are you looking to do?"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "backgroundStyle",
+        "label": "Background Style",
+        "value": "light",
+        "options": [
+          {
+            "name": "Light",
+            "value": "light"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Image",
+            "value": "image"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "backgroundImage",
+        "label": "Background Image",
+        "multi": false,
+        "condition": {
+          "==": [
+            {
+              "var": "backgroundStyle"
+            },
+            "image"
+          ]
+        }
+      },
+      {
+        "component": "select",
+        "name": "headingFont",
+        "label": "Heading Font",
+        "value": "roboto",
+        "options": [
+          {
+            "name": "Roboto",
+            "value": "roboto"
+          },
+          {
+            "name": "Roboto Condensed",
+            "value": "roboto-condensed"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "name": "enableSearch",
+        "label": "Enable Search",
+        "value": true
+      },
+      {
+        "component": "select",
+        "name": "searchMode",
+        "label": "Search Input Mode",
+        "value": "text-and-voice",
+        "options": [
+          {
+            "name": "Text",
+            "value": "text"
+          },
+          {
+            "name": "Voice",
+            "value": "voice"
+          },
+          {
+            "name": "Text and Voice",
+            "value": "text-and-voice"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "searchPlaceholder",
+        "label": "Search Placeholder",
+        "value": "Ask TCS..."
+      },
+      {
+        "component": "aem-content",
+        "name": "searchActionUrl",
+        "label": "Search Results Page URL",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "canvas-search-hero-settings",
     "fields": [
       {

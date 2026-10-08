@@ -242,11 +242,13 @@
       "medium-list",
       "modal-v1",
       "quote",
+      "quotes",
       "search",
       "spotlight",
       "statistics-list",
       "table",
       "table-list",
+      "title-with-column",
       "tabs-new",
       "teaser-v2",
       "text-with-link"
@@ -342,6 +344,17 @@
     ]
   },
   {
+    "id": "richtext",
+    "components": [
+      "richtext"
+    ],
+    "rte": {
+      "toolbar": {
+        "format": []
+      }
+    }
+  },
+  {
     "id": "spotlight",
     "components": [
       "spotlight-header",
@@ -389,6 +402,20 @@
     "id": "tabs-new",
     "components": [
       "tabs-item"
+    ]
+  },
+  {
+    "id": "title-with-column",
+    "components": [
+      "column"
+    ]
+  },
+  {
+    "id": "column",
+    "components": [
+      "title",
+      "text",
+      "cta"
     ]
   }
 ]

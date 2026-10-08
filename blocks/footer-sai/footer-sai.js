@@ -3,14 +3,17 @@ import decorateCanvasSearchHero from '../canvas-search-hero/canvas-search-hero.j
 
 function getCells(row) {
   let cells = [...row.children];
-  while (cells.length === 1 && cells[0].children.length > 1) {
+  while (cells.length === 1 && cells[0].children.length > 1
+    && [...cells[0].children].every((child) => child.tagName === 'DIV')) {
     cells = [...cells[0].children];
   }
   return cells;
 }
 
 function getCellValue(cell) {
-  return cell?.querySelector('a')?.getAttribute('href') || cell?.textContent?.trim() || '';
+  const linkHref = cell?.querySelector('a')?.getAttribute('href');
+  const valueNode = cell?.matches('[data-value]') ? cell : cell?.querySelector('[data-value]');
+  return linkHref || valueNode?.dataset?.value || cell?.textContent?.trim() || '';
 }
 
 function getItemType(row) {
@@ -22,22 +25,29 @@ function getItemType(row) {
 
   const cells = getCells(row);
   const values = cells.map((cell) => cell.textContent.trim());
+  if (values.includes('footer-sai-legal-item')) return 'footer-sai-legal-item';
   if (row.querySelector('[data-aue-prop="heading"], [data-aue-prop="backgroundStyle"]')
     || cells.length >= 8) {
     return 'canvas-search-hero-settings';
   }
+  if (row.querySelector('[data-aue-prop="label"], [data-name="label"]')) {
+    return 'footer-sai-legal-item';
+  }
   if (row.querySelector('img')) {
-    const combinedText = values.join(' ').toLowerCase();
+    const combinedText = [...values, row.querySelector('img').alt].join(' ').toLowerCase();
     if (combinedText.includes('tata') && !combinedText.includes('tcs')) {
       return 'footer-sai-tata-logo';
     }
     return 'footer-sai-tcs-logo';
   }
   if (cells.length >= 5 && /^(true|false)$/i.test(values[1] || '')) return 'footer-sai-hero';
-  if (values.some((value) => value.toLowerCase().includes('copyright')) || cells.length >= 3) {
+  if (values.some((value) => value.toLowerCase().includes('copyright'))
+    || cells.length >= 4
+    || (cells.length === 3 && !values[0])
+    || /^(privacy(?: notice| policy)?|cookie(?: notice| policy)?|disclaimer|security policy)$/i.test(values[0] || '')) {
     return 'footer-sai-legal-item';
   }
-  if (cells.length === 2 && values[0]) return 'footer-sai-nav-item';
+  if (cells.length >= 2 && values[0]) return 'footer-sai-nav-item';
   return '';
 }
 
@@ -62,11 +72,19 @@ function getThemeValueFromBlock(block) {
     .replace(/\s+/g, '-');
 }
 
-function createLink(label, href) {
+function createLink(label, href, target) {
   if (!label) return null;
   const link = document.createElement('a');
   link.textContent = label;
   link.href = href || '#';
+  const normalizedTarget = String(target || '').trim().toLowerCase().replace(/\s+/g, '-');
+  const opensNewTab = ['_blank', 'blank', 'new-tab', 'new-window'].includes(normalizedTarget);
+  if (opensNewTab) {
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+  } else if (normalizedTarget === '_self' || normalizedTarget === 'same-tab') {
+    link.target = '_self';
+  }
   return link;
 }
 
@@ -75,6 +93,7 @@ function createSearch(block, mode, placeholder, action) {
   form.className = `search-container search-${mode}`;
   form.dataset.searchMode = mode;
   form.action = action || '#';
+  form.method = 'get';
 
   const hasTextInput = mode !== 'voice';
   const hasVoiceInput = mode !== 'text';
@@ -113,7 +132,7 @@ function createSearch(block, mode, placeholder, action) {
   }
 
   form.addEventListener('submit', (event) => {
-    event.preventDefault();
+    if (!action) event.preventDefault();
     const query = input?.value.trim() || '';
     form.dataset.query = query;
     block.dataset.searchQuery = query;
@@ -131,9 +150,33 @@ export default function decorate(block) {
   wrapper.className = 'footer-sai-content';
 
   const themeOptions = ['soft-white', 'powder-blue', 'sage-green', 'blush-pink', 'lavender', 'warm-cream', 'dark'];
+  const motionOptions = ['fade', 'slide-up'];
+  const propertyCells = [];
+  [...block.children].every((row) => {
+    const cells = getCells(row);
+    if (cells.length !== 1 || row.querySelector('img') || row.dataset.aueComponent) return false;
+    propertyCells.push(cells[0]);
+    return true;
+  });
+  const publishedMotion = propertyCells.find((cell) => (
+    ['none', 'fade', 'fade-in', 'slide-up'].includes(getCellValue(cell).toLowerCase())
+  ));
   let selectedTheme = '';
   const blockThemeValue = getThemeValueFromBlock(block);
   if (themeOptions.includes(blockThemeValue)) selectedTheme = blockThemeValue;
+  const motionProperty = block.matches('[data-aue-prop="motion"]')
+    ? block
+    : block.querySelector('[data-aue-prop="motion"]');
+  const motionClass = [...block.classList]
+    .find((className) => className.startsWith('footer-sai-motion-'))
+    ?.replace('footer-sai-motion-', '');
+  const motionValue = (motionClass || motionProperty?.dataset?.value
+    || motionProperty?.textContent || getCellValue(publishedMotion))
+    .trim()
+    .toLowerCase()
+    .replace(/^footer-sai-motion-/, '')
+    .replace(/^fade-in$/, 'fade')
+    .replace(/\s+/g, '-');
 
   const heroContainer = document.createElement('div');
   heroContainer.className = 'footer-sai-hero';
@@ -151,12 +194,23 @@ export default function decorate(block) {
   legalLinksContainer.setAttribute('aria-label', 'Legal');
   const canvasHeroRows = [];
 
-  let copyrightTextElement = null;
+  const copyrightProperty = block.matches('[data-aue-prop="copyrightText"], [data-name="copyrightText"]')
+    ? block
+    : block.querySelector('[data-aue-prop="copyrightText"], [data-name="copyrightText"]')
+      || propertyCells.find((cell) => cell !== publishedMotion && cell.textContent.trim());
+  const copyrightContent = copyrightProperty?.innerHTML || '';
+  const copyrightTextElement = copyrightContent.trim() ? document.createElement('div') : null;
+  if (copyrightTextElement) {
+    copyrightTextElement.className = 'footer-sai-copyright';
+    copyrightTextElement.innerHTML = copyrightContent;
+    moveInstrumentation(copyrightProperty, copyrightTextElement);
+  }
 
   [...block.children].forEach((row) => {
+    if (propertyCells.includes(getCells(row)[0])) return;
     const itemType = getItemType(row);
     const cells = getCells(row);
-    const values = cells.map(getCellValue);
+    const values = cells.map(getCellValue).filter((value) => value !== 'footer-sai-legal-item');
 
     if (itemType === 'canvas-search-hero-settings') {
       canvasHeroRows.push(row);
@@ -207,27 +261,23 @@ export default function decorate(block) {
     } else if (itemType === 'footer-sai-nav-item') {
       const navItem = document.createElement('div');
       navItem.className = 'footer-sai-nav-item';
-      const link = createLink(values[0], values[1]);
+      const link = createLink(values[0], values[1], values[2]);
       if (link) navItem.appendChild(link);
       moveInstrumentation(row, navItem);
       navContainer.appendChild(navItem);
     } else if (itemType === 'footer-sai-legal-item') {
-      const [copyright] = values;
-      const copyrightElement = copyright?.toLowerCase().includes('copyright')
-        ? document.createElement('div')
-        : null;
-      if (copyrightElement) {
-        copyrightElement.className = 'footer-sai-copyright';
-        copyrightElement.textContent = copyright;
-        copyrightTextElement = copyrightElement;
+      const [firstValue] = values;
+      const isLegacyCopyright = firstValue?.toLowerCase().includes('copyright');
+      let link = null;
+      if (isLegacyCopyright && values.length >= 4) {
+        link = createLink(values[1], values[2], values[3]);
+      } else if (!isLegacyCopyright) {
+        link = createLink(values[0], values[1], values[2]);
       }
-      const link = createLink(values[1], values[2]);
       if (link) {
         moveInstrumentation(row, link);
         legalLinksContainer.appendChild(link);
-      } else if (copyrightElement) {
-        moveInstrumentation(row, copyrightElement);
-      } else {
+      } else if (!isLegacyCopyright) {
         const legalItem = document.createElement('span');
         legalItem.className = 'footer-sai-legal-item';
         moveInstrumentation(row, legalItem);
@@ -257,6 +307,7 @@ export default function decorate(block) {
     .forEach((className) => block.classList.remove(className));
   block.classList.add('footer-sai-wrapper');
   if (selectedTheme) block.classList.add(`footer-sai-theme-${selectedTheme}`);
+  if (motionOptions.includes(motionValue)) block.classList.add(`footer-sai-motion-${motionValue}`);
   wrapper.append(heroContainer, mainContentContainer);
   block.replaceChildren(wrapper);
 }

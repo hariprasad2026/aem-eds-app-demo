@@ -124,3 +124,78 @@
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   }
 }
+
+/* ========================================
+   Title With Column
+   ======================================== */
+ 
+.columns-2-cols h1[id],
+.columns-2-cols h2[id],
+.columns-2-cols h3[id],
+.columns-2-cols h4[id],
+.columns-2-cols h5[id],
+.columns-2-cols h6[id] {
+  font-size: 46px !important;
+  font-weight: 200 !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.03em !important;
+  margin: 0 !important;
+  font-family: inherit !important;
+  padding-left: 25px;
+}
+ 
+ 
+@media (width >= 900px) {
+  .columns-2-cols > div {
+    gap: 40px;
+  }
+ 
+  /* Left Column */
+ 
+   .columns-2-cols > div > div:first-child {
+    align-self: flex-start;
+    padding-top: 34px;
+  }
+ 
+ 
+  /* Right Column */
+ 
+  .columns-2-cols > div > div:last-child {
+    padding-left: 25px;
+    padding-right: 25px;
+    flex:1;
+  }
+ 
+  .columns-2-cols > div > div:last-child p {
+    max-width: 65ch !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    margin: 30px !important;
+  }
+ 
+  .columns-2-cols > div > div:last-child > * + * {
+  margin-top: 48px;
+}
+}
+ 
+@media (width < 900px) {
+  .columns-2-cols {
+    padding: 32px 0;
+  }
+ 
+  .columns-2-cols > div {
+    gap: 32px;
+  }
+ 
+  .columns-2-cols h1[id],
+  .columns-2-cols h2[id],
+  .columns-2-cols h3[id],
+  .columns-2-cols h4[id],
+  .columns-2-cols h5[id],
+  .columns-2-cols h6[id] {
+    font-size: 40px !important;
+  }
+ 
+}

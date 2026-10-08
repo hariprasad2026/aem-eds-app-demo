@@ -1,5 +1,17 @@
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
+const SETTING_FIELDS = [
+  'heading',
+  'description',
+  'backgroundStyle',
+  'backgroundImage',
+  'headingFont',
+  'enableSearch',
+  'searchMode',
+  'searchPlaceholder',
+  'searchActionUrl',
+];
+
 function getCells(row) {
   let cells = [...row.children];
   while (cells.length === 1 && cells[0].children.length > 1) {
@@ -20,7 +32,7 @@ function getItemType(row, cells) {
   const explicitType = row.dataset.aueComponent
     || [...row.classList].find((className) => className.startsWith('canvas-search-hero-'));
   if (explicitType) return explicitType;
-  if (row.querySelector('[data-aue-prop="heading"]') || cells.length >= 8) {
+  if (cells.length >= 8) {
     return 'canvas-search-hero-settings';
   }
   if (cells.length === 2) return 'canvas-search-hero-cta';
@@ -89,6 +101,7 @@ function createCta(label, href, row) {
 export default function decorate(block) {
   const settings = {};
   let settingsRow;
+  let settingFieldIndex = 0;
   const ctas = [];
 
   [...block.children].forEach((row) => {
@@ -110,10 +123,17 @@ export default function decorate(block) {
       ] = values;
     } else if (itemType === 'canvas-search-hero-cta') {
       ctas.push({ label: values[0], href: values[1], row });
+    } else if (cells.length === 1 && settingFieldIndex < SETTING_FIELDS.length) {
+      const property = row.querySelector('[data-aue-prop]')?.dataset.aueProp;
+      const fieldName = SETTING_FIELDS.includes(property)
+        ? property
+        : SETTING_FIELDS[settingFieldIndex];
+      settings[fieldName] = values[0];
+      settingFieldIndex += 1;
     }
   });
 
-  Object.entries(settings).forEach(([name]) => {
+  SETTING_FIELDS.forEach((name) => {
     settings[name] = getProperty(block, name, settings[name] || '');
   });
 
@@ -135,7 +155,7 @@ export default function decorate(block) {
   const content = document.createElement('div');
   content.className = 'canvas-search-hero-inner';
   const settingsContent = document.createElement('div');
-  settingsContent.className = 'canvas-search-hero-settings';
+  settingsContent.className = 'canvas-search-hero-settings-content';
   if (settingsRow) moveInstrumentation(settingsRow, settingsContent);
   const heading = document.createElement('h1');
   heading.className = `canvas-search-hero-heading font-${settings.headingFont === 'roboto-condensed' ? 'roboto-condensed' : 'roboto'}`;

@@ -2535,6 +2535,8 @@
         "component": "richtext",
         "name": "text",
         "label": "Statement Text",
+        "valueType": "string",
+        "value": "",
         "filter": "richtext"
       }
     ]

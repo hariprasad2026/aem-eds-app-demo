@@ -18,7 +18,10 @@
   --text-color: #131313;
   --link-color: #3b63fb;
   --link-hover-color: #1d3ecf;
-  --overlay-background-color:lightgrey;
+  --overlay-background-color: lightgrey;
+  --title-color-white: #fff;
+  --title-color-black: #212529;
+  --title-color-blue: #0d6efd;
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback, sans-serif;
@@ -316,6 +319,34 @@ h3 { font-size: var(--heading-font-size-l); }
 h4 { font-size: var(--heading-font-size-m); }
 h5 { font-size: var(--heading-font-size-s); }
 h6 { font-size: var(--heading-font-size-xs); }
+
+/* title component color themes */
+:is(
+  .title.white,
+  .title.title-color-white,
+  .title[data-title-color="white"],
+  .title[data-titlecolor="white"]
+) :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--title-color-white);
+}
+
+:is(
+  .title.black,
+  .title.title-color-black,
+  .title[data-title-color="black"],
+  .title[data-titlecolor="black"]
+) :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--title-color-black);
+}
+
+:is(
+  .title.blue,
+  .title.title-color-blue,
+  .title[data-title-color="blue"],
+  .title[data-titlecolor="blue"]
+) :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--title-color-blue);
+}
 
 p,
 dl,

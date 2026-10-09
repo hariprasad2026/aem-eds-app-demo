@@ -77,6 +77,73 @@
   width: var(--slide-content-width, auto);
 }
 
+.carousel .carousel-slide.carousel-slide-hero .carousel-slide-content {
+  --slide-content-width: min(100%, 1200px);
+
+  margin: 3rem;
+  padding: 2rem;
+  color: var(--text-default-default, #0c0c0d);
+  background: rgb(255 255 255 / 84%);
+  backdrop-filter: blur(3px);
+  text-align: center;
+}
+
+.carousel .carousel-slide.carousel-slide-hero .carousel-slide-image picture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(255 255 255 / 65%);
+}
+
+.carousel .carousel-hero-icon {
+  display: block;
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1rem;
+}
+
+.carousel .carousel-hero-eyebrow {
+  margin: 0;
+  color: var(--text-brand-default, #4673db);
+  font-size: var(--body-font-size-s, 0.875rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.carousel .carousel-hero-title {
+  margin: 0.75rem 0 1.25rem;
+  color: inherit;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1.1;
+}
+
+.carousel .carousel-hero-description > :first-child {
+  margin-block-start: 0;
+}
+
+.carousel .carousel-hero-description > :last-child {
+  margin-block-end: 0;
+}
+
+.carousel .carousel-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  background: var(--background-neutral-default, #0c0c0d);
+  color: var(--text-neutral-on-neutral, #fff);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.carousel .carousel-hero-cta:focus-visible,
+.carousel .carousel-hero-cta:hover {
+  background: var(--background-neutral-default-hover, #1f2937);
+}
+
 .carousel .carousel-slide-indicators {
   display: flex;
   flex-wrap: wrap;
@@ -165,5 +232,17 @@
 
   .carousel .carousel-slide .carousel-slide-content[data-align='justify'] {
     --slide-content-width: auto;
+  }
+
+  .carousel .carousel-slide.carousel-slide-hero .carousel-slide-content {
+    margin: 4rem;
+    padding: 2.5rem;
+  }
+}
+
+@media (width < 600px) {
+  .carousel .carousel-slide.carousel-slide-hero .carousel-slide-content {
+    margin: 1rem;
+    padding: 1.5rem;
   }
 }

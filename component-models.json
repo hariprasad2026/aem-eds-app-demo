@@ -2743,7 +2743,7 @@
     "id": "intro-statement",
     "fields": [
       {
-        "component": "text",
+        "component": "richtext",
         "name": "text",
         "label": "Text",
         "value": "",

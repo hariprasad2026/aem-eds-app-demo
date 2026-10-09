@@ -4,6 +4,34 @@ import { getAEMPublish } from '../../scripts/endpointconfig.js';
 const REMOTE_QUERY_INDEX_URL = 'https://demo-blocks--aem-eds-app-demo--hariprasad2026.aem.live/query-index.json';
 const QUERY_INDEX_PATH = '/query-index.json';
 
+const CONFIG_FIELD_ORDER = [
+  'title',
+  'description',
+  'ctaLabel',
+  'ctaLink',
+  'maximumItems',
+  'listType',
+  'parentPath',
+  'childDepth',
+  'tags',
+  'tagMatch',
+  'personalization',
+  'displayType',
+  'showEyebrow',
+  'showTitle',
+  'showDescription',
+  'showImage',
+  'showDate',
+  'dateFormat',
+  'displayTags',
+  'authorDetails',
+  'showIcon',
+  'linkItem',
+  'cardsColor',
+  'orderBy',
+  'sortOrder',
+];
+
 const CONFIG_FIELDS = new Set([
   'title',
   'description',
@@ -46,6 +74,77 @@ const LIST_ITEM_ORDER = [
 
 function normalize(value = '') {
   return String(value).toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function getProp(block, name, fallback = '') {
+  const lowerName = name.toLowerCase();
+  const normalizedName = normalize(name);
+  const roots = [block, ...block.querySelectorAll('.list-ue-store')];
+
+  const readFieldValue = (element) => {
+    if (!element) return '';
+    const image = element.matches('img') ? element : element.querySelector('picture img, img');
+    if (image) return image.getAttribute('src') || image.src;
+    const anchor = element.matches('a') ? element : element.querySelector('a[href]');
+    if (anchor) return anchor.getAttribute('href') || anchor.textContent.trim();
+    return element.dataset.value
+      || element.getAttribute('value')
+      || element.value
+      || element.textContent.trim();
+  };
+
+  if (block.dataset[name] !== undefined) return block.dataset[name];
+  if (block.dataset[lowerName] !== undefined) return block.dataset[lowerName];
+
+  const propertyElements = roots.flatMap((root) => {
+    const descendants = [...root.querySelectorAll('[data-aue-prop]')];
+    if (root.matches('[data-aue-prop]')) descendants.unshift(root);
+    return descendants;
+  });
+  const propertyElement = propertyElements.find(
+    (element) => normalize(element.getAttribute('data-aue-prop')) === normalizedName,
+  );
+  if (propertyElement) {
+    const value = readFieldValue(propertyElement);
+    if (value) return value;
+  }
+
+  const rows = roots.flatMap((root) => [...root.children])
+    .filter((row) => !row.classList.contains('list-rendered') && !row.classList.contains('list-ue-store'));
+
+  const aliases = {
+    parentpath: ['parentpage', 'tagsparentpage'],
+    childdepth: ['depth'],
+    maximumitems: ['maxitems'],
+  };
+  const acceptableNames = [normalizedName, ...(aliases[normalizedName] || [])];
+  const targetRow = rows.find((row) => {
+    const cols = [...row.children];
+    const key = normalize(cols[0]?.textContent || '');
+    return cols.length >= 2 && acceptableNames.includes(key);
+  });
+  if (targetRow) {
+    const cols = [...targetRow.children];
+    const value = readFieldValue(cols[1]);
+    if (value) return value;
+  }
+
+  const fieldIndex = CONFIG_FIELD_ORDER.indexOf(name);
+  if (fieldIndex >= 0) {
+    const stores = [...block.querySelectorAll('.list-ue-store')];
+    const storedRows = stores.length
+      ? stores.flatMap((store) => [...store.children])
+      : [...block.children].filter((child) => !child.matches('.list-rendered'));
+    const row = storedRows[fieldIndex];
+    if (row) {
+      const cells = [...row.children];
+      const valueCell = cells.length > 1 ? cells[1] : cells[0] || row;
+      const value = readFieldValue(valueCell);
+      if (value) return value;
+    }
+  }
+
+  return fallback;
 }
 
 function readValue(cell) {
@@ -129,6 +228,21 @@ function extractItems(payload) {
   return [];
 }
 
+async function loadQueryIndexFromUrl(url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return null;
+
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) return null;
+
+    const data = await response.json();
+    return extractItems(data);
+  } catch (error) {
+    return null;
+  }
+}
+
 async function fetchQueryIndex() {
   const configuredOrigin = getAEMPublish();
   const codeOrigin = new URL(import.meta.url).origin;
@@ -142,23 +256,8 @@ async function fetchQueryIndex() {
     QUERY_INDEX_PATH,
   ];
 
-  for (let index = 0; index < urls.length; index += 1) {
-    const url = urls[index];
-    try {
-      const response = await fetch(url);
-      if (!response.ok) continue;
-
-      const contentType = response.headers.get('content-type') || '';
-      if (!contentType.includes('application/json')) continue;
-
-      const data = await response.json();
-      return extractItems(data);
-    } catch (error) {
-      // Try the next source.
-    }
-  }
-
-  return [];
+  const results = await Promise.all(urls.map((url) => loadQueryIndexFromUrl(url)));
+  return results.find((result) => Array.isArray(result)) || [];
 }
 
 function getMetadataPath(itemPath) {
@@ -197,7 +296,10 @@ function matchesParentAndDepth(itemPath, parentPath, childDepth) {
     : normalizedParentPath.replace(/^\//, '').split('/').filter(Boolean);
   const itemSegments = normalizedItemPath.replace(/^\//, '').split('/').filter(Boolean);
 
-  if (parentSegments.length && parentSegments.some((segment, index) => segment !== itemSegments[index])) {
+  const parentPathMatches = parentSegments.some(
+    (segment, index) => segment !== itemSegments[index],
+  );
+  if (parentSegments.length && parentPathMatches) {
     return false;
   }
 
@@ -601,30 +703,33 @@ function parseConfigRows(block) {
   });
 
   return {
-    title: config.title || '',
-    description: config.description || '',
-    ctaLabel: config.ctalabel || '',
-    ctaLink: config.ctalink || '',
-    listType: String(config.listtype || 'manual').toLowerCase().trim(),
-    displayType: config.displaytype || 'default',
-    maximumItems: parseNumber(config.maximumitems, 8),
-    parentPath: config.parentpath || '/',
-    childDepth: parseNumber(config.childdepth, 1),
-    tags: config.tags || '',
-    tagMatch: String(config.tagmatch || 'any').toLowerCase().trim() === 'all' ? 'all' : 'any',
-    showEyebrow: parseBoolean(config.showeyebrow, false),
-    showTitle: parseBoolean(config.showtitle, true),
-    showDescription: parseBoolean(config.showdescription, false),
-    showImage: parseBoolean(config.showimage, true),
-    showDate: parseBoolean(config.showdate, false),
-    dateFormat: config.dateformat || 'mmm-d-yyyy',
-    displayTags: parseBoolean(config.displaytags, true),
-    authorDetails: parseBoolean(config.authordetails, false),
-    showIcon: parseBoolean(config.showicon, false),
-    linkItem: parseBoolean(config.linkitem, false),
-    cardsColor: config.cardscolor || 'blue',
-    orderBy: config.orderby || 'title',
-    sortOrder: config.sortorder || 'ascending',
+    title: config.title || getProp(block, 'title', ''),
+    description: config.description || getProp(block, 'description', ''),
+    ctaLabel: config.ctalabel || getProp(block, 'ctaLabel', ''),
+    ctaLink: config.ctalink || getProp(block, 'ctaLink', ''),
+    listType: String(config.listtype || getProp(block, 'listType', 'manual')).toLowerCase().trim(),
+    displayType: config.displaytype || getProp(block, 'displayType', 'default'),
+    maximumItems: parseNumber(config.maximumitems || getProp(block, 'maximumItems', '8'), 8),
+    parentPath: config.parentpath || getProp(block, 'parentPath', '/'),
+    childDepth: parseNumber(config.childdepth || getProp(block, 'childDepth', '1'), 1),
+    tags: config.tags || getProp(block, 'tags', ''),
+    tagMatch:
+      String(config.tagmatch || getProp(block, 'tagMatch', 'any')).toLowerCase().trim() === 'all'
+        ? 'all'
+        : 'any',
+    showEyebrow: parseBoolean(config.showeyebrow || getProp(block, 'showEyebrow', ''), false),
+    showTitle: parseBoolean(config.showtitle || getProp(block, 'showTitle', ''), true),
+    showDescription: parseBoolean(config.showdescription || getProp(block, 'showDescription', ''), false),
+    showImage: parseBoolean(config.showimage || getProp(block, 'showImage', ''), true),
+    showDate: parseBoolean(config.showdate || getProp(block, 'showDate', ''), false),
+    dateFormat: config.dateformat || getProp(block, 'dateFormat', 'mmm-d-yyyy'),
+    displayTags: parseBoolean(config.displaytags || getProp(block, 'displayTags', ''), true),
+    authorDetails: parseBoolean(config.authordetails || getProp(block, 'authorDetails', ''), false),
+    showIcon: parseBoolean(config.showicon || getProp(block, 'showIcon', ''), false),
+    linkItem: parseBoolean(config.linkitem || getProp(block, 'linkItem', ''), false),
+    cardsColor: config.cardscolor || getProp(block, 'cardsColor', 'blue'),
+    orderBy: config.orderby || getProp(block, 'orderBy', 'title'),
+    sortOrder: config.sortorder || getProp(block, 'sortOrder', 'ascending'),
   };
 }
 

@@ -1,4 +1,8 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
+import { getAEMPublish } from '../../scripts/endpointconfig.js';
+
+const REMOTE_QUERY_INDEX_URL = 'https://demo-blocks--aem-eds-app-demo--hariprasad2026.aem.live/query-index.json';
+const QUERY_INDEX_PATH = '/query-index.json';
 
 const CONFIG_FIELDS = new Set([
   'title',
@@ -6,6 +10,8 @@ const CONFIG_FIELDS = new Set([
   'ctalabel',
   'ctalink',
   'listtype',
+  'displaytype',
+  'maximumitems',
   'parentpath',
   'childdepth',
   'tags',
@@ -88,7 +94,7 @@ function parseTags(value) {
   }
 
   return String(value)
-    .split(',')
+    .split(/[;,]/)
     .map((tag) => tag.trim().toLowerCase())
     .filter(Boolean);
 }
@@ -124,13 +130,60 @@ function extractItems(payload) {
 }
 
 async function fetchQueryIndex() {
+  const configuredOrigin = getAEMPublish();
+  const codeOrigin = new URL(import.meta.url).origin;
+  const publishHost = configuredOrigin.includes('.adobeaemcloud.com')
+    ? codeOrigin
+    : configuredOrigin;
+
+  const urls = [
+    REMOTE_QUERY_INDEX_URL,
+    new URL(QUERY_INDEX_PATH, publishHost).toString(),
+    QUERY_INDEX_PATH,
+  ];
+
+  for (let index = 0; index < urls.length; index += 1) {
+    const url = urls[index];
+    try {
+      const response = await fetch(url);
+      if (!response.ok) continue;
+
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) continue;
+
+      const data = await response.json();
+      return extractItems(data);
+    } catch (error) {
+      // Try the next source.
+    }
+  }
+
+  return [];
+}
+
+function getMetadataPath(itemPath) {
+  const normalizedPath = normalizePath(itemPath);
+  if (!normalizedPath || normalizedPath === '/') return null;
+  const pathWithoutExtension = normalizedPath.replace(/\.[a-z0-9]+$/i, '');
+  return `${pathWithoutExtension}.metadata.json`;
+}
+
+async function fetchArticleMetadata(itemPath) {
+  const metadataPath = getMetadataPath(itemPath);
+  if (!metadataPath) return null;
+
   try {
-    const response = await fetch('/query-index.json');
-    if (!response.ok) return [];
-    const data = await response.json();
-    return extractItems(data);
+    const metadataUrl = new URL(metadataPath, REMOTE_QUERY_INDEX_URL).toString();
+    const response = await fetch(metadataUrl);
+    if (!response.ok) return null;
+
+    const metadata = await response.json();
+    return {
+      title: metadata.title || metadata.pageTitle || '',
+      description: metadata.description || metadata.seoDescription || metadata.summary || '',
+    };
   } catch (error) {
-    return [];
+    return null;
   }
 }
 
@@ -184,7 +237,7 @@ async function resolveTagBasedItems(config) {
   const selectedTags = parseTags(config.tags);
   if (!selectedTags.length) return [];
 
-  return items
+  const filteredItems = items
     .filter((item) => matchesParentAndDepth(item.path, config.parentPath, config.childDepth))
     .filter((item) => {
       const itemTags = readItemTags(item);
@@ -205,8 +258,20 @@ async function resolveTagBasedItems(config) {
       }
 
       return selectedTags.some(matchesTag);
-    })
-    .map((item) => mapQueryItemToListItem(item));
+    });
+
+  const itemsWithMetadata = await Promise.all(filteredItems.map(async (item) => {
+    const metadata = await fetchArticleMetadata(item.path);
+    if (!metadata) return item;
+
+    return {
+      ...item,
+      title: metadata.title || item.title,
+      description: metadata.description || item.description,
+    };
+  }));
+
+  return itemsWithMetadata.map((item) => mapQueryItemToListItem(item));
 }
 
 function createImageFromSource(source, altText) {
@@ -540,11 +605,13 @@ function parseConfigRows(block) {
     description: config.description || '',
     ctaLabel: config.ctalabel || '',
     ctaLink: config.ctalink || '',
-    listType: config.listtype || 'manual',
+    listType: String(config.listtype || 'manual').toLowerCase().trim(),
+    displayType: config.displaytype || 'default',
+    maximumItems: parseNumber(config.maximumitems, 8),
     parentPath: config.parentpath || '/',
     childDepth: parseNumber(config.childdepth, 1),
     tags: config.tags || '',
-    tagMatch: config.tagmatch === 'all' ? 'all' : 'any',
+    tagMatch: String(config.tagmatch || 'any').toLowerCase().trim() === 'all' ? 'all' : 'any',
     showEyebrow: parseBoolean(config.showeyebrow, false),
     showTitle: parseBoolean(config.showtitle, true),
     showDescription: parseBoolean(config.showdescription, false),
@@ -594,6 +661,9 @@ export default async function decorate(block) {
   }
 
   const sortedItems = sortItems(items, config);
+  const visibleItems = config.maximumItems > 0
+    ? sortedItems.slice(0, config.maximumItems)
+    : sortedItems;
 
   block.textContent = '';
   block.classList.add('list', `list-theme-${config.cardsColor}`);
@@ -601,13 +671,13 @@ export default async function decorate(block) {
 
   let rendered;
   if (config.displayType === 'card' || config.displayType === 'content-card') {
-    rendered = renderCards(sortedItems, config);
+    rendered = renderCards(visibleItems, config);
   } else if (config.displayType === 'hero-card') {
-    rendered = renderHeroCards(sortedItems, config);
+    rendered = renderHeroCards(visibleItems, config);
   } else if (config.displayType === 'table-list') {
-    rendered = renderTable(sortedItems, config);
+    rendered = renderTable(visibleItems, config);
   } else {
-    rendered = renderDefault(sortedItems, config);
+    rendered = renderDefault(visibleItems, config);
   }
 
   block.append(rendered);

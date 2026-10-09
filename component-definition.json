@@ -1172,7 +1172,7 @@
                 "template": {
                   "name": "Statistics List",
                   "model": "statistics-list",
-                  "filter": "statistics-list"
+                  "filter": "richtext"
                 }
               }
             }

@@ -10,7 +10,7 @@
             "template": {
               "name": "Statistics List",
               "model": "statistics-list",
-              "filter": "statistics-list"
+              "filter": "richtext"
             }
           }
         }
@@ -53,12 +53,11 @@
       "id": "statistics-list-item",
       "fields": [
         {
-          "component": "richtext",
+          "component": "text",
           "name": "title",
           "label": "Title",
           "value": "",
-          "valueType": "string",
-          "filter": "richtext"
+          "valueType": "string"
         },
         {
           "component": "text",

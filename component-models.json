@@ -152,6 +152,26 @@
       },
       {
         "component": "select",
+        "name": "titleColor",
+        "label": "Title Color",
+        "value": "black",
+        "options": [
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          },
+          {
+            "name": "Blue",
+            "value": "blue"
+          }
+        ]
+      },
+      {
+        "component": "select",
         "name": "alignment",
         "label": "Alignment",
         "value": "left",
@@ -4126,11 +4146,32 @@
             ]
           }
         ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "tabAlignment",
+        "label": "Tab Alignment",
+        "value": "left",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
       }
     ]
   },
   {
-    "id": "tabs-item",
+    "id": "tabs-new-item",
     "fields": [
       {
         "component": "text",
@@ -4179,12 +4220,18 @@
         "multi": false
       },
       {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "content_video",
+        "label": "Video",
+        "multi": false
+      },
+      {
         "component": "richtext",
         "valueType": "string",
         "name": "content_richtext",
         "value": "",
-        "label": "Content",
-        "filter": "richtext"
+        "label": "Content"
       }
     ]
   },

@@ -32,7 +32,8 @@
                 "template": {
                   "model": "title",
                   "titleType": "h2",
-                  "titleVariant": "default"
+                  "titleVariant": "default",
+                  "titleColor": "black"
                 }
               }
             }
@@ -1363,7 +1364,7 @@
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
                   "name": "Tab",
-                  "model": "tabs-item",
+                  "model": "tabs-new-item",
                   "title": "Tab Title",
                   "content_heading": "Tab Heading",
                   "content_headingType": "h3"

@@ -6,6 +6,10 @@ const CONFIG_FIELDS = new Set([
   'ctalabel',
   'ctalink',
   'listtype',
+  'parentpath',
+  'childdepth',
+  'tags',
+  'tagmatch',
   'showeyebrow',
   'showtitle',
   'showdescription',
@@ -56,6 +60,163 @@ function parseBoolean(value, fallback = false) {
   if (value === undefined || value === null || value === '') return fallback;
   const normalized = String(value).trim().toLowerCase();
   return ['true', 'yes', '1', 'on'].includes(normalized);
+}
+
+function parseNumber(value, fallback) {
+  if (value === undefined || value === null || value === '') return fallback;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function normalizePath(path) {
+  if (!path) return '/';
+  let pathname;
+  try {
+    pathname = new URL(String(path).trim(), window.location.origin).pathname;
+  } catch (error) {
+    [pathname] = String(path).split(/[?#]/);
+  }
+
+  const clean = pathname.replace(/\/+$/, '') || '/';
+  return clean.startsWith('/') ? clean : `/${clean}`;
+}
+
+function parseTags(value) {
+  if (!value) return [];
+  if (Array.isArray(value)) {
+    return value.flatMap((entry) => parseTags(entry));
+  }
+
+  return String(value)
+    .split(',')
+    .map((tag) => tag.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function normalizeTag(tag) {
+  return String(tag || '').trim().toLowerCase();
+}
+
+function stripNamespace(tag) {
+  const normalized = normalizeTag(tag);
+  const separatorIndex = normalized.indexOf(':');
+  return separatorIndex >= 0 ? normalized.slice(separatorIndex + 1) : normalized;
+}
+
+function readItemTags(item) {
+  const tagSources = [
+    item.tags,
+    item.tag,
+    item.cqTags,
+    item.cqtags,
+    item['cq:tags'],
+    item.taxonomy,
+  ];
+
+  return tagSources.flatMap((source) => parseTags(source));
+}
+
+function extractItems(payload) {
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload?.data)) return payload.data;
+  if (Array.isArray(payload?.items)) return payload.items;
+  return [];
+}
+
+async function fetchQueryIndex() {
+  try {
+    const response = await fetch('/query-index.json');
+    if (!response.ok) return [];
+    const data = await response.json();
+    return extractItems(data);
+  } catch (error) {
+    return [];
+  }
+}
+
+function matchesParentAndDepth(itemPath, parentPath, childDepth) {
+  if (!itemPath) return false;
+
+  const normalizedItemPath = normalizePath(itemPath);
+  const normalizedParentPath = normalizePath(parentPath || '/');
+  const parentSegments = normalizedParentPath === '/'
+    ? []
+    : normalizedParentPath.replace(/^\//, '').split('/').filter(Boolean);
+  const itemSegments = normalizedItemPath.replace(/^\//, '').split('/').filter(Boolean);
+
+  if (parentSegments.length && parentSegments.some((segment, index) => segment !== itemSegments[index])) {
+    return false;
+  }
+
+  const relativeDepth = itemSegments.length - parentSegments.length;
+  if (relativeDepth <= 0) return false;
+
+  return relativeDepth <= childDepth;
+}
+
+function mapQueryItemToListItem(item) {
+  const itemTags = readItemTags(item);
+  const primaryTag = itemTags[0] ? stripNamespace(itemTags[0]) : '';
+  const rawDate = item.publishDate || item.date || item.lastModified || '';
+  let resolvedDate = rawDate;
+  if (typeof rawDate === 'number' || /^\d+(\.\d+)?$/.test(String(rawDate).trim())) {
+    const numeric = Number(rawDate);
+    const timestamp = numeric < 1e12 ? numeric * 1000 : numeric;
+    resolvedDate = new Date(timestamp).toISOString();
+  }
+
+  return {
+    itemEyebrow: (item.category || primaryTag || '').toUpperCase(),
+    itemTitle: item.title || item.name || '',
+    itemDescription: item.description || item.excerpt || '',
+    itemImage: item.image || item.thumbnail || '',
+    itemImageAlt: item.imageAlt || item.title || '',
+    itemDate: resolvedDate,
+    itemTags: itemTags.map(stripNamespace).join(', '),
+    itemAuthor: item.author || item.byline || '',
+    itemIcon: '',
+    itemLink: normalizePath(item.path || '#'),
+  };
+}
+
+async function resolveTagBasedItems(config) {
+  const items = await fetchQueryIndex();
+  const selectedTags = parseTags(config.tags);
+  if (!selectedTags.length) return [];
+
+  return items
+    .filter((item) => matchesParentAndDepth(item.path, config.parentPath, config.childDepth))
+    .filter((item) => {
+      const itemTags = readItemTags(item);
+      if (!itemTags.length) return false;
+
+      const normalizedItemTags = new Set(itemTags.map(normalizeTag));
+      const namespaceAgnosticItemTags = new Set(itemTags.map(stripNamespace));
+
+      const matchesTag = (tag) => {
+        const normalizedTag = normalizeTag(tag);
+        const namespaceAgnosticTag = stripNamespace(tag);
+        return normalizedItemTags.has(normalizedTag)
+          || namespaceAgnosticItemTags.has(namespaceAgnosticTag);
+      };
+
+      if (config.tagMatch === 'all') {
+        return selectedTags.every(matchesTag);
+      }
+
+      return selectedTags.some(matchesTag);
+    })
+    .map((item) => mapQueryItemToListItem(item));
+}
+
+function createImageFromSource(source, altText) {
+  if (source instanceof Element) return source;
+  if (!source) return null;
+
+  const image = document.createElement('img');
+  image.src = source;
+  image.alt = altText || '';
+  return image;
 }
 
 function formatDate(raw, format) {
@@ -202,8 +363,8 @@ function createCardItem(item, config) {
   cardRoot.className = 'list-card';
   if (cardRoot.tagName === 'A') cardRoot.href = item.itemLink;
 
-  if (config.showImage && item.itemImage instanceof Element) {
-    const image = item.itemImage;
+  const image = createImageFromSource(item.itemImage, item.itemImageAlt || item.itemTitle || '');
+  if (config.showImage && image) {
     const optimizedPicture = createOptimizedPicture(
       image.src,
       item.itemImageAlt || image.alt || item.itemTitle || '',
@@ -379,7 +540,11 @@ function parseConfigRows(block) {
     description: config.description || '',
     ctaLabel: config.ctalabel || '',
     ctaLink: config.ctalink || '',
-    listType: config.listtype || 'default',
+    listType: config.listtype || 'manual',
+    parentPath: config.parentpath || '/',
+    childDepth: parseNumber(config.childdepth, 1),
+    tags: config.tags || '',
+    tagMatch: config.tagmatch === 'all' ? 'all' : 'any',
     showEyebrow: parseBoolean(config.showeyebrow, false),
     showTitle: parseBoolean(config.showtitle, true),
     showDescription: parseBoolean(config.showdescription, false),
@@ -420,20 +585,26 @@ function parseItems(block) {
   }).filter((item) => item.itemTitle || item.itemLink || item.itemDescription);
 }
 
-export default function decorate(block) {
+export default async function decorate(block) {
   const config = parseConfigRows(block);
-  const sortedItems = sortItems(parseItems(block), config);
+
+  let items = parseItems(block);
+  if (config.listType === 'tags') {
+    items = await resolveTagBasedItems(config);
+  }
+
+  const sortedItems = sortItems(items, config);
 
   block.textContent = '';
   block.classList.add('list', `list-theme-${config.cardsColor}`);
   block.append(buildHeader(config));
 
   let rendered;
-  if (config.listType === 'card') {
+  if (config.displayType === 'card' || config.displayType === 'content-card') {
     rendered = renderCards(sortedItems, config);
-  } else if (config.listType === 'hero-card') {
+  } else if (config.displayType === 'hero-card') {
     rendered = renderHeroCards(sortedItems, config);
-  } else if (config.listType === 'table-list') {
+  } else if (config.displayType === 'table-list') {
     rendered = renderTable(sortedItems, config);
   } else {
     rendered = renderDefault(sortedItems, config);

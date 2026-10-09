@@ -54,7 +54,12 @@
     "id": "accordion",
     "components": [
       "accordion-item"
-    ]
+    ],
+    "rte": {
+      "toolbar": {
+        "format": []
+      }
+    }
   },
   {
     "id": "canvas-search-hero",

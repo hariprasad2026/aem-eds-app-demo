@@ -210,6 +210,12 @@
         width: 420px;
         max-width: 420px;
     }
+
+    .quotes blockquote.image .quote-quotation p:first-child::before {
+        left: -24px;
+        top: -8px;
+        font-size: 50px;
+    }
 }
 
 @media (width <=768px) {
@@ -247,4 +253,23 @@
         bottom: -40px;
         font-size: 40px;
     }
+}
+
+.quotes .quote-media.quote-media-alt {
+    width: 220px;
+    height: 330px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 80px;
+    margin-left: 120px;
+    background: #f2f2f2;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: #666;
+    text-align: center;
+    overflow: hidden;
 }

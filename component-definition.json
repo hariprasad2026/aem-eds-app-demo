@@ -1189,8 +1189,7 @@
                   "name": "Statistic",
                   "model": "statistics-list-item",
                   "title": "Title",
-                  "value": "Value",
-                  "filter": "richtext"
+                  "value": "Value"
                 }
               }
             }

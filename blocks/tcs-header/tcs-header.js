@@ -1,25 +1,26 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
 function getProp(block, name, fallback = '') {
-  const lower = name.toLowerCase();
-  const fieldOrder = [
-    'headerVariant',
-    'tcsLogo',
-    'tcsLogoLink',
-    'tataLogo',
-    'tataLogoLink',
-    'tcsLogoAlt',
-    'tataLogoAlt',
-    'navigationMotion',
-    'navRootPath',
-    'navDepth',
-    'canvasPlaceholder',
-    'showCanvasSearchIcon',
-    'canvasActionUrl',
-    'canvasNavRootPath',
-    'canvasNavDepth',
-    'canvasMotion',
-  ];
+  const normalizeKey = (value) => String(value).toLowerCase().replace(/[^a-z0-9]/g, '');
+  const propertyLabels = {
+    headerVariant: 'Header Variant',
+    tcsLogo: 'TCS Logo Image',
+    tcsLogoLink: 'TCS Logo Target URL',
+    tataLogo: 'Tata Logo Image',
+    tataLogoLink: 'Tata Logo Target URL',
+    tcsLogoAlt: 'TCS Logo Alt Text',
+    tataLogoAlt: 'Tata Logo Alt Text',
+    navigationMotion: 'Navigation Motion Type',
+    navRootPath: 'Nav Root Path',
+    navDepth: 'Nav Depth',
+    canvasPlaceholder: 'Canvas Search Placeholder',
+    showCanvasSearchIcon: 'Show Canvas Search Icon',
+    canvasActionUrl: 'Canvas Search Target URL',
+    canvasNavRootPath: 'Canvas Nav Root Path',
+    canvasNavDepth: 'Canvas Nav Depth',
+    canvasMotion: 'Canvas Motion Type',
+  };
+  const matchingKeys = new Set([normalizeKey(name), normalizeKey(propertyLabels[name] || '')]);
 
   const getValue = (element) => {
     if (!element) return '';
@@ -31,8 +32,10 @@ function getProp(block, name, fallback = '') {
   };
 
   if (block.dataset[name] !== undefined) return block.dataset[name];
+  const lower = name.toLowerCase();
   if (block.dataset[lower] !== undefined) return block.dataset[lower];
-  const attrElem = block.querySelector(`[data-aue-prop="${name}"], [data-aue-prop="${lower}"]`);
+  const attrElem = [...block.querySelectorAll('[data-aue-prop]')]
+    .find((element) => matchingKeys.has(normalizeKey(element.dataset.aueProp)));
   if (attrElem) return getValue(attrElem);
 
   const rows = [...block.children];
@@ -40,17 +43,11 @@ function getProp(block, name, fallback = '') {
     const row = rows[index];
     const cols = [...row.children];
     if (cols.length >= 2) {
-      const key = cols[0].textContent.trim().toLowerCase().replace(/[-_]/g, '');
-      if (key === lower.replace(/[-_]/g, '')) {
+      const key = normalizeKey(cols[0].textContent.trim());
+      if (matchingKeys.has(key)) {
         return getValue(cols[1]);
       }
     }
-  }
-
-  const fieldIndex = fieldOrder.indexOf(name);
-  if (fieldIndex >= 0 && rows[fieldIndex]) {
-    const cols = [...rows[fieldIndex].children];
-    return getValue(cols.length > 1 ? cols[1] : rows[fieldIndex]) || fallback;
   }
 
   return fallback;
@@ -278,14 +275,6 @@ function createThirdLevelPanel(item) {
   return panel;
 }
 
-/**
- * The floating canvas dock should remain visible while scrolling, matching the required UX.
- * The previous hide-on-scroll behavior is intentionally disabled.
- */
-function setupScrollDockObserver() {
-  // Intentionally no-op to keep the dock fixed and floating while the page scrolls.
-}
-
 function decorateNavigationDock(container, taxonomy, config) {
   const currentPath = window.location.pathname;
   const {
@@ -295,9 +284,9 @@ function decorateNavigationDock(container, taxonomy, config) {
 
   let activeL1 = initialActiveL1;
   let activeL2 = initialActiveL2;
+  let menuOpen = false;
 
   container.className = 'navigation-dock-wrapper floating-bottom-dock';
-  container.dataset.motionType = config.navigationMotion;
 
   const dock = document.createElement('div');
   dock.className = 'dock-inner-wrapper';
@@ -316,11 +305,18 @@ function decorateNavigationDock(container, taxonomy, config) {
 
   const render = () => {
     nav.replaceChildren();
+    hamburger.classList.toggle('is-open', menuOpen);
+    hamburger.setAttribute('aria-expanded', String(menuOpen));
+
+    if (!menuOpen) {
+      return;
+    }
 
     if (!activeL1) {
       nav.append(createLevel(taxonomy, 'dock-level-one', (item, button) => {
         activeL1 = item;
         activeL2 = null;
+        menuOpen = true;
         render();
         button.blur();
       }));
@@ -345,16 +341,37 @@ function decorateNavigationDock(container, taxonomy, config) {
   };
 
   hamburger.addEventListener('click', () => {
-    activeL1 = activeL1 ? null : taxonomy[0];
-    activeL2 = null;
+    if (menuOpen) {
+      menuOpen = false;
+      activeL1 = null;
+      activeL2 = null;
+    } else {
+      menuOpen = true;
+      activeL1 = activeL1 || taxonomy[0] || null;
+      activeL2 = null;
+    }
     render();
   });
+
+  const updateFloatingDockState = () => {
+    const exclusionTargets = ['#table-list', '#footer-sai', '[data-disable-floating-canvas]'];
+    const shouldHide = exclusionTargets.some((selector) => {
+      const element = document.querySelector(selector);
+      if (!element || !document.body.contains(element)) return false;
+      const rect = element.getBoundingClientRect();
+      return rect.top < window.innerHeight && rect.bottom > 0;
+    });
+
+    container.classList.toggle('floating-disabled', shouldHide);
+  };
 
   dock.append(hamburger, canvasForm);
   container.append(dock, nav);
   render();
+  updateFloatingDockState();
 
-  setupScrollDockObserver();
+  window.addEventListener('scroll', updateFloatingDockState, { passive: true });
+  window.addEventListener('resize', updateFloatingDockState);
 }
 
 export default async function decorate(block) {
@@ -384,8 +401,12 @@ export default async function decorate(block) {
   block.dataset.navigationMotion = config.navigationMotion;
   block.dataset.canvasMotion = config.canvasMotion;
 
+  /* 1. Top Header Bar */
   const navWrapper = document.createElement('div');
   navWrapper.className = 'tcs-nav-wrapper';
+
+  const navPlaceholder = document.createElement('div');
+  navPlaceholder.className = 'tcs-nav-placeholder';
 
   const nav = document.createElement('nav');
   nav.id = 'tcs-nav';
@@ -418,10 +439,20 @@ export default async function decorate(block) {
 
   nav.append(brandPrimary, brandSecondary);
   navWrapper.append(nav);
-  block.append(navWrapper);
+  block.append(navPlaceholder, navWrapper);
+
+  /* Keep the fixed dock outside section wrappers. */
+  let telePortContainer = document.querySelector('body > .tcs-header-dock-global');
+  if (!telePortContainer) {
+    telePortContainer = document.createElement('div');
+    telePortContainer.className = 'tcs-header tcs-header-dock-global';
+    document.body.append(telePortContainer);
+  } else {
+    telePortContainer.textContent = '';
+  }
 
   const navDockContainer = document.createElement('div');
-  block.append(navDockContainer);
+  telePortContainer.append(navDockContainer);
 
   const rawIndex = await fetchQueryIndex();
   const taxonomy = buildTaxonomyFromIndex(rawIndex, config.navRootPath, config.navDepth);

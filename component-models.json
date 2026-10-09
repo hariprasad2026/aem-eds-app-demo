@@ -3425,6 +3425,10 @@
         "value": "white",
         "options": [
           {
+            "name": "Default",
+            "value": "white"
+          },
+          {
             "name": "Light Grey",
             "value": "light-grey"
           },

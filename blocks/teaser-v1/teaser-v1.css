@@ -208,6 +208,7 @@
   line-height: 1.4;
   letter-spacing: -0.015em;
   text-align: left;
+  text-decoration: none;
 }
 
 .teaser-v1 .teaser-cta-list::after {
@@ -259,6 +260,11 @@
 
 .teaser-v1 .teaser-ctas .teaser-cta-list:last-child {
   padding-bottom: 0;
+  border-bottom: 0;
+}
+
+/* Remove separator below the final CTA */
+.teaser-v1 .teaser-ctas .teaser-cta-list:last-child {
   border-bottom: 0;
 }
 

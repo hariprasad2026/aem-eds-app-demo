@@ -37,7 +37,7 @@
       "id": "statistics-list",
       "fields": [
         {
-          "component": "richtext",
+          "component": "text",
           "name": "text",
           "label": "Text",
           "value": "",

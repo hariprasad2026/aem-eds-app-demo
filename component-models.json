@@ -2743,7 +2743,7 @@
     "id": "intro-statement",
     "fields": [
       {
-        "component": "richtext",
+        "component": "text",
         "name": "text",
         "label": "Text",
         "value": "",
@@ -3449,7 +3449,7 @@
     "id": "statistics-list",
     "fields": [
       {
-        "component": "richtext",
+        "component": "text",
         "name": "text",
         "label": "Text",
         "value": "",

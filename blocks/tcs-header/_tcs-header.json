@@ -60,95 +60,11 @@
           "value": "https://www.tata.com"
         },
         {
-          "component": "text-input",
+          "component": "richtext",
           "valueType": "string",
-          "name": "tcsLogoAlt",
-          "label": "TCS Logo Alt Text",
-          "value": "Tata Consultancy Services"
-        },
-        {
-          "component": "text-input",
-          "valueType": "string",
-          "name": "tataLogoAlt",
-          "label": "Tata Logo Alt Text",
-          "value": "TATA Group"
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "navigationMotion",
-          "label": "Navigation Motion Type",
-          "value": "slide",
-          "options": [
-            { "name": "Slide", "value": "slide" },
-            { "name": "Fade", "value": "fade" },
-            { "name": "None", "value": "none" }
-          ]
-        },
-        {
-          "component": "text-input",
-          "valueType": "string",
-          "name": "navRootPath",
-          "label": "Nav Root Path",
-          "value": "/"
-        },
-        {
-          "component": "number-input",
-          "valueType": "number",
-          "name": "navDepth",
-          "label": "Nav Depth",
-          "value": 3,
-          "min": 1,
-          "max": 3
-        },
-        {
-          "component": "text-input",
-          "valueType": "string",
-          "name": "canvasPlaceholder",
-          "label": "Canvas Search Placeholder",
-          "value": "Ask us a question"
-        },
-        {
-          "component": "checkbox",
-          "valueType": "boolean",
-          "name": "showCanvasSearchIcon",
-          "label": "Show Canvas Search Icon",
-          "value": true
-        },
-        {
-          "component": "text-input",
-          "valueType": "string",
-          "name": "canvasActionUrl",
-          "label": "Canvas Search Target URL",
-          "value": "/search"
-        },
-        {
-          "component": "text-input",
-          "valueType": "string",
-          "name": "canvasNavRootPath",
-          "label": "Canvas Nav Root Path",
-          "value": "/"
-        },
-        {
-          "component": "number-input",
-          "valueType": "number",
-          "name": "canvasNavDepth",
-          "label": "Canvas Nav Depth",
-          "value": 3,
-          "min": 1,
-          "max": 3
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "canvasMotion",
-          "label": "Canvas Motion Type",
-          "value": "slide",
-          "options": [
-            { "name": "Slide", "value": "slide" },
-            { "name": "Fade", "value": "fade" },
-            { "name": "None", "value": "none" }
-          ]
+          "name": "menu",
+          "label": "Navigation Links",
+          "description": "Add top-level links or a bulleted list for submenus."
         }
       ]
     }

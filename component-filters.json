@@ -140,6 +140,12 @@
     ]
   },
   {
+    "id": "list",
+    "components": [
+      "list-item"
+    ]
+  },
+  {
     "id": "quote-richtext",
     "components": [
       "richtext"

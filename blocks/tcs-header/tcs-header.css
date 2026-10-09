@@ -5,9 +5,16 @@
   height: 124px;
 }
 
+.tcs-header .tcs-nav-placeholder {
+  height: 124px;
+}
+
 .tcs-header .tcs-nav-wrapper {
-  position: relative;
-  z-index: 10;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  left: 0;
   width: 100%;
   background-color: #fff;
   border-bottom: 1px solid #e0e0e0;
@@ -58,6 +65,10 @@
   padding-bottom: 20px;
 }
 
+.tcs-header.variant-compact .tcs-nav-placeholder {
+  height: 80px;
+}
+
 .tcs-header.variant-compact .nav-brand-primary img {
   width: 112px;
   height: 28px;
@@ -72,6 +83,10 @@
     height: 64px;
   }
 
+  .tcs-header .tcs-nav-placeholder {
+    height: 64px;
+  }
+
   .tcs-header nav#tcs-nav {
     height: 64px;
     padding: 12px 20px;
@@ -81,6 +96,10 @@
     height: 56px;
     padding-top: 8px;
     padding-bottom: 8px;
+  }
+
+  .tcs-header.variant-compact .tcs-nav-placeholder {
+    height: 56px;
   }
 
   .tcs-header .nav-brand-primary img {
@@ -108,47 +127,49 @@
 }
 
 /* ==========================================================================
-   FLOATING BOTTOM DOCK WITH CANVAS SEARCH
+   PERMANENTLY FIXED FLOATING BOTTOM DOCK & CANVAS
    ========================================================================== */
+body > .tcs-header-dock-global {
+  position: static !important;
+  height: 160px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
 .tcs-header .navigation-dock-wrapper {
   overflow: visible !important;
 }
 
 .tcs-header .floating-bottom-dock {
   position: fixed !important;
-  z-index: 9999;
-  right: 0;
-  bottom: 0;
-  left: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  width: min(1280px, calc(100vw - 48px));
-  padding: 0 0 20px;
-  pointer-events: none;
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 99999 !important;
+  right: 0 !important;
+  bottom: 24px !important;
+  left: 50% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: min(1280px, calc(100vw - 48px)) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateX(-50%) translateY(0) !important;
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
 }
 
-/* Hidden state when scrolled over .tcs-canvas */
-.tcs-header .navigation-dock-wrapper.dock-hidden {
+.tcs-header .floating-bottom-dock.floating-disabled {
   opacity: 0 !important;
+  visibility: hidden !important;
   pointer-events: none !important;
-  transform: translateX(-50%) translateY(30px) !important;
+  transform: translateX(-50%) translateY(20px) !important;
 }
 
 .tcs-header .floating-bottom-dock::before {
-  position: absolute;
-  z-index: -1;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: min(48vh, 440px);
-  background: linear-gradient(180deg, rgb(255 255 255 / 0%) 0%, rgb(255 255 255 / 84%) 62%, #fff 100%);
-  content: '';
-  pointer-events: none;
+  display: none;
 }
 
 .tcs-header .dock-inner-wrapper {
@@ -165,17 +186,22 @@
 .tcs-header .dock-hamburger-btn {
   position: relative;
   display: inline-flex;
-  flex: 0 0 52px;
+  flex: 0 0 58px;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
+  width: 58px;
+  height: 58px;
   padding: 0;
-  border: 1.5px solid #4a4a4a;
+  border: 1px solid rgb(0 0 0 / 8%);
   border-radius: 50%;
-  background: #fff;
+  background: rgb(255 255 255 / 92%);
   cursor: pointer;
   box-shadow: 0 4px 12px rgb(0 0 0 / 5%);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.tcs-header .dock-hamburger-btn:hover {
+  transform: translateY(-1px);
 }
 
 .tcs-header .dock-hamburger-btn span,
@@ -186,6 +212,8 @@
   height: 2px;
   background: #4a4a4a;
   content: '';
+  border-radius: 99px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .tcs-header .dock-hamburger-btn span::before {
@@ -196,22 +224,40 @@
   transform: translateY(5px);
 }
 
+.tcs-header .dock-hamburger-btn.is-open {
+  background: rgb(255 255 255 / 96%);
+  border-color: rgb(0 0 0 / 10%);
+}
+
+.tcs-header .dock-hamburger-btn.is-open span {
+  background: transparent;
+}
+
+.tcs-header .dock-hamburger-btn.is-open span::before {
+  transform: rotate(45deg);
+}
+
+.tcs-header .dock-hamburger-btn.is-open span::after {
+  transform: rotate(-45deg);
+}
+
 /* Canvas Search Bar Shell */
 .tcs-header .dock-canvas-form {
   display: flex;
   align-items: center;
-  width: min(580px, calc(100vw - 100px));
-  height: 52px;
-  padding: 4px 6px 4px 24px;
-  border: 1.5px solid #4a4a4a;
-  border-radius: 28px;
-  background: #fff;
-  box-shadow: 0 4px 12px rgb(0 0 0 / 5%);
+  width: min(530px, calc(100vw - 90px));
+  height: 72px;
+  padding: 5px 7px 5px 22px;
+  border: 2px solid #555b62;
+  border-radius: 36px;
+  background: linear-gradient(110deg, #fff 0%, #f8f9fa 100%);
+  box-shadow: 0 3px 12px rgb(0 0 0 / 8%);
   box-sizing: border-box;
 }
 
 .tcs-header .dock-canvas-input {
   flex: 1;
+  min-width: 0;
   border: none;
   background: transparent;
   color: #202426;
@@ -220,22 +266,24 @@
 }
 
 .tcs-header .dock-canvas-input::placeholder {
-  color: #9aa0a6;
+  color: #a1a5aa;
+  opacity: 1;
 }
 
 /* Mic & Submit Action Buttons */
 .tcs-header .dock-canvas-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
 .tcs-header .dock-mic-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
   border: none;
   background: transparent;
   color: #3c4043;
@@ -244,17 +292,22 @@
 }
 
 .tcs-header .dock-mic-btn svg {
-  width: 20px;
-  height: 20px;
-  fill: currentcolor;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .tcs-header .dock-submit-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
   border: none;
   border-radius: 50%;
   background: #4878f6;
@@ -283,10 +336,19 @@
   overflow-x: auto;
   scrollbar-width: none;
   pointer-events: auto;
+  margin-top: 12px;
 }
 
 .tcs-header .dock-navigation::-webkit-scrollbar {
   display: none;
+}
+
+.tcs-header .dock-level-two-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 16px;
+  width: 100%;
 }
 
 .tcs-header .dock-list {
@@ -326,6 +388,12 @@
   border-color: #4b80f7;
   background: #4b80f7;
   color: #fff;
+}
+
+.tcs-header .dock-level-one .dock-pill-btn,
+.tcs-header .dock-level-two .dock-pill-btn {
+  border-radius: 999px;
+  padding-inline: 22px;
 }
 
 .tcs-header .dock-chevron-icon {
@@ -475,7 +543,8 @@
 
 @media (width <= 900px) {
   .tcs-header .floating-bottom-dock {
-    padding: 0 12px 12px;
+    bottom: 16px !important;
+    padding: 0 12px !important;
   }
 
   .tcs-header .dock-inner-wrapper {
@@ -483,8 +552,15 @@
   }
 
   .tcs-header .dock-canvas-form {
-    width: calc(100vw - 78px);
-    padding-left: 16px;
+    width: calc(100vw - 88px);
+    height: 62px;
+    padding-left: 18px;
+  }
+
+  .tcs-header .dock-hamburger-btn {
+    flex-basis: 52px;
+    width: 52px;
+    height: 52px;
   }
 
   .tcs-header .dock-megamenu-panel {

@@ -2740,6 +2740,19 @@
     ]
   },
   {
+    "id": "intro-statement",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Text",
+        "value": "",
+        "valueType": "string",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
     "id": "medium-list",
     "fields": [
       {

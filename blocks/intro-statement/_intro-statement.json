@@ -16,7 +16,21 @@
       }
     }
   ],
-  "models": [],
+  "models": [
+    {
+      "id": "intro-statement",
+      "fields": [
+        {
+          "component": "richtext",
+          "name": "text",
+          "label": "Text",
+          "value": "",
+          "valueType": "string",
+          "filter": "richtext"
+        }
+      ]
+    }
+  ],
   "filters": [
     {
       "id": "intro-statement",

@@ -72,7 +72,7 @@
           "component": "select",
           "name": "listType",
           "label": "List Types",
-          "value": "manual",
+          "value": "children-pages",
           "valueType": "string",
           "options": [
             {
@@ -94,74 +94,6 @@
           ]
         },
         {
-          "component": "aem-content",
-          "name": "parentPath",
-          "label": "Parent Path",
-          "valueType": "string",
-          "condition": {
-            "==": [
-              {
-                "var": "listType"
-              },
-              "tags"
-            ]
-          }
-        },
-        {
-          "component": "number",
-          "name": "childDepth",
-          "label": "Child Depth",
-          "value": 1,
-          "valueType": "number",
-          "condition": {
-            "==": [
-              {
-                "var": "listType"
-              },
-              "tags"
-            ]
-          }
-        },
-        {
-          "component": "aem-tag",
-          "name": "tags",
-          "label": "Tags",
-          "valueType": "string",
-          "condition": {
-            "==": [
-              {
-                "var": "listType"
-              },
-              "tags"
-            ]
-          }
-        },
-        {
-          "component": "select",
-          "name": "tagMatch",
-          "label": "Tags Match",
-          "value": "any",
-          "valueType": "string",
-          "options": [
-            {
-              "name": "Any Tag",
-              "value": "any"
-            },
-            {
-              "name": "All Tags",
-              "value": "all"
-            }
-          ],
-          "condition": {
-            "==": [
-              {
-                "var": "listType"
-              },
-              "tags"
-            ]
-          }
-        },
-        {
           "component": "boolean",
           "name": "personalization",
           "label": "Personalization",
@@ -180,7 +112,7 @@
               "value": "default"
             },
             {
-              "name": "Content Cards",
+              "name": "Card",
               "value": "card"
             },
             {

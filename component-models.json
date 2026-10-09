@@ -3446,7 +3446,7 @@
     ]
   },
   {
-    "id": "statistics-list-text",
+    "id": "statistics-list",
     "fields": [
       {
         "component": "richtext",

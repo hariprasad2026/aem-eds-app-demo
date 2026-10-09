@@ -17,21 +17,6 @@
       }
     },
     {
-      "title": "Text",
-      "id": "statistics-list-text",
-      "plugins": {
-        "xwalk": {
-          "page": {
-            "resourceType": "core/franklin/components/block/v1/block/item",
-            "template": {
-              "name": "Text",
-              "model": "text"
-            }
-          }
-        }
-      }
-    },
-    {
       "title": "Statistic",
       "id": "statistics-list-item",
       "plugins": {
@@ -49,7 +34,7 @@
   ],
   "models": [
     {
-      "id": "statistics-list-text",
+      "id": "statistics-list",
       "fields": [
         {
           "component": "richtext",
@@ -84,11 +69,7 @@
   "filters": [
     {
       "id": "statistics-list",
-      "components": ["statistics-list-item","statistics-list-text"]
-    },
-    {
-      "id": "statistics-list-text",
-      "components": ["text"]
+      "components": ["statistics-list-item","text"]
     }
   ]
 }

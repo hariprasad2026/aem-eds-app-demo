@@ -965,21 +965,6 @@
           }
         },
         {
-          "title": "List Item",
-          "id": "list-item",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "List Item",
-                  "model": "list-item"
-                }
-              }
-            }
-          }
-        },
-        {
           "title": "Medium List",
           "id": "medium-list",
           "plugins": {

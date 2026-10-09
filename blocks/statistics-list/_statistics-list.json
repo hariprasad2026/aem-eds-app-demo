@@ -37,12 +37,12 @@
       "id": "statistics-list",
       "fields": [
         {
-          "component": "text",
+          "component": "richtext",
           "name": "text",
           "label": "Text",
           "value": "",
           "valueType": "string",
-          "filter": "richtext"
+          "filter": "text"
         }
       ]
     },

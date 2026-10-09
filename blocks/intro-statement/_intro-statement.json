@@ -17,5 +17,10 @@
     }
   ],
   "models": [],
-  "filters": []
+  "filters": [
+    {
+      "id": "intro-statement",
+      "component": ["text"]
+    }
+  ]
 }

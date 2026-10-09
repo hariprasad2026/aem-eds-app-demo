@@ -126,7 +126,7 @@ function buildHeader(config) {
   }
 
   if (!config.ctaLabel) {
-    topRow.classList.add('list-header-top--no-cta');
+    topRow.classList.add('list-header-top-no-cta');
   }
 
   if (topRow.childElementCount) {

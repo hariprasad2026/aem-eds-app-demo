@@ -144,7 +144,10 @@ function matchesParentAndDepth(itemPath, parentPath, childDepth) {
     : normalizedParentPath.replace(/^\//, '').split('/').filter(Boolean);
   const itemSegments = normalizedItemPath.replace(/^\//, '').split('/').filter(Boolean);
 
-  if (parentSegments.length && parentSegments.some((segment, index) => segment !== itemSegments[index])) {
+  const hasParentMismatch = parentSegments.some(
+    (segment, index) => segment !== itemSegments[index],
+  );
+  if (parentSegments.length && hasParentMismatch) {
     return false;
   }
 
@@ -612,4 +615,3 @@ export default async function decorate(block) {
 
   block.append(rendered);
 }
-

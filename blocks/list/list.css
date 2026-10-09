@@ -130,6 +130,10 @@
   padding: clamp(1rem, 2vw, 1.5rem);
 }
 
+.list-item-title {
+  margin: 0;
+}
+
 .list-item-hero .list-item-image {
   margin-bottom: 0.25rem;
 }
@@ -157,10 +161,6 @@
   inline-size: 100%;
   block-size: auto;
   border-radius: var(--radius-sm, 0.5rem);
-}
-
-.list-item-title {
-  margin: 0;
 }
 
 .list-item-eyebrow,

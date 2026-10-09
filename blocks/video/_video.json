@@ -28,24 +28,6 @@
           "label": "Video"
         },
         {
-          "component": "multiselect",
-          "name": "classes",
-          "value": "",
-          "label": "Options",
-          "valueType": "string",
-          "options": [
-            {
-              "name": "Auto Play",
-              "children": [
-                {
-                  "name": "AutoPlay",
-                  "value": "autoplay"
-                }
-              ]
-            }
-          ]
-        },
-        {
           "component": "reference",
           "valueType": "string",
           "name": "placeholder_image",
@@ -58,6 +40,41 @@
           "name": "placeholder_imageAlt",
           "value": "",
           "label": "Placeholder Image Alt Text"
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "autoplay",
+          "label": "Autoplay",
+          "value": false
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "loop",
+          "label": "Play in Loop",
+          "value": false
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "controls",
+          "label": "Show Controls",
+          "value": true
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "muted",
+          "label": "Muted",
+          "value": false
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "centerPlayButton",
+          "label": "Play Button in Center",
+          "value": false
         }
       ]
     }

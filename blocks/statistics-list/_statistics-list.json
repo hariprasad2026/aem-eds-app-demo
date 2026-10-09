@@ -10,7 +10,7 @@
             "template": {
               "name": "Statistics List",
               "model": "statistics-list",
-              "filter": ["statistics-list", "richtext"]
+              "filter": "statistics-list"
             }
           }
         }

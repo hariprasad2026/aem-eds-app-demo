@@ -62,9 +62,48 @@
           "valueType": "string"
         },
         {
+          "component": "number",
+          "name": "maximumItems",
+          "label": "Maximum Items",
+          "value": 8,
+          "valueType": "number"
+        },
+        {
           "component": "select",
           "name": "listType",
           "label": "List Types",
+          "value": "children-pages",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Children Pages",
+              "value": "children-pages"
+            },
+            {
+              "name": "Fixed List",
+              "value": "fixed-list"
+            },
+            {
+              "name": "Tags",
+              "value": "tags"
+            },
+            {
+              "name": "Manual",
+              "value": "manual"
+            }
+          ]
+        },
+        {
+          "component": "boolean",
+          "name": "personalization",
+          "label": "Personalization",
+          "value": false,
+          "valueType": "boolean"
+        },
+        {
+          "component": "select",
+          "name": "displayType",
+          "label": "Display Type",
           "value": "default",
           "valueType": "string",
           "options": [
@@ -87,76 +126,39 @@
           ]
         },
         {
-          "component": "select",
-          "name": "showSection",
-          "label": "Show Section",
-          "value": "true",
-          "valueType": "string",
-          "options": [
-            {
-              "name": "Yes",
-              "value": "true"
-            },
-            {
-              "name": "No",
-              "value": "false"
-            }
-          ]
-        },
-        {
-          "component": "select",
+          "component": "boolean",
           "name": "showEyebrow",
           "label": "Show Eyebrow",
-          "value": "false",
-          "valueType": "string",
-          "options": [
-            { "name": "Yes", "value": "true" },
-            { "name": "No", "value": "false" }
-          ]
+          "value": false,
+          "valueType": "boolean"
         },
         {
-          "component": "select",
+          "component": "boolean",
           "name": "showTitle",
           "label": "Show Title",
-          "value": "true",
-          "valueType": "string",
-          "options": [
-            { "name": "Yes", "value": "true" },
-            { "name": "No", "value": "false" }
-          ]
+          "value": true,
+          "valueType": "boolean"
         },
         {
-          "component": "select",
+          "component": "boolean",
           "name": "showDescription",
           "label": "Show Description",
-          "value": "false",
-          "valueType": "string",
-          "options": [
-            { "name": "Yes", "value": "true" },
-            { "name": "No", "value": "false" }
-          ]
+          "value": false,
+          "valueType": "boolean"
         },
         {
-          "component": "select",
+          "component": "boolean",
           "name": "showImage",
           "label": "Show Image",
-          "value": "true",
-          "valueType": "string",
-          "options": [
-            { "name": "Yes", "value": "true" },
-            { "name": "No", "value": "false" }
-          ]
+          "value": true,
+          "valueType": "boolean"
         },
         {
-          "component": "select",
+          "component": "boolean",
           "name": "showDate",
           "label": "Show Date",
-          "value": "false",
-          "valueType": "string",
-          "options": [
-            { "name": "Yes", "value": "true" },
-            { "name": "No", "value": "false" }
-          ]
+          "value": false,
+          "valueType": "boolean"
         },
         {
           "component": "select",
@@ -180,48 +182,32 @@
           ]
         },
         {
-          "component": "select",
+          "component": "boolean",
           "name": "displayTags",
           "label": "Display Tags",
-          "value": "true",
-          "valueType": "string",
-          "options": [
-            { "name": "Yes", "value": "true" },
-            { "name": "No", "value": "false" }
-          ]
+          "value": true,
+          "valueType": "boolean"
         },
         {
-          "component": "select",
+          "component": "boolean",
           "name": "authorDetails",
           "label": "Author Details",
-          "value": "false",
-          "valueType": "string",
-          "options": [
-            { "name": "Yes", "value": "true" },
-            { "name": "No", "value": "false" }
-          ]
+          "value": false,
+          "valueType": "boolean"
         },
         {
-          "component": "select",
+          "component": "boolean",
           "name": "showIcon",
           "label": "Show Icon",
-          "value": "false",
-          "valueType": "string",
-          "options": [
-            { "name": "Yes", "value": "true" },
-            { "name": "No", "value": "false" }
-          ]
+          "value": false,
+          "valueType": "boolean"
         },
         {
-          "component": "select",
+          "component": "boolean",
           "name": "linkItem",
           "label": "Link Item",
-          "value": "false",
-          "valueType": "string",
-          "options": [
-            { "name": "Yes", "value": "true" },
-            { "name": "No", "value": "false" }
-          ]
+          "value": false,
+          "valueType": "boolean"
         },
         {
           "component": "select",

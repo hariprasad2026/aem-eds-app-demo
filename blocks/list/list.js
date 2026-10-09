@@ -6,7 +6,6 @@ const CONFIG_FIELDS = new Set([
   'ctalabel',
   'ctalink',
   'listtype',
-  'showsection',
   'showeyebrow',
   'showtitle',
   'showdescription',
@@ -86,11 +85,37 @@ function buildHeader(config) {
   const header = document.createElement('header');
   header.className = 'list-header';
 
+  const topRow = document.createElement('div');
+  topRow.className = 'list-header-top';
+
   if (config.title) {
     const heading = document.createElement('h2');
     heading.className = 'list-heading';
     heading.textContent = config.title;
-    header.append(heading);
+    topRow.append(heading);
+  }
+
+  if (config.ctaLabel && config.ctaLink) {
+    const cta = document.createElement('a');
+    cta.className = 'list-cta';
+    cta.href = config.ctaLink;
+    cta.setAttribute('aria-label', config.ctaLabel);
+
+    const ctaLabel = document.createElement('span');
+    ctaLabel.className = 'list-cta-label';
+    ctaLabel.textContent = config.ctaLabel;
+
+    const ctaArrow = document.createElement('span');
+    ctaArrow.className = 'list-cta-arrow';
+    ctaArrow.setAttribute('aria-hidden', 'true');
+    ctaArrow.textContent = '→';
+
+    cta.append(ctaLabel, ctaArrow);
+    topRow.append(cta);
+  }
+
+  if (topRow.childElementCount) {
+    header.append(topRow);
   }
 
   if (config.description) {
@@ -98,14 +123,6 @@ function buildHeader(config) {
     description.className = 'list-description';
     description.innerHTML = config.description;
     header.append(description);
-  }
-
-  if (config.ctaLabel && config.ctaLink) {
-    const cta = document.createElement('a');
-    cta.className = 'list-cta';
-    cta.href = config.ctaLink;
-    cta.textContent = config.ctaLabel;
-    header.append(cta);
   }
 
   return header;
@@ -332,7 +349,6 @@ function parseConfigRows(block) {
     ctaLabel: config.ctalabel || '',
     ctaLink: config.ctalink || '',
     listType: config.listtype || 'default',
-    showSection: parseBoolean(config.showsection, true),
     showEyebrow: parseBoolean(config.showeyebrow, false),
     showTitle: parseBoolean(config.showtitle, true),
     showDescription: parseBoolean(config.showdescription, false),
@@ -379,11 +395,7 @@ export default function decorate(block) {
 
   block.textContent = '';
   block.classList.add('list', `list-theme-${config.cardsColor}`);
-  block.classList.toggle('is-section-hidden', !config.showSection);
-
-  if (config.showSection) {
-    block.append(buildHeader(config));
-  }
+  block.append(buildHeader(config));
 
   let rendered;
   if (config.listType === 'card') {

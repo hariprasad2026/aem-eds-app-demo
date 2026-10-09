@@ -47,6 +47,11 @@ function readValue(cell) {
   return cell.textContent.trim();
 }
 
+function readText(cell) {
+  if (!cell) return '';
+  return cell.textContent.trim();
+}
+
 function parseBoolean(value, fallback = false) {
   if (value === undefined || value === null || value === '') return fallback;
   const normalized = String(value).trim().toLowerCase();
@@ -95,11 +100,17 @@ function buildHeader(config) {
     topRow.append(heading);
   }
 
-  if (config.ctaLabel && config.ctaLink) {
-    const cta = document.createElement('a');
+  if (config.ctaLabel) {
+    const cta = config.ctaLink
+      ? document.createElement('a')
+      : document.createElement('span');
     cta.className = 'list-cta';
-    cta.href = config.ctaLink;
-    cta.setAttribute('aria-label', config.ctaLabel);
+    if (cta.tagName === 'A') {
+      cta.href = config.ctaLink;
+      cta.setAttribute('aria-label', config.ctaLabel);
+    } else {
+      cta.classList.add('list-cta-static');
+    }
 
     const ctaLabel = document.createElement('span');
     ctaLabel.className = 'list-cta-label';
@@ -112,6 +123,10 @@ function buildHeader(config) {
 
     cta.append(ctaLabel, ctaArrow);
     topRow.append(cta);
+  }
+
+  if (!config.ctaLabel) {
+    topRow.classList.add('list-header-top--no-cta');
   }
 
   if (topRow.childElementCount) {
@@ -329,7 +344,15 @@ function parseConfigRows(block) {
   [...block.querySelectorAll('[data-aue-prop]')].forEach((element) => {
     const prop = normalize(element.dataset.aueProp);
     if (CONFIG_FIELDS.has(prop)) {
-      config[prop] = readValue(element);
+      if (prop === 'ctalabel') {
+        config[prop] = readText(element);
+        const ctaAnchor = element.querySelector('a[href]');
+        if (ctaAnchor && !config.ctalink) {
+          config.ctalink = ctaAnchor.getAttribute('href') || ctaAnchor.href;
+        }
+      } else {
+        config[prop] = readValue(element);
+      }
     }
   });
 
@@ -339,7 +362,15 @@ function parseConfigRows(block) {
 
     const key = normalize(cells[0].textContent);
     if (CONFIG_FIELDS.has(key) && !config[key]) {
-      config[key] = readValue(cells[1]);
+      if (key === 'ctalabel') {
+        config[key] = readText(cells[1]);
+        const ctaAnchor = cells[1].querySelector('a[href]');
+        if (ctaAnchor && !config.ctalink) {
+          config.ctalink = ctaAnchor.getAttribute('href') || ctaAnchor.href;
+        }
+      } else {
+        config[key] = readValue(cells[1]);
+      }
     }
   });
 

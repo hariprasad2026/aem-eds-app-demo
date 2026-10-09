@@ -3646,11 +3646,12 @@
     "id": "statistics-list-item",
     "fields": [
       {
-        "component": "text",
+        "component": "richtext",
         "name": "title",
         "label": "Title",
         "value": "",
-        "valueType": "string"
+        "valueType": "string",
+        "filter": "richtext"
       },
       {
         "component": "text",

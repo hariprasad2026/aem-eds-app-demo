@@ -10,7 +10,8 @@
             "template": {
               "model": "title",
               "titleType": "h2",
-              "titleVariant": "default"
+              "titleVariant": "default",
+              "titleColor": "black"
             }
           }
         }
@@ -78,6 +79,26 @@
             {
               "name": "Background image",
               "value": "image-background"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "titleColor",
+          "label": "Title Color",
+          "value": "black",
+          "options": [
+            {
+              "name": "White",
+              "value": "white"
+            },
+            {
+              "name": "Black",
+              "value": "black"
+            },
+            {
+              "name": "Blue",
+              "value": "blue"
             }
           ]
         },

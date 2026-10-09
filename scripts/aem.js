@@ -638,7 +638,7 @@ function decorateBlocks(main) {
 // }
 
 async function loadHeader(header) {
-  const resp = await fetch('/blocks/tcs-header.plain.html');
+  const resp = await fetch('/content/aem-eds-xwalk/blocks/tcs-header.plain.html');
 
   if (!resp.ok) {
     return;

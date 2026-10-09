@@ -1,11 +1,15 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
+import { getAEMPublish } from '../../scripts/endpointconfig.js';
 
 const CONFIG_FIELDS = new Set([
   'title',
   'description',
   'ctalabel',
   'ctalink',
+  'maximumitems',
   'listtype',
+  'displaytype',
+  'personalization',
   'parentpath',
   'childdepth',
   'tags',
@@ -24,6 +28,9 @@ const CONFIG_FIELDS = new Set([
   'orderby',
   'sortorder',
 ]);
+
+const RENDERED_SELECTOR = ':scope > .list-rendered';
+const HERO_CARD_LIMIT = 5;
 
 const LIST_ITEM_ORDER = [
   'itemEyebrow',
@@ -107,6 +114,8 @@ function readItemTags(item) {
   const tagSources = [
     item.tags,
     item.tag,
+    item.storyTags,
+    item['story-tags'],
     item.cqTags,
     item.cqtags,
     item['cq:tags'],
@@ -124,8 +133,14 @@ function extractItems(payload) {
 }
 
 async function fetchQueryIndex() {
+  const configuredOrigin = getAEMPublish();
+  const codeOrigin = new URL(import.meta.url).origin;
+  const host = configuredOrigin.includes('.adobeaemcloud.com')
+    ? codeOrigin
+    : configuredOrigin;
+
   try {
-    const response = await fetch('/query-index.json');
+    const response = await fetch(new URL('/query-index.json', host));
     if (!response.ok) return [];
     const data = await response.json();
     return extractItems(data);
@@ -159,7 +174,7 @@ function matchesParentAndDepth(itemPath, parentPath, childDepth) {
 
 function mapQueryItemToListItem(item) {
   const itemTags = readItemTags(item);
-  const primaryTag = itemTags[0] ? stripNamespace(itemTags[0]) : '';
+  const primaryTag = item.pageType || item['page-type'] || (itemTags[0] ? stripNamespace(itemTags[0]) : '');
   const rawDate = item.publishDate || item.date || item.lastModified || '';
   let resolvedDate = rawDate;
   if (typeof rawDate === 'number' || /^\d+(\.\d+)?$/.test(String(rawDate).trim())) {
@@ -168,18 +183,62 @@ function mapQueryItemToListItem(item) {
     resolvedDate = new Date(timestamp).toISOString();
   }
 
+  const image = item.image
+    || item.thumbnail
+    || item['image-path']
+    || item.imagePath
+    || item['icon-image']
+    || item.iconImage
+    || item.heroImage
+    || '';
+  const imageAlt = item.imageAlt
+    || item['image-alt']
+    || item.imageAltText
+    || item['icon-alt-text']
+    || item.iconAltText
+    || item.title
+    || '';
+  const description = item.description
+    || item['jcr:description']
+    || item.excerpt
+    || item['story-description']
+    || item.storyDescription
+    || '';
+  const title = item.title
+    || item['page-title']
+    || item.pageTitle
+    || item['story-title']
+    || item.storyTitle
+    || item['jcr:title']
+    || item.name
+    || '';
+  const linkText = item.storyLinkTitle
+    || item['story-link-title']
+    || item.linkText
+    || '';
+
   return {
     itemEyebrow: (item.category || primaryTag || '').toUpperCase(),
-    itemTitle: item.title || item.name || '',
-    itemDescription: item.description || item.excerpt || '',
-    itemImage: item.image || item.thumbnail || '',
-    itemImageAlt: item.imageAlt || item.title || '',
+    itemTitle: title,
+    itemDescription: description,
+    itemImage: image,
+    itemImageAlt: imageAlt,
     itemDate: resolvedDate,
     itemTags: itemTags.map(stripNamespace).join(', '),
-    itemAuthor: item.author || item.byline || '',
-    itemIcon: '',
+    itemAuthor: item.author || item.byline || item.authorName || '',
+    itemIcon: item.icon || item['icon-image'] || item.iconImage || '',
     itemLink: normalizePath(item.path || '#'),
+    itemLinkText: linkText,
   };
+}
+
+async function resolveChildrenPageItems(config) {
+  const items = await fetchQueryIndex();
+  const parentPath = config.parentPath || window.location.pathname;
+
+  return items
+    .filter((item) => matchesParentAndDepth(item.path, parentPath, config.childDepth))
+    .map((item) => mapQueryItemToListItem(item));
 }
 
 async function resolveTagBasedItems(config) {
@@ -210,6 +269,21 @@ async function resolveTagBasedItems(config) {
       return selectedTags.some(matchesTag);
     })
     .map((item) => mapQueryItemToListItem(item));
+}
+
+function ensureStore(block) {
+  let ueStore = block.querySelector(':scope > .list-ue-store');
+  if (ueStore) return ueStore;
+
+  ueStore = document.createElement('div');
+  ueStore.className = 'list-ue-store';
+  ueStore.hidden = true;
+
+  while (block.firstElementChild) {
+    ueStore.append(block.firstElementChild);
+  }
+
+  return ueStore;
 }
 
 function createImageFromSource(source, altText) {
@@ -378,10 +452,11 @@ function createCardItem(item, config) {
     cardRoot.append(optimizedPicture);
   }
 
-  if (config.showIcon && item.itemIcon instanceof Element) {
+  const icon = createImageFromSource(item.itemIcon, item.itemTitle || '');
+  if (config.showIcon && icon) {
     const iconWrap = document.createElement('span');
     iconWrap.className = 'list-item-icon';
-    iconWrap.append(item.itemIcon.cloneNode(true));
+    iconWrap.append(icon instanceof Element ? icon.cloneNode(true) : icon);
     cardRoot.append(iconWrap);
   }
 
@@ -391,7 +466,7 @@ function createCardItem(item, config) {
     const inlineLink = document.createElement('a');
     inlineLink.className = 'list-item-link';
     inlineLink.href = item.itemLink;
-    inlineLink.textContent = 'Learn more';
+    inlineLink.textContent = item.itemLinkText || 'Learn more';
     cardRoot.append(inlineLink);
   }
 
@@ -420,6 +495,10 @@ function renderCards(items, config) {
 }
 
 function renderHeroCards(items, config) {
+  if (items.length < HERO_CARD_LIMIT) {
+    return renderCards(items, config);
+  }
+
   const wrapper = document.createElement('div');
   wrapper.className = 'list-hero-layout';
   if (!items.length) return wrapper;
@@ -427,13 +506,20 @@ function renderHeroCards(items, config) {
   const [hero, ...rest] = items;
   const heroList = document.createElement('ul');
   heroList.className = 'list-hero';
-  heroList.append(createCardItem(hero, config));
+  const heroItem = createCardItem(hero, {
+    ...config,
+    showImage: true,
+    showDescription: true,
+  });
+  heroItem.classList.add('list-item-hero');
+  heroItem.firstElementChild?.classList.add('list-card-hero');
+  heroList.append(heroItem);
   wrapper.append(heroList);
 
   if (rest.length) {
     const grid = document.createElement('ul');
-    grid.className = 'list-cards';
-    rest.forEach((item) => grid.append(createCardItem(item, config)));
+    grid.className = 'list-cards list-cards-secondary';
+    rest.slice(0, HERO_CARD_LIMIT - 1).forEach((item) => grid.append(createCardItem(item, config)));
     wrapper.append(grid);
   }
 
@@ -446,7 +532,7 @@ function renderTable(items, config) {
 
   const thead = document.createElement('thead');
   const headRow = document.createElement('tr');
-  ['Title', 'Description', 'Date', 'Tags', 'Author'].forEach((label) => {
+  ['No.', 'Title', 'Description', 'Link'].forEach((label) => {
     const th = document.createElement('th');
     th.scope = 'col';
     th.textContent = label;
@@ -455,8 +541,12 @@ function renderTable(items, config) {
   thead.append(headRow);
 
   const tbody = document.createElement('tbody');
-  items.forEach((item) => {
+  items.forEach((item, index) => {
     const row = document.createElement('tr');
+
+    const indexCell = document.createElement('td');
+    indexCell.textContent = String(index + 1).padStart(2, '0');
+
     const titleCell = document.createElement('td');
     if (item.itemLink) {
       const link = document.createElement('a');
@@ -467,19 +557,27 @@ function renderTable(items, config) {
       titleCell.textContent = item.itemTitle || 'Untitled';
     }
 
+    if (config.showEyebrow && item.itemEyebrow) {
+      const eyebrow = document.createElement('p');
+      eyebrow.className = 'list-table-eyebrow';
+      eyebrow.textContent = item.itemEyebrow;
+      titleCell.prepend(eyebrow);
+    }
+
     const descriptionCell = document.createElement('td');
-    descriptionCell.textContent = config.showDescription ? item.itemDescription || '' : '';
+    descriptionCell.textContent = item.itemDescription || '';
 
-    const dateCell = document.createElement('td');
-    dateCell.textContent = config.showDate ? formatDate(item.itemDate, config.dateFormat) : '';
+    const linkCell = document.createElement('td');
+    if (item.itemLink) {
+      const link = document.createElement('a');
+      link.href = item.itemLink;
+      link.className = 'list-table-link';
+      link.textContent = item.itemLinkText || 'Learn more';
+      link.setAttribute('aria-label', item.itemTitle || 'Learn more');
+      linkCell.append(link);
+    }
 
-    const tagsCell = document.createElement('td');
-    tagsCell.textContent = config.displayTags ? item.itemTags || '' : '';
-
-    const authorCell = document.createElement('td');
-    authorCell.textContent = config.authorDetails ? item.itemAuthor || '' : '';
-
-    row.append(titleCell, descriptionCell, dateCell, tagsCell, authorCell);
+    row.append(indexCell, titleCell, descriptionCell, linkCell);
     tbody.append(row);
   });
 
@@ -543,7 +641,10 @@ function parseConfigRows(block) {
     description: config.description || '',
     ctaLabel: config.ctalabel || '',
     ctaLink: config.ctalink || '',
+    maximumItems: parseNumber(config.maximumitems, 8),
     listType: config.listtype || 'manual',
+    displayType: config.displaytype || 'default',
+    personalization: parseBoolean(config.personalization, false),
     parentPath: config.parentpath || '/',
     childDepth: parseNumber(config.childdepth, 1),
     tags: config.tags || '',
@@ -589,18 +690,25 @@ function parseItems(block) {
 }
 
 export default async function decorate(block) {
-  const config = parseConfigRows(block);
+  const ueStore = ensureStore(block);
+  block.querySelector(RENDERED_SELECTOR)?.remove();
 
-  let items = parseItems(block);
-  if (config.listType === 'tags') {
+  const config = parseConfigRows(ueStore);
+
+  let items = parseItems(ueStore);
+  if (config.listType === 'children-pages') {
+    items = await resolveChildrenPageItems(config);
+  } else if (config.listType === 'tags') {
     items = await resolveTagBasedItems(config);
   }
 
-  const sortedItems = sortItems(items, config);
+  const sortedItems = sortItems(items, config)
+    .slice(0, config.maximumItems > 0 ? config.maximumItems : undefined);
 
-  block.textContent = '';
   block.classList.add('list', `list-theme-${config.cardsColor}`);
-  block.append(buildHeader(config));
+  const renderedRoot = document.createElement('div');
+  renderedRoot.className = 'list-rendered';
+  renderedRoot.append(buildHeader(config));
 
   let rendered;
   if (config.displayType === 'card' || config.displayType === 'content-card') {
@@ -613,5 +721,6 @@ export default async function decorate(block) {
     rendered = renderDefault(sortedItems, config);
   }
 
-  block.append(rendered);
+  renderedRoot.append(rendered);
+  block.append(ueStore, renderedRoot);
 }

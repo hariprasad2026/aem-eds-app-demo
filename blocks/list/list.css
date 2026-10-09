@@ -3,6 +3,15 @@
   gap: var(--spacing-xl, 2rem);
 }
 
+.list-ue-store {
+  display: none;
+}
+
+.list-rendered {
+  display: grid;
+  gap: var(--spacing-xl, 2rem);
+}
+
 .list-header {
   display: grid;
   gap: var(--spacing-s, 0.75rem);
@@ -117,6 +126,18 @@
   block-size: 100%;
 }
 
+.list-card-hero {
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+.list-item-hero .list-item-image {
+  margin-bottom: 0.25rem;
+}
+
+.list-item-hero .list-item-title {
+  font-size: clamp(1.5rem, 2vw, 2rem);
+}
+
 .list-theme-blue .list-card {
   background: color-mix(in srgb, var(--color-brand-primary, #2f6ce5) 12%, white);
 }
@@ -163,6 +184,13 @@
   gap: var(--spacing-m, 1rem);
 }
 
+.list-hero,
+.list-cards-secondary {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .list-hero .list-card {
   min-block-size: 16rem;
 }
@@ -189,6 +217,17 @@
   vertical-align: top;
 }
 
+.list-table-eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.list-table-link {
+  font-weight: 600;
+}
+
 @media (width >= 600px) {
   .list-cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -212,7 +251,20 @@
   }
 
   .list-hero-layout {
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    align-items: start;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .list-cards-secondary {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .list-item-hero .list-card-hero {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .list-item-hero .list-item-image {
+    margin: 0;
   }
 }

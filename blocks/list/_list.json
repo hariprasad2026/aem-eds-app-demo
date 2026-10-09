@@ -69,6 +69,20 @@
           "valueType": "number"
         },
         {
+          "component": "text",
+          "name": "parentPath",
+          "label": "Parent Path",
+          "description": "Optional parent page path for children pages or tag-scoped lists.",
+          "valueType": "string"
+        },
+        {
+          "component": "number",
+          "name": "childDepth",
+          "label": "Child Depth",
+          "value": 1,
+          "valueType": "number"
+        },
+        {
           "component": "select",
           "name": "listType",
           "label": "List Types",
@@ -90,6 +104,30 @@
             {
               "name": "Manual",
               "value": "manual"
+            }
+          ]
+        },
+        {
+          "component": "text",
+          "name": "tags",
+          "label": "Metadata Tags",
+          "description": "Comma-separated tag names to match against content page metadata.",
+          "valueType": "string"
+        },
+        {
+          "component": "select",
+          "name": "tagMatch",
+          "label": "Tag Match",
+          "value": "any",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Match Any",
+              "value": "any"
+            },
+            {
+              "name": "Match All",
+              "value": "all"
             }
           ]
         },

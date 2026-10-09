@@ -2619,15 +2619,15 @@
         "options": [
           {
             "name": "Left",
-            "value": "hero-button-left"
+            "value": "hero-content-left"
           },
           {
             "name": "Center",
-            "value": "hero-button-center"
+            "value": "hero-content-center"
           },
           {
             "name": "Right",
-            "value": "hero-button-right"
+            "value": "hero-content-right"
           }
         ]
       }
@@ -3671,8 +3671,8 @@
       {
         "component": "select",
         "valueType": "string",
-        "name": "classes",
-        "label": "Variation",
+        "name": "variations",
+        "label": "Variations",
         "value": "",
         "options": [
           {
@@ -3680,20 +3680,8 @@
             "value": ""
           },
           {
-            "name": "Compact",
-            "value": "compact"
-          },
-          {
-            "name": "No Description",
-            "value": "no-description"
-          },
-          {
-            "name": "Dark Theme",
+            "name": "Black Theme",
             "value": "dark"
-          },
-          {
-            "name": "Featured Industry",
-            "value": "featured-industry"
           },
           {
             "name": "No Number",
@@ -3702,8 +3690,110 @@
           {
             "name": "Description First",
             "value": "description-first"
+          },
+          {
+            "name": "Title Right",
+            "value": "title-right"
           }
         ]
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "maxCards",
+        "label": "Maximum Cards",
+        "description": "Display between 1 and 4 cards.",
+        "value": 4,
+        "validation": {
+          "numberMin": 1,
+          "numberMax": 4,
+          "customErrorMsg": "Maximum Cards must be between 1 and 4."
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showTags",
+        "label": "Show Tags",
+        "description": "Display each card's tags above its description in the Title Right variation.",
+        "value": false
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "view",
+        "label": "View",
+        "value": "list",
+        "options": [
+          {
+            "name": "List",
+            "value": "list"
+          },
+          {
+            "name": "Table",
+            "value": "table"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "cardColor",
+        "label": "Card Color",
+        "value": "white",
+        "options": [
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "display",
+        "label": "Display",
+        "value": "title-description",
+        "options": [
+          {
+            "name": "Title and Description",
+            "value": "title-description"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "viewAllTitle",
+        "label": "View All Title",
+        "value": "View all"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "viewAllLink",
+        "label": "View All Link",
+        "description": "Destination URL for the header CTA.",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "motionType",
+        "label": "Motion Type",
+        "value": "none",
+        "options": []
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "listTitle",
+        "label": "List Title",
+        "value": "Our transformation solutions"
       }
     ]
   },
@@ -3722,9 +3812,8 @@
         "valueType": "string",
         "name": "exploreLink",
         "label": "Explore All Link",
-        "description": "Add a linked 'See all Products & Platforms' label. The arrow is added automatically.",
-        "value": "",
-        "filter": "richtext"
+        "description": "Legacy header link. The parent View All settings take precedence when configured.",
+        "value": ""
       }
     ]
   },
@@ -3736,7 +3825,7 @@
         "valueType": "string",
         "name": "number",
         "label": "Number",
-        "description": "Optional. Leave blank to number cards automatically as 01, 02, 03, etc.",
+        "description": "Optional. Leave blank to number cards automatically.",
         "value": ""
       },
       {
@@ -3744,8 +3833,7 @@
         "valueType": "string",
         "name": "title",
         "label": "Title",
-        "value": "TwinX",
-        "filter": "richtext"
+        "value": "TwinX"
       },
       {
         "component": "text",
@@ -3755,13 +3843,28 @@
         "value": "Risk free business experimentation and decision making"
       },
       {
-        "component": "richtext",
+        "component": "aem-content",
         "valueType": "string",
         "name": "link",
-        "label": "Card Link",
-        "description": "Add a link to the destination. The card uses the title as its accessible link label; the arrow is added automatically.",
-        "value": "",
-        "filter": "richtext"
+        "label": "Page Reference",
+        "description": "Destination page path for the card.",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tag1",
+        "label": "Tag 1",
+        "description": "Optional. Displayed above the description when Show Tags is enabled.",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tag2",
+        "label": "Tag 2",
+        "description": "Optional second tag displayed above the description.",
+        "value": ""
       }
     ]
   },

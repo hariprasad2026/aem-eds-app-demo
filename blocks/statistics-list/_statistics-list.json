@@ -10,7 +10,7 @@
             "template": {
               "name": "Statistics List",
               "model": "statistics-list",
-              "filter": "richtext"
+              "filter": ["statistics-list", "richtext"]
             }
           }
         }
@@ -27,8 +27,7 @@
               "name": "Statistic",
               "model": "statistics-list-item",
               "title": "Title",
-              "value": "Value",
-              "filter": "richtext"
+              "value": "Value"
             }
           }
         }

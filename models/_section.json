@@ -71,7 +71,6 @@
         "intro-statement",
         "medium-list",
         "modal-v1",
-        "quote",
         "quotes",
         "search",
         "spotlight",
@@ -82,7 +81,8 @@
         "title-with-column",
         "tabs-new",
         "teaser-v2",
-        "text-with-link"
+        "text-with-link",
+        "video"
       ]
     }
   ]

@@ -264,9 +264,10 @@
 }
 
 /* Remove separator below the final CTA */
-.teaser-v1 .teaser-ctas .teaser-cta-list:last-child {
+
+/* .teaser-v1 .teaser-ctas .teaser-cta-list:last-child {
   border-bottom: 0;
-}
+} */
 
 /* Default text link */
 

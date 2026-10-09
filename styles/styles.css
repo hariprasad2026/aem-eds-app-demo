@@ -12,10 +12,10 @@
 
 :root {
   /* breakpoints */
-  --breakpoint-mobile: 320px;
-  --breakpoint-tablet: 700px;
-  --breakpoint-desktop: 1200px;
-  --breakpoint-max: 1920px;
+  --breakpoint-mobile: 20rem;
+  --breakpoint-tablet: 43.75rem;
+  --breakpoint-desktop: 75rem;
+  --breakpoint-max: 120rem;
 
   /* color primitives */
   --color-white: #fff;
@@ -72,70 +72,70 @@
   --font-weight-bold: 700;
 
   /* display scale (mobile) */
-  --display-1-size: 52px;
+  --display-1-size: 3.25rem;
   --display-1-line-height: 1.2;
   --display-1-weight: var(--font-weight-bold);
-  --display-1-semi-size: 52px;
+  --display-1-semi-size: 3.25rem;
   --display-1-semi-line-height: 1.2;
   --display-1-semi-weight: var(--font-weight-semibold);
-  --display-2-size: 43px;
+  --display-2-size: 2.6875rem;
   --display-2-line-height: 1.2;
   --display-2-weight: var(--font-weight-bold);
-  --display-3-size: 36px;
+  --display-3-size: 2.25rem;
   --display-3-line-height: 1.2;
   --display-3-weight: var(--font-weight-bold);
-  --body-font-size-m: 16px;
-  --body-font-size-s: 14px;
-  --body-font-size-xs: 12px;
+  --body-font-size-m: 1rem;
+  --body-font-size-s: 0.875rem;
+  --body-font-size-xs: 0.75rem;
   --body-line-height: 1.6;
 
   /* spacing */
-  --spacing-xxs: 4px;
-  --spacing-xs: 8px;
-  --spacing-s: 12px;
-  --spacing-m: 16px;
-  --spacing-l: 24px;
-  --spacing-xl: 32px;
-  --spacing-2xl: 40px;
-  --spacing-3xl: 48px;
-  --spacing-4xl: 64px;
-  --spacing-5xl: 80px;
-  --spacing-6xl: 120px;
+  --spacing-xxs: 0.25rem;
+  --spacing-xs: 0.5rem;
+  --spacing-s: 0.75rem;
+  --spacing-m: 1rem;
+  --spacing-l: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 2.5rem;
+  --spacing-3xl: 3rem;
+  --spacing-4xl: 4rem;
+  --spacing-5xl: 5rem;
+  --spacing-6xl: 7.5rem;
 
   /* radius and shadows */
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-pill: 9999px;
-  --shadow-sm: 0 4px 8px -1px var(--color-black-5), 0 1px 4px 0 var(--color-black-5);
-  --shadow-md: 0 10px 30px rgb(12 12 13 / 10%);
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-pill: 624.9375rem;
+  --shadow-sm: 0 0.25rem 0.5rem -0.0625rem var(--color-black-5), 0 0.0625rem 0.25rem 0 var(--color-black-5);
+  --shadow-md: 0 0.625rem 1.875rem rgb(12 12 13 / 10%);
 
   /* layout */
-  --container-width: 1440px;
+  --container-width: 90rem;
   --container-width-max: var(--breakpoint-max);
   --container-gutter: var(--spacing-m);
   --section-padding-block: var(--spacing-2xl);
-  --nav-height: 64px;
+  --nav-height: 4rem;
 }
 
-@media (width >= 700px) {
+@media (width >= 43.75rem) {
   :root {
     --container-gutter: var(--spacing-l);
     --section-padding-block: var(--spacing-5xl);
   }
 }
 
-@media (width >= 1200px) {
+@media (width >= 75rem) {
   :root {
-    --display-1-size: 80px;
+    --display-1-size: 5rem;
     --display-1-weight: var(--font-weight-regular);
-    --display-1-semi-size: 80px;
+    --display-1-semi-size: 5rem;
     --display-1-semi-weight: var(--font-weight-semibold);
-    --display-2-size: 64px;
+    --display-2-size: 4rem;
     --display-2-weight: var(--font-weight-regular);
-    --display-3-size: 40px;
+    --display-3-size: 2.5rem;
     --display-3-weight: var(--font-weight-regular);
-    --body-font-size-m: 18px;
-    --body-font-size-s: 16px;
+    --body-font-size-m: 1.125rem;
+    --body-font-size-s: 1rem;
     --container-gutter: var(--spacing-5xl);
     --section-padding-block: var(--spacing-6xl);
   }
@@ -172,8 +172,8 @@ body.appear {
 }
 
 :focus-visible {
-  outline: 2px solid var(--focus-color);
-  outline-offset: 2px;
+  outline: 0.125rem solid var(--focus-color);
+  outline-offset: 0.125rem;
 }
 
 header {
@@ -224,15 +224,15 @@ h3 {
 }
 
 h4 {
-  font-size: clamp(28px, 3vw, 40px);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
 }
 
 h5 {
-  font-size: clamp(24px, 2.4vw, 32px);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
 }
 
 h6 {
-  font-size: clamp(20px, 2vw, 24px);
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
 }
 
 p,
@@ -257,7 +257,7 @@ pre {
 pre {
   padding: var(--spacing-m);
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
+  border: 0.0625rem solid var(--border-color);
   background-color: var(--surface-subtle);
   overflow-x: auto;
   white-space: pre;
@@ -288,16 +288,16 @@ input:not([type='checkbox'], [type='radio']),
 textarea,
 select {
   width: 100%;
-  min-height: 44px;
-  border: 1px solid var(--border-color);
+  min-height: 2.75rem;
+  border: 0.0625rem solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 10px 12px;
+  padding: 0.625rem 0.75rem;
   background-color: var(--surface-color);
   color: var(--text-color);
 }
 
 textarea {
-  min-height: 120px;
+  min-height: 7.5rem;
   resize: vertical;
 }
 
@@ -310,7 +310,7 @@ a:any-link {
   color: var(--link-color);
   text-decoration: underline;
   text-underline-offset: 0.12em;
-  text-decoration-thickness: 1px;
+  text-decoration-thickness: 0.0625rem;
   overflow-wrap: break-word;
 }
 
@@ -329,10 +329,10 @@ button.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
+  min-height: 2.75rem;
   max-width: 100%;
   margin: 0;
-  border: 1px solid transparent;
+  border: 0.0625rem solid transparent;
   border-radius: var(--radius-pill);
   padding: 0.65em 1.25em;
   font: inherit;
@@ -465,7 +465,7 @@ main .section.highlight,
 .card,
 .cards > ul > li,
 .surface-card {
-  border: 1px solid var(--border-color);
+  border: 0.0625rem solid var(--border-color);
   border-radius: var(--radius-md);
   background: var(--surface-color);
   box-shadow: var(--shadow-sm);
@@ -492,13 +492,13 @@ main .section.highlight,
   gap: var(--spacing-l);
 }
 
-@media (width >= 700px) {
+@media (width >= 43.75rem) {
   .grid.grid-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (width >= 1200px) {
+@media (width >= 75rem) {
   .grid.grid-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }

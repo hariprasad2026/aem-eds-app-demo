@@ -1,36 +1,4 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
-import { getAEMPublish } from '../../scripts/endpointconfig.js';
-
-const REMOTE_QUERY_INDEX_URL = 'https://demo-blocks--aem-eds-app-demo--hariprasad2026.aem.live/query-index.json';
-const QUERY_INDEX_PATH = '/query-index.json';
-
-const CONFIG_FIELD_ORDER = [
-  'title',
-  'description',
-  'ctaLabel',
-  'ctaLink',
-  'maximumItems',
-  'listType',
-  'parentPath',
-  'childDepth',
-  'tags',
-  'tagMatch',
-  'personalization',
-  'displayType',
-  'showEyebrow',
-  'showTitle',
-  'showDescription',
-  'showImage',
-  'showDate',
-  'dateFormat',
-  'displayTags',
-  'authorDetails',
-  'showIcon',
-  'linkItem',
-  'cardsColor',
-  'orderBy',
-  'sortOrder',
-];
 
 const CONFIG_FIELDS = new Set([
   'title',
@@ -38,12 +6,6 @@ const CONFIG_FIELDS = new Set([
   'ctalabel',
   'ctalink',
   'listtype',
-  'displaytype',
-  'maximumitems',
-  'parentpath',
-  'childdepth',
-  'tags',
-  'tagmatch',
   'showeyebrow',
   'showtitle',
   'showdescription',
@@ -76,77 +38,6 @@ function normalize(value = '') {
   return String(value).toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-function getProp(block, name, fallback = '') {
-  const lowerName = name.toLowerCase();
-  const normalizedName = normalize(name);
-  const roots = [block, ...block.querySelectorAll('.list-ue-store')];
-
-  const readFieldValue = (element) => {
-    if (!element) return '';
-    const image = element.matches('img') ? element : element.querySelector('picture img, img');
-    if (image) return image.getAttribute('src') || image.src;
-    const anchor = element.matches('a') ? element : element.querySelector('a[href]');
-    if (anchor) return anchor.getAttribute('href') || anchor.textContent.trim();
-    return element.dataset.value
-      || element.getAttribute('value')
-      || element.value
-      || element.textContent.trim();
-  };
-
-  if (block.dataset[name] !== undefined) return block.dataset[name];
-  if (block.dataset[lowerName] !== undefined) return block.dataset[lowerName];
-
-  const propertyElements = roots.flatMap((root) => {
-    const descendants = [...root.querySelectorAll('[data-aue-prop]')];
-    if (root.matches('[data-aue-prop]')) descendants.unshift(root);
-    return descendants;
-  });
-  const propertyElement = propertyElements.find(
-    (element) => normalize(element.getAttribute('data-aue-prop')) === normalizedName,
-  );
-  if (propertyElement) {
-    const value = readFieldValue(propertyElement);
-    if (value) return value;
-  }
-
-  const rows = roots.flatMap((root) => [...root.children])
-    .filter((row) => !row.classList.contains('list-rendered') && !row.classList.contains('list-ue-store'));
-
-  const aliases = {
-    parentpath: ['parentpage', 'tagsparentpage'],
-    childdepth: ['depth'],
-    maximumitems: ['maxitems'],
-  };
-  const acceptableNames = [normalizedName, ...(aliases[normalizedName] || [])];
-  const targetRow = rows.find((row) => {
-    const cols = [...row.children];
-    const key = normalize(cols[0]?.textContent || '');
-    return cols.length >= 2 && acceptableNames.includes(key);
-  });
-  if (targetRow) {
-    const cols = [...targetRow.children];
-    const value = readFieldValue(cols[1]);
-    if (value) return value;
-  }
-
-  const fieldIndex = CONFIG_FIELD_ORDER.indexOf(name);
-  if (fieldIndex >= 0) {
-    const stores = [...block.querySelectorAll('.list-ue-store')];
-    const storedRows = stores.length
-      ? stores.flatMap((store) => [...store.children])
-      : [...block.children].filter((child) => !child.matches('.list-rendered'));
-    const row = storedRows[fieldIndex];
-    if (row) {
-      const cells = [...row.children];
-      const valueCell = cells.length > 1 ? cells[1] : cells[0] || row;
-      const value = readFieldValue(valueCell);
-      if (value) return value;
-    }
-  }
-
-  return fallback;
-}
-
 function readValue(cell) {
   if (!cell) return '';
   const image = cell.querySelector('img');
@@ -165,225 +56,6 @@ function parseBoolean(value, fallback = false) {
   if (value === undefined || value === null || value === '') return fallback;
   const normalized = String(value).trim().toLowerCase();
   return ['true', 'yes', '1', 'on'].includes(normalized);
-}
-
-function parseNumber(value, fallback) {
-  if (value === undefined || value === null || value === '') return fallback;
-  const parsed = Number.parseInt(value, 10);
-  return Number.isFinite(parsed) ? parsed : fallback;
-}
-
-function normalizePath(path) {
-  if (!path) return '/';
-  let pathname;
-  try {
-    pathname = new URL(String(path).trim(), window.location.origin).pathname;
-  } catch (error) {
-    [pathname] = String(path).split(/[?#]/);
-  }
-
-  const clean = pathname.replace(/\/+$/, '') || '/';
-  return clean.startsWith('/') ? clean : `/${clean}`;
-}
-
-function parseTags(value) {
-  if (!value) return [];
-  if (Array.isArray(value)) {
-    return value.flatMap((entry) => parseTags(entry));
-  }
-
-  return String(value)
-    .split(/[;,]/)
-    .map((tag) => tag.trim().toLowerCase())
-    .filter(Boolean);
-}
-
-function normalizeTag(tag) {
-  return String(tag || '').trim().toLowerCase();
-}
-
-function stripNamespace(tag) {
-  const normalized = normalizeTag(tag);
-  const separatorIndex = normalized.indexOf(':');
-  return separatorIndex >= 0 ? normalized.slice(separatorIndex + 1) : normalized;
-}
-
-function readItemTags(item) {
-  const tagSources = [
-    item.tags,
-    item.tag,
-    item.cqTags,
-    item.cqtags,
-    item['cq:tags'],
-    item.taxonomy,
-  ];
-
-  return tagSources.flatMap((source) => parseTags(source));
-}
-
-function extractItems(payload) {
-  if (Array.isArray(payload)) return payload;
-  if (Array.isArray(payload?.data)) return payload.data;
-  if (Array.isArray(payload?.items)) return payload.items;
-  return [];
-}
-
-async function loadQueryIndexFromUrl(url) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) return null;
-
-    const contentType = response.headers.get('content-type') || '';
-    if (!contentType.includes('application/json')) return null;
-
-    const data = await response.json();
-    return extractItems(data);
-  } catch (error) {
-    return null;
-  }
-}
-
-async function fetchQueryIndex() {
-  const configuredOrigin = getAEMPublish();
-  const codeOrigin = new URL(import.meta.url).origin;
-  const publishHost = configuredOrigin.includes('.adobeaemcloud.com')
-    ? codeOrigin
-    : configuredOrigin;
-
-  const urls = [
-    REMOTE_QUERY_INDEX_URL,
-    new URL(QUERY_INDEX_PATH, publishHost).toString(),
-    QUERY_INDEX_PATH,
-  ];
-
-  const results = await Promise.all(urls.map((url) => loadQueryIndexFromUrl(url)));
-  return results.find((result) => Array.isArray(result)) || [];
-}
-
-function getMetadataPath(itemPath) {
-  const normalizedPath = normalizePath(itemPath);
-  if (!normalizedPath || normalizedPath === '/') return null;
-  const pathWithoutExtension = normalizedPath.replace(/\.[a-z0-9]+$/i, '');
-  return `${pathWithoutExtension}.metadata.json`;
-}
-
-async function fetchArticleMetadata(itemPath) {
-  const metadataPath = getMetadataPath(itemPath);
-  if (!metadataPath) return null;
-
-  try {
-    const metadataUrl = new URL(metadataPath, REMOTE_QUERY_INDEX_URL).toString();
-    const response = await fetch(metadataUrl);
-    if (!response.ok) return null;
-
-    const metadata = await response.json();
-    return {
-      title: metadata.title || metadata.pageTitle || '',
-      description: metadata.description || metadata.seoDescription || metadata.summary || '',
-    };
-  } catch (error) {
-    return null;
-  }
-}
-
-function matchesParentAndDepth(itemPath, parentPath, childDepth) {
-  if (!itemPath) return false;
-
-  const normalizedItemPath = normalizePath(itemPath);
-  const normalizedParentPath = normalizePath(parentPath || '/');
-  const parentSegments = normalizedParentPath === '/'
-    ? []
-    : normalizedParentPath.replace(/^\//, '').split('/').filter(Boolean);
-  const itemSegments = normalizedItemPath.replace(/^\//, '').split('/').filter(Boolean);
-
-  const parentPathMatches = parentSegments.some(
-    (segment, index) => segment !== itemSegments[index],
-  );
-  if (parentSegments.length && parentPathMatches) {
-    return false;
-  }
-
-  const relativeDepth = itemSegments.length - parentSegments.length;
-  if (relativeDepth <= 0) return false;
-
-  return relativeDepth <= childDepth;
-}
-
-function mapQueryItemToListItem(item) {
-  const itemTags = readItemTags(item);
-  const primaryTag = itemTags[0] ? stripNamespace(itemTags[0]) : '';
-  const rawDate = item.publishDate || item.date || item.lastModified || '';
-  let resolvedDate = rawDate;
-  if (typeof rawDate === 'number' || /^\d+(\.\d+)?$/.test(String(rawDate).trim())) {
-    const numeric = Number(rawDate);
-    const timestamp = numeric < 1e12 ? numeric * 1000 : numeric;
-    resolvedDate = new Date(timestamp).toISOString();
-  }
-
-  return {
-    itemEyebrow: (item.category || primaryTag || '').toUpperCase(),
-    itemTitle: item.title || item.name || '',
-    itemDescription: item.description || item.excerpt || '',
-    itemImage: item.image || item.thumbnail || '',
-    itemImageAlt: item.imageAlt || item.title || '',
-    itemDate: resolvedDate,
-    itemTags: itemTags.map(stripNamespace).join(', '),
-    itemAuthor: item.author || item.byline || '',
-    itemIcon: '',
-    itemLink: normalizePath(item.path || '#'),
-  };
-}
-
-async function resolveTagBasedItems(config) {
-  const items = await fetchQueryIndex();
-  const selectedTags = parseTags(config.tags);
-  if (!selectedTags.length) return [];
-
-  const filteredItems = items
-    .filter((item) => matchesParentAndDepth(item.path, config.parentPath, config.childDepth))
-    .filter((item) => {
-      const itemTags = readItemTags(item);
-      if (!itemTags.length) return false;
-
-      const normalizedItemTags = new Set(itemTags.map(normalizeTag));
-      const namespaceAgnosticItemTags = new Set(itemTags.map(stripNamespace));
-
-      const matchesTag = (tag) => {
-        const normalizedTag = normalizeTag(tag);
-        const namespaceAgnosticTag = stripNamespace(tag);
-        return normalizedItemTags.has(normalizedTag)
-          || namespaceAgnosticItemTags.has(namespaceAgnosticTag);
-      };
-
-      if (config.tagMatch === 'all') {
-        return selectedTags.every(matchesTag);
-      }
-
-      return selectedTags.some(matchesTag);
-    });
-
-  const itemsWithMetadata = await Promise.all(filteredItems.map(async (item) => {
-    const metadata = await fetchArticleMetadata(item.path);
-    if (!metadata) return item;
-
-    return {
-      ...item,
-      title: metadata.title || item.title,
-      description: metadata.description || item.description,
-    };
-  }));
-
-  return itemsWithMetadata.map((item) => mapQueryItemToListItem(item));
-}
-
-function createImageFromSource(source, altText) {
-  if (source instanceof Element) return source;
-  if (!source) return null;
-
-  const image = document.createElement('img');
-  image.src = source;
-  image.alt = altText || '';
-  return image;
 }
 
 function formatDate(raw, format) {
@@ -530,8 +202,8 @@ function createCardItem(item, config) {
   cardRoot.className = 'list-card';
   if (cardRoot.tagName === 'A') cardRoot.href = item.itemLink;
 
-  const image = createImageFromSource(item.itemImage, item.itemImageAlt || item.itemTitle || '');
-  if (config.showImage && image) {
+  if (config.showImage && item.itemImage instanceof Element) {
+    const image = item.itemImage;
     const optimizedPicture = createOptimizedPicture(
       image.src,
       item.itemImageAlt || image.alt || item.itemTitle || '',
@@ -703,33 +375,24 @@ function parseConfigRows(block) {
   });
 
   return {
-    title: config.title || getProp(block, 'title', ''),
-    description: config.description || getProp(block, 'description', ''),
-    ctaLabel: config.ctalabel || getProp(block, 'ctaLabel', ''),
-    ctaLink: config.ctalink || getProp(block, 'ctaLink', ''),
-    listType: String(config.listtype || getProp(block, 'listType', 'manual')).toLowerCase().trim(),
-    displayType: config.displaytype || getProp(block, 'displayType', 'default'),
-    maximumItems: parseNumber(config.maximumitems || getProp(block, 'maximumItems', '8'), 8),
-    parentPath: config.parentpath || getProp(block, 'parentPath', '/'),
-    childDepth: parseNumber(config.childdepth || getProp(block, 'childDepth', '1'), 1),
-    tags: config.tags || getProp(block, 'tags', ''),
-    tagMatch:
-      String(config.tagmatch || getProp(block, 'tagMatch', 'any')).toLowerCase().trim() === 'all'
-        ? 'all'
-        : 'any',
-    showEyebrow: parseBoolean(config.showeyebrow || getProp(block, 'showEyebrow', ''), false),
-    showTitle: parseBoolean(config.showtitle || getProp(block, 'showTitle', ''), true),
-    showDescription: parseBoolean(config.showdescription || getProp(block, 'showDescription', ''), false),
-    showImage: parseBoolean(config.showimage || getProp(block, 'showImage', ''), true),
-    showDate: parseBoolean(config.showdate || getProp(block, 'showDate', ''), false),
-    dateFormat: config.dateformat || getProp(block, 'dateFormat', 'mmm-d-yyyy'),
-    displayTags: parseBoolean(config.displaytags || getProp(block, 'displayTags', ''), true),
-    authorDetails: parseBoolean(config.authordetails || getProp(block, 'authorDetails', ''), false),
-    showIcon: parseBoolean(config.showicon || getProp(block, 'showIcon', ''), false),
-    linkItem: parseBoolean(config.linkitem || getProp(block, 'linkItem', ''), false),
-    cardsColor: config.cardscolor || getProp(block, 'cardsColor', 'blue'),
-    orderBy: config.orderby || getProp(block, 'orderBy', 'title'),
-    sortOrder: config.sortorder || getProp(block, 'sortOrder', 'ascending'),
+    title: config.title || '',
+    description: config.description || '',
+    ctaLabel: config.ctalabel || '',
+    ctaLink: config.ctalink || '',
+    listType: config.listtype || 'default',
+    showEyebrow: parseBoolean(config.showeyebrow, false),
+    showTitle: parseBoolean(config.showtitle, true),
+    showDescription: parseBoolean(config.showdescription, false),
+    showImage: parseBoolean(config.showimage, true),
+    showDate: parseBoolean(config.showdate, false),
+    dateFormat: config.dateformat || 'mmm-d-yyyy',
+    displayTags: parseBoolean(config.displaytags, true),
+    authorDetails: parseBoolean(config.authordetails, false),
+    showIcon: parseBoolean(config.showicon, false),
+    linkItem: parseBoolean(config.linkitem, false),
+    cardsColor: config.cardscolor || 'blue',
+    orderBy: config.orderby || 'title',
+    sortOrder: config.sortorder || 'ascending',
   };
 }
 
@@ -757,33 +420,25 @@ function parseItems(block) {
   }).filter((item) => item.itemTitle || item.itemLink || item.itemDescription);
 }
 
-export default async function decorate(block) {
+export default function decorate(block) {
   const config = parseConfigRows(block);
-
-  let items = parseItems(block);
-  if (config.listType === 'tags') {
-    items = await resolveTagBasedItems(config);
-  }
-
-  const sortedItems = sortItems(items, config);
-  const visibleItems = config.maximumItems > 0
-    ? sortedItems.slice(0, config.maximumItems)
-    : sortedItems;
+  const sortedItems = sortItems(parseItems(block), config);
 
   block.textContent = '';
   block.classList.add('list', `list-theme-${config.cardsColor}`);
   block.append(buildHeader(config));
 
   let rendered;
-  if (config.displayType === 'card' || config.displayType === 'content-card') {
-    rendered = renderCards(visibleItems, config);
-  } else if (config.displayType === 'hero-card') {
-    rendered = renderHeroCards(visibleItems, config);
-  } else if (config.displayType === 'table-list') {
-    rendered = renderTable(visibleItems, config);
+  if (config.listType === 'card') {
+    rendered = renderCards(sortedItems, config);
+  } else if (config.listType === 'hero-card') {
+    rendered = renderHeroCards(sortedItems, config);
+  } else if (config.listType === 'table-list') {
+    rendered = renderTable(sortedItems, config);
   } else {
-    rendered = renderDefault(visibleItems, config);
+    rendered = renderDefault(sortedItems, config);
   }
 
   block.append(rendered);
 }
+

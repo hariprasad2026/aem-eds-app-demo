@@ -141,6 +141,13 @@
     ]
   },
   {
+    "id": "list",
+    "components": [
+      "title",
+      "button"
+    ]
+  },
+  {
     "id": "quote-richtext",
     "components": [
       "richtext"

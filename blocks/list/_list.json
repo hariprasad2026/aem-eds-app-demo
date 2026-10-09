@@ -9,7 +9,6 @@
             "resourceType": "core/franklin/components/block/v1/block",
             "template": {
               "name": "List",
-              "model": "list",
               "filter": "list"
             }
           }
@@ -17,38 +16,14 @@
       }
     }
   ],
-  "models": [
+  "models": [],
+  "filters": [
     {
       "id": "list",
-      "fields": [
-        {
-          "component": "text",
-          "name": "title",
-          "label": "Title",
-          "valueType": "string"
-        },
-        {
-          "component": "container",
-          "name": "cta",
-          "label": "CTA",
-          "collapsible": true,
-          "fields": [
-            {
-              "component": "text",
-              "name": "ctaLabel",
-              "label": "CTA Label",
-              "valueType": "string"
-            },
-            {
-              "component": "aem-content",
-              "name": "ctaLink",
-              "label": "CTA Link",
-              "valueType": "string"
-            }
-          ]
-        }
+      "components": [
+        "title",
+        "button"
       ]
     }
-  ],
-  "filters": []
+  ]
 }

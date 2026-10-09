@@ -2738,37 +2738,6 @@
     ]
   },
   {
-    "id": "list",
-    "fields": [
-      {
-        "component": "text",
-        "name": "title",
-        "label": "Title",
-        "valueType": "string"
-      },
-      {
-        "component": "container",
-        "name": "cta",
-        "label": "CTA",
-        "collapsible": true,
-        "fields": [
-          {
-            "component": "text",
-            "name": "ctaLabel",
-            "label": "CTA Label",
-            "valueType": "string"
-          },
-          {
-            "component": "aem-content",
-            "name": "ctaLink",
-            "label": "CTA Link",
-            "valueType": "string"
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": "medium-list",
     "fields": [
       {

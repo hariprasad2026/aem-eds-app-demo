@@ -1,14 +1,8 @@
 .list {
-  display: grid;
-  gap: var(--spacing-xl, 2rem);
+  display: block;
 }
 
-.list-header {
-  display: grid;
-  gap: var(--spacing-s, 0.75rem);
-}
-
-.list-header-top {
+.list-header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -16,9 +10,17 @@
   flex-wrap: wrap;
 }
 
-.list-heading {
-  margin: 0;
+.list-title-slot {
   flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.list-header-row-no-cta .list-title-slot {
+  flex-basis: 100%;
+}
+
+.list-title-slot :is(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
   color: var(--color-heading, #0f172a);
   font-family: var(--font-family-title, var(--heading-font-family, sans-serif));
   font-size: clamp(1.75rem, 2.8vw, 3rem);
@@ -27,59 +29,40 @@
   letter-spacing: -0.01em;
 }
 
-.list-header-top-no-cta .list-heading {
-  inline-size: 100%;
+.list-cta-slot {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
 }
 
-.list-cta {
+.list-cta-slot > * {
+  margin: 0;
+}
+
+.list-cta-slot .button-container {
+  margin: 0;
+}
+
+.list-cta-slot a.button,
+.list-cta-slot .button-container a {
   display: inline-flex;
   align-items: center;
-  margin-inline-start: auto;
   gap: var(--spacing-xs, 0.5rem);
-  border-radius: var(--radius-pill, 999px);
-  border: 1px solid #0c0c0d;
-  padding: 0.5rem 0.85rem;
-  background: #0c0c0d;
-  color: #fff;
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1;
-  text-decoration: none;
-  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
-}
-
-.list-cta-static {
-  cursor: default;
-}
-
-.list-cta:hover,
-.list-cta:focus-visible {
-  background: #1f2937;
-  border-color: #1f2937;
-  transform: translateY(-1px);
-  text-decoration: none;
-}
-
-.list-cta:focus-visible {
-  outline: 2px solid var(--color-focus-ring, #2563eb);
-  outline-offset: 2px;
-}
-
-.list-cta-label {
   white-space: nowrap;
 }
 
-.list-cta-arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: 1rem;
-  block-size: 1rem;
+.list-cta-slot a.button::after,
+.list-cta-slot .button-container a::after {
+  content: '→';
   font-size: 0.95rem;
 }
 
 @media (width < 600px) {
-  .list-header-top {
+  .list-header-row {
     align-items: flex-start;
+  }
+
+  .list-cta-slot {
+    margin-inline-start: 0;
   }
 }

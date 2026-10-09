@@ -171,7 +171,8 @@
   {
     "id": "statistics-list",
     "components": [
-      "statistics-list-item"
+      "statistics-list-item",
+      "text"
     ]
   },
   {

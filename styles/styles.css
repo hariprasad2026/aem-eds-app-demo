@@ -16,13 +16,30 @@
   --light-color: #f8f8f8;
   --dark-color: #505050;
   --text-color: #131313;
+  --text-default-default: #131313;
+  --text-default-subtle: #555;
+  --text-default-inverse: #fff;
+  --text-brand-default: #0057d8;
   --link-color: #3b63fb;
   --link-hover-color: #1d3ecf;
+  --surface-default: #fff;
+  --surface-muted: #f5f1ec;
+  --surface-brand-blue: #edf4ff;
+  --surface-brand-dark: #111827;
   --overlay-background-color:lightgrey;
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback, sans-serif;
   --heading-font-family: roboto-condensed, roboto-condensed-fallback, sans-serif;
+  --title-font-family: var(--heading-font-family);
+  --title-font-weight: 600;
+  --title-line-height: 1.1;
+  --title-letter-spacing: -0.04em;
+
+  /* title sizing */
+  --title-size-mobile: clamp(2.3rem, 6vw, 3.4rem);
+  --title-size-tablet: clamp(2.7rem, 5vw, 4.2rem);
+  --title-size-desktop: clamp(3rem, 4vw, 5rem);
 
   /* body sizes */
   --body-font-size-m: 22px;
@@ -316,6 +333,97 @@ h3 { font-size: var(--heading-font-size-l); }
 h4 { font-size: var(--heading-font-size-m); }
 h5 { font-size: var(--heading-font-size-s); }
 h6 { font-size: var(--heading-font-size-xs); }
+
+.title,
+:is(h1, h2, h3, h4, h5, h6).title {
+  margin: 0 0 1rem;
+  font-family: var(--title-font-family);
+  font-weight: var(--title-font-weight);
+  line-height: var(--title-line-height);
+  letter-spacing: var(--title-letter-spacing);
+  color: var(--text-default-default);
+}
+
+.title {
+  font-size: var(--title-size-mobile);
+}
+
+@media (width >= 900px) {
+  .title {
+    font-size: var(--title-size-desktop);
+  }
+}
+
+.title.align-center,
+.title.title--center,
+.title[data-alignment="center"] {
+  text-align: center;
+}
+
+.title.align-right,
+.title.title--right,
+.title[data-alignment="right"] {
+  text-align: right;
+}
+
+.title.title--default,
+.title.title--no-background,
+.title[data-title-color="default"],
+.title[data-title-color="black"],
+.title[data-title-color="default"],
+:is(h1, h2, h3, h4, h5, h6)[data-title-color="default"],
+:is(h1, h2, h3, h4, h5, h6)[data-title-color="black"] {
+  color: var(--text-default-default);
+  background: transparent;
+}
+
+.title.title--with-background,
+.title[data-title-variant="with-background"],
+:is(h1, h2, h3, h4, h5, h6)[data-title-variant="with-background"] {
+  display: inline-block;
+  padding: 0.55em 0.8em;
+  border-radius: 0.75rem;
+  background: var(--surface-muted);
+  color: var(--text-default-default);
+}
+
+.title.title--image-background,
+.title[data-title-variant="image-background"],
+:is(h1, h2, h3, h4, h5, h6)[data-title-variant="image-background"] {
+  display: inline-block;
+  padding: 0.7em 1em;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, rgb(17 24 39 / 92%), rgb(17 24 39 / 75%));
+  color: var(--text-default-inverse);
+}
+
+.title.title--light,
+.title.title--inverse,
+.title[data-title-color="light"],
+.title[data-title-color="white"],
+.theme-dark .title,
+:is(h1, h2, h3, h4, h5, h6)[data-title-color="light"],
+:is(h1, h2, h3, h4, h5, h6)[data-title-color="white"] {
+  color: var(--text-default-inverse);
+}
+
+.title.title--brand,
+.title.title--blue,
+.title[data-title-color="brand"],
+.title[data-title-color="blue"],
+:is(h1, h2, h3, h4, h5, h6)[data-title-color="brand"],
+:is(h1, h2, h3, h4, h5, h6)[data-title-color="blue"] {
+  color: var(--text-brand-default);
+}
+
+.title.title--muted,
+.title.title--subtle,
+.title[data-title-color="muted"],
+.title[data-title-color="subtle"],
+:is(h1, h2, h3, h4, h5, h6)[data-title-color="muted"],
+:is(h1, h2, h3, h4, h5, h6)[data-title-color="subtle"] {
+  color: var(--text-default-subtle);
+}
 
 p,
 dl,

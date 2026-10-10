@@ -154,19 +154,23 @@
         "component": "select",
         "name": "titleColor",
         "label": "Title Color",
-        "value": "black",
+        "value": "default",
         "options": [
           {
-            "name": "White",
-            "value": "white"
+            "name": "Default",
+            "value": "default"
           },
           {
-            "name": "Black",
-            "value": "black"
+            "name": "Light",
+            "value": "light"
           },
           {
-            "name": "Blue",
-            "value": "blue"
+            "name": "Brand",
+            "value": "brand"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
           }
         ]
       },

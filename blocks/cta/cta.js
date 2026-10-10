@@ -85,7 +85,7 @@ function createArrow(direction) {
 
   const arrow = document.createElement('img');
 
-  arrow.src = '/content/dam/aem-eds-xwalk/hero/icons/arrow 14x14.svg';
+  arrow.src = '/content/dam/aem-eds-xwalk/hero/icons/arrow14x14.svg';
   arrow.alt = '';
   arrow.className = 'cta-arrow-icon';
 

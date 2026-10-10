@@ -1022,7 +1022,7 @@
     ]
   },
   {
-    "id": "carousel-hero2",
+    "id": "hero2",
     "fields": [
       {
         "component": "reference",

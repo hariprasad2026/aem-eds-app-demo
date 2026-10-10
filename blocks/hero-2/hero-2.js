@@ -133,16 +133,8 @@ async function applyLottoBackground(block, assetUrl, alt) {
   }
 }
 
-const HERO_FIELDS = [
-  'heroIcon', 'heroIconAlt', 'heroImageType', 'heroImage', 'heroLottoImagePath',
-  'heroImageAlt', 'heroView', 'eyebrowText', 'title', 'description', 'motionType',
-  'alignment', 'bgColor',
-];
-
 function getFieldElement(block, name) {
-  const field = block.querySelector(`[data-aue-prop="${name}"], [data-hero-field="${name}"]`);
-  if (field || block.querySelector('[data-hero-field]')) return field;
-  return block.children[HERO_FIELDS.indexOf(name)]?.firstElementChild;
+  return block.querySelector(`[data-aue-prop="${name}"]`);
 }
 
 function getTextValue(block, name, defaultValue = '') {
@@ -152,7 +144,7 @@ function getTextValue(block, name, defaultValue = '') {
 }
 
 function getAlignment(block) {
-  const allowed = ['top', 'middle', 'bottom', 'left', 'center', 'right'];
+  const allowed = ['top', 'middle', 'bottom'];
   const fromField = getTextValue(block, 'alignment').toLowerCase();
   if (allowed.includes(fromField)) {
     return fromField;
@@ -168,6 +160,18 @@ function getAlignment(block) {
 }
 
 function getContent(block) {
+  console.log(
+    'TITLE FIELD :',
+    block.querySelector('div:nth-child(10) p')
+      ?.textContent?.trim(),
+  );
+
+  console.log(
+    'DESCRIPTION FIELD :',
+    getFieldElement(block, 'description'),
+  );
+
+  console.log(block.innerHTML);
   return {
     heroIcon: getFieldElement(block, 'heroIcon'),
     heroIconAlt: getTextValue(block, 'heroIconAlt'),
@@ -180,7 +184,14 @@ function getContent(block) {
 
     eyebrowText: getTextValue(block, 'eyebrowText'),
 
-    title: getTextValue(block, 'title'),
+    title:
+      getFieldElement(block, 'eyebrowText')
+        ?.closest('div')
+        ?.parentElement
+        ?.nextElementSibling
+        ?.querySelector('p')
+        ?.textContent
+        ?.trim(),
 
     description: getFieldElement(block, 'description'),
 
@@ -212,9 +223,6 @@ export default function decorate(block) {
   if (content.alignment) {
     block.classList.add(`hero2-align-${content.alignment}`);
   }
-  if (['light', 'dark'].includes(content.bgColor)) {
-    block.classList.add(`hero2-bg-${content.bgColor}`);
-  }
 
   if (content.heroImageType === 'lotto') {
     // Lotto: only .zip / .svg. Images inside a zip are extracted and rendered as background.
@@ -225,10 +233,10 @@ export default function decorate(block) {
     // Default: any image format is allowed.
     const imageField = content.heroImage || content.heroLottoImagePath;
     if (imageField) {
-      const bgImg = imageField.matches('img') ? imageField : imageField.querySelector('img');
-      const bgSrc = getAssetUrl(imageField);
+      const bgImg = imageField.querySelector('img') || imageField;
+      const bgSrc = bgImg.getAttribute('src');
 
-      if (bgImg && content.heroImageAlt) {
+      if (content.heroImageAlt) {
         bgImg.alt = content.heroImageAlt;
       }
       if (bgSrc) {
@@ -243,10 +251,8 @@ export default function decorate(block) {
   if (content.heroIcon) {
     content.heroIcon.classList.add('hero2-icon');
 
-    const icon = content.heroIcon.matches('img')
-      ? content.heroIcon : content.heroIcon.querySelector('img');
-    if (icon && content.heroIconAlt) {
-      icon.alt = content.heroIconAlt;
+    if (content.heroIconAlt) {
+      content.heroIcon.alt = content.heroIconAlt;
     }
 
     contentWrapper.append(content.heroIcon);
@@ -285,37 +291,4 @@ export default function decorate(block) {
   }
 
   block.append(contentWrapper);
-}
-
-export function decorateCarouselHero(row) {
-  const fields = [
-    'heroIcon', 'heroIconAlt', 'heroImageType', 'heroLottoImagePath', 'heroImageAlt',
-    'heroView', 'eyebrowText', 'title', 'description', 'ctaTitle', 'ctaLink',
-    'ctaLinkType', 'ctaView', 'alignment', 'bgColor', 'motionType',
-  ];
-  const cells = [...row.children];
-  const hero = document.createElement('div');
-  hero.className = 'hero-2';
-  cells.forEach((cell, index) => {
-    const fieldRow = document.createElement('div');
-    cell.dataset.heroField = fields[index];
-    fieldRow.append(cell);
-    hero.append(fieldRow);
-  });
-
-  const title = getTextValue(hero, 'ctaTitle');
-  const link = getAssetUrl(getFieldElement(hero, 'ctaLink'));
-  if (title && link) {
-    const cta = document.createElement('div');
-    const view = getTextValue(hero, 'ctaView') === 'link'
-      ? 'default' : getTextValue(hero, 'ctaLinkType', 'primary');
-    [title, link, 'default', view].forEach((value) => {
-      const cell = document.createElement('div');
-      cell.textContent = value;
-      cta.append(cell);
-    });
-    hero.append(cta);
-  }
-  decorate(hero);
-  return hero;
 }

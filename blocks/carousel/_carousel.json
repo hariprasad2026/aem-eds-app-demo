@@ -40,7 +40,7 @@
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
               "name": "Hero 2",
-              "model": "carousel-hero2"
+              "model": "hero2"
             }
           }
         }
@@ -138,7 +138,7 @@
       ]
     },
     {
-      "id": "carousel-hero2",
+      "id": "hero2",
       "fields": [
         {
           "component": "reference",
@@ -271,4 +271,3 @@
     }
   ]
 }
- 

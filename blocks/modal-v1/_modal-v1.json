@@ -1,0 +1,238 @@
+{
+  "definitions": [
+    {
+      "title": "Modal V1",
+      "id": "modal-v1",
+      "plugins": {
+        "da": {
+          "rows": 13,
+          "columns": 1,
+          "fields": [
+            {
+              "name": "variant",
+              "selector": "div:nth-child(1)>div"
+            },
+            {
+              "name": "image",
+              "selector": "div:nth-child(2)>div>picture>img[src]"
+            },
+            {
+              "name": "imageAlt",
+              "selector": "div:nth-child(2)>div>picture>img[alt]"
+            },
+            {
+              "name": "eyebrow",
+              "selector": "div:nth-child(3)>div"
+            },
+            {
+              "name": "title",
+              "selector": "div:nth-child(4)>div"
+            },
+            {
+              "name": "content",
+              "selector": "div:nth-child(5)>div"
+            },
+            {
+              "name": "video",
+              "selector": "div:nth-child(6)>div"
+            },
+            {
+              "name": "cta1Text",
+              "selector": "div:nth-child(7)>div>p>strong"
+            },
+            {
+              "name": "cta1",
+              "selector": "div:nth-child(7)>div>p>strong>a[href]"
+            },
+            {
+              "name": "cta2Text",
+              "selector": "div:nth-child(8)>div>p>em"
+            },
+            {
+              "name": "cta2",
+              "selector": "div:nth-child(8)>div>p>em>a[href]"
+            },
+            {
+              "name": "closeLabel",
+              "selector": "div:nth-child(9)>div"
+            },
+            {
+              "name": "triggerText",
+              "selector": "div:nth-child(10)>div"
+            }
+          ]
+        },
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Modal V1",
+              "model": "modal-v1",
+              "classes": [
+                "modal-v1"
+              ],
+              "variant": "default",
+              "image": "",
+              "imageAlt": "",
+              "eyebrow": "",
+              "title": "Welcome",
+              "content": "This is a default modal.",
+              "video": "",
+              "cta1Text": "",
+              "cta1": "",
+              "cta2Text": "",
+              "cta2": "",
+              "closeLabel": "Close",
+              "triggerText": "Open Modal"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "modal-v1",
+      "fields": [
+        {
+          "component": "select",
+          "name": "variant",
+          "label": "Modal Variation",
+          "valueType": "string",
+          "value": "default",
+          "required": true,
+          "options": [
+            {
+              "name": "Default",
+              "value": "default"
+            },
+            {
+              "name": "Image",
+              "value": "image"
+            },
+            {
+              "name": "Video",
+              "value": "video"
+            },
+            {
+              "name": "Content",
+              "value": "content"
+            },
+            {
+              "name": "Small",
+              "value": "small"
+            },
+            {
+              "name": "Large",
+              "value": "large"
+            },
+            {
+              "name": "Full Screen",
+              "value": "full-screen"
+            },
+            {
+              "name": "Right / Side",
+              "value": "side"
+            },
+            {
+              "name": "CTA",
+              "value": "cta"
+            },
+            {
+              "name": "Confirmation",
+              "value": "confirmation"
+            }
+          ]
+        },
+        {
+          "component": "reference",
+          "name": "image",
+          "label": "Image",
+          "valueType": "string",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "name": "imageAlt",
+          "label": "Image Description",
+          "valueType": "string",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "eyebrow",
+          "label": "Eyebrow",
+          "valueType": "string",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Title",
+          "valueType": "string",
+          "value": ""
+        },
+        {
+          "component": "richtext",
+          "name": "content",
+          "label": "Content",
+          "valueType": "string",
+          "value": "",
+          "filter": "richtext"
+        },
+        {
+          "component": "text",
+          "name": "video",
+          "label": "Video URL",
+          "description": "URL of the video or embedded media.",
+          "valueType": "string",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "cta1Text",
+          "label": "Primary CTA Text",
+          "valueType": "string",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "cta1",
+          "label": "Primary CTA Link",
+          "valueType": "string",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "cta2Text",
+          "label": "Secondary CTA Text",
+          "valueType": "string",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "cta2",
+          "label": "Secondary CTA Link",
+          "valueType": "string",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "closeLabel",
+          "label": "Close Button Label",
+          "valueType": "string",
+          "value": "Close"
+        },
+        {
+          "component": "text",
+          "name": "triggerText",
+          "label": "Trigger Text",
+          "description": "Text displayed on the button that opens the modal.",
+          "valueType": "string",
+          "value": "Open Modal"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

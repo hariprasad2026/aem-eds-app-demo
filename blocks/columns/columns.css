@@ -1,46 +1,37 @@
 .columns {
   margin: 48px auto;
+  width: 100%;
 }
-
+ 
+/* Row container */
+.columns .columns-row,
 .columns > div {
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
 }
-
-.columns-variant-image-copy > div {
-  align-items: center;
-}
-
-.columns-variant-content-links .columns-text-col {
-  gap: 12px;
-}
-
-.columns-variant-followup-copy .columns-text-col {
-  gap: 10px;
-}
-
-.columns > div > div {
+ 
+/* Individual Column Container */
+.columns .columns-col {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
 }
-
+ 
+/* Force child elements/blocks inside columns to expand to 100% width */
+.columns .columns-col > * {
+  width: 100%;
+}
+ 
 .columns img {
   display: block;
   width: 100%;
   height: auto;
   border-radius: 12px;
 }
-
-.columns > div > .columns-img-col {
-  order: 0;
-}
-
-.columns > div > .columns-text-col {
-  order: 1;
-}
-
+ 
+/* Standard Link Lists */
 .columns .columns-link-list {
   display: flex;
   flex-wrap: wrap;
@@ -49,11 +40,7 @@
   padding: 0;
   list-style: none;
 }
-
-.columns .columns-link-list li {
-  margin: 0;
-}
-
+ 
 .columns .columns-link {
   display: inline-flex;
   align-items: center;
@@ -62,12 +49,7 @@
   font-weight: 600;
   text-decoration: none;
 }
-
-.columns .columns-link:hover,
-.columns .columns-link:focus-visible {
-  text-decoration: underline;
-}
-
+ 
 .columns .columns-link-arrow {
   display: inline-flex;
   align-items: center;
@@ -75,42 +57,145 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--link-color);
-  color: var(--background-color);
+  background: var(--link-color, #0052cc);
+  color: var(--background-color, #fff);
   font-size: 1.1rem;
-  line-height: 1;
 }
-
-.columns-variant-content-links .columns-link-list {
-  flex-direction: row;
-  align-items: center;
-  margin-top: 0;
-}
-
-.columns-variant-followup-copy .columns-link-list {
-  margin-bottom: 0;
-}
-
+ 
+/* ==========================================================================
+   Responsive Grid & Variant Layouts
+   ========================================================================== */
+ 
 @media (width >= 600px) {
+  .columns-2-cols .columns-row,
   .columns-2-cols > div {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
+ 
+  .columns-3-cols .columns-row,
   .columns-3-cols > div {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-
+ 
+@media (width >= 768px) {
+  /* Design 1 (Stacked Left) & Design 2 (Stacked Right) Base Grid */
+  .columns-variant-stacked-left .columns-row,
+  .columns-variant-stacked-right .columns-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+  }
+ 
+  /* Force multi-item columns (left or right) to space out vertically */
+  .columns-variant-stacked-left .columns-col,
+  .columns-variant-stacked-right .columns-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    height: 100%;
+  }
+ 
+  /* Divide height equally among multiple items stacked inside one side */
+  .columns-variant-stacked-left .columns-col:first-child > *,
+  .columns-variant-stacked-right .columns-col:last-child > * {
+    flex: 1;
+  }
+ 
+  /* Stretch the single full-height item on the opposite side */
+  .columns-variant-stacked-left .columns-col:last-child > *,
+  .columns-variant-stacked-right .columns-col:first-child > * {
+    height: 100%;
+  }
+}
+ 
 @media (width >= 900px) {
+  .columns .columns-row,
   .columns > div {
     gap: 32px;
   }
-
-  .columns-2-cols.columns-variant-image-copy > div {
+ 
+  .columns-2-cols.columns-variant-image-copy .columns-row {
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   }
-
-  .columns-2-cols.columns-variant-content-links > div {
+ 
+  .columns-2-cols.columns-variant-content-links .columns-row {
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   }
+}
+
+/* ========================================
+   Title With Column
+   ======================================== */
+ 
+.columns-2-cols h1[id],
+.columns-2-cols h2[id],
+.columns-2-cols h3[id],
+.columns-2-cols h4[id],
+.columns-2-cols h5[id],
+.columns-2-cols h6[id] {
+  font-size: 46px !important;
+  font-weight: 200 !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.03em !important;
+  margin: 0 !important;
+  font-family: inherit !important;
+  padding-left: 25px;
+}
+ 
+ 
+@media (width >= 900px) {
+  .columns-2-cols > div {
+    gap: 40px;
+  }
+ 
+  /* Left Column */
+ 
+   .columns-2-cols > div > div:first-child {
+    align-self: flex-start;
+    padding-top: 34px;
+  }
+ 
+ 
+  /* Right Column */
+ 
+  .columns-2-cols > div > div:last-child {
+    padding-left: 25px;
+    padding-right: 25px;
+    flex:1;
+  }
+ 
+  .columns-2-cols > div > div:last-child p {
+    max-width: 65ch !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    margin: 30px !important;
+  }
+ 
+  .columns-2-cols > div > div:last-child > * + * {
+  margin-top: 48px;
+}
+}
+ 
+@media (width < 900px) {
+  .columns-2-cols {
+    padding: 32px 0;
+  }
+ 
+  .columns-2-cols > div {
+    gap: 32px;
+  }
+ 
+  .columns-2-cols h1[id],
+  .columns-2-cols h2[id],
+  .columns-2-cols h3[id],
+  .columns-2-cols h4[id],
+  .columns-2-cols h5[id],
+  .columns-2-cols h6[id] {
+    font-size: 40px !important;
+  }
+ 
 }

@@ -12,16 +12,79 @@
       "image",
       "button",
       "title",
-      "hero",
+      "accordion",
+      "article",
+      "blog-list",
+      "canvas",
+      "canvas-search-hero",
       "cards",
+      "carousel",
       "columns",
-      "fragment"
+      "cta",
+      "demo-card-column",
+      "dm-scene7-template",
+      "dm-video",
+      "embedv1",
+      "form-variations",
+      "tarun-header",
+      "tcs-header",
+      "footer-sai",
+      "fragment",
+      "hero",
+      "hero2",
+      "industry-list",
+      "intro-statement",
+      "medium-list",
+      "modal-v1",
+      "quotes",
+      "search",
+      "spotlight",
+      "statistics-list",
+      "table",
+      "table-list",
+      "teaser-v1",
+      "title-with-column",
+      "tabs-new",
+      "teaser-v2",
+      "text-with-link",
+      "video"
+    ]
+  },
+  {
+    "id": "accordion",
+    "components": [
+      "accordion-item"
+    ],
+    "rte": {
+      "toolbar": {
+        "format": []
+      }
+    }
+  },
+  {
+    "id": "canvas-search-hero",
+    "components": [
+      "canvas-search-hero-settings",
+      "canvas-search-hero-cta"
+    ]
+  },
+  {
+    "id": "canvas",
+    "components": [
+      "canvas-option"
     ]
   },
   {
     "id": "cards",
     "components": [
       "card"
+    ]
+  },
+  {
+    "id": "carousel",
+    "components": [
+      "carousel-item",
+      "hero2-item"
     ]
   },
   {
@@ -36,7 +99,269 @@
       "text",
       "image",
       "button",
-      "title"
+      "title",
+      "quote",
+      "demo-card-column-item"
     ]
+  },
+  {
+    "id": "content-cards",
+    "components": [
+      "content-card-item"
+    ]
+  },
+  {
+    "id": "demo-card-column",
+    "components": [
+      "demo-card-column-item"
+    ]
+  },
+  {
+    "id": "footer-sai",
+    "components": [
+      "footer-sai-hero",
+      "footer-sai-nav-item",
+      "footer-sai-legal-item",
+      "footer-sai-tcs-logo",
+      "footer-sai-tata-logo",
+      "canvas-search-hero-settings"
+    ]
+  },
+  {
+    "id": "form-variations",
+    "components": [
+      "field-text",
+      "field-select",
+      "field-textarea",
+      "field-checkbox",
+      "contact-card",
+      "field-submit"
+    ]
+  },
+  {
+    "id": "industry-list",
+    "components": [
+      "industry-list-header",
+      "industry-list-card"
+    ]
+  },
+  {
+    "id": "richtext",
+    "components": [
+      "richtext"
+    ],
+    "rte": {
+      "toolbar": {
+        "format": []
+      }
+    }
+  },
+  {
+    "id": "spotlight",
+    "components": [
+      "spotlight-header",
+      "spotlight-card"
+    ]
+  },
+  {
+    "id": "statistics-list",
+    "components": [
+      "statistics-list-item"
+    ]
+  },
+  {
+    "id": "table-list",
+    "components": [
+      "table-list-header",
+      "table-list-card"
+    ]
+  },
+  {
+    "id": "table",
+    "components": [
+      "table-row"
+    ]
+  },
+  {
+    "id": "table-2-columns",
+    "components": [
+      "table-col-2"
+    ]
+  },
+  {
+    "id": "table-3-columns",
+    "components": [
+      "table-col-3"
+    ]
+  },
+  {
+    "id": "table-4-columns",
+    "components": [
+      "table-col-4"
+    ]
+  },
+  {
+    "id": "tabs-new",
+    "components": [
+      "tabs-item"
+    ]
+  },
+  {
+    "id": "teaser-v1-children",
+    "components": [
+      "teaser-v1-link"
+    ]
+  },
+  {
+    "id": "title-with-column",
+    "components": [
+      "column"
+    ]
+  },
+  {
+    "id": "column",
+    "components": [
+      "title",
+      "text",
+      "cta"
+    ]
+  },
+  {
+    "id": "video",
+    "components": []
+  },
+  {
+    "id": "richtext",
+    "components": [
+      "richtext"
+    ],
+    "rte": {
+      "toolbar": {
+        "format": [
+          "bold",
+          "italic",
+          "underline",
+          "strike",
+          "code_inline",
+          "text_color"
+        ],
+        "alignment": [
+          "left",
+          "center",
+          "right",
+          "justify"
+        ],
+        "direction": [
+          "ltr",
+          "rtl"
+        ],
+        "indentation": [
+          "indent",
+          "outdent"
+        ],
+        "blocks": [
+          "paragraph",
+          "h1",
+          "h2",
+          "h3",
+          "h4",
+          "h5",
+          "h6",
+          "code_block",
+          "blockquote"
+        ],
+        "list": [
+          "bullet_list",
+          "ordered_list"
+        ],
+        "insert": [
+          "link",
+          "unlink",
+          "image",
+          "table",
+          "special_characters"
+        ],
+        "sr_script": [
+          "superscript",
+          "subscript"
+        ],
+        "editor": [
+          "removeformat",
+          "clean_unsupported_tags",
+          "paste_text"
+        ],
+        "advanced": [
+          "classes"
+        ],
+        "sections": [
+          "format",
+          "blocks",
+          "alignment",
+          "direction",
+          "list",
+          "indentation",
+          "insert",
+          "sr_script",
+          "editor",
+          "advanced"
+        ]
+      },
+      "actions": {
+        "bold": {
+          "tag": "strong"
+        },
+        "italic": {
+          "tag": "em"
+        },
+        "strike": {
+          "tag": "del"
+        },
+        "image": {
+          "wrapInPicture": true
+        },
+        "table": {
+          "showTableProperties": true,
+          "showRowProperties": true,
+          "showCellProperties": true
+        },
+        "classes": {
+          "label": "Typography style",
+          "options": [
+            {
+              "value": "rte-font-aptos",
+              "label": "Aptos"
+            },
+            {
+              "value": "rte-font-arial",
+              "label": "Arial"
+            },
+            {
+              "value": "rte-font-calibri",
+              "label": "Calibri"
+            },
+            {
+              "value": "rte-font-cambria",
+              "label": "Cambria"
+            },
+            {
+              "value": "rte-font-courier-new",
+              "label": "Courier New"
+            },
+            {
+              "value": "rte-font-consolas",
+              "label": "Consolas"
+            },
+            {
+              "value": "rte-font-georgia",
+              "label": "Georgia"
+            },
+            {
+              "value": "rte-font-roboto",
+              "label": "Roboto"
+            }
+          ]
+        }
+      }
+    }
   }
 ]

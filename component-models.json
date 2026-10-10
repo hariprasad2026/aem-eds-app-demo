@@ -152,81 +152,21 @@
       },
       {
         "component": "select",
-        "name": "alignment",
-        "label": "Alignment",
-        "value": "left",
+        "name": "titleColor",
+        "label": "Title Color",
+        "value": "black",
         "options": [
           {
-            "name": "Left",
-            "value": "left"
+            "name": "White",
+            "value": "white"
           },
           {
-            "name": "Center",
-            "value": "center"
+            "name": "Black",
+            "value": "black"
           },
           {
-            "name": "Right",
-            "value": "right"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "text",
-    "fields": [
-      {
-        "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text",
-        "valueType": "string"
-      },
-      {
-        "component": "select",
-        "name": "textStyle",
-        "label": "Text variation",
-        "value": "default",
-        "options": [
-          {
-            "name": "Default",
-            "value": "default"
-          },
-          {
-            "name": "Lead copy",
-            "value": "lead"
-          },
-          {
-            "name": "Muted text",
-            "value": "muted"
-          },
-          {
-            "name": "Highlight",
-            "value": "highlight"
-          },
-          {
-            "name": "Small text",
-            "value": "small"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "backgroundType",
-        "label": "Background",
-        "value": "none",
-        "options": [
-          {
-            "name": "No background",
-            "value": "none"
-          },
-          {
-            "name": "Light background",
-            "value": "light"
-          },
-          {
-            "name": "Accent background",
-            "value": "accent"
+            "name": "Blue",
+            "value": "blue"
           }
         ]
       },
@@ -338,6 +278,596 @@
     ]
   },
   {
+    "id": "accordion-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "summary",
+        "value": "",
+        "label": "Summary"
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      },
+      {
+        "component": "select",
+        "name": "layout",
+        "label": "Layout",
+        "valueType": "string",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Single Open",
+            "value": "single-open"
+          },
+          {
+            "name": "Search",
+            "value": "search"
+          },
+          {
+            "name": "Horizontal Accordion",
+            "value": "horizontal"
+          },
+          {
+            "name": "Corporate Accordion",
+            "value": "corporate"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "backgroundColor",
+        "label": "Background Color",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "textColor",
+        "label": "Text Color",
+        "valueType": "string",
+        "value": "black",
+        "options": [
+          {
+            "name": "Royal Blue",
+            "value": "royal-blue"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          },
+          {
+            "name": "Sky Blue",
+            "value": "sky-blue"
+          },
+          {
+            "name": "Dark Grey",
+            "value": "dark-grey"
+          },
+          {
+            "name": "White",
+            "value": "white"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "date",
+        "label": "Date",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "location",
+        "label": "Location",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "ctaLabel",
+        "label": "CTA Label",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "aem-content",
+        "name": "ctaLink",
+        "label": "CTA Link"
+      },
+      {
+        "component": "reference",
+        "name": "flagImage",
+        "label": "Flag Image",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "bannerImage",
+        "label": "Banner Image",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "article",
+    "fields": [
+      {
+        "component": "aem-content-fragment",
+        "name": "articlepath",
+        "label": "Article Content Fragment Path",
+        "value": "",
+        "valueType": "string"
+      },
+      {
+        "component": "select",
+        "name": "variation",
+        "label": "Variation",
+        "value": "main",
+        "options": [
+          {
+            "name": "Main",
+            "value": "main"
+          },
+          {
+            "name": "Summary",
+            "value": "summary"
+          },
+          {
+            "name": "Split",
+            "value": "split"
+          },
+          {
+            "name": "Hero",
+            "value": "hero"
+          },
+          {
+            "name": "Card",
+            "value": "card"
+          },
+          {
+            "name": "Minimal",
+            "value": "minimal"
+          },
+          {
+            "name": "Spotlight",
+            "value": "spotlight"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "alignment",
+        "label": "Alignment",
+        "value": "left",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "component": "checkbox-group",
+        "name": "displayfields",
+        "label": "Display Fields",
+        "value": [
+          "title",
+          "author",
+          "publicationdate",
+          "content"
+        ],
+        "options": [
+          {
+            "name": "Title",
+            "value": "title"
+          },
+          {
+            "name": "Author",
+            "value": "author"
+          },
+          {
+            "name": "Publication Date",
+            "value": "publicationdate"
+          },
+          {
+            "name": "Content",
+            "value": "content"
+          },
+          {
+            "name": "Featured Image",
+            "value": "featuredimage"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "blog-list",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "label": "Heading",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "readMoreLabel",
+        "label": "Read More Label",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "variant",
+        "label": "Variant",
+        "value": "featured",
+        "options": [
+          {
+            "name": "Featured",
+            "value": "featured"
+          },
+          {
+            "name": "Grid",
+            "value": "grid"
+          },
+          {
+            "name": "Horizontal",
+            "value": "horizontal"
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "canvas-search-hero-settings",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "label": "Heading",
+        "value": "What are you looking to do?"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "backgroundStyle",
+        "label": "Background Style",
+        "value": "light",
+        "options": [
+          {
+            "name": "Light",
+            "value": "light"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Image",
+            "value": "image"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "backgroundImage",
+        "label": "Background Image",
+        "multi": false,
+        "condition": {
+          "==": [
+            {
+              "var": "backgroundStyle"
+            },
+            "image"
+          ]
+        }
+      },
+      {
+        "component": "select",
+        "name": "headingFont",
+        "label": "Heading Font",
+        "value": "roboto",
+        "options": [
+          {
+            "name": "Roboto",
+            "value": "roboto"
+          },
+          {
+            "name": "Roboto Condensed",
+            "value": "roboto-condensed"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "name": "enableSearch",
+        "label": "Enable Search",
+        "value": true
+      },
+      {
+        "component": "select",
+        "name": "searchMode",
+        "label": "Search Input Mode",
+        "value": "text-and-voice",
+        "options": [
+          {
+            "name": "Text",
+            "value": "text"
+          },
+          {
+            "name": "Voice",
+            "value": "voice"
+          },
+          {
+            "name": "Text and Voice",
+            "value": "text-and-voice"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "searchPlaceholder",
+        "label": "Search Placeholder",
+        "value": "Ask TCS..."
+      },
+      {
+        "component": "aem-content",
+        "name": "searchActionUrl",
+        "label": "Search Results Page URL",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "canvas-search-hero-cta",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLabel",
+        "label": "CTA Label",
+        "value": ""
+      },
+      {
+        "component": "aem-content",
+        "name": "ctaLink",
+        "label": "CTA Link",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "canvas",
+    "fields": [
+      {
+        "component": "container",
+        "name": "commonFields",
+        "label": "Common Fields",
+        "collapsible": false,
+        "fields": [
+          {
+            "component": "select",
+            "name": "canvasType",
+            "label": "Canvas Type",
+            "value": "search",
+            "options": [
+              {
+                "name": "Search Canvas",
+                "value": "search"
+              },
+              {
+                "name": "Intent Canvas",
+                "value": "intent"
+              }
+            ]
+          },
+          {
+            "component": "text",
+            "name": "canvasSearchWatermark",
+            "label": "Canvas Search Watermark"
+          },
+          {
+            "component": "reference",
+            "name": "canvasMicrophoneIcon",
+            "label": "Canvas Microphone Icon"
+          },
+          {
+            "component": "reference",
+            "name": "canvasMenuIcon",
+            "label": "Canvas Menu Icon"
+          },
+          {
+            "component": "select",
+            "name": "motionType",
+            "label": "Motion Type",
+            "value": "none",
+            "options": [
+              {
+                "name": "None",
+                "value": "none"
+              },
+              {
+                "name": "Fade",
+                "value": "fade"
+              },
+              {
+                "name": "Slide Up",
+                "value": "slide-up"
+              }
+            ]
+          },
+          {
+            "component": "select",
+            "name": "canvasStyle",
+            "label": "Canvas Style",
+            "value": "default",
+            "options": [
+              {
+                "name": "Default",
+                "value": "default"
+              },
+              {
+                "name": "Floating Sticky",
+                "value": "floating-sticky"
+              }
+            ]
+          },
+          {
+            "component": "text",
+            "name": "canvasTitle",
+            "label": "Canvas Title"
+          },
+          {
+            "component": "richtext",
+            "name": "canvasDescription",
+            "label": "Canvas Description"
+          }
+        ]
+      },
+      {
+        "component": "container",
+        "name": "searchCanvasSettings",
+        "label": "Search Canvas Settings",
+        "collapsible": false,
+        "condition": {
+          "==": [
+            {
+              "var": "canvasType"
+            },
+            "search"
+          ]
+        },
+        "fields": [
+          {
+            "component": "checkbox",
+            "name": "showNavigation",
+            "label": "Show Navigation",
+            "value": true
+          },
+          {
+            "component": "checkbox",
+            "name": "showMicrophone",
+            "label": "Show Microphone",
+            "value": true
+          },
+          {
+            "component": "aem-content",
+            "name": "canvasNavRootPath",
+            "label": "Canvas Nav Root Path"
+          },
+          {
+            "component": "number",
+            "name": "canvasNavDepth",
+            "label": "Canvas Nav Depth",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "component": "container",
+        "name": "intentCanvasSettings",
+        "label": "Intent Canvas Settings",
+        "collapsible": false,
+        "condition": {
+          "==": [
+            {
+              "var": "canvasType"
+            },
+            "intent"
+          ]
+        },
+        "fields": [
+          {
+            "component": "checkbox",
+            "name": "enableSearch",
+            "label": "Enable Search",
+            "value": true
+          },
+          {
+            "component": "checkbox",
+            "name": "showNavigation",
+            "label": "Show Navigation",
+            "value": true
+          },
+          {
+            "component": "checkbox",
+            "name": "showMicrophone",
+            "label": "Show Microphone",
+            "value": true
+          },
+          {
+            "component": "number",
+            "name": "maximumOptions",
+            "label": "Maximum Options",
+            "value": 5
+          },
+          {
+            "component": "select",
+            "name": "optionsType",
+            "label": "Options Type",
+            "value": "default",
+            "options": [
+              {
+                "name": "Default",
+                "value": "default"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "canvas-option",
+    "fields": [
+      {
+        "component": "text",
+        "name": "optionLabel",
+        "label": "Option Label"
+      },
+      {
+        "component": "text",
+        "name": "optionLink",
+        "label": "Option Link"
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {
@@ -348,11 +878,289 @@
         "multi": false
       },
       {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "theme",
+        "value": "default",
+        "label": "Card Theme",
+        "options": [
+          {
+            "name": "Default Light",
+            "value": "default"
+          },
+          {
+            "name": "Dark Charcoal",
+            "value": "dark"
+          },
+          {
+            "name": "Brand Accent Border",
+            "value": "highlight"
+          }
+        ]
+      },
+      {
         "component": "richtext",
         "name": "text",
         "value": "",
         "label": "Text",
+        "valueType": "string",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
+    "id": "carousel",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "carouselType",
+        "label": "carousel type",
+        "value": "slider",
+        "options": [
+          {
+            "name": "Slider (default)",
+            "value": "slider"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "motionType",
+        "label": "Motion Type",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "carousel-item",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "media_image",
+        "label": "Background Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "media_imageAlt",
+        "value": "",
+        "label": "Background Alt"
+      },
+      {
+        "component": "richtext",
+        "name": "content_text",
+        "value": "",
+        "label": "Text",
         "valueType": "string"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "content_align",
+        "label": "Horizontal Alignment",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "content_valign",
+        "label": "Vertical Alignment",
+        "options": [
+          {
+            "name": "Top",
+            "value": "top"
+          },
+          {
+            "name": "Middle",
+            "value": "middle"
+          },
+          {
+            "name": "Bottom",
+            "value": "bottom"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hero2",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "icon",
+        "label": "Icon",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "iconAlt",
+        "label": "Icon Image Alt Text"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "heroImageType",
+        "label": "Hero Image Type",
+        "options": [
+          {
+            "name": "Lotto",
+            "value": "lotto"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "heroLottoImagePath",
+        "label": "Hero Lotto Image Path",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heroImageAlt",
+        "label": "Hero Image Alt Text"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "heroView",
+        "label": "Hero View",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrow",
+        "label": "Eyebrow"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaTitle",
+        "label": "CTA Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Link"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "ctaLinkType",
+        "label": "CTA Link Type",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "ctaView",
+        "label": "CTA View",
+        "options": [
+          {
+            "name": "Button",
+            "value": "button"
+          },
+          {
+            "name": "Link",
+            "value": "link"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "alignment",
+        "label": "Alignment",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "bgColor",
+        "label": "BG Color",
+        "options": [
+          {
+            "name": "Light",
+            "value": "light"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "motionType",
+        "label": "Motion Type"
       }
     ]
   },
@@ -380,8 +1188,16 @@
         "value": "default",
         "options": [
           {
-            "name": "Default",
+            "name": "Default Equal Grid",
             "value": "default"
+          },
+          {
+            "name": "Stacked Left (Design 1)",
+            "value": "stacked-left"
+          },
+          {
+            "name": "Stacked Right (Design 2)",
+            "value": "stacked-right"
           },
           {
             "name": "Image and copy",
@@ -396,18 +1212,1265 @@
     ]
   },
   {
+    "id": "column",
+    "title": "Column",
+    "fields": []
+  },
+  {
+    "id": "content-cards",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Card Style Variant",
+        "value": "",
+        "options": [
+          {
+            "name": "Solid Blue Topic Cards",
+            "value": ""
+          },
+          {
+            "name": "Article & Report Cards",
+            "value": "article-cards"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "content-card-item",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "theme",
+        "value": "default-light",
+        "label": "Card Theme (Child Color / Style)",
+        "options": [
+          {
+            "name": "Default Light",
+            "value": "default-light"
+          },
+          {
+            "name": "Blue Solid (No Image)",
+            "value": "blue-solid"
+          },
+          {
+            "name": "Dark Charcoal",
+            "value": "dark-charcoal"
+          },
+          {
+            "name": "Brand Accent Border",
+            "value": "brand-accent-border"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "category",
+        "label": "Category",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "tagBadge",
+        "label": "Tag Badge",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "topic",
+        "label": "Topic / Read Time",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "publishedDate",
+        "label": "Published Date",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description / Summary",
+        "valueType": "string",
+        "filter": "richtext"
+      },
+      {
+        "component": "richtext",
+        "name": "stats",
+        "label": "Stats List / Author Info",
+        "valueType": "string",
+        "filter": "richtext"
+      },
+      {
+        "component": "text",
+        "name": "ctaLabel",
+        "label": "CTA Label",
+        "valueType": "string"
+      },
+      {
+        "component": "aem-content",
+        "name": "buttonLink",
+        "label": "CTA Link",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "cta",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "text_cta",
+        "label": "CTA Text",
+        "value": "",
+        "required": true
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Link",
+        "value": "",
+        "required": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "openInNewTab",
+        "label": "Open In New Tab",
+        "value": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ariaLabel",
+        "label": "ARIA Label",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "shape",
+        "label": "Shape",
+        "value": "rectangle",
+        "options": [
+          {
+            "name": "Rectangle",
+            "value": "rectangle"
+          },
+          {
+            "name": "Rounded",
+            "value": "rounded"
+          },
+          {
+            "name": "Pill",
+            "value": "pill"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "backgroundColor",
+        "label": "Background Color",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "textColor",
+        "label": "Text Color",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "borderColor",
+        "label": "Border Color",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "arrowDirection",
+        "label": "Arrow",
+        "value": "none",
+        "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "demo-card-column",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Card Style Variant",
+        "value": "",
+        "options": [
+          {
+            "name": "Solid Blue Topic Cards",
+            "value": ""
+          },
+          {
+            "name": "Article & Report Cards",
+            "value": "article-cards"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "demo-card-column-item",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "theme",
+        "value": "default-light",
+        "label": "Card Theme (Child Color / Style)",
+        "options": [
+          {
+            "name": "Default Light",
+            "value": "default-light"
+          },
+          {
+            "name": "Blue Solid (No Image)",
+            "value": "blue-solid"
+          },
+          {
+            "name": "Dark Charcoal",
+            "value": "dark-charcoal"
+          },
+          {
+            "name": "Brand Accent Border",
+            "value": "brand-accent-border"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "category",
+        "label": "Category",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "topic",
+        "label": "Topic / Read Time",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "publishedDate",
+        "label": "Published Date",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description / Summary",
+        "valueType": "string",
+        "filter": "richtext"
+      },
+      {
+        "component": "richtext",
+        "name": "stats",
+        "label": "Stats List / Author Info",
+        "valueType": "string",
+        "filter": "richtext"
+      },
+      {
+        "component": "aem-content",
+        "name": "buttonLink",
+        "label": "CTA Link",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "dm-scene7-template",
+    "fields": [
+      {
+        "component": "text",
+        "name": "image",
+        "label": "Scene7 template URL",
+        "description": "Paste the full Dynamic Media image template URL (…/is/image/…?…). Use this text field (not custom-asset) if the site rewrites Scene7 links before block JS runs. Approach B, not mediabus.",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "dm-video",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "thumbnail",
+        "label": "Thumbnail / Poster Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "videoUrl",
+        "label": "DM Video URL (/play player or direct .mp4)",
+        "required": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "autoplay",
+        "label": "Autoplay",
+        "value": false
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "loop",
+        "label": "Play in Loop",
+        "value": false
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "controls",
+        "label": "Show Controls",
+        "value": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "muted",
+        "label": "Muted",
+        "value": false
+      }
+    ]
+  },
+  {
+    "id": "embedv1",
+    "fields": [
+      {
+        "component": "select",
+        "name": "type",
+        "label": "Embed Type",
+        "required": true,
+        "options": [
+          {
+            "name": "Iframe",
+            "value": "iframe"
+          },
+          {
+            "name": "YouTube",
+            "value": "youtube"
+          },
+          {
+            "name": "Vimeo",
+            "value": "vimeo"
+          },
+          {
+            "name": "Generic",
+            "value": "generic"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "url",
+        "label": "Embed URL",
+        "required": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "textarea",
+        "valueType": "string",
+        "name": "caption",
+        "label": "Caption"
+      },
+      {
+        "component": "select",
+        "name": "alignment",
+        "label": "Alignment",
+        "value": "center",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "size",
+        "label": "Size",
+        "value": "large",
+        "options": [
+          {
+            "name": "Small",
+            "value": "small"
+          },
+          {
+            "name": "Medium",
+            "value": "medium"
+          },
+          {
+            "name": "Large",
+            "value": "large"
+          },
+          {
+            "name": "Full Width",
+            "value": "full-width"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "footer-sai",
+    "fields": [
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Footer Theme",
+        "valueType": "string",
+        "required": false,
+        "maxSize": 1,
+        "options": [
+          {
+            "name": "Theme",
+            "children": [
+              {
+                "name": "Dark",
+                "value": "footer-sai-theme-dark"
+              },
+              {
+                "name": "Soft White",
+                "value": "footer-sai-theme-soft-white"
+              },
+              {
+                "name": "Powder Blue",
+                "value": "footer-sai-theme-powder-blue"
+              },
+              {
+                "name": "Sage Green",
+                "value": "footer-sai-theme-sage-green"
+              },
+              {
+                "name": "Blush Pink",
+                "value": "footer-sai-theme-blush-pink"
+              },
+              {
+                "name": "Lavender",
+                "value": "footer-sai-theme-lavender"
+              },
+              {
+                "name": "Warm Cream",
+                "value": "footer-sai-theme-warm-cream"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "motion",
+        "label": "Motion Type",
+        "value": "none",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
+          {
+            "name": "Fade In",
+            "value": "fade"
+          },
+          {
+            "name": "Slide Up",
+            "value": "slide-up"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "name": "copyrightText",
+        "label": "Copyright Text",
+        "value": "",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "footer-sai-hero",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "label": "Heading",
+        "value": ""
+      },
+      {
+        "component": "boolean",
+        "name": "enableSearch",
+        "label": "Enable Search Bar",
+        "value": true
+      },
+      {
+        "component": "select",
+        "name": "searchMode",
+        "label": "AI Search Input Mode",
+        "value": "text-and-voice",
+        "options": [
+          {
+            "name": "Text",
+            "value": "text"
+          },
+          {
+            "name": "Voice",
+            "value": "voice"
+          },
+          {
+            "name": "Text and Voice",
+            "value": "text-and-voice"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "searchPlaceholder",
+        "label": "Search Placeholder Text",
+        "value": "Search..."
+      },
+      {
+        "component": "aem-content",
+        "name": "searchActionUrl",
+        "label": "Search Results Page URL",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "footer-sai-nav-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "linkText",
+        "label": "Link Text",
+        "valueType": "string"
+      },
+      {
+        "component": "aem-content",
+        "name": "linkCta",
+        "label": "Link CTA",
+        "valueType": "string"
+      },
+      {
+        "component": "select",
+        "name": "linkTarget",
+        "label": "Link Target",
+        "value": "_self",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Same Tab",
+            "value": "_self"
+          },
+          {
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "footer-sai-legal-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Legal Link Label",
+        "value": ""
+      },
+      {
+        "component": "aem-content",
+        "name": "linkCta",
+        "label": "Legal Link URL",
+        "valueType": "string"
+      },
+      {
+        "component": "select",
+        "name": "linkTarget",
+        "label": "Link Target",
+        "value": "_self",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Same Tab",
+            "value": "_self"
+          },
+          {
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "itemType",
+        "label": "Link Group",
+        "value": "footer-sai-legal-item",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Legal",
+            "value": "footer-sai-legal-item"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "footer-sai-tcs-logo",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "tcsLogo",
+        "label": "TCS Logo Image",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tcsLogoAlt",
+        "label": "TCS Logo Alt Text",
+        "value": ""
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "tcsLogoLink",
+        "label": "TCS Logo Link URL",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "footer-sai-tata-logo",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "tataLogo",
+        "label": "Tata Logo Image",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tataLogoAlt",
+        "label": "Tata Logo Alt Text",
+        "value": ""
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "tataLogoLink",
+        "label": "Tata Logo Link URL",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "form-variations",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "formTitle",
+        "label": "Form Title / Heading"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "formDescription",
+        "label": "Form Description",
+        "filter": "richtext"
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Theme & Style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Dark Theme",
+            "value": "dark"
+          },
+          {
+            "name": "Light Theme",
+            "value": "light"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "field-text",
+    "fields": [
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Field Name / ID (e.g. firstName)",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "label",
+        "label": "Field Label (e.g. First name)",
+        "required": true
+      },
+      {
+        "component": "select",
+        "name": "type",
+        "label": "Input Type",
+        "value": "text",
+        "options": [
+          {
+            "name": "Text",
+            "value": "text"
+          },
+          {
+            "name": "Email",
+            "value": "email"
+          },
+          {
+            "name": "Tel",
+            "value": "tel"
+          }
+        ]
+      },
+      {
+        "component": "checkbox",
+        "name": "required",
+        "label": "Mandatory Field (*)"
+      },
+      {
+        "component": "text",
+        "name": "dependsOn",
+        "label": "Show Only If Dropdown Value Equals (Case 1)"
+      }
+    ]
+  },
+  {
+    "id": "field-select",
+    "fields": [
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Dropdown ID (e.g. sector or region)",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "label",
+        "label": "Dropdown Label (e.g. Sector)",
+        "required": true
+      },
+      {
+        "component": "checkbox",
+        "name": "required",
+        "label": "Mandatory Field (*)"
+      },
+      {
+        "component": "text",
+        "name": "options",
+        "label": "Options (Comma Separated e.g. Technology, Sport, Asia Pacific, India)"
+      },
+      {
+        "component": "text",
+        "name": "dependsOn",
+        "label": "Show Only If Dropdown Value Equals (Case 1)"
+      }
+    ]
+  },
+  {
+    "id": "field-textarea",
+    "fields": [
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Field ID (e.g. feedback)",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "label",
+        "label": "Field Label (e.g. How can we help you?)",
+        "required": true
+      },
+      {
+        "component": "number",
+        "name": "maxLength",
+        "label": "Max Character Limit",
+        "value": 1500
+      },
+      {
+        "component": "checkbox",
+        "name": "required",
+        "label": "Mandatory Field (*)"
+      },
+      {
+        "component": "text",
+        "name": "dependsOn",
+        "label": "Show Only If Dropdown Value Equals (Case 1)"
+      }
+    ]
+  },
+  {
+    "id": "field-checkbox",
+    "fields": [
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Checkbox ID (e.g. consent)",
+        "required": true
+      },
+      {
+        "component": "richtext",
+        "name": "label",
+        "label": "Consent Text / Disclaimer",
+        "required": true,
+        "filter": "richtext"
+      },
+      {
+        "component": "checkbox",
+        "name": "required",
+        "label": "Mandatory Field (*)"
+      },
+      {
+        "component": "text",
+        "name": "dependsOn",
+        "label": "Show Only If Dropdown Value Equals (Case 1)"
+      }
+    ]
+  },
+  {
+    "id": "contact-card",
+    "fields": [
+      {
+        "component": "text",
+        "name": "region",
+        "label": "Target Dropdown Match Value (e.g. India)",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "contactName",
+        "label": "Contact Name (e.g. Iris Tham)",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "emails",
+        "label": "Emails (Comma Separated)"
+      },
+      {
+        "component": "text",
+        "name": "phones",
+        "label": "Phones (Comma Separated)"
+      }
+    ]
+  },
+  {
+    "id": "field-submit",
+    "fields": [
+      {
+        "component": "text",
+        "name": "label",
+        "label": "Button Label",
+        "value": "Send"
+      },
+      {
+        "component": "text",
+        "name": "dependsOn",
+        "label": "Show Only If Dropdown Value Equals (Case 1)"
+      }
+    ]
+  },
+  {
     "id": "fragment",
     "fields": [
+      {
+        "component": "select",
+        "name": "fragmentType",
+        "label": "Fragment Type",
+        "valueType": "string",
+        "value": "standard",
+        "options": [
+          {
+            "name": "Standard Fragment",
+            "value": "standard"
+          },
+          {
+            "name": "Hero Fragment",
+            "value": "hero"
+          }
+        ]
+      },
       {
         "component": "aem-content",
         "name": "reference",
         "label": "Reference"
+      },
+      {
+        "component": "select",
+        "name": "heroLayout",
+        "label": "Hero Layout",
+        "valueType": "string",
+        "value": "full",
+        "condition": {
+          "===": [
+            {
+              "var": "fragmentType"
+            },
+            "hero"
+          ]
+        },
+        "options": [
+          {
+            "name": "Full Hero",
+            "value": "full"
+          },
+          {
+            "name": "Image + Text",
+            "value": "image-text"
+          },
+          {
+            "name": "Without Media",
+            "value": "without-media"
+          },
+          {
+            "name": "Text Only",
+            "value": "text-only"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "imagePosition",
+        "label": "Image Position",
+        "valueType": "string",
+        "value": "left",
+        "condition": {
+          "===": [
+            {
+              "var": "heroLayout"
+            },
+            "image-text"
+          ]
+        },
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hero2",
+    "fields": [
+      {
+        "component": "fieldset",
+        "name": "imageSection",
+        "label": "Image Section"
+      },
+      {
+        "component": "reference",
+        "name": "heroIcon",
+        "label": "Icon"
+      },
+      {
+        "component": "text",
+        "name": "heroIconAlt",
+        "label": "Icon Image Alt Text"
+      },
+      {
+        "component": "select",
+        "name": "heroImageType",
+        "label": "Hero Image Type",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Lotto",
+            "value": "lotto"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "heroLottoImagePath",
+        "label": "Hero Lotto Image Path"
+      },
+      {
+        "component": "text",
+        "name": "heroImageAlt",
+        "label": "Hero Image Alt Text"
+      },
+      {
+        "component": "select",
+        "name": "heroView",
+        "label": "Hero View",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          }
+        ]
+      },
+      {
+        "component": "fieldset",
+        "name": "contentSection",
+        "label": "Content Section"
+      },
+      {
+        "component": "text",
+        "name": "eyebrowText",
+        "label": "Eyebrow"
+      },
+      {
+        "component": "textarea",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "fieldset",
+        "name": "linkSection",
+        "label": "Link Section"
+      },
+      {
+        "component": "text",
+        "name": "ctaTitle",
+        "label": "CTA Title"
+      },
+      {
+        "component": "text",
+        "name": "ctaLink",
+        "label": "CTA Link"
+      },
+      {
+        "component": "select",
+        "name": "ctaLinkType",
+        "label": "CTA Link Type",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Open In New Window",
+            "value": "new-window"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "ctaView",
+        "label": "CTA View",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "fieldset",
+        "name": "styleSection",
+        "label": "Style"
+      },
+      {
+        "component": "select",
+        "name": "alignment",
+        "label": "Alignment",
+        "options": [
+          {
+            "name": "Top",
+            "value": "top"
+          },
+          {
+            "name": "Middle",
+            "value": "middle"
+          },
+          {
+            "name": "Bottom",
+            "value": "bottom"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "bgColor",
+        "label": "BG Color",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          }
+        ]
       }
     ]
   },
   {
     "id": "hero",
     "fields": [
+      {
+        "component": "select",
+        "name": "heroType",
+        "label": "Hero Type",
+        "valueType": "string",
+        "value": "split",
+        "options": [
+          {
+            "name": "Split Hero",
+            "value": "split"
+          },
+          {
+            "name": "Overlay Hero",
+            "value": "overlay"
+          },
+          {
+            "name": "Centered Hero",
+            "value": "centered"
+          },
+          {
+            "name": "Banner Hero",
+            "value": "banner"
+          }
+        ]
+      },
+      {
+        "component": "tab",
+        "name": "contentTab",
+        "label": "Content"
+      },
+      {
+        "component": "text",
+        "name": "overline",
+        "label": "Overline",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string"
+      },
+      {
+        "component": "textarea",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      },
       {
         "component": "reference",
         "valueType": "string",
@@ -419,15 +2482,2922 @@
         "component": "text",
         "valueType": "string",
         "name": "imageAlt",
-        "label": "Alt",
+        "label": "Image Alt"
+      },
+      {
+        "component": "text",
+        "name": "link1Text",
+        "label": "Link 1 Text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "link1Url",
+        "label": "Link 1 URL",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "link2Text",
+        "label": "Link 2 Text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "link2Url",
+        "label": "Link 2 URL",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "buttonText",
+        "label": "Button Text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "overlay"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "buttonUrl",
+        "label": "Button URL",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "overlay"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "primaryButtonText",
+        "label": "Primary Button Text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "centered"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "primaryButtonUrl",
+        "label": "Primary Button URL",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "centered"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "secondaryButtonText",
+        "label": "Secondary Button Text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "centered"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "secondaryButtonUrl",
+        "label": "Secondary Button URL",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "centered"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "bannerLinkText",
+        "label": "Banner Link Text",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "banner"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "bannerLinkUrl",
+        "label": "Banner Link URL",
+        "valueType": "string",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "banner"
+          ]
+        }
+      },
+      {
+        "component": "tab",
+        "name": "styleTab",
+        "label": "Style"
+      },
+      {
+        "component": "select",
+        "name": "titleType",
+        "label": "Title Tag",
+        "valueType": "string",
+        "value": "h1",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "backgroundColor",
+        "label": "Background Color",
+        "valueType": "string",
+        "value": "hero-bg-black",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        },
+        "options": [
+          {
+            "name": "Black",
+            "value": "hero-bg-black"
+          },
+          {
+            "name": "White",
+            "value": "hero-bg-white"
+          },
+          {
+            "name": "Dark Gray",
+            "value": "hero-bg-dark-gray"
+          },
+          {
+            "name": "Brand Red",
+            "value": "hero-bg-brand-red"
+          },
+          {
+            "name": "Brand Blue",
+            "value": "hero-bg-brand-blue"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "textColor",
+        "label": "Text Color",
+        "valueType": "string",
+        "value": "hero-text-white",
+        "options": [
+          {
+            "name": "White",
+            "value": "hero-text-white"
+          },
+          {
+            "name": "Black",
+            "value": "hero-text-black"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "buttonColor",
+        "label": "Button Color",
+        "valueType": "string",
+        "value": "hero-button-color-white",
+        "condition": {
+          "in": [
+            {
+              "var": "heroType"
+            },
+            [
+              "overlay",
+              "centered"
+            ]
+          ]
+        },
+        "options": [
+          {
+            "name": "White",
+            "value": "hero-button-color-white"
+          },
+          {
+            "name": "Black",
+            "value": "hero-button-color-black"
+          },
+          {
+            "name": "Brand Red",
+            "value": "hero-button-color-brand-red"
+          },
+          {
+            "name": "Brand Blue",
+            "value": "hero-button-color-brand-blue"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "imagePosition",
+        "label": "Image Position",
+        "valueType": "string",
+        "value": "hero-image-right",
+        "condition": {
+          "===": [
+            {
+              "var": "heroType"
+            },
+            "split"
+          ]
+        },
+        "options": [
+          {
+            "name": "Left",
+            "value": "hero-image-left"
+          },
+          {
+            "name": "Right",
+            "value": "hero-image-right"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "buttonPosition",
+        "label": "Button Position",
+        "valueType": "string",
+        "value": "hero-button-center",
+        "condition": {
+          "in": [
+            {
+              "var": "heroType"
+            },
+            [
+              "overlay",
+              "centered"
+            ]
+          ]
+        },
+        "options": [
+          {
+            "name": "Left",
+            "value": "hero-content-left"
+          },
+          {
+            "name": "Center",
+            "value": "hero-content-center"
+          },
+          {
+            "name": "Right",
+            "value": "hero-content-right"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "industry-list",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "classes",
+        "label": "Variation",
+        "value": "",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "No Description",
+            "value": "no-description"
+          },
+          {
+            "name": "Dark Theme",
+            "value": "dark"
+          },
+          {
+            "name": "Featured Industry",
+            "value": "featured-industry"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "industry-list-header",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "label": "Heading",
+        "value": "Deep expertise, across industries"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "exploreLink",
+        "label": "Explore All Link",
+        "description": "Add a linked 'Explore all Industries' label. The arrow is added automatically.",
+        "value": "",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
+    "id": "industry-list-card",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "number",
+        "label": "Number",
+        "description": "Optional. Leave blank to number cards automatically as 01, 02, 03, etc.",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "value": "Banking"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description",
+        "value": "Building the Intelligent, Trusted Bank"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "link",
+        "label": "Card Link",
+        "description": "Add a link to the destination. The card uses the title as its accessible link label; the arrow is added automatically.",
+        "value": "",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
+    "id": "intro-statement",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Statement Text",
+        "valueType": "string",
+        "value": "",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
+    "id": "medium-list",
+    "fields": [
+      {
+        "component": "select",
+        "name": "listType",
+        "label": "List Type",
+        "value": "children",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Child Pages",
+            "value": "children"
+          },
+          {
+            "name": "Fixed List",
+            "value": "fixed"
+          },
+          {
+            "name": "Search",
+            "value": "search"
+          },
+          {
+            "name": "Tags",
+            "value": "tags"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "parentPage",
+        "label": "Parent Page Path",
+        "description": "Folder path to list children from (e.g. /news). Defaults to current page if empty.",
+        "value": "",
+        "valueType": "string",
+        "condition": {
+          "==": [
+            {
+              "var": "listType"
+            },
+            "children"
+          ]
+        }
+      },
+      {
+        "component": "number",
+        "name": "maxItems",
+        "label": "Maximum Items",
+        "value": "5",
+        "valueType": "number",
+        "condition": {
+          "==": [
+            {
+              "var": "listType"
+            },
+            "children"
+          ]
+        }
+      },
+      {
+        "component": "select",
+        "name": "orderBy",
+        "label": "Order By",
+        "value": "title",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Title",
+            "value": "title"
+          },
+          {
+            "name": "Last Modified",
+            "value": "modified"
+          }
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "listType"
+            },
+            "children"
+          ]
+        }
+      },
+      {
+        "component": "select",
+        "name": "sortOrder",
+        "label": "Sort Order",
+        "value": "ascending",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Ascending (A-Z / Oldest)",
+            "value": "ascending"
+          },
+          {
+            "name": "Descending (Z-A / Newest)",
+            "value": "descending"
+          }
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "listType"
+            },
+            "children"
+          ]
+        }
+      },
+      {
+        "component": "richtext",
+        "name": "fixedItems",
+        "label": "Fixed Items",
+        "description": "Add a bulleted list of links with optional text directly in the editor.",
+        "value": "",
+        "valueType": "string",
+        "condition": {
+          "==": [
+            {
+              "var": "listType"
+            },
+            "fixed"
+          ]
+        },
+        "filter": "richtext"
+      },
+      {
+        "component": "text",
+        "name": "searchQuery",
+        "label": "Search Query",
+        "description": "Keywords to match against title or description.",
+        "value": "",
+        "valueType": "string",
+        "condition": {
+          "==": [
+            {
+              "var": "listType"
+            },
+            "search"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "searchIn",
+        "label": "Search In Path",
+        "description": "Optional folder path to scope the search (e.g. /news).",
+        "value": "",
+        "valueType": "string",
+        "condition": {
+          "==": [
+            {
+              "var": "listType"
+            },
+            "search"
+          ]
+        }
+      },
+      {
+        "component": "number",
+        "name": "maxItemsSearch",
+        "label": "Maximum Items",
+        "value": "5",
+        "valueType": "number",
+        "condition": {
+          "==": [
+            {
+              "var": "listType"
+            },
+            "search"
+          ]
+        }
+      },
+      {
+        "component": "aem-tag",
+        "name": "tags",
+        "label": "Tags (Comma-separated)",
+        "description": "e.g. cloud, platform, security",
+        "value": "",
+        "valueType": "string",
+        "condition": {
+          "==": [
+            {
+              "var": "listType"
+            },
+            "tags"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "tagsParentPage",
+        "label": "Parent Page Path",
+        "description": "Optional path to scope tagged pages.",
+        "value": "",
+        "valueType": "string",
+        "condition": {
+          "==": [
+            {
+              "var": "listType"
+            },
+            "tags"
+          ]
+        }
+      },
+      {
+        "component": "select",
+        "name": "tagMatch",
+        "label": "Match Mode",
+        "value": "any",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Any Tag (Match ≥1)",
+            "value": "any"
+          },
+          {
+            "name": "All Tags (Match All)",
+            "value": "all"
+          }
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "listType"
+            },
+            "tags"
+          ]
+        }
+      },
+      {
+        "component": "number",
+        "name": "maxItemsTags",
+        "label": "Maximum Items",
+        "value": "5",
+        "valueType": "number",
+        "condition": {
+          "==": [
+            {
+              "var": "listType"
+            },
+            "tags"
+          ]
+        }
+      },
+      {
+        "component": "select",
+        "name": "displayAsTeaser",
+        "label": "Display as Teaser",
+        "value": "true",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Yes",
+            "value": "true"
+          },
+          {
+            "name": "No",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "showDescription",
+        "label": "Show Description",
+        "value": "true",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Yes",
+            "value": "true"
+          },
+          {
+            "name": "No",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "showDate",
+        "label": "Show Modification Date",
+        "value": "false",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Yes",
+            "value": "true"
+          },
+          {
+            "name": "No",
+            "value": "false"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "modal-v1",
+    "fields": [
+      {
+        "component": "select",
+        "name": "variant",
+        "label": "Modal Variation",
+        "valueType": "string",
+        "value": "default",
+        "required": true,
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Image",
+            "value": "image"
+          },
+          {
+            "name": "Video",
+            "value": "video"
+          },
+          {
+            "name": "Content",
+            "value": "content"
+          },
+          {
+            "name": "Small",
+            "value": "small"
+          },
+          {
+            "name": "Large",
+            "value": "large"
+          },
+          {
+            "name": "Full Screen",
+            "value": "full-screen"
+          },
+          {
+            "name": "Right / Side",
+            "value": "side"
+          },
+          {
+            "name": "CTA",
+            "value": "cta"
+          },
+          {
+            "name": "Confirmation",
+            "value": "confirmation"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Description",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "eyebrow",
+        "label": "Eyebrow",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string",
         "value": ""
       },
       {
         "component": "richtext",
-        "name": "text",
+        "name": "content",
+        "label": "Content",
+        "valueType": "string",
         "value": "",
+        "filter": "richtext"
+      },
+      {
+        "component": "text",
+        "name": "video",
+        "label": "Video URL",
+        "description": "URL of the video or embedded media.",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "cta1Text",
+        "label": "Primary CTA Text",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "cta1",
+        "label": "Primary CTA Link",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "cta2Text",
+        "label": "Secondary CTA Text",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "cta2",
+        "label": "Secondary CTA Link",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "closeLabel",
+        "label": "Close Button Label",
+        "valueType": "string",
+        "value": "Close"
+      },
+      {
+        "component": "text",
+        "name": "triggerText",
+        "label": "Trigger Text",
+        "description": "Text displayed on the button that opens the modal.",
+        "valueType": "string",
+        "value": "Open Modal"
+      }
+    ]
+  },
+  {
+    "id": "quotes",
+    "fields": [
+      {
+        "component": "text",
+        "name": "eyebrow",
+        "label": "Eyebrow",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "quotation",
+        "value": "",
+        "label": "Quotation"
+      },
+      {
+        "component": "select",
+        "name": "layout",
+        "label": "Layout",
+        "valueType": "string",
+        "value": "image",
+        "options": [
+          {
+            "name": "Default",
+            "value": "image"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "backgroundColor",
+        "label": "Background Color",
+        "valueType": "string",
+        "value": "white",
+        "options": [
+          {
+            "name": "Default",
+            "value": "white"
+          },
+          {
+            "name": "Light Grey",
+            "value": "light-grey"
+          },
+          {
+            "name": "Off White",
+            "value": "off-white"
+          },
+          {
+            "name": "Dark Grey",
+            "value": "dark-grey"
+          },
+          {
+            "name": "Light Blue",
+            "value": "light-blue"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "profileImage",
+        "label": "Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAltText",
+        "label": "Image Alt Text",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "authorDetails",
+        "label": "Author Details",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "search",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "index",
+        "label": "Index",
+        "description": "Path to the query index file (e.g., /query-index.json)."
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Options & Variations",
+        "valueType": "string",
+        "required": false,
+        "maxSize": 4,
+        "options": [
+          {
+            "name": "1. Search Style (Layout)",
+            "children": [
+              {
+                "name": "Minimal (Input Only)",
+                "value": "minimal"
+              },
+              {
+                "name": "Hero Banner Search",
+                "value": "hero-search"
+              }
+            ]
+          },
+          {
+            "name": "2. Display Width",
+            "children": [
+              {
+                "name": "Container Width",
+                "value": "container-width"
+              },
+              {
+                "name": "Full Width",
+                "value": "full-width"
+              }
+            ]
+          },
+          {
+            "name": "3. Results Display",
+            "children": [
+              {
+                "name": "Dropdown Instant Results",
+                "value": "results-dropdown"
+              },
+              {
+                "name": "In-Page Grid Results",
+                "value": "results-grid"
+              }
+            ]
+          },
+          {
+            "name": "4. Color Theme",
+            "children": [
+              {
+                "name": "Light Theme",
+                "value": "theme-light"
+              },
+              {
+                "name": "Dark Theme",
+                "value": "theme-dark"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "spotlight",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "classes",
+        "label": "Variation",
+        "value": "",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "No Metadata",
+            "value": "no-metadata"
+          },
+          {
+            "name": "Featured First",
+            "value": "featured-first"
+          },
+          {
+            "name": "Dark Theme",
+            "value": "dark"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "spotlight-header",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Heading",
+        "value": "Latest News"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "viewAllLink",
+        "label": "View All Link",
+        "description": "Add a linked 'View all' label; the arrow is decorative.",
+        "value": "",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
+    "id": "spotlight-card",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "category",
+        "label": "Category Tag",
+        "value": "Event"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrow",
+        "label": "Small Tagline",
+        "value": "Executive Leadership"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "headline",
+        "label": "Headline",
+        "value": "Join us at the Enterprise Intelligence Summit 2027"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "link",
+        "label": "Card Link",
+        "description": "Add a link to the destination. The headline is displayed as the card text and the entire card is clickable.",
+        "value": "",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
+    "id": "statistics-list",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "text",
         "label": "Text",
+        "value": "",
+        "valueType": "string",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
+    "id": "statistics-list-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "value": "",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "value",
+        "label": "Statistic",
+        "value": "",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "table-list",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "variations",
+        "label": "Variations",
+        "value": "",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Black Theme",
+            "value": "dark"
+          },
+          {
+            "name": "No Number",
+            "value": "no-number"
+          },
+          {
+            "name": "Description First",
+            "value": "description-first"
+          },
+          {
+            "name": "Title Right",
+            "value": "title-right"
+          }
+        ]
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "maxCards",
+        "label": "Maximum Cards",
+        "description": "Display between 1 and 4 cards.",
+        "value": 4,
+        "validation": {
+          "numberMin": 1,
+          "numberMax": 4,
+          "customErrorMsg": "Maximum Cards must be between 1 and 4."
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showTags",
+        "label": "Show Tags",
+        "description": "Display each card's tags above its description in the Title Right variation.",
+        "value": false
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "view",
+        "label": "View",
+        "value": "list",
+        "options": [
+          {
+            "name": "List",
+            "value": "list"
+          },
+          {
+            "name": "Table",
+            "value": "table"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "cardColor",
+        "label": "Card Color",
+        "value": "white",
+        "options": [
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "display",
+        "label": "Display",
+        "value": "title-description",
+        "options": [
+          {
+            "name": "Title and Description",
+            "value": "title-description"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "viewAllTitle",
+        "label": "View All Title",
+        "value": "View all"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "viewAllLink",
+        "label": "View All Link",
+        "description": "Destination URL for the header CTA.",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "motionType",
+        "label": "Motion Type",
+        "value": "none",
+        "options": []
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "listTitle",
+        "label": "List Title",
+        "value": "Our transformation solutions"
+      }
+    ]
+  },
+  {
+    "id": "table-list-header",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "label": "Heading",
+        "value": "Our transformation solutions"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "exploreLink",
+        "label": "Explore All Link",
+        "description": "Legacy header link. The parent View All settings take precedence when configured.",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "table-list-card",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "number",
+        "label": "Number",
+        "description": "Optional. Leave blank to number cards automatically.",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "value": "TwinX"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description",
+        "value": "Risk free business experimentation and decision making"
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "link",
+        "label": "Page Reference",
+        "description": "Destination page path for the card.",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tag1",
+        "label": "Tag 1",
+        "description": "Optional. Displayed above the description when Show Tags is enabled.",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tag2",
+        "label": "Tag 2",
+        "description": "Optional second tag displayed above the description.",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "table",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "value": "",
+        "label": "Table Variation",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Striped",
+            "value": "striped"
+          },
+          {
+            "name": "Bordered",
+            "value": "bordered"
+          },
+          {
+            "name": "No Header",
+            "value": "no-header"
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "Hoverable",
+            "value": "hoverable"
+          },
+          {
+            "name": "Comparison",
+            "value": "comparison"
+          },
+          {
+            "name": "Pricing",
+            "value": "pricing"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Responsive Cards",
+            "value": "responsive-cards"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "filter",
+        "label": "Columns",
+        "valueType": "string",
+        "value": "table",
+        "options": [
+          {
+            "name": "1 Column",
+            "value": "table"
+          },
+          {
+            "name": "2 Columns",
+            "value": "table-2-columns"
+          },
+          {
+            "name": "3 Columns",
+            "value": "table-3-columns"
+          },
+          {
+            "name": "4 Columns",
+            "value": "table-4-columns"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "name": "sortable",
+        "label": "Enable Sorting",
+        "value": false,
+        "valueType": "boolean"
+      },
+      {
+        "component": "boolean",
+        "name": "searchable",
+        "label": "Enable Search",
+        "value": false,
+        "valueType": "boolean"
+      },
+      {
+        "component": "boolean",
+        "name": "stickyHeader",
+        "label": "Enable Sticky Header",
+        "value": false,
+        "valueType": "boolean"
+      },
+      {
+        "component": "boolean",
+        "name": "pagination",
+        "label": "Enable Pagination",
+        "value": false,
+        "valueType": "boolean"
+      }
+    ]
+  },
+  {
+    "id": "table-row",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column1text",
+        "label": "Column 1",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
+    "id": "table-col-2",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column1text",
+        "label": "Column 1",
+        "filter": "richtext"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column2text",
+        "label": "Column 2",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
+    "id": "table-col-3",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column1text",
+        "label": "Column 1",
+        "filter": "richtext"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column2text",
+        "label": "Column 2",
+        "filter": "richtext"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column3text",
+        "label": "Column 3",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
+    "id": "table-col-4",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column1text",
+        "label": "Column 1",
+        "filter": "richtext"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column2text",
+        "label": "Column 2",
+        "filter": "richtext"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column3text",
+        "label": "Column 3",
+        "filter": "richtext"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "column4text",
+        "label": "Column 4",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
+    "id": "tabs-new",
+    "fields": [
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Style",
+        "valueType": "string",
+        "maxSize": 2,
+        "options": [
+          {
+            "name": "Layout",
+            "children": [
+              {
+                "name": "Default",
+                "value": "default"
+              },
+              {
+                "name": "Underline",
+                "value": "underline"
+              },
+              {
+                "name": "Pills",
+                "value": "pills"
+              },
+              {
+                "name": "Vertical",
+                "value": "vertical"
+              },
+              {
+                "name": "Cards",
+                "value": "cards"
+              }
+            ]
+          },
+          {
+            "name": "Theme",
+            "children": [
+              {
+                "name": "Light",
+                "value": "light"
+              },
+              {
+                "name": "Dark",
+                "value": "dark"
+              },
+              {
+                "name": "TCS Red",
+                "value": "tcs-red"
+              },
+              {
+                "name": "TCS Blue",
+                "value": "tcs-blue"
+              },
+              {
+                "name": "TCS Yellow",
+                "value": "tcs-yellow"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "tabAlignment",
+        "label": "Tab Alignment",
+        "value": "left",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tabs-new-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Tab Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "content_heading",
+        "value": "",
+        "label": "Heading"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "content_headingType",
+        "value": "h3",
+        "label": "Heading Type",
+        "options": [
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "content_image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "content_video",
+        "label": "Video",
+        "multi": false
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "content_richtext",
+        "value": "",
+        "label": "Content"
+      }
+    ]
+  },
+  {
+    "id": "tarun-header",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "headerVariant",
+        "label": "Header Variant",
+        "value": "standard",
+        "options": [
+          {
+            "name": "Standard",
+            "value": "standard"
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Centered",
+            "value": "centered"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "tcsLogo",
+        "label": "TCS Logo Image"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tcsLogoLink",
+        "label": "TCS Logo Target URL",
+        "value": "/"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "tataLogo",
+        "label": "Tata Logo Image"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tataLogoLink",
+        "label": "Tata Logo Target URL",
+        "value": "https://www.tata.com"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "menu",
+        "label": "Navigation Links",
+        "description": "Add top-level links or a bulleted list for submenus.",
+        "filter": "richtext"
+      }
+    ]
+  },
+  {
+    "id": "tcs-header",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "headerVariant",
+        "label": "Header Variant",
+        "value": "standard",
+        "options": [
+          {
+            "name": "Standard",
+            "value": "standard"
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Centered",
+            "value": "centered"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "tcsLogo",
+        "label": "TCS Logo Image"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tcsLogoLink",
+        "label": "TCS Logo Target URL",
+        "value": "/"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "tataLogo",
+        "label": "Tata Logo Image"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tataLogoLink",
+        "label": "Tata Logo Target URL",
+        "value": "https://www.tata.com"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tcsLogoAlt",
+        "label": "TCS Logo Alt Text",
+        "value": "Tata Consultancy Services"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tataLogoAlt",
+        "label": "Tata Logo Alt Text",
+        "value": "TATA Group"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "navigationMotion",
+        "label": "Navigation Motion Type",
+        "value": "slide",
+        "options": [
+          {
+            "name": "Slide",
+            "value": "slide"
+          },
+          {
+            "name": "Fade",
+            "value": "fade"
+          },
+          {
+            "name": "None",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "navRootPath",
+        "label": "Nav Root Path",
+        "value": "/"
+      },
+      {
+        "component": "number-input",
+        "valueType": "number",
+        "name": "navDepth",
+        "label": "Nav Depth",
+        "value": 3,
+        "min": 1,
+        "max": 3
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "canvasPlaceholder",
+        "label": "Canvas Search Placeholder",
+        "value": "Ask us a question"
+      },
+      {
+        "component": "checkbox",
+        "valueType": "boolean",
+        "name": "showCanvasSearchIcon",
+        "label": "Show Canvas Search Icon",
+        "value": true
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "canvasActionUrl",
+        "label": "Canvas Search Target URL",
+        "value": "/search"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "canvasNavRootPath",
+        "label": "Canvas Nav Root Path",
+        "value": "/"
+      },
+      {
+        "component": "number-input",
+        "valueType": "number",
+        "name": "canvasNavDepth",
+        "label": "Canvas Nav Depth",
+        "value": 3,
+        "min": 1,
+        "max": 3
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "canvasMotion",
+        "label": "Canvas Motion Type",
+        "value": "slide",
+        "options": [
+          {
+            "name": "Slide",
+            "value": "slide"
+          },
+          {
+            "name": "Fade",
+            "value": "fade"
+          },
+          {
+            "name": "None",
+            "value": "none"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "teaser-v1",
+    "fields": [
+      {
+        "component": "text",
+        "name": "eyebrow",
+        "label": "Eyebrow"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "titleType",
+        "label": "Title Type",
+        "value": "h2",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image Path",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "backgroundImage",
+        "label": "Background Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "reference",
+        "name": "arrowIcon",
+        "label": "CTA Arrow Icon",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "richtext",
+        "name": "shortDescription",
+        "label": "Short Description"
+      },
+      {
+        "component": "text",
+        "name": "viewAllText",
+        "label": "View All Text"
+      },
+      {
+        "component": "aem-content",
+        "name": "viewAllLink",
+        "label": "View All Link"
+      },
+      {
+        "component": "select",
+        "name": "style",
+        "label": "Style",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "No Image, Right Desc & Links",
+            "value": "no-image-right-desc-links"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "name": "personalizationEnabled",
+        "label": "Personalization",
+        "value": false,
+        "valueType": "boolean"
+      },
+      {
+        "component": "select",
+        "name": "backgroundColor",
+        "label": "BG Color",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Grey",
+            "value": "grey"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "imagePosition",
+        "label": "Image Position",
+        "value": "right",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "name": "showEyebrow",
+        "label": "Show Eyebrow",
+        "value": true,
+        "valueType": "boolean"
+      },
+      {
+        "component": "boolean",
+        "name": "hideTitle",
+        "label": "Hide Title",
+        "value": false,
+        "valueType": "boolean"
+      },
+      {
+        "component": "boolean",
+        "name": "showDescription",
+        "label": "Show Description",
+        "value": true,
+        "valueType": "boolean"
+      },
+      {
+        "component": "boolean",
+        "name": "hideImage",
+        "label": "Hide Image",
+        "value": false,
+        "valueType": "boolean"
+      },
+      {
+        "component": "boolean",
+        "name": "showDate",
+        "label": "Show Date",
+        "value": false,
+        "valueType": "boolean"
+      },
+      {
+        "component": "select",
+        "name": "dateFormat",
+        "label": "Date Format",
+        "value": "mmm-d-yyyy",
+        "options": [
+          {
+            "name": "DD-MM-YYYY",
+            "value": "dd-mm-yyyy"
+          },
+          {
+            "name": "MM-DD-YYYY",
+            "value": "mm-dd-yyyy"
+          },
+          {
+            "name": "MMM d, yyyy",
+            "value": "mmm-d-yyyy"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "name": "displayTags",
+        "label": "Display Tags",
+        "value": false,
+        "valueType": "boolean"
+      },
+      {
+        "component": "boolean",
+        "name": "multiLinksEnabled",
+        "label": "Multi Links",
+        "value": false,
+        "valueType": "boolean"
+      },
+      {
+        "component": "text",
+        "name": "primaryCtaTitle",
+        "label": "Primary CTA Title"
+      },
+      {
+        "component": "aem-content",
+        "name": "primaryCtaLink",
+        "label": "Primary CTA Link"
+      },
+      {
+        "component": "select",
+        "name": "primaryCtaLinkType",
+        "label": "Primary CTA Link Type",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "List",
+            "value": "list"
+          },
+          {
+            "name": "Primary Button",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary Button",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "secondaryCtaTitle",
+        "label": "Secondary CTA Title"
+      },
+      {
+        "component": "aem-content",
+        "name": "secondaryCtaLink",
+        "label": "Secondary CTA Link"
+      },
+      {
+        "component": "select",
+        "name": "secondaryCtaLinkType",
+        "label": "Secondary CTA Link Type",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "List",
+            "value": "list"
+          },
+          {
+            "name": "Primary Button",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary Button",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "linkStyle",
+        "label": "Link Style",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "List",
+            "value": "list"
+          },
+          {
+            "name": "Primary Button",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary Button",
+            "value": "secondary"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "teaser-v1-link",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "CTA Title"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "CTA Link"
+      },
+      {
+        "component": "select",
+        "name": "linkType",
+        "label": "CTA Link Type",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "List",
+            "value": "list"
+          },
+          {
+            "name": "Primary Button",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary Button",
+            "value": "secondary"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "teaser-v2",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "fileReference",
+        "label": "Image",
+        "description": "The teaser image, min Xpx x Ypx...",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "fileReferenceAlt",
+        "value": "",
+        "label": "Image Description",
+        "description": "A descriptive text of the image will be shown as tooltip."
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Style",
+        "valueType": "string",
+        "required": true,
+        "maxSize": 25,
+        "options": [
+          {
+            "name": "Theme",
+            "children": [
+              {
+                "name": "Light",
+                "value": "light"
+              },
+              {
+                "name": "Dark",
+                "value": "dark"
+              },
+              {
+                "name": "Half Height",
+                "value": "half-height"
+              }
+            ]
+          },
+          {
+            "name": "Layout",
+            "children": [
+              {
+                "name": "Split (50/50)",
+                "value": "split"
+              },
+              {
+                "name": "Card (Floating Box)",
+                "value": "card"
+              },
+              {
+                "name": "Hero (Large)",
+                "value": "hero"
+              },
+              {
+                "name": "Image Left",
+                "value": "image-left"
+              },
+              {
+                "name": "Image Right",
+                "value": "image-right"
+              },
+              {
+                "name": "Image Top",
+                "value": "image-top"
+              }
+            ]
+          },
+          {
+            "name": "Image Style",
+            "children": [
+              {
+                "name": "Background Image",
+                "value": "image-background"
+              },
+              {
+                "name": "Contained Image",
+                "value": "image-contained"
+              }
+            ]
+          },
+          {
+            "name": "Image Width",
+            "children": [
+              {
+                "name": "30%",
+                "value": "image-width-30"
+              },
+              {
+                "name": "40%",
+                "value": "image-width-40"
+              },
+              {
+                "name": "50%",
+                "value": "image-width-50"
+              },
+              {
+                "name": "60%",
+                "value": "image-width-60"
+              },
+              {
+                "name": "70%",
+                "value": "image-width-70"
+              }
+            ]
+          },
+          {
+            "name": "Image Alignment",
+            "children": [
+              {
+                "name": "Top",
+                "value": "image-align-top"
+              },
+              {
+                "name": "Middle",
+                "value": "image-align-middle"
+              },
+              {
+                "name": "Bottom",
+                "value": "image-align-bottom"
+              }
+            ]
+          },
+          {
+            "name": "Alignment",
+            "children": [
+              {
+                "name": "Left",
+                "value": "left"
+              },
+              {
+                "name": "Right",
+                "value": "right"
+              },
+              {
+                "name": "Center",
+                "value": "center"
+              }
+            ]
+          },
+          {
+            "name": "Background Color",
+            "children": [
+              {
+                "name": "tcs Red",
+                "value": "tcs-background-red"
+              },
+              {
+                "name": "tcs Yellow",
+                "value": "tcs-background-yellow"
+              },
+              {
+                "name": "tcs Blue",
+                "value": "tcs-background-blue"
+              },
+              {
+                "name": "tcs Beige",
+                "value": "tcs-background-beige"
+              },
+              {
+                "name": "tcs Black",
+                "value": "tcs-background-black"
+              }
+            ]
+          },
+          {
+            "name": "Text Direction",
+            "children": [
+              {
+                "name": "Row",
+                "value": "text-row"
+              },
+              {
+                "name": "Column",
+                "value": "text-column"
+              }
+            ]
+          },
+          {
+            "name": "Text Horizontal Alignment",
+            "children": [
+              {
+                "name": "Left",
+                "value": "text-left"
+              },
+              {
+                "name": "Center",
+                "value": "text-center"
+              },
+              {
+                "name": "Right",
+                "value": "text-right"
+              }
+            ]
+          },
+          {
+            "name": "Text Vertical Alignment",
+            "children": [
+              {
+                "name": "Top",
+                "value": "text-top"
+              },
+              {
+                "name": "Middle",
+                "value": "text-middle"
+              },
+              {
+                "name": "Bottom",
+                "value": "text-bottom"
+              }
+            ]
+          },
+          {
+            "name": "CTA Direction",
+            "children": [
+              {
+                "name": "Row",
+                "value": "cta-row"
+              },
+              {
+                "name": "Column",
+                "value": "cta-column"
+              }
+            ]
+          },
+          {
+            "name": "CTA Alignment",
+            "children": [
+              {
+                "name": "Left",
+                "value": "cta-left"
+              },
+              {
+                "name": "Center",
+                "value": "cta-center"
+              },
+              {
+                "name": "Right",
+                "value": "cta-right"
+              }
+            ]
+          },
+          {
+            "name": "CTA Style",
+            "children": [
+              {
+                "name": "Default Button",
+                "value": "cta-default"
+              },
+              {
+                "name": "Pill Button",
+                "value": "cta-pill"
+              },
+              {
+                "name": "Text Link Arrow",
+                "value": "cta-link-arrow"
+              }
+            ]
+          },
+          {
+            "name": "CTA Color",
+            "children": [
+              {
+                "name": "Light",
+                "value": "cta-light"
+              },
+              {
+                "name": "Dark",
+                "value": "cta-dark"
+              },
+              {
+                "name": "TCS Red",
+                "value": "cta-red"
+              },
+              {
+                "name": "TCS Blue",
+                "value": "cta-blue"
+              },
+              {
+                "name": "TCS Yellow",
+                "value": "cta-yellow"
+              },
+              {
+                "name": "TCS Beige",
+                "value": "cta-beige"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrow",
+        "value": "",
+        "label": "Eyebrow",
+        "description": "Sets the small pre-title above the title."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Heading",
+        "description": "Sets the main title of the teaser."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "titleType",
+        "value": "h3",
+        "label": "Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "longDescr",
+        "value": "",
+        "label": "Long Description",
+        "description": "The description shown in Desktop and Tablet view.",
+        "filter": "richtext"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "shortDescr",
+        "value": "",
+        "label": "Short Description",
+        "description": "The description shown in Mobile view. If not set long text is used.",
+        "filter": "richtext"
+      },
+      {
+        "component": "select",
+        "name": "cta1Type",
+        "value": "primary",
+        "label": "First CTA Type",
+        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1Text",
+        "value": "",
+        "label": "First CTA Text",
+        "description": "Text to be shown inside button."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1",
+        "value": "",
+        "label": "First CTA Link",
+        "description": "What link to open when clicking the button."
+      },
+      {
+        "component": "select",
+        "name": "cta2Type",
+        "value": "primary",
+        "label": "Second CTA Type",
+        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta2Text",
+        "value": "",
+        "label": "Second CTA Text",
+        "description": "Text to be shown inside button."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta2",
+        "value": "",
+        "label": "Second CTA Link",
+        "description": "What link to open when clicking the button."
+      }
+    ]
+  },
+  {
+    "id": "text-with-link",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "title",
+        "label": "Title",
+        "value": "",
+        "valueType": "string",
+        "required": true,
+        "filter": "richtext"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "value": "",
+        "valueType": "string",
+        "filter": "richtext"
+      },
+      {
+        "component": "text",
+        "name": "ctaLabel",
+        "label": "CTA Label",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "aem-content",
+        "name": "ctaLink",
+        "label": "CTA Link",
+        "required": false
+      },
+      {
+        "component": "select",
+        "name": "backgroundColor",
+        "label": "Background Color",
+        "valueType": "string",
+        "value": "white",
+        "required": true,
+        "options": [
+          {
+            "name": "Dark Navy",
+            "value": "dark-navy"
+          },
+          {
+            "name": "Royal Blue",
+            "value": "royal-blue"
+          },
+          {
+            "name": "Light Grey",
+            "value": "light-grey"
+          },
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          },
+          {
+            "name": "Off White",
+            "value": "off-white"
+          },
+          {
+            "name": "Dark Grey",
+            "value": "dark-grey"
+          },
+          {
+            "name": "Light Blue",
+            "value": "light-blue"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "textColor",
+        "label": "Text Color",
+        "valueType": "string",
+        "value": "black",
+        "required": true,
+        "options": [
+          {
+            "name": "Dark Navy",
+            "value": "dark-navy"
+          },
+          {
+            "name": "Royal Blue",
+            "value": "royal-blue"
+          },
+          {
+            "name": "Light Grey",
+            "value": "light-grey"
+          },
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          },
+          {
+            "name": "Off White",
+            "value": "off-white"
+          },
+          {
+            "name": "Dark Grey",
+            "value": "dark-grey"
+          },
+          {
+            "name": "Light Blue",
+            "value": "light-blue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "title-with-column",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "number",
+        "name": "columns",
+        "value": "2",
+        "label": "Columns"
+      },
+      {
+        "component": "text",
+        "valueType": "number",
+        "name": "rows",
+        "value": "1",
+        "label": "Rows"
+      }
+    ]
+  },
+  {
+    "id": "video",
+    "fields": [
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "uri",
+        "label": "Video"
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "value": "",
+        "label": "Options",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Auto Play",
+            "children": [
+              {
+                "name": "AutoPlay",
+                "value": "autoplay"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "placeholder_image",
+        "label": "Placeholder Image",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "placeholder_imageAlt",
+        "value": "",
+        "label": "Placeholder Image Alt Text"
       }
     ]
   }

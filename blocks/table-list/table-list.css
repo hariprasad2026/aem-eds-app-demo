@@ -1,0 +1,1099 @@
+/* stylelint-disable no-descending-specificity */
+
+.table-list-container {
+  background-color: #fff;
+}
+
+.table-list-wrapper {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+main>.section>div.table-list-wrapper {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1440px;
+  padding: 0;
+}
+
+.table-list {
+  box-sizing: border-box;
+  padding: 80px 80px 100px;
+  background-color: #fff;
+  color: #1f1f1f;
+}
+
+.table-list p {
+  margin: 0;
+}
+
+.table-list .table-list-cards {
+  width: 100%;
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.table-list .table-list-header {
+  box-sizing: border-box;
+  display: flex;
+  min-height: 67px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+.table-list .table-list-heading {
+  margin: 0;
+  font-family: var(--body-font-family);
+  font-size: clamp(32px, 3.5vw, 46px);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.table-list .table-list-explore a:any-link {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 4px 32px 4px 0;
+  background: none;
+  color: inherit;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.3;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.table-list .table-list-explore a::after {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  content: '\2192';
+  font-size: 25px;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.table-list .table-list-explore a:hover,
+.table-list .table-list-explore a:focus-visible {
+  background: none;
+  color: #555;
+  text-decoration: underline;
+}
+
+/* =========================================
+   CARD LAYOUT
+   ========================================= */
+
+.table-list .table-list-card {
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 0.9fr) minmax(0, 1.8fr) 150px;
+  min-height: 108px;
+  align-items: center;
+  border-bottom: 1px solid #777;
+  padding: 16px 0;
+}
+
+.table-list .table-list-number {
+  grid-column: 1;
+  grid-row: 1;
+  color: #c7c7c7;
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.table-list .table-list-title-group {
+  min-width: 0;
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.table-list .table-list-title {
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.table-list .table-list-description-group {
+  min-width: 0;
+  grid-column: 3;
+  grid-row: 1;
+  padding: 0 20px;
+}
+
+.table-list .table-list-description {
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+/* =========================================
+   TAGS
+   ========================================= */
+
+.table-list .table-list-tags {
+  display: none;
+}
+
+.table-list.show-tags.title-right .table-list-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px 14px;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.table-list .table-list-tag {
+  color: #929292;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.table-list .table-list-tags:empty {
+  display: none;
+}
+
+/* =========================================
+   CARD LINKS
+   ========================================= */
+
+.table-list .table-list-link {
+  grid-column: 4;
+  grid-row: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.table-list .table-list-arrow {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.table-list a.table-list-arrow {
+  cursor: pointer;
+}
+
+.table-list a.table-list-arrow:hover,
+.table-list a.table-list-arrow:focus-visible {
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+.table-list a.table-list-arrow:focus-visible {
+  outline: 2px solid currentcolor;
+  outline-offset: 3px;
+}
+
+.table-list .table-list-card:has(a.table-list-arrow:hover) .table-list-title,
+.table-list .table-list-card:has(a.table-list-arrow:focus-visible) .table-list-title {
+  text-decoration: underline;
+}
+
+.table-list .table-list-table-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  font-size: 24px;
+  text-decoration: none;
+}
+
+.table-list .table-list-table-link::after {
+  content: '\2192';
+}
+
+/* =========================================
+   COMPACT
+   ========================================= */
+
+.table-list.compact {
+  padding-top: 56px;
+  padding-bottom: 64px;
+}
+
+.table-list.compact .table-list-header {
+  margin-bottom: 36px;
+}
+
+.table-list.compact .table-list-card {
+  min-height: 76px;
+  padding: 10px 0;
+}
+
+.table-list.compact .table-list-title,
+.table-list.compact .table-list-number {
+  font-size: 30px;
+}
+
+.table-list.compact .table-list-description {
+  font-size: 18px;
+}
+
+/* =========================================
+   NO DESCRIPTION
+   ========================================= */
+
+.table-list.no-description .table-list-description,
+.table-list.display-title .table-list-description {
+  display: none;
+}
+
+.table-list.no-description .table-list-title-group,
+.table-list.display-title .table-list-title-group {
+  grid-column: 2 / 4;
+}
+
+.table-list.display-description .table-list-title-group {
+  display: none;
+}
+
+.table-list.display-description .table-list-description-group {
+  grid-column: 2 / 4;
+}
+
+/* =========================================
+   DARK THEME
+   ========================================= */
+
+.table-list-container:has(.table-list.dark),
+.table-list.dark {
+  background-color: #111;
+}
+
+.table-list.dark {
+  color: #f7f9fc;
+}
+
+.table-list.dark .table-list-card {
+  border-bottom-color: #677182;
+}
+
+.table-list.dark .table-list-number {
+  color: #aab8cc;
+}
+
+.table-list.dark .table-list-explore a:hover,
+.table-list.dark .table-list-explore a:focus-visible {
+  color: #cedff4;
+}
+
+.table-list.dark .table-list-link a:focus-visible {
+  outline-color: #fff;
+}
+
+/* =========================================
+   FEATURED INDUSTRY
+   ========================================= */
+
+.table-list.featured-industry .table-list-card-featured {
+  position: relative;
+  margin-bottom: 8px;
+  border: 0;
+  border-radius: 4px;
+  padding: 28px 24px;
+  background-color: #f2f4f7;
+}
+
+.table-list.featured-industry .table-list-card-featured::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  content: '';
+  background-color: #1f1f1f;
+}
+
+.table-list.featured-industry .table-list-card-featured .table-list-number {
+  color: #777;
+}
+
+.table-list.featured-industry .table-list-card-featured .table-list-title {
+  font-weight: 500;
+}
+
+.table-list.featured-industry .table-list-card-featured .table-list-description {
+  font-size: 23px;
+}
+
+.table-list.dark.featured-industry .table-list-card-featured {
+  background-color: #252d3a;
+}
+
+.table-list.dark.featured-industry .table-list-card-featured::before {
+  background-color: #f7f9fc;
+}
+
+.table-list.dark.featured-industry .table-list-card-featured .table-list-number {
+  color: #aab8cc;
+}
+
+/* =========================================
+   NO NUMBER
+   ========================================= */
+
+.table-list.no-number .table-list-number {
+  display: none;
+}
+
+.table-list.no-number .table-list-title-group {
+  grid-column: 1 / 3;
+}
+
+/* =========================================
+   DESCRIPTION FIRST
+   ========================================= */
+
+.table-list.description-first .table-list-card {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  min-height: 170px;
+  padding: 28px 0;
+}
+
+.table-list.description-first .table-list-description-group {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  padding: 0 30px 0 0;
+}
+
+.table-list.description-first .table-list-description {
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+.table-list.description-first .table-list-number {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  padding-left: 20px;
+  font-size: 30px;
+}
+
+.table-list.description-first .table-list-title-group {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center;
+  padding-right: 20px;
+  text-align: right;
+}
+
+.table-list.description-first .table-list-title {
+  font-size: clamp(48px, 5vw, 82px);
+  line-height: 1;
+}
+
+.table-list.description-first .table-list-link {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.table-list.description-first .table-list-link a:any-link {
+  justify-content: center;
+  padding-left: 0;
+}
+
+.table-list.compact.description-first .table-list-card {
+  min-height: 130px;
+  padding: 20px 0;
+}
+
+.table-list.compact.description-first .table-list-description {
+  font-size: 18px;
+}
+
+.table-list.compact.description-first .table-list-title {
+  font-size: clamp(40px, 4vw, 64px);
+}
+
+.table-list.compact.description-first .table-list-number {
+  font-size: 26px;
+}
+
+.table-list.dark.description-first .table-list-number {
+  color: #aab8cc;
+}
+
+.table-list.no-number.description-first .table-list-number {
+  display: none;
+}
+
+.table-list.no-number.description-first .table-list-description-group {
+  grid-column: 1;
+}
+
+.table-list.no-number.description-first .table-list-title-group {
+  grid-column: 2 / 4;
+}
+
+.table-list.no-number.description-first .table-list-link {
+  grid-column: 4;
+}
+
+.table-list.description-first.display-title .table-list-description-group,
+.table-list.description-first.display-description .table-list-title-group {
+  display: none;
+}
+
+.table-list.description-first.display-description .table-list-description-group {
+  grid-column: 1 / 4;
+}
+
+/* =========================================
+   TITLE RIGHT
+   ========================================= */
+
+.table-list.title-right .table-list-card {
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 0.8fr) 36px;
+  min-height: 108px;
+  padding: 20px 0;
+}
+
+.table-list.title-right .table-list-number {
+  display: none;
+}
+
+.table-list.title-right .table-list-description-group {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  padding: 0 30px 0 0;
+}
+
+.table-list.title-right .table-list-description {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.table-list.title-right .table-list-title-group {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  padding: 0 20px;
+  text-align: right;
+}
+
+.table-list.title-right .table-list-title {
+  font-size: 32px;
+  line-height: 1.2;
+  text-align: right;
+}
+
+.table-list.title-right .table-list-link {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+/* Compact + Title Right */
+
+.table-list.compact.title-right .table-list-card {
+  min-height: 84px;
+  padding: 14px 0;
+}
+
+.table-list.compact.title-right .table-list-title {
+  font-size: 27px;
+}
+
+.table-list.compact.title-right .table-list-description {
+  font-size: 16px;
+}
+
+/* Title Right + No Description */
+
+.table-list.title-right.no-description .table-list-title-group {
+  grid-column: 1 / 3;
+}
+
+/* Title Right + No Number */
+
+.table-list.title-right.no-number .table-list-title-group {
+  grid-column: 2;
+}
+
+/* Black View All CTA — Title Right only */
+
+.table-list.title-right .table-list-header {
+  margin-bottom: 64px;
+}
+
+.table-list.title-right .table-list-explore a:any-link {
+  display: inline-flex;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 999px;
+  padding: 9px 20px;
+  background-color: #111820;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.table-list.title-right .table-list-explore a::after {
+  position: static;
+  content: '\2192';
+  font-size: 19px;
+  line-height: 1;
+  transform: none;
+}
+
+.table-list.title-right .table-list-explore a:hover,
+.table-list.title-right .table-list-explore a:focus-visible {
+  background-color: #303942;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* =========================================
+   CARD COLORS
+   ========================================= */
+
+.table-list.card-white .table-list-card {
+  background-color: #fff;
+}
+
+.table-list.card-blue .table-list-card {
+  border-bottom-color: #2b78a5;
+  background-color: #eaf5fb;
+}
+
+.table-list.card-black .table-list-card {
+  border-bottom-color: #555;
+  background-color: #111;
+  color: #fff;
+}
+
+.table-list.card-grey .table-list-card {
+  border-bottom-color: #c4c4c4;
+  background-color: #f2f2f2;
+}
+
+.table-list.card-black .table-list-number {
+  color: #aeb7c2;
+}
+
+.table-list.card-black .table-list-title,
+.table-list.card-black .table-list-description {
+  color: #fff;
+}
+
+.table-list.card-black .table-list-tag {
+  color: #c3c3c3;
+}
+
+.table-list.card-black .table-list-link a:focus-visible {
+  outline-color: #fff;
+}
+
+.table-list.card-blue.featured-industry .table-list-card-featured {
+  background-color: #dff1fa;
+}
+
+.table-list.card-black.featured-industry .table-list-card-featured {
+  background-color: #171717;
+}
+
+/* =========================================
+   MOTION
+   ========================================= */
+
+.table-list.motion-fade .table-list-card {
+  animation: table-list-fade-in 500ms ease both;
+}
+
+.table-list.motion-slide .table-list-card {
+  animation: table-list-slide-in 500ms ease both;
+}
+
+.table-list.motion-reveal .table-list-card {
+  animation: table-list-reveal-in 600ms ease both;
+}
+
+@keyframes table-list-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes table-list-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes table-list-reveal-in {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+
+  to {
+    opacity: 1;
+    clip-path: inset(0);
+  }
+}
+
+/* =========================================
+   TABLE VIEW
+   ========================================= */
+
+.table-list.view-table .table-list-cards {
+  display: none;
+}
+
+.table-list.view-table .table-list-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.table-list.view-table .table-list-table th,
+.table-list.view-table .table-list-table td {
+  padding: 18px 16px;
+  border-bottom: 1px solid #777;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table-list.view-table .table-list-table th {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.table-list.view-table .table-list-table td {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.table-list.view-table .table-list-table th:first-child,
+.table-list.view-table .table-list-table td:first-child {
+  width: 80px;
+}
+
+.table-list.view-table .table-list-table th:last-child,
+.table-list.view-table .table-list-table td:last-child {
+  width: 150px;
+  text-align: right;
+}
+
+.table-list.view-table .table-list-table-link:any-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.table-list.view-table .table-list-table-link::after {
+  content: '\2197';
+  font-size: 22px;
+}
+
+.table-list.dark.view-table .table-list-table th,
+.table-list.dark.view-table .table-list-table td {
+  border-bottom-color: #677182;
+}
+
+.table-list.card-black.view-table .table-list-table th,
+.table-list.card-black.view-table .table-list-table td {
+  border-bottom-color: #555;
+}
+
+.table-list.card-black.view-table .table-list-table {
+  color: #fff;
+}
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (width < 900px) {
+  .table-list {
+    min-height: auto;
+    padding: 56px 24px;
+  }
+
+  .table-list .table-list-header {
+    margin-bottom: 44px;
+  }
+
+  .table-list .table-list-card {
+    grid-template-columns: 48px minmax(0, 1fr) 110px;
+    gap: 4px 8px;
+  }
+
+  .table-list .table-list-title {
+    font-size: 30px;
+  }
+
+  .table-list .table-list-number {
+    font-size: 30px;
+  }
+
+  .table-list .table-list-description-group {
+    grid-column: 2;
+    grid-row: 2;
+    padding: 0;
+  }
+
+  .table-list .table-list-description {
+    font-size: 18px;
+  }
+
+  .table-list.compact {
+    padding: 40px 24px;
+  }
+
+  .table-list.compact .table-list-card {
+    min-height: 76px;
+  }
+
+  .table-list.no-description .table-list-title-group {
+    grid-column: 2;
+  }
+
+  .table-list.featured-industry .table-list-card-featured {
+    padding: 24px 20px;
+  }
+
+  .table-list.description-first .table-list-card {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    min-height: 150px;
+    gap: 8px;
+    padding: 24px 0;
+  }
+
+  .table-list.description-first .table-list-description-group {
+    grid-column: 1;
+    grid-row: 1;
+    padding-right: 12px;
+  }
+
+  .table-list.description-first .table-list-description {
+    font-size: 18px;
+  }
+
+  .table-list.description-first .table-list-number {
+    grid-column: 2;
+    grid-row: 1;
+    padding-left: 8px;
+    font-size: 26px;
+  }
+
+  .table-list.description-first .table-list-title-group {
+    grid-column: 3;
+    grid-row: 1;
+    padding-right: 8px;
+  }
+
+  .table-list.description-first .table-list-title {
+    font-size: clamp(36px, 4vw, 56px);
+  }
+
+  .table-list.description-first .table-list-link {
+    grid-column: 4;
+    grid-row: 1;
+  }
+
+  .table-list.no-number.description-first .table-list-title-group {
+    grid-column: 2 / 4;
+  }
+
+  .table-list.display-title .table-list-title-group {
+    grid-column: 2;
+  }
+
+  .table-list.display-title .table-list-link {
+    grid-column: 3;
+  }
+
+  .table-list.display-description .table-list-description-group {
+    grid-column: 2;
+  }
+
+  .table-list.display-description .table-list-link {
+    grid-column: 3;
+  }
+
+  .table-list.title-right .table-list-card {
+    grid-template-columns: minmax(0, 1fr) minmax(150px, 0.8fr) 32px;
+    gap: 8px;
+  }
+
+  .table-list.title-right .table-list-description-group {
+    grid-column: 1;
+    grid-row: 1;
+    padding-right: 16px;
+  }
+
+  .table-list.title-right .table-list-description {
+    font-size: 16px;
+  }
+
+  .table-list.title-right .table-list-title-group {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 0 12px;
+  }
+
+  .table-list.title-right .table-list-title {
+    font-size: 26px;
+  }
+
+  .table-list.title-right .table-list-tags {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .table-list.title-right .table-list-tag {
+    font-size: 11px;
+  }
+
+  .table-list.title-right .table-list-link {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .table-list.view-table .table-list-table th,
+  .table-list.view-table .table-list-table td {
+    padding: 14px 10px;
+  }
+
+  .table-list.view-table .table-list-table td {
+    font-size: 16px;
+  }
+}
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (width < 600px) {
+  .table-list {
+    padding: 40px 20px;
+  }
+
+  .table-list .table-list-header {
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+
+  .table-list .table-list-heading {
+    font-size: 30px;
+  }
+
+  .table-list .table-list-explore a:any-link {
+    font-size: 16px;
+  }
+
+  .table-list .table-list-card {
+    grid-template-columns: 40px minmax(0, 1fr) 95px;
+    min-height: 108px;
+  }
+
+  .table-list .table-list-title,
+  .table-list .table-list-number {
+    font-size: 24px;
+  }
+
+  .table-list .table-list-description {
+    font-size: 16px;
+  }
+
+  .table-list .table-list-link a:any-link {
+    font-size: 14px;
+  }
+
+  .table-list .table-list-link a::after {
+    font-size: 21px;
+  }
+
+  .table-list.compact {
+    padding: 32px 20px;
+  }
+
+  .table-list.compact .table-list-title,
+  .table-list.compact .table-list-number {
+    font-size: 22px;
+  }
+
+  .table-list.compact .table-list-description {
+    font-size: 16px;
+  }
+
+  .table-list.description-first .table-list-card {
+    grid-template-columns: minmax(0, 1fr) 28px;
+    min-height: 180px;
+    gap: 8px 12px;
+    padding: 24px 0;
+  }
+
+  .table-list.description-first .table-list-description-group {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 0;
+  }
+
+  .table-list.description-first .table-list-number {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 0;
+    font-size: 24px;
+  }
+
+  .table-list.description-first .table-list-title-group {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 0;
+    text-align: left;
+  }
+
+  .table-list.description-first .table-list-title {
+    font-size: clamp(34px, 10vw, 48px);
+    line-height: 1.05;
+  }
+
+  .table-list.description-first .table-list-link {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .table-list.description-first .table-list-link a:any-link {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .table-list.no-number.description-first .table-list-title-group {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .table-list.no-number.description-first .table-list-link {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .table-list.featured-industry .table-list-card-featured {
+    padding: 20px 16px;
+  }
+
+  .table-list.featured-industry .table-list-card-featured .table-list-description {
+    font-size: 18px;
+  }
+
+  .table-list.title-right .table-list-header {
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .table-list.title-right .table-list-explore a:any-link {
+    padding: 8px 15px;
+    font-size: 13px;
+  }
+
+  .table-list.title-right .table-list-card {
+    grid-template-columns: minmax(0, 1fr) 28px;
+    min-height: 120px;
+    gap: 8px 12px;
+    padding: 20px 0;
+  }
+
+  .table-list.title-right .table-list-description-group {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    padding: 0;
+  }
+
+  .table-list.title-right .table-list-description {
+    font-size: 16px;
+  }
+
+  .table-list.title-right .table-list-title-group {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 0;
+    text-align: left;
+  }
+
+  .table-list.title-right .table-list-title {
+    font-size: 24px;
+    text-align: left;
+  }
+
+  .table-list.title-right .table-list-tags {
+    margin-bottom: 8px;
+  }
+
+  .table-list.title-right .table-list-link {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .table-list.view-table {
+    overflow-x: auto;
+  }
+
+  .table-list.view-table .table-list-table {
+    min-width: 640px;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .table-list.motion-fade .table-list-card,
+  .table-list.motion-slide .table-list-card,
+  .table-list.motion-reveal .table-list-card {
+    animation: none;
+  }
+}

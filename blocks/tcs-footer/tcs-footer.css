@@ -104,7 +104,7 @@
   box-sizing: border-box;
   width: 59px;
   height: 59px;
-  background: rgb(255 255 255 / 60%);
+  background: rgb(255 255 255 / 70%);
   border: 2px solid #494c4d;
   backdrop-filter: blur(13.7px);
   border-radius: 151px;
@@ -124,7 +124,7 @@
 }
 
 .tcs-footer-hamburger:hover {
-  background: rgb(255 255 255 / 90%);
+  background: rgb(255 255 255 / 95%);
   border-color: #1e2222;
 }
 
@@ -282,18 +282,19 @@
   transform: rotate(180deg);
 }
 
-/* Glassmorphism Submenu Grid Panel */
+/* Glassmorphism Submenu Grid Panel with Frosted Overlay (Image 2 Style) */
 .tcs-footer-submenu-panel {
   width: 100%;
-  max-width: 686px;
-  background: rgb(255 255 255 / 95%);
-  border: 2px solid #494c4d;
-  backdrop-filter: blur(40px);
+  max-width: 720px;
+  background: rgb(230 233 238 / 85%);
+  border: 1px solid rgb(255 255 255 / 60%);
+  backdrop-filter: blur(25px);
   border-radius: 28px;
-  padding: 24px;
+  padding: 32px 28px;
   margin-bottom: 16px;
   z-index: 100;
   box-sizing: border-box;
+  box-shadow: 0 20px 50px rgb(0 0 0 / 8%);
 }
 
 .tcs-footer-submenu-panel.is-fixed {
@@ -307,7 +308,7 @@
 .tcs-submenu-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px 24px;
+  gap: 16px 36px;
 }
 
 /* CTA Arrow Styling */
@@ -319,8 +320,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 18px;
-  border-bottom: 1px solid rgb(73 76 77 / 20%);
+  padding: 12px 4px;
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
   color: #0c0c0d;
   font-family: Inter, sans-serif;
   font-size: 15px;
@@ -341,7 +342,7 @@
 
 .tcs-submenu-item .arrow {
   color: #0c0c0d;
-  opacity: 0.8;
+  opacity: 0.7;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 

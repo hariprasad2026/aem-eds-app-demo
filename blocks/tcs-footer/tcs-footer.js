@@ -20,6 +20,7 @@ function formatHtmlPath(path) {
 
 /**
  * Parses query-index.json into a flexible multi-level tree structure.
+ * Filters out utility, test, block, header, and home pages.
  */
 async function fetchHierarchicalNavData() {
   try {
@@ -29,6 +30,20 @@ async function fetchHierarchicalNavData() {
     const data = json.data || json;
 
     const navTree = {};
+    const excludedPages = [
+      'footer',
+      'header',
+      'tcs-footer',
+      'tcs-header',
+      'blocks',
+      'test',
+      'home',
+      'home-page',
+      'homepage',
+      'demo',
+      'nav',
+      'iconlist',
+    ];
 
     data.forEach((item) => {
       const rawPath = item.path || '';
@@ -41,7 +56,12 @@ async function fetchHierarchicalNavData() {
 
       if (segments.length === 0) return;
 
+      const lastSegment = segments[segments.length - 1].toLowerCase().replace(/\s+/g, '-');
+      if (excludedPages.includes(lastSegment)) return;
+
       const l1Key = segments[0];
+      if (excludedPages.includes(l1Key.toLowerCase())) return;
+
       if (!navTree[l1Key]) {
         navTree[l1Key] = {
           key: l1Key,
@@ -53,6 +73,8 @@ async function fetchHierarchicalNavData() {
 
       if (segments.length >= 2) {
         const l2Key = segments[1];
+        if (excludedPages.includes(l2Key.toLowerCase())) return;
+
         if (!navTree[l1Key].children[l2Key]) {
           navTree[l1Key].children[l2Key] = {
             key: l2Key,
@@ -64,6 +86,8 @@ async function fetchHierarchicalNavData() {
 
         if (segments.length >= 3) {
           const l3Key = segments[2];
+          if (excludedPages.includes(l3Key.toLowerCase())) return;
+
           navTree[l1Key].children[l2Key].children.push({
             key: l3Key,
             title: item.title || l3Key.replace(/-/g, ' '),
@@ -128,12 +152,11 @@ export default function decorate(block) {
 
   let hamburgerWrapperNode = null;
   let hamburgerBtnNode = null;
+  let searchBoxWrapperNode = null;
   let isNavOpen = false;
   let navTreeData = null;
 
   let currentViewLevel = 'L1';
-
-  // Variable to store search query
   let searchQueryVariable = '';
 
   const getModelType = (row) => {
@@ -152,7 +175,13 @@ export default function decorate(block) {
       }
       return 'tcs-footer-legal-item';
     }
-    if (cells >= 3) return 'tcs-footer-cta';
+    if (cells >= 3) {
+      const firstCellVal = cells[0]?.textContent.trim().toLowerCase() || '';
+      if (firstCellVal.includes('http') || firstCellVal.includes('/') || cells.length === 3) {
+        return 'tcs-footer-legal-item';
+      }
+      return 'tcs-footer-cta';
+    }
     return null;
   };
 
@@ -183,14 +212,14 @@ export default function decorate(block) {
       `;
       hamburgerWrapperNode = row;
       hamburgerBtnNode = row.querySelector('.tcs-footer-hamburger');
-      searchRow.append(row);
+      searchRow.prepend(row);
     } else if (model === 'tcs-footer-search') {
       const variation = cells[0]?.textContent.trim().toLowerCase() || 'both';
       const placeholder = cells[1]?.textContent.trim() || 'Ask Canvas Search';
 
       row.className = `tcs-footer-search-box mode-${variation}`;
+      searchBoxWrapperNode = row;
 
-      // Form wrapper to catch submit event cleanly
       const formEl = document.createElement('form');
       formEl.className = 'tcs-search-form';
       formEl.action = '#';
@@ -227,18 +256,15 @@ export default function decorate(block) {
       row.innerHTML = '';
       row.append(formEl);
 
-      // 3. Search Variable Capture & Console Display
       const inputEl = formEl.querySelector('.tcs-search-input');
       const micBtn = formEl.querySelector('.mic-btn');
 
-      // Capture Input Event into Variable
       if (inputEl) {
         inputEl.addEventListener('input', (e) => {
           searchQueryVariable = e.target.value;
         });
       }
 
-      // Handle Form Submit Event
       formEl.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -249,11 +275,9 @@ export default function decorate(block) {
         // eslint-disable-next-line no-console
         console.log('Search Query Variable:', searchQueryVariable);
 
-        // Update location hash to '#' without full page refresh
         window.location.hash = '#';
       });
 
-      // Voice Input Handler (SpeechRecognition API)
       if (micBtn && inputEl) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -314,11 +338,13 @@ export default function decorate(block) {
     } else if (model === 'tcs-footer-legal-item') {
       const label = cells[0]?.textContent.trim() || 'Privacy & Terms';
       const link = formatHtmlPath(cells[1]?.querySelector('a')?.href || '#');
+      const target = cells[2]?.textContent.trim() || '_self';
 
       row.className = 'tcs-footer-legal-item-wrapper';
       const legalLink = document.createElement('a');
       legalLink.className = 'tcs-footer-legal-link';
       legalLink.href = link;
+      legalLink.target = target;
       legalLink.textContent = label;
 
       moveInstrumentation(cells[0], legalLink);
@@ -344,7 +370,6 @@ export default function decorate(block) {
   block.textContent = '';
   block.append(footerContainer);
 
-  // Render Glassmorphism Grid Panel (L3 Items)
   const renderSubmenuCard = (items) => {
     if (!items || items.length === 0) {
       subMenuPanel.classList.add('hidden');
@@ -368,7 +393,6 @@ export default function decorate(block) {
     subMenuPanel.classList.remove('hidden');
   };
 
-  // Switch Button Icon State & Position
   const updateButtonStateAndPosition = (level) => {
     currentViewLevel = level;
     const hamburgerIcon = hamburgerBtnNode.querySelector('.icon-hamburger');
@@ -376,16 +400,17 @@ export default function decorate(block) {
 
     if (level === 'L1') {
       searchRow.prepend(hamburgerWrapperNode);
+      if (searchBoxWrapperNode) searchBoxWrapperNode.classList.remove('hidden');
       hamburgerIcon.classList.add('hidden');
       closeIcon.classList.remove('hidden');
     } else {
       navPillsRow.prepend(hamburgerWrapperNode);
+      if (searchBoxWrapperNode) searchBoxWrapperNode.classList.add('hidden');
       hamburgerIcon.classList.remove('hidden');
       closeIcon.classList.add('hidden');
     }
   };
 
-  // Render Level 2 Navigation Bar
   const renderL2SubNavigation = (l1Data) => {
     navPillsRow.innerHTML = '';
     updateButtonStateAndPosition('L2');
@@ -429,7 +454,6 @@ export default function decorate(block) {
     navPillsRow.classList.remove('hidden');
   };
 
-  // Render Top-Level L1 Parent Navigation Bar
   const renderL1ParentNavigation = async () => {
     navPillsRow.innerHTML = '';
     subMenuPanel.classList.add('hidden');
@@ -471,12 +495,12 @@ export default function decorate(block) {
     navPillsRow.classList.remove('hidden');
   };
 
-  // Close Navigation Completely
   const closeAllNavigation = () => {
     isNavOpen = false;
     currentViewLevel = 'L1';
 
     searchRow.prepend(hamburgerWrapperNode);
+    if (searchBoxWrapperNode) searchBoxWrapperNode.classList.remove('hidden');
     hamburgerBtnNode.setAttribute('aria-expanded', 'false');
     hamburgerBtnNode.querySelector('.icon-hamburger').classList.remove('hidden');
     hamburgerBtnNode.querySelector('.icon-close').classList.add('hidden');
@@ -485,7 +509,6 @@ export default function decorate(block) {
     subMenuPanel.classList.add('hidden');
   };
 
-  // Hamburger Button Event Handler
   if (hamburgerBtnNode) {
     hamburgerBtnNode.addEventListener('click', async () => {
       if (currentViewLevel === 'L2' || currentViewLevel === 'L3') {
@@ -503,13 +526,11 @@ export default function decorate(block) {
     });
   }
 
-  // Hide floating panel when mouse leaves footer zone
   footerContainer.addEventListener('mouseleave', () => {
     subMenuPanel.classList.add('hidden');
     navPillsRow.querySelectorAll('.tcs-nav-pill').forEach((p) => p.classList.remove('active'));
   });
 
-  // Floating behavior on scroll
   const handleScroll = () => {
     const footerRect = block.getBoundingClientRect();
     const windowHeight = window.innerHeight;

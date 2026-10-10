@@ -4449,6 +4449,23 @@
         "component": "aem-content",
         "name": "link",
         "label": "Legal Link"
+      },
+      {
+        "component": "select",
+        "name": "target",
+        "label": "Target Type",
+        "valueType": "string",
+        "value": "_self",
+        "options": [
+          {
+            "name": "Same Tab (_self)",
+            "value": "_self"
+          },
+          {
+            "name": "New Tab (_blank)",
+            "value": "_blank"
+          }
+        ]
       }
     ]
   },

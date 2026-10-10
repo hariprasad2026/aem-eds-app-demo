@@ -61,6 +61,22 @@
             {
               "name": "Slider (default)",
               "value": "slider"
+            },
+            {
+              "name": "Slides Only",
+              "value": "slides-only"
+            },
+            {
+              "name": "With Controls",
+              "value": "with-controls"
+            },
+            {
+              "name": "With Indicators",
+              "value": "with-indicators"
+            },
+            {
+              "name": "With Captions",
+              "value": "with-captions"
             }
           ]
         },
@@ -255,3 +271,4 @@
     }
   ]
 }
+ 

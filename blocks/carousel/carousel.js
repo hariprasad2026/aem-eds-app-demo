@@ -75,6 +75,55 @@ function bindEvents(block) {
   });
 }
 
+const CAROUSEL_TYPES = {
+  slider: { controls: true, indicators: true },
+  'slides-only': { controls: false, indicators: false, autoplay: true },
+  'with-controls': { controls: true, indicators: false },
+  'with-indicators': { controls: true, indicators: true },
+  'with-captions': { controls: true, indicators: true },
+};
+
+const AUTOPLAY_INTERVAL = 5000;
+
+function isConfigRow(row) {
+  const cells = row.querySelectorAll(':scope > div');
+  return cells.length === 1 && !cells[0].querySelector('picture, img, a, h1, h2, h3, h4, h5, h6');
+}
+
+// Authored carouselType/motionType fields are rendered as leading rows; consume them.
+function extractConfig(block, rows) {
+  const config = {};
+  const classType = Object.keys(CAROUSEL_TYPES).find((type) => block.classList.contains(type));
+  if (classType) config.type = classType;
+
+  if (rows.length && isConfigRow(rows[0])) {
+    const value = rows[0].textContent.trim().toLowerCase();
+    if (CAROUSEL_TYPES[value]) {
+      config.type = value;
+      rows[0].remove();
+      rows.shift();
+      if (rows.length && isConfigRow(rows[0])) {
+        config.motion = rows[0].textContent.trim();
+        rows[0].remove();
+        rows.shift();
+      }
+    }
+  }
+  return config;
+}
+
+function startAutoplay(block) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let paused = false;
+  ['mouseenter', 'focusin'].forEach((evt) => block.addEventListener(evt, () => { paused = true; }));
+  ['mouseleave', 'focusout'].forEach((evt) => block.addEventListener(evt, () => { paused = false; }));
+  setInterval(() => {
+    if (paused || document.hidden) return;
+    const active = Number.parseInt(block.dataset.activeSlide, 10) || 0;
+    showSlide(block, active + 1);
+  }, AUTOPLAY_INTERVAL);
+}
+
 function createSlide(row, slideIndex, carouselId) {
   const slide = document.createElement('li');
   slide.dataset.slideIndex = slideIndex;
@@ -125,14 +174,18 @@ export default async function decorate(block) {
   carouselId += 1;
   block.setAttribute('id', `carousel-${carouselId}`);
 
-  // Extract Carousel parent properties if present
-  const carouselType = block.getAttribute('data-carousel-type') || 'slider';
-  block.setAttribute('data-carousel-type', carouselType);
+  const rows = Array.from(block.querySelectorAll(':scope > div'));
 
-  const motionType = block.getAttribute('data-motion-type');
+  // Extract Carousel parent properties if present
+  const config = extractConfig(block, rows);
+  let carouselType = config.type || block.getAttribute('data-carousel-type') || 'slider';
+  if (!CAROUSEL_TYPES[carouselType]) carouselType = 'slider';
+  block.setAttribute('data-carousel-type', carouselType);
+  const typeConfig = CAROUSEL_TYPES[carouselType];
+
+  const motionType = config.motion || block.getAttribute('data-motion-type');
   if (motionType) block.setAttribute('data-motion', motionType);
 
-  const rows = Array.from(block.querySelectorAll(':scope > div'));
   const isSingleSlide = rows.length < 2;
 
   const placeholders = await fetchPlaceholders();
@@ -151,24 +204,28 @@ export default async function decorate(block) {
 
   let slideIndicators;
   if (!isSingleSlide) {
-    const slideIndicatorsNav = document.createElement('nav');
-    slideIndicatorsNav.setAttribute(
-      'aria-label',
-      placeholders.carouselSlideControls || 'Carousel Slide Controls',
-    );
-    slideIndicators = document.createElement('ol');
-    slideIndicators.classList.add('carousel-slide-indicators');
-    slideIndicatorsNav.append(slideIndicators);
-    block.append(slideIndicatorsNav);
+    if (typeConfig.indicators) {
+      const slideIndicatorsNav = document.createElement('nav');
+      slideIndicatorsNav.setAttribute(
+        'aria-label',
+        placeholders.carouselSlideControls || 'Carousel Slide Controls',
+      );
+      slideIndicators = document.createElement('ol');
+      slideIndicators.classList.add('carousel-slide-indicators');
+      slideIndicatorsNav.append(slideIndicators);
+      block.append(slideIndicatorsNav);
+    }
 
-    const slideNavButtons = document.createElement('div');
-    slideNavButtons.classList.add('carousel-navigation-buttons');
-    slideNavButtons.innerHTML = `
-      <button type="button" class="slide-prev" aria-label="${placeholders.previousSlide || 'Previous Slide'}"></button>
-      <button type="button" class="slide-next" aria-label="${placeholders.nextSlide || 'Next Slide'}"></button>
-    `;
+    if (typeConfig.controls) {
+      const slideNavButtons = document.createElement('div');
+      slideNavButtons.classList.add('carousel-navigation-buttons');
+      slideNavButtons.innerHTML = `
+        <button type="button" class="slide-prev" aria-label="${placeholders.previousSlide || 'Previous Slide'}"></button>
+        <button type="button" class="slide-next" aria-label="${placeholders.nextSlide || 'Next Slide'}"></button>
+      `;
 
-    container.append(slideNavButtons);
+      container.append(slideNavButtons);
+    }
   }
 
   rows.forEach((row, idx) => {
@@ -192,5 +249,8 @@ export default async function decorate(block) {
   if (!isSingleSlide) {
     updateActiveSlide(slidesWrapper.querySelector('.carousel-slide'));
     bindEvents(block);
+    if (typeConfig.autoplay && !document.documentElement.classList.contains('adobe-ue-edit')) {
+      startAutoplay(block);
+    }
   }
 }

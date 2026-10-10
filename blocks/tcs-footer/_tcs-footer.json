@@ -1,0 +1,211 @@
+{
+  "definitions": [
+    {
+      "title": "TCS Footer",
+      "id": "tcs-footer",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "TCS Footer",
+              "model": "tcs-footer",
+              "filter": "tcs-footer"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Footer Hamburger",
+      "id": "tcs-footer-hamburger",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Footer Hamburger",
+              "model": "tcs-footer-hamburger"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Footer Search Bar",
+      "id": "tcs-footer-search",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Footer Search Bar",
+              "model": "tcs-footer-search"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Footer CTA Button",
+      "id": "tcs-footer-cta",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Footer CTA Button",
+              "model": "tcs-footer-cta"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Footer Copyright",
+      "id": "tcs-footer-copyright",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Footer Copyright",
+              "model": "tcs-footer-copyright"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Footer Legal Link",
+      "id": "tcs-footer-legal-item",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Footer Legal Link",
+              "model": "tcs-footer-legal-item"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "tcs-footer",
+      "fields": [
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Heading Title",
+          "valueType": "string",
+          "value": "Let's build the future together"
+        }
+      ]
+    },
+    {
+      "id": "tcs-footer-hamburger",
+      "fields": [
+        {
+          "component": "text",
+          "name": "ariaLabel",
+          "label": "Aria Label",
+          "valueType": "string",
+          "value": "Open navigation menu"
+        }
+      ]
+    },
+    {
+      "id": "tcs-footer-search",
+      "fields": [
+        {
+          "component": "select",
+          "name": "searchVariation",
+          "label": "Search Variation",
+          "valueType": "string",
+          "value": "both",
+          "options": [
+            { "name": "Text & Voice", "value": "both" },
+            { "name": "Text Only", "value": "text-only" },
+            { "name": "Voice Only", "value": "voice-only" }
+          ]
+        },
+        {
+          "component": "text",
+          "name": "placeholder",
+          "label": "Placeholder Text",
+          "valueType": "string",
+          "value": "Ask us a question"
+        }
+      ]
+    },
+    {
+      "id": "tcs-footer-cta",
+      "fields": [
+        {
+          "component": "text",
+          "name": "label",
+          "label": "CTA Label",
+          "valueType": "string"
+        },
+        {
+          "component": "aem-content",
+          "name": "link",
+          "label": "CTA Link"
+        },
+        {
+          "component": "select",
+          "name": "target",
+          "label": "Target Type",
+          "valueType": "string",
+          "value": "_self",
+          "options": [
+            { "name": "Same Tab (_self)", "value": "_self" },
+            { "name": "New Tab (_blank)", "value": "_blank" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tcs-footer-copyright",
+      "fields": [
+        {
+          "component": "richtext",
+          "name": "text",
+          "label": "Copyright Rich Text",
+          "valueType": "string"
+        }
+      ]
+    },
+    {
+      "id": "tcs-footer-legal-item",
+      "fields": [
+        {
+          "component": "text",
+          "name": "label",
+          "label": "Legal Link Label",
+          "valueType": "string"
+        },
+        {
+          "component": "aem-content",
+          "name": "link",
+          "label": "Legal Link"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "tcs-footer",
+      "components": [
+        "tcs-footer-hamburger",
+        "tcs-footer-search",
+        "tcs-footer-cta",
+        "tcs-footer-copyright",
+        "tcs-footer-legal-item"
+      ]
+    }
+  ]
+}

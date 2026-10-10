@@ -4092,6 +4092,123 @@
     ]
   },
   {
+    "id": "tcs-footer",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Heading Title",
+        "valueType": "string",
+        "value": "Let's build the future together"
+      }
+    ]
+  },
+  {
+    "id": "tcs-footer-hamburger",
+    "fields": [
+      {
+        "component": "text",
+        "name": "ariaLabel",
+        "label": "Aria Label",
+        "valueType": "string",
+        "value": "Open navigation menu"
+      }
+    ]
+  },
+  {
+    "id": "tcs-footer-search",
+    "fields": [
+      {
+        "component": "select",
+        "name": "searchVariation",
+        "label": "Search Variation",
+        "valueType": "string",
+        "value": "both",
+        "options": [
+          {
+            "name": "Text & Voice",
+            "value": "both"
+          },
+          {
+            "name": "Text Only",
+            "value": "text-only"
+          },
+          {
+            "name": "Voice Only",
+            "value": "voice-only"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "placeholder",
+        "label": "Placeholder Text",
+        "valueType": "string",
+        "value": "Ask us a question"
+      }
+    ]
+  },
+  {
+    "id": "tcs-footer-cta",
+    "fields": [
+      {
+        "component": "text",
+        "name": "label",
+        "label": "CTA Label",
+        "valueType": "string"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "CTA Link"
+      },
+      {
+        "component": "select",
+        "name": "target",
+        "label": "Target Type",
+        "valueType": "string",
+        "value": "_self",
+        "options": [
+          {
+            "name": "Same Tab (_self)",
+            "value": "_self"
+          },
+          {
+            "name": "New Tab (_blank)",
+            "value": "_blank"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tcs-footer-copyright",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Copyright Rich Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "tcs-footer-legal-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "label",
+        "label": "Legal Link Label",
+        "valueType": "string"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Legal Link"
+      }
+    ]
+  },
+  {
     "id": "tcs-header",
     "fields": [
       {

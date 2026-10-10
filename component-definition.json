@@ -1371,6 +1371,97 @@
           }
         },
         {
+          "title": "TCS Footer",
+          "id": "tcs-footer",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "TCS Footer",
+                  "model": "tcs-footer",
+                  "filter": "tcs-footer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Footer Hamburger",
+          "id": "tcs-footer-hamburger",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Footer Hamburger",
+                  "model": "tcs-footer-hamburger"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Footer Search Bar",
+          "id": "tcs-footer-search",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Footer Search Bar",
+                  "model": "tcs-footer-search"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Footer CTA Button",
+          "id": "tcs-footer-cta",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Footer CTA Button",
+                  "model": "tcs-footer-cta"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Footer Copyright",
+          "id": "tcs-footer-copyright",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Footer Copyright",
+                  "model": "tcs-footer-copyright"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Footer Legal Link",
+          "id": "tcs-footer-legal-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Footer Legal Link",
+                  "model": "tcs-footer-legal-item"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "TCS Header",
           "id": "tcs-header",
           "plugins": {

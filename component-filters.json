@@ -213,6 +213,16 @@
     ]
   },
   {
+    "id": "tcs-footer",
+    "components": [
+      "tcs-footer-hamburger",
+      "tcs-footer-search",
+      "tcs-footer-cta",
+      "tcs-footer-copyright",
+      "tcs-footer-legal-item"
+    ]
+  },
+  {
     "id": "teaser-v1-children",
     "components": [
       "teaser-v1-link"

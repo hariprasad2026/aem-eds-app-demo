@@ -36,6 +36,18 @@
           "value": "",
           "required": true
         },
+
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "arrowIcon",
+          "label": "Arrow Icon",
+          "validation": {
+            "pattern": ".*\\.svg$",
+            "message": "Only SVG files are allowed."
+          }
+        },
+
         {
           "component": "select",
           "valueType": "string",

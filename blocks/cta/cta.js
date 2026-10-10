@@ -1,6 +1,7 @@
 const DEFAULTS = {
   text_cta: '',
   ctaLink: '',
+  arrowIcon: null,
   linkTarget: 'default',
   ctaView: 'default',
   shape: 'rectangle',
@@ -77,17 +78,33 @@ function isValidCssColor(value) {
   return Boolean(element.style.color);
 }
 
-function createArrow(direction) {
+function createArrow(direction, arrowIcon) {
   const wrapper = document.createElement('span');
 
   wrapper.className = `cta-arrow cta-arrow-${direction}`;
   wrapper.setAttribute('aria-hidden', 'true');
 
-  const arrow = document.createElement('img');
+  if (!arrowIcon) {
+    return wrapper;
+  }
 
-  arrow.src = '/content/dam/aem-eds-xwalk/hero/icons/arrow14x14.svg';
-  arrow.alt = '';
-  arrow.className = 'cta-arrow-icon';
+  const arrow = arrowIcon.cloneNode(true);
+
+  arrow.classList.add('cta-arrow-icon');
+
+  const arrowSrc = arrow.getAttribute('src') || '';
+
+  if (
+    arrowSrc
+    && !arrowSrc.toLowerCase().endsWith('.svg')
+  ) {
+    // eslint-disable-next-line no-console
+    console.error(
+      'CTA Arrow Icon must be SVG format only.',
+    );
+
+    return wrapper;
+  }
 
   if (direction === 'left') {
     arrow.classList.add('cta-arrow-icon-left');
@@ -97,7 +114,6 @@ function createArrow(direction) {
 
   return wrapper;
 }
-
 function readBlockContent(block) {
   return {
     text_cta: getFieldValue(
@@ -112,49 +128,52 @@ function readBlockContent(block) {
       DEFAULTS.ctaLink,
     ),
 
+    arrowIcon: block.children[2]
+      ?.querySelector('img'),
+
     linkTarget: normalizeLinkTarget(
       [...block.children]
         .map((cell) => cell.textContent.trim().toLowerCase())
         .find((text) => text === 'new-window' || text === 'true')
-      || DEFAULTS.linkTarget,
+        || DEFAULTS.linkTarget,
     ),
 
     ctaView: getFieldValue(
       block,
-      3,
+      4,
       'default',
     ),
 
     shape: normalizeShape(
       getFieldValue(
         block,
-        4,
+        5,
         DEFAULTS.shape,
       ),
     ),
 
     backgroundColor: getFieldValue(
       block,
-      5,
+      6,
       DEFAULTS.backgroundColor,
     ),
 
     textColor: getFieldValue(
       block,
-      6,
+      7,
       DEFAULTS.textColor,
     ),
 
     borderColor: getFieldValue(
       block,
-      7,
+      8,
       DEFAULTS.borderColor,
     ),
 
     arrowDirection: normalizeArrow(
       getFieldValue(
         block,
-        8,
+        9,
         DEFAULTS.arrowDirection,
       ),
     ),
@@ -218,7 +237,10 @@ function createCta(data) {
 
   if (data.arrowDirection === 'left') {
     link.appendChild(
-      createArrow('left'),
+      createArrow(
+        'left',
+        data.arrowIcon,
+      ),
     );
   }
 
@@ -231,7 +253,10 @@ function createCta(data) {
 
   if (data.arrowDirection === 'right') {
     link.appendChild(
-      createArrow('right'),
+      createArrow(
+        'right',
+        data.arrowIcon,
+      ),
     );
   }
 

@@ -84,7 +84,11 @@
     "id": "carousel",
     "components": [
       "carousel-item",
+<<<<<<< HEAD
       "hero2-item"
+=======
+      "hero2"
+>>>>>>> 36838076e3cfaf3483b3dc37e215a0e9e50db3a4
     ]
   },
   {

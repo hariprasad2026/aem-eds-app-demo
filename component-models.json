@@ -915,6 +915,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "id": "carousel",
     "fields": [
       {
@@ -940,6 +941,8 @@
     ]
   },
   {
+=======
+>>>>>>> 36838076e3cfaf3483b3dc37e215a0e9e50db3a4
     "id": "carousel-item",
     "fields": [
       {
@@ -954,14 +957,23 @@
         "valueType": "string",
         "name": "media_imageAlt",
         "value": "",
+<<<<<<< HEAD
         "label": "Background Alt"
+=======
+        "label": "Bacgkround Alt"
+>>>>>>> 36838076e3cfaf3483b3dc37e215a0e9e50db3a4
       },
       {
         "component": "richtext",
         "name": "content_text",
         "value": "",
         "label": "Text",
+<<<<<<< HEAD
         "valueType": "string"
+=======
+        "valueType": "string",
+        "filter": "richtext"
+>>>>>>> 36838076e3cfaf3483b3dc37e215a0e9e50db3a4
       },
       {
         "component": "select",
@@ -1002,6 +1014,7 @@
             "value": "bottom"
           }
         ]
+<<<<<<< HEAD
       }
     ]
   },
@@ -1161,6 +1174,8 @@
         "valueType": "string",
         "name": "motionType",
         "label": "Motion Type"
+=======
+>>>>>>> 36838076e3cfaf3483b3dc37e215a0e9e50db3a4
       }
     ]
   },

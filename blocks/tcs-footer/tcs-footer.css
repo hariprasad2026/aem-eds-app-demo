@@ -52,7 +52,7 @@
   z-index: 1;
 }
 
-/* Heading: Let's build the future together */
+/* Heading */
 .tcs-footer-heading {
   width: 100%;
   font-family: Inter, sans-serif;
@@ -74,8 +74,8 @@
   gap: 24px;
   width: 100%;
   max-width: 686px;
-  transition: transform 0.2s ease;
-  z-index: 99;
+  transition: transform 0.2s ease, position 0.2s ease;
+  z-index: 100;
 }
 
 .tcs-footer-floating-nav.is-fixed {
@@ -104,7 +104,7 @@
   box-sizing: border-box;
   width: 59px;
   height: 59px;
-  background: rgb(255 255 255 / 70%);
+  background: rgb(255 255 255 / 60%);
   border: 2px solid #494c4d;
   backdrop-filter: blur(13.7px);
   border-radius: 151px;
@@ -124,7 +124,7 @@
 }
 
 .tcs-footer-hamburger:hover {
-  background: rgb(255 255 255 / 95%);
+  background: rgb(255 255 255 / 90%);
   border-color: #1e2222;
 }
 
@@ -195,6 +195,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.tcs-footer-search-actions .mic-btn.listening {
+  color: #d93025;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
 .tcs-footer-search-actions .submit-btn {
@@ -282,19 +295,18 @@
   transform: rotate(180deg);
 }
 
-/* Glassmorphism Submenu Grid Panel with Frosted Overlay (Image 2 Style) */
+/* Glassmorphism Submenu Grid Panel */
 .tcs-footer-submenu-panel {
   width: 100%;
-  max-width: 720px;
-  background: rgb(230 233 238 / 85%);
-  border: 1px solid rgb(255 255 255 / 60%);
-  backdrop-filter: blur(25px);
+  max-width: 686px;
+  background: rgb(255 255 255 / 95%);
+  border: 2px solid #494c4d;
+  backdrop-filter: blur(40px);
   border-radius: 28px;
-  padding: 32px 28px;
+  padding: 24px;
   margin-bottom: 16px;
-  z-index: 100;
+  z-index: 99;
   box-sizing: border-box;
-  box-shadow: 0 20px 50px rgb(0 0 0 / 8%);
 }
 
 .tcs-footer-submenu-panel.is-fixed {
@@ -308,7 +320,7 @@
 .tcs-submenu-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px 36px;
+  gap: 12px 24px;
 }
 
 /* CTA Arrow Styling */
@@ -320,8 +332,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 4px;
-  border-bottom: 1px solid rgb(0 0 0 / 8%);
+  padding: 14px 18px;
+  border-bottom: 1px solid rgb(73 76 77 / 20%);
   color: #0c0c0d;
   font-family: Inter, sans-serif;
   font-size: 15px;
@@ -342,7 +354,7 @@
 
 .tcs-submenu-item .arrow {
   color: #0c0c0d;
-  opacity: 0.7;
+  opacity: 0.8;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 

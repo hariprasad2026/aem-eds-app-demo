@@ -2,7 +2,6 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 
 /**
  * Resolves content paths for AEM authoring/publishing environments
- * E.g., /praneeth/dummy-1 -> /content/2026/39/briskdeer43959/praneeth/dummy-1.html
  */
 function formatHtmlPath(path) {
   if (!path || path === '/') return path || '#';
@@ -20,7 +19,6 @@ function formatHtmlPath(path) {
 
 /**
  * Parses query-index.json into a flexible multi-level tree structure.
- * Filters out utility, test, block, header, and home pages.
  */
 async function fetchHierarchicalNavData() {
   try {
@@ -29,6 +27,8 @@ async function fetchHierarchicalNavData() {
     const json = await response.json();
     const data = json.data || json;
 
+    if (!Array.isArray(data)) return [];
+
     const navTree = {};
     const excludedPages = [
       'footer',
@@ -36,17 +36,20 @@ async function fetchHierarchicalNavData() {
       'tcs-footer',
       'tcs-header',
       'blocks',
-      'test',
       'home',
       'home-page',
       'homepage',
       'demo',
       'nav',
       'iconlist',
+      'qa',
+      'test',
     ];
 
     data.forEach((item) => {
-      const rawPath = item.path || '';
+      const rawPath = item?.path || '';
+      if (!rawPath) return;
+
       const segments = rawPath.split('/').filter(Boolean);
 
       let locale = '';
@@ -114,7 +117,7 @@ async function fetchHierarchicalNavData() {
 export default function decorate(block) {
   const blockRows = [...block.children];
 
-  // 1. Heading Title
+  // 1. Heading Title (First row of block)
   const mainTitleRow = blockRows.shift();
   const titleText = mainTitleRow?.textContent.trim() || "Let's build the future together";
 
@@ -126,18 +129,16 @@ export default function decorate(block) {
   heading.textContent = titleText;
   footerContainer.append(heading);
 
-  // Floating Control Bar
+  // Floating Control Bar Containers
   const floatingNav = document.createElement('div');
   floatingNav.className = 'tcs-footer-floating-nav';
 
   const searchRow = document.createElement('div');
   searchRow.className = 'tcs-footer-search-row';
 
-  // Navigation Pill Row
   const navPillsRow = document.createElement('div');
   navPillsRow.className = 'tcs-footer-nav-pills-row hidden';
 
-  // Submenu Panel
   const subMenuPanel = document.createElement('div');
   subMenuPanel.className = 'tcs-footer-submenu-panel hidden';
 
@@ -159,38 +160,44 @@ export default function decorate(block) {
   let currentViewLevel = 'L1';
   let searchQueryVariable = '';
 
-  const getModelType = (row) => {
-    const model = row.getAttribute('data-aue-model') || row.dataset.aueModel;
-    if (model) return model;
+  /**
+   * Fail-Safe Model Classification Logic
+   * Uses explicit data-aue-model attributes first, content string matching second,
+   * and strict row position index as the ultimate fallback.
+   */
+  const getModelType = (row, index) => {
+    const explicitModel = row.getAttribute('data-aue-model') || row.dataset?.aueModel;
+    if (explicitModel) return explicitModel;
 
-    const cells = row.children.length;
-    if (cells === 1) {
-      if (row.textContent.includes('©') || row.querySelector('p')) return 'tcs-footer-copyright';
-      return 'tcs-footer-hamburger';
+    const text = row.textContent.trim().toLowerCase();
+
+    // Explicit string checks
+    if (text.includes('both') || text.includes('text-only') || text.includes('voice-only') || text.includes('ask canvas') || text.includes('ask us')) {
+      return 'tcs-footer-search';
     }
-    if (cells === 2) {
-      const val = row.textContent.toLowerCase();
-      if (val.includes('both') || val.includes('text-only') || val.includes('voice-only')) {
-        return 'tcs-footer-search';
-      }
+    if (text.includes('©') || text.includes('tata consultancy') || text.includes('all rights reserved')) {
+      return 'tcs-footer-copyright';
+    }
+    if (text.includes('privacy') || text.includes('terms') || text.includes('cookie') || text.includes('legal')) {
       return 'tcs-footer-legal-item';
     }
-    if (cells >= 3) {
-      const firstCellVal = cells[0]?.textContent.trim().toLowerCase() || '';
-      if (firstCellVal.includes('http') || firstCellVal.includes('/') || cells.length === 3) {
-        return 'tcs-footer-legal-item';
-      }
-      return 'tcs-footer-cta';
-    }
-    return null;
+
+    // Index-based structural map fallback matching your AEM authoring tree (image_04f79f.png)
+    if (index === 0) return 'tcs-footer-hamburger';
+    if (index === 1) return 'tcs-footer-search';
+    if (index === 2) return 'tcs-footer-cta';
+    if (index === 3) return 'tcs-footer-copyright';
+    if (index === 4) return 'tcs-footer-legal-item';
+
+    return 'tcs-footer-cta';
   };
 
-  // 2. Process Authored Items
-  blockRows.forEach((row) => {
-    const model = getModelType(row);
+  // Process Authored Rows
+  blockRows.forEach((row, index) => {
+    const model = getModelType(row, index);
     const cells = [...row.children];
 
-    if (model === 'tcs-footer-hamburger') {
+    if (model === 'tcs-footer-hamburger' && !hamburgerWrapperNode) {
       const ariaLabel = cells[0]?.textContent.trim() || 'Open navigation menu';
       row.className = 'tcs-footer-hamburger-wrapper';
       row.innerHTML = `
@@ -212,8 +219,7 @@ export default function decorate(block) {
       `;
       hamburgerWrapperNode = row;
       hamburgerBtnNode = row.querySelector('.tcs-footer-hamburger');
-      searchRow.prepend(row);
-    } else if (model === 'tcs-footer-search') {
+    } else if (model === 'tcs-footer-search' && !searchBoxWrapperNode) {
       const variation = cells[0]?.textContent.trim().toLowerCase() || 'both';
       const placeholder = cells[1]?.textContent.trim() || 'Ask Canvas Search';
 
@@ -267,15 +273,9 @@ export default function decorate(block) {
 
       formEl.addEventListener('submit', (e) => {
         e.preventDefault();
-
-        if (inputEl) {
-          searchQueryVariable = inputEl.value;
-        }
-
+        if (inputEl) searchQueryVariable = inputEl.value;
         // eslint-disable-next-line no-console
         console.log('Search Query Variable:', searchQueryVariable);
-
-        window.location.hash = '#';
       });
 
       if (micBtn && inputEl) {
@@ -292,29 +292,19 @@ export default function decorate(block) {
             recognition.start();
           });
 
+          const stopListening = () => micBtn.classList.remove('listening');
+
           recognition.onresult = (e) => {
-            micBtn.classList.remove('listening');
+            stopListening();
             const { transcript } = e.results[0][0];
             inputEl.value = transcript;
             searchQueryVariable = transcript;
-
-            // eslint-disable-next-line no-console
-            console.log('Search Query Variable (Voice):', searchQueryVariable);
-
-            window.location.hash = '#';
           };
 
-          recognition.onerror = () => {
-            micBtn.classList.remove('listening');
-          };
-
-          recognition.onend = () => {
-            micBtn.classList.remove('listening');
-          };
+          recognition.onerror = stopListening;
+          recognition.onend = stopListening;
         }
       }
-
-      searchRow.append(row);
     } else if (model === 'tcs-footer-cta') {
       const label = cells[0]?.textContent.trim() || 'Click here';
       const link = formatHtmlPath(cells[1]?.querySelector('a')?.href || '#');
@@ -327,7 +317,7 @@ export default function decorate(block) {
       ctaBtn.target = target;
       ctaBtn.innerHTML = `<span>${label}</span><span class="arrow">→</span>`;
 
-      moveInstrumentation(cells[0], ctaBtn);
+      if (cells[0]) moveInstrumentation(cells[0], ctaBtn);
       row.innerHTML = '';
       row.append(ctaBtn);
       ctaRow.append(row);
@@ -347,23 +337,27 @@ export default function decorate(block) {
       legalLink.target = target;
       legalLink.textContent = label;
 
-      moveInstrumentation(cells[0], legalLink);
+      if (cells[0]) moveInstrumentation(cells[0], legalLink);
       row.innerHTML = '';
       row.append(legalLink);
       legalNav.append(row);
     }
   });
 
-  // Assemble floating structure
+  // Assemble Floating Bar
+  if (hamburgerWrapperNode) searchRow.append(hamburgerWrapperNode);
+  if (searchBoxWrapperNode) searchRow.append(searchBoxWrapperNode);
+
   if (searchRow.children.length > 0) floatingNav.append(searchRow);
   floatingNav.append(navPillsRow);
-  if (ctaRow.children.length > 0) floatingNav.append(ctaRow);
 
   if (floatingNav.children.length > 0) {
     footerContainer.append(subMenuPanel);
     footerContainer.append(floatingNav);
   }
 
+  // Static Bottom Items
+  if (ctaRow.children.length > 0) footerContainer.append(ctaRow);
   if (legalNav.children.length > 0) bottomRow.append(legalNav);
   if (bottomRow.children.length > 0) footerContainer.append(bottomRow);
 
@@ -395,6 +389,8 @@ export default function decorate(block) {
 
   const updateButtonStateAndPosition = (level) => {
     currentViewLevel = level;
+    if (!hamburgerBtnNode || !hamburgerWrapperNode) return;
+
     const hamburgerIcon = hamburgerBtnNode.querySelector('.icon-hamburger');
     const closeIcon = hamburgerBtnNode.querySelector('.icon-close');
 
@@ -441,11 +437,8 @@ export default function decorate(block) {
       };
 
       l2Pill.addEventListener('mouseenter', triggerL3View);
-
       const chevronBtn = l2Pill.querySelector('.chevron-btn');
-      if (chevronBtn) {
-        chevronBtn.addEventListener('click', triggerL3View);
-      }
+      if (chevronBtn) chevronBtn.addEventListener('click', triggerL3View);
 
       l2Group.append(l2Pill);
     });
@@ -475,9 +468,7 @@ export default function decorate(block) {
 
       const enterSubPageNavigation = (e) => {
         if (e) e.stopPropagation();
-        if (!hasL2) return;
-
-        renderL2SubNavigation(l1);
+        if (hasL2) renderL2SubNavigation(l1);
       };
 
       l1Pill.addEventListener('mouseenter', () => {
@@ -485,9 +476,7 @@ export default function decorate(block) {
       });
 
       const chevronBtn = l1Pill.querySelector('.chevron-btn');
-      if (chevronBtn) {
-        chevronBtn.addEventListener('click', enterSubPageNavigation);
-      }
+      if (chevronBtn) chevronBtn.addEventListener('click', enterSubPageNavigation);
 
       navPillsRow.append(l1Pill);
     });
@@ -499,11 +488,16 @@ export default function decorate(block) {
     isNavOpen = false;
     currentViewLevel = 'L1';
 
-    searchRow.prepend(hamburgerWrapperNode);
+    if (hamburgerWrapperNode) {
+      searchRow.prepend(hamburgerWrapperNode);
+    }
     if (searchBoxWrapperNode) searchBoxWrapperNode.classList.remove('hidden');
-    hamburgerBtnNode.setAttribute('aria-expanded', 'false');
-    hamburgerBtnNode.querySelector('.icon-hamburger').classList.remove('hidden');
-    hamburgerBtnNode.querySelector('.icon-close').classList.add('hidden');
+
+    if (hamburgerBtnNode) {
+      hamburgerBtnNode.setAttribute('aria-expanded', 'false');
+      hamburgerBtnNode.querySelector('.icon-hamburger').classList.remove('hidden');
+      hamburgerBtnNode.querySelector('.icon-close').classList.add('hidden');
+    }
 
     navPillsRow.classList.add('hidden');
     subMenuPanel.classList.add('hidden');
@@ -531,19 +525,27 @@ export default function decorate(block) {
     navPillsRow.querySelectorAll('.tcs-nav-pill').forEach((p) => p.classList.remove('active'));
   });
 
+  // Smooth Scroll Fixed Position Monitor
+  let ticking = false;
   const handleScroll = () => {
-    const footerRect = block.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const footerRect = block.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
 
-    if (footerRect.top < windowHeight - 140) {
-      floatingNav.classList.remove('is-fixed');
-      subMenuPanel.classList.remove('is-fixed');
-    } else {
-      floatingNav.classList.add('is-fixed');
-      subMenuPanel.classList.add('is-fixed');
+        if (footerRect.top < windowHeight - 140) {
+          floatingNav.classList.remove('is-fixed');
+          subMenuPanel.classList.remove('is-fixed');
+        } else {
+          floatingNav.classList.add('is-fixed');
+          subMenuPanel.classList.add('is-fixed');
+        }
+        ticking = false;
+      });
+      ticking = true;
     }
   };
 
-  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('scroll', handleScroll, { passive: true });
   handleScroll();
 }

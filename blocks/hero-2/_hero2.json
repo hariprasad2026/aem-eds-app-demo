@@ -1,0 +1,185 @@
+{
+  "definitions": [
+    {
+      "title": "Hero 2",
+      "id": "hero2",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Hero 2",
+              "model": "hero2",
+              "filter": "hero2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "CTA",
+      "id": "cta-item",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "CTA",
+              "model": "cta"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "hero2",
+      "fields": [
+        {
+          "component": "fieldset",
+          "name": "imageSection",
+          "label": "Image Section"
+        },
+        {
+          "component": "reference",
+          "name": "heroIcon",
+          "label": "Icon"
+        },
+        {
+          "component": "text",
+          "name": "heroIconAlt",
+          "label": "Icon Image Alt Text"
+        },
+        {
+          "component": "select",
+          "name": "heroImageType",
+          "label": "Hero Image Type",
+          "valueType": "string",
+          "value": "default",
+          "options": [
+            {
+              "name": "Default",
+              "value": "default"
+            },
+            {
+              "name": "Lotto",
+              "value": "lotto"
+            }
+          ]
+        },
+        {
+          "component": "reference",
+          "name": "heroImage",
+          "label": "Hero Image",
+          "description": "Default: any image format is allowed.",
+          "valueType": "string",
+          "multi": false,
+          "condition": { "===": [{ "var": "heroImageType" }, "default"] }
+        },
+        {
+          "component": "reference",
+          "name": "heroLottoImagePath",
+          "label": "Hero Lotto Image Path",
+          "description": "Lotto: only .zip or .svg files are allowed.",
+          "valueType": "string",
+          "multi": false,
+          "condition": { "===": [{ "var": "heroImageType" }, "lotto"] }
+        },
+        {
+          "component": "text",
+          "name": "heroImageAlt",
+          "label": "Hero Image Alt Text"
+        },
+        {
+          "component": "select",
+          "name": "heroView",
+          "label": "Hero View",
+          "options": [
+            {
+              "name": "Default",
+              "value": "default"
+            }
+          ]
+        },
+
+        {
+          "component": "fieldset",
+          "name": "contentSection",
+          "label": "Content Section"
+        },
+        {
+          "component": "text",
+          "name": "eyebrowText",
+          "label": "Eyebrow"
+        },
+        {
+          "component": "textarea",
+          "name": "title",
+          "label": "Title"
+        },
+        {
+          "component": "richtext",
+          "name": "description",
+          "label": "Description"
+        },
+
+        {
+          "component": "select",
+          "name": "motionType",
+          "label": "Motion Type",
+          "options": [
+            {
+              "name": "Select",
+              "value": "Select"
+            }
+          ]
+        },
+
+        {
+          "component": "fieldset",
+          "name": "styleSection",
+          "label": "Style"
+        },
+        {
+          "component": "select",
+          "name": "alignment",
+          "label": "Alignment",
+          "options": [
+            {
+              "name": "Top",
+              "value": "top"
+            },
+            {
+              "name": "Middle",
+              "value": "middle"
+            },
+            {
+              "name": "Bottom",
+              "value": "bottom"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "bgColor",
+          "label": "BG Color",
+          "options": [
+            {
+              "name": "Default",
+              "value": "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "hero2",
+      "components": [
+        "cta-item"
+      ]
+    }
+  ]
+}

@@ -2,7 +2,8 @@
   box-sizing: border-box;
 }
 
-.cta-link {
+.cta-link,
+.cta-link:any-link {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
@@ -26,22 +27,55 @@
     filter 160ms ease;
 }
 
-.cta-link-rectangle {
+.cta-link.cta-link-rectangle {
   border-radius: 0;
 }
 
-.cta-link-rounded {
+.cta-link.cta-link-rounded {
   border-radius: 0.375rem;
 }
 
-.cta-link-pill {
+.cta-link.cta-link-pill {
   border-radius: 9999px;
 }
 
+.cta-link.cta-view-default.cta-link-pill,
+.cta-link.cta-view-default.cta-link-rounded,
+.cta-link.cta-view-default.cta-link-rectangle {
+  border-radius: 0;
+}
+
+/* Default View */
+.cta-link.cta-view-default {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Primary View */
+.cta-link.cta-view-primary {
+  padding: 12px 16px 12px 24px;
+  gap: 8px;
+  min-height: 50px;
+}
+
+/* Secondary View */
+.cta-link.cta-view-secondary {
+  background: transparent;
+  border-width: 1px;
+  border-style: solid;
+}
+
 .cta-text {
+  font-family: Inter, sans-serif;
   display: inline-block;
   min-width: 0;
   overflow-wrap: anywhere;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0.01em;
 }
 
 .cta-arrow {
@@ -57,25 +91,18 @@
 
 .cta-arrow-icon {
   display: block;
-  width: 1em;
-  height: 1em;
-  color: inherit;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
 .cta-link:hover {
-  transform: translateY(-1px);
+  transform: none;
 }
 
 .cta-link:active {
   transform: translateY(0);
-}
-
-.cta-link:hover .cta-arrow-right {
-  transform: translateX(3px);
-}
-
-.cta-link:hover .cta-arrow-left {
-  transform: translateX(-3px);
 }
 
 .cta-link:focus {
@@ -86,6 +113,19 @@
 .cta-link:focus-visible {
   outline: 3px solid currentcolor;
   outline-offset: 3px;
+}
+
+.cta-link:hover .cta-arrow-right {
+  transform: translateX(3px);
+}
+
+.cta-link:hover .cta-arrow-left {
+  transform: translateX(-3px);
+}
+
+.cta-link:any-link:hover {
+  color: #000;
+  text-decoration: none;
 }
 
 .cta-link:focus:not(:focus-visible) {

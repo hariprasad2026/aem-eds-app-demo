@@ -138,6 +138,12 @@
     ]
   },
   {
+    "id": "hero2",
+    "components": [
+      "cta-item"
+    ]
+  },
+  {
     "id": "industry-list",
     "components": [
       "industry-list-header",

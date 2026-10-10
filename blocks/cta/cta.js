@@ -1,8 +1,8 @@
 const DEFAULTS = {
   text_cta: '',
   ctaLink: '',
-  openInNewTab: false,
-  ariaLabel: '',
+  linkTarget: 'default',
+  ctaView: 'default',
   shape: 'rectangle',
   backgroundColor: '',
   textColor: '',
@@ -15,6 +15,23 @@ const ALLOWED_SHAPES = [
   'rounded',
   'pill',
 ];
+
+const ALLOWED_LINK_TARGETS = [
+  'default',
+  'new-window',
+];
+
+function normalizeLinkTarget(value) {
+  if (String(value).trim().toLowerCase() === 'true') {
+    return 'new-window';
+  }
+
+  if (ALLOWED_LINK_TARGETS.includes(value)) {
+    return value;
+  }
+
+  return DEFAULTS.linkTarget;
+}
 
 const ALLOWED_ARROWS = [
   'none',
@@ -30,16 +47,6 @@ function getFieldValue(block, index, fallback = '') {
   }
 
   return field.textContent.trim() || fallback;
-}
-
-function getBooleanFieldValue(block, index, fallback = false) {
-  const value = getFieldValue(block, index, '');
-
-  if (!value) {
-    return fallback;
-  }
-
-  return value.toLowerCase() === 'true';
 }
 
 function normalizeShape(value) {
@@ -76,44 +83,17 @@ function createArrow(direction) {
   wrapper.className = `cta-arrow cta-arrow-${direction}`;
   wrapper.setAttribute('aria-hidden', 'true');
 
-  const svg = document.createElementNS(
-    'http://www.w3.org/2000/svg',
-    'svg',
-  );
+  const arrow = document.createElement('img');
 
-  svg.classList.add('cta-arrow-icon');
-
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('width', '1em');
-  svg.setAttribute('height', '1em');
-  svg.setAttribute('focusable', 'false');
-  svg.setAttribute('aria-hidden', 'true');
-
-  const path = document.createElementNS(
-    'http://www.w3.org/2000/svg',
-    'path',
-  );
+  arrow.src = '/content/dam/aem-eds-xwalk/hero/icons/arrow 14x14.svg';
+  arrow.alt = '';
+  arrow.className = 'cta-arrow-icon';
 
   if (direction === 'left') {
-    path.setAttribute(
-      'd',
-      'M19 12H5M12 19l-7-7 7-7',
-    );
-  } else {
-    path.setAttribute(
-      'd',
-      'M5 12h14M12 5l7 7-7 7',
-    );
+    arrow.classList.add('cta-arrow-icon-left');
   }
 
-  path.setAttribute('fill', 'none');
-  path.setAttribute('stroke', 'currentColor');
-  path.setAttribute('stroke-width', '2');
-  path.setAttribute('stroke-linecap', 'round');
-  path.setAttribute('stroke-linejoin', 'round');
-
-  svg.appendChild(path);
-  wrapper.appendChild(svg);
+  wrapper.appendChild(arrow);
 
   return wrapper;
 }
@@ -132,16 +112,17 @@ function readBlockContent(block) {
       DEFAULTS.ctaLink,
     ),
 
-    openInNewTab: getBooleanFieldValue(
-      block,
-      2,
-      DEFAULTS.openInNewTab,
+    linkTarget: normalizeLinkTarget(
+      [...block.children]
+        .map((cell) => cell.textContent.trim().toLowerCase())
+        .find((text) => text === 'new-window' || text === 'true')
+        || DEFAULTS.linkTarget,
     ),
 
-    ariaLabel: getFieldValue(
+    ctaView: getFieldValue(
       block,
       3,
-      DEFAULTS.ariaLabel,
+      'default',
     ),
 
     shape: normalizeShape(
@@ -190,21 +171,37 @@ function createCta(data) {
   link.className = [
     'cta-link',
     `cta-link-${data.shape}`,
+    `cta-view-${data.ctaView}`,
   ].join(' ');
 
   link.href = data.ctaLink;
 
   link.setAttribute(
     'aria-label',
-    data.ariaLabel || data.text_cta,
+    data.text_cta,
   );
 
-  if (data.openInNewTab) {
+  const normalizedTarget = String(data.linkTarget || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '-');
+
+  const opensNewTab = [
+    '_blank',
+    'blank',
+    'new-tab',
+    'new-window',
+  ].includes(normalizedTarget);
+
+  if (opensNewTab) {
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
   }
 
-  if (isValidCssColor(data.backgroundColor)) {
+  if (
+    data.ctaView === 'primary'
+    && isValidCssColor(data.backgroundColor)
+  ) {
     link.style.backgroundColor = data.backgroundColor;
   }
 
@@ -212,7 +209,10 @@ function createCta(data) {
     link.style.color = data.textColor;
   }
 
-  if (isValidCssColor(data.borderColor)) {
+  if (
+    ['primary', 'secondary'].includes(data.ctaView)
+    && isValidCssColor(data.borderColor)
+  ) {
     link.style.borderColor = data.borderColor;
   }
 

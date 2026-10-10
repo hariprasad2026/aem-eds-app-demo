@@ -1,6 +1,8 @@
 import { moveInstrumentation } from '../../scripts/scripts.js';
 import fetchPlaceholders from '../../scripts/placeholders.js';
 import showSlide from '../../scripts/carousel-support.js';
+import { loadCSS } from '../../scripts/aem.js';
+import { decorateCarouselHero } from '../hero-2/hero-2.js';
 
 function updateActiveSlide(slide) {
   const block = slide.closest('.carousel');
@@ -132,7 +134,16 @@ function createSlide(row, slideIndex, carouselId) {
 
   const columns = Array.from(row.querySelectorAll(':scope > div'));
 
-  if (columns.length > 0) {
+  const isHero = row.dataset.aueModel === 'hero2'
+    || row.dataset.aueModel === 'carousel-hero2'
+    || row.querySelector('[data-aue-prop="heroImageType"]')
+    || columns.length > 5;
+
+  if (isHero) {
+    loadCSS(`${window.hlx.codeBasePath}/blocks/hero-2/hero-2.css`);
+    slide.classList.add('carousel-slide-hero2');
+    slide.append(decorateCarouselHero(row));
+  } else if (columns.length > 0) {
     columns.forEach((column, colIdx) => {
       const isImage = colIdx === 0;
       column.classList.add(`carousel-slide-${isImage ? 'image' : 'content'}`);
@@ -163,6 +174,7 @@ function createSlide(row, slideIndex, carouselId) {
 
   const labeledBy = slide.querySelector('h1, h2, h3, h4, h5, h6');
   if (labeledBy) {
+    if (!labeledBy.id) labeledBy.id = `carousel-${carouselId}-heading-${slideIndex}`;
     slide.setAttribute('aria-labelledby', labeledBy.getAttribute('id'));
   }
 

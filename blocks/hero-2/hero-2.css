@@ -1,6 +1,6 @@
 .hero2 {
   position: relative;
-  min-height: 1000px;
+  min-height: 600px;
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -12,14 +12,14 @@
 }
 
 /* Lotto background: images extracted from a zip (or an svg) layered behind the content */
-.hero2-bg {
+.hero2 .hero2-bg {
   position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
 }
 
-.hero2-bg-layer {
+.hero2 .hero2-bg-layer {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -36,7 +36,7 @@
   z-index: 0;
 }
 
-.hero2-content {
+.hero2 .hero2-content {
   position: relative;
   z-index: 1;
   display: flex;
@@ -47,11 +47,12 @@
   text-align: center;
   width: 100%;
   max-width: 1200px;
-  min-height: 1000px;
-  padding: 0 24px;
+  min-height: inherit;
+  padding: 40px 20px;
 }
 
-.hero2-icon {
+.hero2 .hero2-icon,
+.hero2 .hero2-icon img {
   width: 48px;
   height: 48px;
   object-fit: contain;
@@ -61,7 +62,7 @@
     hue-rotate(221deg) brightness(98%) contrast(96%);
 }
 
-.hero2-eyebrow {
+.hero2 .hero2-eyebrow {
   font-family: Inter, sans-serif;
   color: #4673DB;
   margin: 0;
@@ -70,7 +71,7 @@
   line-height: 160%;
 }
 
-.hero2-title {
+.hero2 .hero2-title {
   font-family: Inter, sans-serif;
   width: 100%;
   max-width: 1352px;
@@ -78,31 +79,32 @@
   margin-top: 24px;
   margin-bottom: 40px;
   color: #000;
-  font-size: 64px;
+  font-size: 40px;
   font-weight: 500;
   line-height: 120%;
-  letter-spacing: -0.025em;
+  letter-spacing: 0;
   text-align: center;
   text-wrap: balance;
+  overflow-wrap: anywhere;
 }
 
-.hero2-description {
+.hero2 .hero2-description {
   max-width: 850px;
   margin: 0 0 32px;
   text-align: center;
 }
 
-.hero2-description p {
+.hero2 .hero2-description p {
   font-family: Inter, sans-serif;
   font-size: 24px;
   font-weight: 500;
   line-height: 120%;
-  letter-spacing: -0.025em;
+  letter-spacing: 0;
   margin: 0;
 }
 
 
-.hero2-cta-items {
+.hero2 .hero2-cta-items {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -111,61 +113,70 @@
   margin-top: 40px;
 }
 
-.hero2-cta-items > div {
+.hero2 .hero2-cta-items > div {
   display: block;
   justify-content: center;
 }
 
-.hero2-align-top .hero2-content {
+.hero2.hero2-align-top .hero2-content {
   justify-content: flex-start;
   padding-top: 80px;
   padding-bottom: 0;
 }
 
-.hero2-align-middle .hero2-content {
+.hero2.hero2-align-middle .hero2-content {
   justify-content: center;
 }
 
-.hero2-align-bottom .hero2-content {
+.hero2.hero2-align-bottom .hero2-content {
   justify-content: flex-end;
   padding-top: 0;
   padding-bottom: 80px;
 }
 
-@media (width <= 1024px) {
+.hero2.hero2-align-left .hero2-content {
+  align-items: flex-start;
+}
+
+.hero2.hero2-align-right .hero2-content {
+  align-items: flex-end;
+}
+
+.hero2.hero2-align-left :is(.hero2-title, .hero2-description),
+.hero2.hero2-align-right :is(.hero2-title, .hero2-description) {
+  text-align: inherit;
+}
+
+.hero2.hero2-align-left {
+  text-align: left;
+}
+
+.hero2.hero2-align-right {
+  text-align: right;
+}
+
+.hero2.hero2-bg-dark::before {
+  background: rgb(0 0 0 / 65%);
+}
+
+.hero2.hero2-bg-dark,
+.hero2.hero2-bg-dark :is(.hero2-title, .hero2-eyebrow) {
+  color: white;
+}
+
+@media (width >= 900px) {
   .hero2 {
     min-height: 750px;
   }
 
-  .hero2-title {
+  .hero2 .hero2-title {
     font-size: 64px;
   }
 }
 
-@media (width <= 767px) {
+@media (width >= 1200px) {
   .hero2 {
-    min-height: 600px;
+    min-height: 1000px;
   }
-
-  .hero2-content {
-    padding: 0 20px;
-  }
-
-  .hero2-icon {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 20px;
-  }
-
-
-  .hero2-eyebrow {
-    font-size: 14px;
-  }
-
-  /* .hero2-title {
-    font-size: 40px;
-    margin-bottom: 24px;
-  } */
-
 }
 

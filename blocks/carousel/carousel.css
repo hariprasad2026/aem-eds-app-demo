@@ -31,6 +31,15 @@
   width: 100%;
   min-height: min(50vw, calc(100dvh - var(--header-height)));
 }
+
+.carousel .carousel-slide-hero2 {
+  align-items: stretch;
+  min-width: 0;
+}
+
+.carousel .carousel-slide-hero2 > .hero2 {
+  width: 100%;
+}
  
 /* Alignments */
 .carousel .carousel-slide:has(.carousel-slide-content[data-align='left']),

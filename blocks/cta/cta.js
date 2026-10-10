@@ -116,7 +116,7 @@ function readBlockContent(block) {
       [...block.children]
         .map((cell) => cell.textContent.trim().toLowerCase())
         .find((text) => text === 'new-window' || text === 'true')
-        || DEFAULTS.linkTarget,
+      || DEFAULTS.linkTarget,
     ),
 
     ctaView: getFieldValue(

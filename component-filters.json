@@ -84,7 +84,8 @@
   {
     "id": "carousel",
     "components": [
-      "carousel-item"
+      "carousel-item",
+      "hero2-item"
     ]
   },
   {

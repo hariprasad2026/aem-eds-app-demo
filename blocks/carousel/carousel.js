@@ -32,23 +32,35 @@ function updateActiveSlide(slide) {
 
 export { showSlide };
 
+function getActiveSlideIndex(block) {
+  const activeSlide = Number.parseInt(block.dataset.activeSlide, 10);
+  return Number.isNaN(activeSlide) ? 0 : activeSlide;
+}
+
 function bindEvents(block) {
   const slideIndicators = block.querySelector('.carousel-slide-indicators');
-  if (!slideIndicators) return;
-
-  slideIndicators.querySelectorAll('button').forEach((button) => {
-    button.addEventListener('click', (e) => {
-      const slideIndicator = e.currentTarget.parentElement;
-      showSlide(block, parseInt(slideIndicator.dataset.targetSlide, 10));
+  if (slideIndicators) {
+    slideIndicators.querySelectorAll('button').forEach((button) => {
+      button.addEventListener('click', (e) => {
+        const slideIndicator = e.currentTarget.parentElement;
+        showSlide(block, parseInt(slideIndicator.dataset.targetSlide, 10));
+      });
     });
-  });
+  }
 
-  block.querySelector('.slide-prev').addEventListener('click', () => {
-    showSlide(block, parseInt(block.dataset.activeSlide, 10) - 1);
-  });
-  block.querySelector('.slide-next').addEventListener('click', () => {
-    showSlide(block, parseInt(block.dataset.activeSlide, 10) + 1);
-  });
+  const prevBtn = block.querySelector('.slide-prev');
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      showSlide(block, getActiveSlideIndex(block) - 1);
+    });
+  }
+
+  const nextBtn = block.querySelector('.slide-next');
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      showSlide(block, getActiveSlideIndex(block) + 1);
+    });
+  }
 
   const slideObserver = new IntersectionObserver(
     (entries) => {
@@ -69,31 +81,36 @@ function createSlide(row, slideIndex, carouselId) {
   slide.setAttribute('id', `carousel-${carouselId}-slide-${slideIndex}`);
   slide.classList.add('carousel-slide');
 
-  row.querySelectorAll(':scope > div').forEach((column, colIdx) => {
-    const isImage = colIdx === 0;
-    column.classList.add(`carousel-slide-${isImage ? 'image' : 'content'}`);
+  const columns = Array.from(row.querySelectorAll(':scope > div'));
 
-    if (!isImage) {
-      const allElements = column.querySelectorAll('*');
-      allElements.forEach((el) => {
-        const text = el.textContent.trim().toLowerCase();
+  if (columns.length > 0) {
+    columns.forEach((column, colIdx) => {
+      const isImage = colIdx === 0;
+      column.classList.add(`carousel-slide-${isImage ? 'image' : 'content'}`);
 
-        // Horizontal Alignment
-        if (text === 'left' || text === 'center' || text === 'right') {
-          column.setAttribute('data-align', text);
-          el.remove();
-        }
+      if (!isImage) {
+        const allElements = column.querySelectorAll('*');
+        allElements.forEach((el) => {
+          const text = el.textContent.trim().toLowerCase();
 
-        // Vertical Alignment
-        if (text === 'top' || text === 'middle' || text === 'bottom') {
-          column.setAttribute('data-valign', text);
-          el.remove();
-        }
-      });
-    }
+          // Standard Horizontal Alignment
+          if (text === 'left' || text === 'center' || text === 'right') {
+            column.setAttribute('data-align', text);
+            slide.setAttribute('data-align', text);
+            el.remove();
+          }
 
-    slide.append(column);
-  });
+          // Standard Vertical Alignment
+          if (text === 'top' || text === 'middle' || text === 'bottom') {
+            column.setAttribute('data-valign', text);
+            el.remove();
+          }
+        });
+      }
+
+      slide.append(column);
+    });
+  }
 
   const labeledBy = slide.querySelector('h1, h2, h3, h4, h5, h6');
   if (labeledBy) {
@@ -107,7 +124,15 @@ let carouselId = 0;
 export default async function decorate(block) {
   carouselId += 1;
   block.setAttribute('id', `carousel-${carouselId}`);
-  const rows = block.querySelectorAll(':scope > div');
+
+  // Extract Carousel parent properties if present
+  const carouselType = block.getAttribute('data-carousel-type') || 'slider';
+  block.setAttribute('data-carousel-type', carouselType);
+
+  const motionType = block.getAttribute('data-motion-type');
+  if (motionType) block.setAttribute('data-motion', motionType);
+
+  const rows = Array.from(block.querySelectorAll(':scope > div'));
   const isSingleSlide = rows.length < 2;
 
   const placeholders = await fetchPlaceholders();
@@ -123,7 +148,6 @@ export default async function decorate(block) {
 
   const slidesWrapper = document.createElement('ul');
   slidesWrapper.classList.add('carousel-slides');
-  block.prepend(slidesWrapper);
 
   let slideIndicators;
   if (!isSingleSlide) {
@@ -166,6 +190,7 @@ export default async function decorate(block) {
   block.prepend(container);
 
   if (!isSingleSlide) {
+    updateActiveSlide(slidesWrapper.querySelector('.carousel-slide'));
     bindEvents(block);
   }
 }

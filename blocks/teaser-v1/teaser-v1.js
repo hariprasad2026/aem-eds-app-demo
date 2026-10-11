@@ -61,6 +61,19 @@ const VALID_LINK_STYLES = [
   'secondary',
 ];
 
+const CONTROL_TEXT_VALUES = new Set([
+  'default',
+  'grey',
+  'left',
+  'right',
+  'true',
+  'false',
+  'dd-mm-yyyy',
+  'mm-dd-yyyy',
+  'mmm-d-yyyy',
+  ...VALID_LINK_STYLES,
+]);
+
 function normalizeKey(value = '') {
   return value
     .trim()
@@ -316,6 +329,99 @@ function parsePositionalProperties(block, existingData) {
       data[key] = value;
     }
   });
+
+  return data;
+}
+
+function getRowValueElement(row) {
+  return row?.children?.[0] || row;
+}
+
+function getImageArea(image) {
+  const width = Number(image?.getAttribute('width')) || 0;
+  const height = Number(image?.getAttribute('height')) || 0;
+  return width * height;
+}
+
+function parseLiveFallbackProperties(block, existingData) {
+  const data = { ...existingData };
+  const rows = getParentPropertyRows(block).map((row) => getRowValueElement(row));
+
+  const headingRow = rows.find((row) => row.querySelector('h1, h2, h3, h4, h5, h6'));
+  if (!data.title && headingRow) {
+    data.title = headingRow.textContent.trim();
+  }
+
+  const imageRows = rows.filter((row) => row.querySelector('picture, img'));
+  if (!data.image && imageRows.length) {
+    const largestRow = [...imageRows].sort((left, right) => {
+      const leftArea = getImageArea(left.querySelector('img'));
+      const rightArea = getImageArea(right.querySelector('img'));
+      return rightArea - leftArea;
+    })[0];
+
+    const imageValue = extractValue('image', largestRow);
+    data.imagePicture = imageValue.picture;
+    data.image = imageValue.src;
+  }
+
+  if (!data.arrowIcon && imageRows.length) {
+    const smallestRow = [...imageRows].sort((left, right) => {
+      const leftArea = getImageArea(left.querySelector('img'));
+      const rightArea = getImageArea(right.querySelector('img'));
+      return leftArea - rightArea;
+    })[0];
+
+    const arrowValue = extractValue('arrowIcon', smallestRow);
+    data.arrowIcon = arrowValue.src;
+  }
+
+  const descriptionRow = rows.find((row) => {
+    if (row === headingRow) return false;
+    if (row.querySelector('picture, img, a[href]')) return false;
+
+    const text = row.textContent.trim().toLowerCase();
+    if (!text || CONTROL_TEXT_VALUES.has(text)) return false;
+
+    return row.querySelectorAll('p').length > 0 || text.length > 40;
+  });
+  if (!data.description && descriptionRow) {
+    data.description = descriptionRow.innerHTML.trim();
+  }
+
+  const ctaCandidates = rows.reduce((accumulator, row, index) => {
+    const anchor = row.querySelector('a[href]');
+    if (!anchor) return accumulator;
+
+    let label = '';
+    for (let cursor = index - 1; cursor >= 0; cursor -= 1) {
+      const previousRow = rows[cursor];
+      if (previousRow.querySelector('a[href], picture, img')) continue;
+
+      const candidate = stripHtml(previousRow.textContent || '').trim();
+      if (!candidate || CONTROL_TEXT_VALUES.has(candidate.toLowerCase())) continue;
+
+      label = candidate;
+      break;
+    }
+
+    if (label) {
+      accumulator.push({
+        title: label,
+        link: anchor.getAttribute('href') || '',
+      });
+    }
+    return accumulator;
+  }, []);
+
+  if (!data.primaryCtaTitle && ctaCandidates[0]) {
+    data.primaryCtaTitle = ctaCandidates[0].title;
+    data.primaryCtaLink = ctaCandidates[0].link;
+  }
+  if (!data.secondaryCtaTitle && ctaCandidates[1]) {
+    data.secondaryCtaTitle = ctaCandidates[1].title;
+    data.secondaryCtaLink = ctaCandidates[1].link;
+  }
 
   return data;
 }
@@ -664,6 +770,8 @@ function readBlockData(block) {
   if (parentRows.length === FIELD_ORDER.length) {
     data = parsePositionalProperties(block, data);
   }
+
+  data = parseLiveFallbackProperties(block, data);
 
   data = assignFixedLinksFromDom(data, block);
   data = applyDefaults(data);

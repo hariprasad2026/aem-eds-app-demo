@@ -1027,14 +1027,14 @@
       {
         "component": "reference",
         "valueType": "string",
-        "name": "icon",
+        "name": "heroIcon",
         "label": "Icon",
         "multi": false
       },
       {
         "component": "text",
         "valueType": "string",
-        "name": "iconAlt",
+        "name": "heroIconAlt",
         "label": "Icon Image Alt Text"
       },
       {
@@ -1052,9 +1052,32 @@
       {
         "component": "reference",
         "valueType": "string",
+        "name": "heroImage",
+        "label": "Hero Image",
+        "multi": false,
+        "condition": {
+          "===": [
+            {
+              "var": "heroImageType"
+            },
+            "default"
+          ]
+        }
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
         "name": "heroLottoImagePath",
         "label": "Hero Lotto Image Path",
-        "multi": false
+        "multi": false,
+        "condition": {
+          "===": [
+            {
+              "var": "heroImageType"
+            },
+            "lotto"
+          ]
+        }
       },
       {
         "component": "text",
@@ -1077,7 +1100,7 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "eyebrow",
+        "name": "eyebrowText",
         "label": "Eyebrow"
       },
       {
@@ -1111,12 +1134,12 @@
         "label": "CTA Link Type",
         "options": [
           {
-            "name": "Primary",
-            "value": "primary"
+            "name": "Default",
+            "value": "default"
           },
           {
-            "name": "Secondary",
-            "value": "secondary"
+            "name": "Open In New Window",
+            "value": "new-window"
           }
         ]
       },
@@ -1143,16 +1166,16 @@
         "label": "Alignment",
         "options": [
           {
-            "name": "Left",
-            "value": "left"
+            "name": "Top",
+            "value": "top"
           },
           {
-            "name": "Center",
-            "value": "center"
+            "name": "Middle",
+            "value": "middle"
           },
           {
-            "name": "Right",
-            "value": "right"
+            "name": "Bottom",
+            "value": "bottom"
           }
         ]
       },
@@ -1163,14 +1186,29 @@
         "label": "BG Color",
         "options": [
           {
-            "name": "Light",
-            "value": "light"
-          },
-          {
-            "name": "Dark",
-            "value": "dark"
+            "name": "Default",
+            "value": "default"
           }
         ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "icon",
+        "label": "Legacy Icon (Deprecated)",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "iconAlt",
+        "label": "Legacy Icon Alt (Deprecated)"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrow",
+        "label": "Legacy Eyebrow (Deprecated)"
       },
       {
         "component": "text",

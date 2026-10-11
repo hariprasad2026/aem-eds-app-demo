@@ -83,6 +83,20 @@
   width: var(--slide-content-width, auto);
 }
 
+.carousel .carousel-slide .carousel-slide-content-block {
+  --slide-content-width: 100%;
+
+  inline-size: 100%;
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+}
+
+.carousel .carousel-slide .carousel-slide-content-block > * {
+  inline-size: 100%;
+}
+
 /* Hero 2 Specific Elements */
 .carousel .carousel-slide .hero-icon {
   width: 48px;

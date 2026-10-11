@@ -1,6 +1,7 @@
 import { moveInstrumentation } from '../../scripts/scripts.js';
 import fetchPlaceholders from '../../scripts/placeholders.js';
 import showSlide from '../../scripts/carousel-support.js';
+import { decorateBlock, loadBlock } from '../../scripts/aem.js';
 
 function updateActiveSlide(slide) {
   const block = slide.closest('.carousel');
@@ -124,16 +125,69 @@ function startAutoplay(block) {
   }, AUTOPLAY_INTERVAL);
 }
 
-function createSlide(row, slideIndex, carouselId) {
+function isLegacyHero2Row(row) {
+  const heroFields = [
+    'heroImageType',
+    'heroLottoImagePath',
+    'heroImage',
+    'heroIcon',
+    'icon',
+    'eyebrowText',
+    'eyebrow',
+    'ctaTitle',
+  ];
+
+  const hasNamedHeroField = heroFields.some(
+    (field) => row.querySelector(`[data-aue-prop="${field}"]`),
+  );
+  if (hasNamedHeroField) return true;
+
+  const columns = Array.from(row.querySelectorAll(':scope > div'));
+  const hasMedia = columns.some((column) => column.querySelector('picture, img'));
+  return columns.length >= 8 && hasMedia;
+}
+
+function getNestedBlocks(column) {
+  return Array.from(column.querySelectorAll(':scope > div[class]'));
+}
+
+function createLegacyHero2Block(row) {
+  const heroBlock = document.createElement('div');
+  heroBlock.className = 'hero-2';
+
+  Array.from(row.children).forEach((cell) => heroBlock.append(cell));
+  return heroBlock;
+}
+
+function createSlide(row, slideIndex, carouselId, pendingBlocks) {
   const slide = document.createElement('li');
   slide.dataset.slideIndex = slideIndex;
   slide.setAttribute('id', `carousel-${carouselId}-slide-${slideIndex}`);
   slide.classList.add('carousel-slide');
 
+  if (isLegacyHero2Row(row)) {
+    const content = document.createElement('div');
+    content.className = 'carousel-slide-content carousel-slide-content-block';
+
+    const heroBlock = createLegacyHero2Block(row);
+    content.append(heroBlock);
+    slide.append(content);
+    pendingBlocks.push(heroBlock);
+    return slide;
+  }
+
   const columns = Array.from(row.querySelectorAll(':scope > div'));
 
   if (columns.length > 0) {
     columns.forEach((column, colIdx) => {
+      const nestedBlocks = getNestedBlocks(column);
+      if (nestedBlocks.length) {
+        column.classList.add('carousel-slide-content', 'carousel-slide-content-block');
+        nestedBlocks.forEach((nestedBlock) => pendingBlocks.push(nestedBlock));
+        slide.append(column);
+        return;
+      }
+
       const isImage = colIdx === 0;
       column.classList.add(`carousel-slide-${isImage ? 'image' : 'content'}`);
 
@@ -203,6 +257,7 @@ export default async function decorate(block) {
   slidesWrapper.classList.add('carousel-slides');
 
   let slideIndicators;
+  const pendingBlocks = [];
   if (!isSingleSlide) {
     if (typeConfig.indicators) {
       const slideIndicatorsNav = document.createElement('nav');
@@ -229,7 +284,7 @@ export default async function decorate(block) {
   }
 
   rows.forEach((row, idx) => {
-    const slide = createSlide(row, idx, carouselId);
+    const slide = createSlide(row, idx, carouselId, pendingBlocks);
     moveInstrumentation(row, slide);
     slidesWrapper.append(slide);
 
@@ -245,6 +300,10 @@ export default async function decorate(block) {
 
   container.append(slidesWrapper);
   block.prepend(container);
+
+  const uniqueNestedBlocks = [...new Set(pendingBlocks)];
+  uniqueNestedBlocks.forEach((nestedBlock) => decorateBlock(nestedBlock));
+  await Promise.all(uniqueNestedBlocks.map((nestedBlock) => loadBlock(nestedBlock)));
 
   if (!isSingleSlide) {
     updateActiveSlide(slidesWrapper.querySelector('.carousel-slide'));

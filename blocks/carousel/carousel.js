@@ -86,6 +86,39 @@ const CAROUSEL_TYPES = {
 
 const AUTOPLAY_INTERVAL = 5000;
 
+function normalizeConfigValue(value = '') {
+  return String(value).trim().toLowerCase();
+}
+
+function getTopLevelRow(element, block) {
+  let current = element;
+  while (current?.parentElement && current.parentElement !== block) {
+    current = current.parentElement;
+  }
+
+  return current?.parentElement === block ? current : null;
+}
+
+function readNamedConfig(block, name) {
+  const field = block.querySelector(`[data-aue-prop="${name}"]`);
+  if (!field) return '';
+  return field.textContent.trim();
+}
+
+function readLabeledConfig(rows, label) {
+  const normalizedLabel = normalizeConfigValue(label).replace(/[^a-z0-9]/g, '');
+  const matchingRow = rows.find((row) => {
+    const cells = Array.from(row.querySelectorAll(':scope > div'));
+    if (cells.length < 2) return false;
+    const key = normalizeConfigValue(cells[0].textContent).replace(/[^a-z0-9]/g, '');
+    return key === normalizedLabel;
+  });
+
+  if (!matchingRow) return '';
+  const cells = Array.from(matchingRow.querySelectorAll(':scope > div'));
+  return cells[1]?.textContent?.trim() || '';
+}
+
 function isConfigRow(row) {
   const cells = row.querySelectorAll(':scope > div');
   return cells.length === 1 && !cells[0].querySelector('picture, img, a, h1, h2, h3, h4, h5, h6');
@@ -97,8 +130,43 @@ function extractConfig(block, rows) {
   const classType = Object.keys(CAROUSEL_TYPES).find((type) => block.classList.contains(type));
   if (classType) config.type = classType;
 
+  const namedType = normalizeConfigValue(readNamedConfig(block, 'carouselType'));
+  if (CAROUSEL_TYPES[namedType]) {
+    config.type = namedType;
+    const typeField = block.querySelector('[data-aue-prop="carouselType"]');
+    const typeRow = getTopLevelRow(typeField, block);
+    if (typeRow) {
+      typeRow.remove();
+      const index = rows.indexOf(typeRow);
+      if (index >= 0) rows.splice(index, 1);
+    }
+  }
+
+  const namedMotion = readNamedConfig(block, 'motionType');
+  if (namedMotion) {
+    config.motion = namedMotion;
+    const motionField = block.querySelector('[data-aue-prop="motionType"]');
+    const motionRow = getTopLevelRow(motionField, block);
+    if (motionRow) {
+      motionRow.remove();
+      const index = rows.indexOf(motionRow);
+      if (index >= 0) rows.splice(index, 1);
+    }
+  }
+
+  if (!config.type) {
+    const labeledType = normalizeConfigValue(readLabeledConfig(rows, 'carouselType') || readLabeledConfig(rows, 'carousel type'));
+    if (CAROUSEL_TYPES[labeledType]) {
+      config.type = labeledType;
+    }
+  }
+
+  if (!config.motion) {
+    config.motion = readLabeledConfig(rows, 'motionType') || readLabeledConfig(rows, 'motion type') || '';
+  }
+
   if (rows.length && isConfigRow(rows[0])) {
-    const value = rows[0].textContent.trim().toLowerCase();
+    const value = normalizeConfigValue(rows[0].textContent);
     if (CAROUSEL_TYPES[value]) {
       config.type = value;
       rows[0].remove();
@@ -111,6 +179,31 @@ function extractConfig(block, rows) {
     }
   }
   return config;
+}
+
+function isSlideRow(row) {
+  const columns = Array.from(row.querySelectorAll(':scope > div'));
+  if (!columns.length) return false;
+
+  if (columns.length >= 2) {
+    const key = normalizeConfigValue(columns[0].textContent).replace(/[^a-z0-9]/g, '');
+    if (['carouseltype', 'motiontype'].includes(key)) {
+      return false;
+    }
+  }
+
+  const rowText = row.textContent.trim().toLowerCase();
+  const isTypeRow = Object.keys(CAROUSEL_TYPES).includes(rowText);
+  if (isTypeRow) return false;
+
+  const hasRenderableContent = columns.some((column) => column.querySelector(
+    'picture, img, a, h1, h2, h3, h4, h5, h6, [data-aue-prop], div[class]',
+  ));
+
+  if (hasRenderableContent) return true;
+
+  const hasMeaningfulText = columns.some((column) => column.textContent.trim().length > 0);
+  return hasMeaningfulText && columns.length > 1;
 }
 
 function startAutoplay(block) {
@@ -232,6 +325,7 @@ export default async function decorate(block) {
 
   // Extract Carousel parent properties if present
   const config = extractConfig(block, rows);
+  const slideRows = rows.filter((row) => isSlideRow(row));
   let carouselType = config.type || block.getAttribute('data-carousel-type') || 'slider';
   if (!CAROUSEL_TYPES[carouselType]) carouselType = 'slider';
   block.setAttribute('data-carousel-type', carouselType);
@@ -240,7 +334,7 @@ export default async function decorate(block) {
   const motionType = config.motion || block.getAttribute('data-motion-type');
   if (motionType) block.setAttribute('data-motion', motionType);
 
-  const isSingleSlide = rows.length < 2;
+  const isSingleSlide = slideRows.length < 2;
 
   const placeholders = await fetchPlaceholders();
 
@@ -283,7 +377,7 @@ export default async function decorate(block) {
     }
   }
 
-  rows.forEach((row, idx) => {
+  slideRows.forEach((row, idx) => {
     const slide = createSlide(row, idx, carouselId, pendingBlocks);
     moveInstrumentation(row, slide);
     slidesWrapper.append(slide);
@@ -292,7 +386,7 @@ export default async function decorate(block) {
       const indicator = document.createElement('li');
       indicator.classList.add('carousel-slide-indicator');
       indicator.dataset.targetSlide = idx;
-      indicator.innerHTML = `<button type="button" aria-label="${placeholders.showSlide || 'Show Slide'} ${idx + 1} ${placeholders.of || 'of'} ${rows.length}"></button>`;
+      indicator.innerHTML = `<button type="button" aria-label="${placeholders.showSlide || 'Show Slide'} ${idx + 1} ${placeholders.of || 'of'} ${slideRows.length}"></button>`;
       slideIndicators.append(indicator);
     }
     row.remove();

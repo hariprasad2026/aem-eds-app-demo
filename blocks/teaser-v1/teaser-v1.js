@@ -396,13 +396,17 @@ function parseLiveFallbackProperties(block, existingData) {
     let label = '';
     for (let cursor = index - 1; cursor >= 0; cursor -= 1) {
       const previousRow = rows[cursor];
-      if (previousRow.querySelector('a[href], picture, img')) continue;
+      const hasMediaOrLink = previousRow.querySelector('a[href], picture, img');
+      if (!hasMediaOrLink) {
+        const candidate = stripHtml(previousRow.textContent || '').trim();
+        const isValidCandidate = candidate
+          && !CONTROL_TEXT_VALUES.has(candidate.toLowerCase());
 
-      const candidate = stripHtml(previousRow.textContent || '').trim();
-      if (!candidate || CONTROL_TEXT_VALUES.has(candidate.toLowerCase())) continue;
-
-      label = candidate;
-      break;
+        if (isValidCandidate) {
+          label = candidate;
+          break;
+        }
+      }
     }
 
     if (label) {
@@ -763,16 +767,11 @@ function readBlockData(block) {
 
   const parentRows = getParentPropertyRows(block);
 
-  /*
-   * Positional parsing is safe only when every model field produced
-   * exactly one parent row. Otherwise values shift into wrong fields.
-   */
   if (parentRows.length === FIELD_ORDER.length) {
     data = parsePositionalProperties(block, data);
   }
 
   data = parseLiveFallbackProperties(block, data);
-
   data = assignFixedLinksFromDom(data, block);
   data = applyDefaults(data);
   data = normalizeConfiguration(data);
@@ -822,10 +821,8 @@ function formatDate(dateValue, format = 'mmm-d-yyyy') {
   switch (String(format).toLowerCase()) {
     case 'dd-mm-yyyy':
       return `${day}-${month}-${year}`;
-
     case 'mm-dd-yyyy':
       return `${month}-${day}-${year}`;
-
     case 'mmm-d-yyyy':
     default:
       return `${monthName} ${date.getDate()}, ${year}`;
@@ -889,7 +886,6 @@ function createCTAArrow(arrowIcon) {
   }
 
   const arrow = document.createElement('img');
-
   arrow.src = arrowIcon;
   arrow.alt = '';
   arrow.className = 'teaser-cta-arrow';
@@ -920,12 +916,10 @@ function createCTA(link, arrowIcon) {
   const label = document.createElement('span');
   label.className = 'teaser-cta-label';
   label.textContent = link.title;
-
   anchor.append(label);
 
   if (style === 'list') {
     const arrow = createCTAArrow(arrowIcon);
-
     if (arrow) {
       anchor.append(arrow);
     }
@@ -944,7 +938,6 @@ function createCTAs(links = [], arrowIcon = '') {
 
   links.forEach((link) => {
     const anchor = createCTA(link, arrowIcon);
-
     if (anchor) {
       wrapper.append(anchor);
     }
@@ -957,7 +950,6 @@ function createViewAll(data) {
   const text = typeof data.viewAllText === 'string'
     ? data.viewAllText.trim()
     : '';
-
   const href = typeof data.viewAllLink === 'string'
     ? data.viewAllLink.trim()
     : '';
@@ -975,11 +967,9 @@ function createViewAll(data) {
   }
 
   const anchor = document.createElement('a');
-
   anchor.className = 'teaser-view-all';
   anchor.href = href;
   anchor.textContent = stripHtml(text);
-
   return anchor;
 }
 
@@ -1001,7 +991,6 @@ function renderImage(data) {
   if (data.imagePicture) {
     const picture = data.imagePicture.cloneNode(true);
     const image = picture.querySelector('img');
-
     if (image) {
       image.alt = altText;
     }
@@ -1015,7 +1004,6 @@ function renderImage(data) {
   }
 
   const imageSrc = stripHtml(data.image).trim();
-
   if (!imageSrc) {
     return null;
   }
@@ -1067,7 +1055,6 @@ function renderContent(data) {
       data.date || data.lastModified,
       data.dateFormat,
     );
-
     wrapper.append(date);
   }
 
@@ -1079,18 +1066,15 @@ function renderContent(data) {
     description.className = 'teaser-description';
     description.innerHTML = data.description
       || data.shortDescription;
-
     wrapper.append(description);
   }
 
   const ctas = createCTAs(data.links, data.arrowIcon);
-
   if (ctas) {
     wrapper.append(ctas);
   }
 
   const viewAll = createViewAll(data);
-
   if (viewAll) {
     wrapper.append(viewAll);
   }
@@ -1103,7 +1087,6 @@ function renderTeaser(data) {
   wrapper.className = 'teaser-wrapper';
 
   const image = renderImage(data);
-
   if (image) {
     wrapper.append(image);
   }
@@ -1127,7 +1110,6 @@ async function renderPersonalized(block, data) {
         true,
         'fallback',
       );
-
       return renderTeaser(data);
     }
 
@@ -1163,7 +1145,6 @@ async function renderPersonalized(block, data) {
     );
 
     await sendPropositionDisplay(decision);
-
     return renderTeaser(personalizedData);
   } catch (error) {
     setPersonalizationAttributes(
@@ -1171,7 +1152,6 @@ async function renderPersonalized(block, data) {
       true,
       'fallback',
     );
-
     return renderTeaser(data);
   }
 }
@@ -1186,7 +1166,6 @@ function createBackground(backgroundImage) {
   background.setAttribute('aria-hidden', 'true');
 
   const image = document.createElement('img');
-
   image.src = backgroundImage;
   image.alt = '';
   image.decoding = 'async';
@@ -1196,7 +1175,6 @@ function createBackground(backgroundImage) {
   });
 
   background.append(image);
-
   return background;
 }
 

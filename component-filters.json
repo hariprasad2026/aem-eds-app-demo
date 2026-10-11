@@ -86,7 +86,10 @@
     "components": [
       "carousel-item",
       "hero2-item",
-      "hero2"
+      "hero",
+      "hero2",
+      "cards",
+      "content-cards"
     ]
   },
   {

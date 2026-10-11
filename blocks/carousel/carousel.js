@@ -240,8 +240,18 @@ function isLegacyHero2Row(row) {
   return columns.length >= 8 && hasMedia;
 }
 
+function isPotentialNestedBlock(element) {
+  if (!element || element.tagName !== 'DIV' || !element.classList.length) return false;
+
+  const className = element.classList[0];
+  if (!className || className.endsWith('-container') || className.endsWith('-wrapper')) return false;
+  if (!/^[a-z0-9-]+$/.test(className)) return false;
+
+  return true;
+}
+
 function getNestedBlocks(column) {
-  return Array.from(column.querySelectorAll(':scope > div[class]'));
+  return Array.from(column.children).filter((child) => isPotentialNestedBlock(child));
 }
 
 function createLegacyHero2Block(row) {
@@ -396,8 +406,14 @@ export default async function decorate(block) {
   block.prepend(container);
 
   const uniqueNestedBlocks = [...new Set(pendingBlocks)];
-  uniqueNestedBlocks.forEach((nestedBlock) => decorateBlock(nestedBlock));
-  await Promise.all(uniqueNestedBlocks.map((nestedBlock) => loadBlock(nestedBlock)));
+  uniqueNestedBlocks
+    .filter((nestedBlock) => isPotentialNestedBlock(nestedBlock))
+    .forEach((nestedBlock) => decorateBlock(nestedBlock));
+  await Promise.all(
+    uniqueNestedBlocks
+      .filter((nestedBlock) => nestedBlock.dataset.blockName)
+      .map((nestedBlock) => loadBlock(nestedBlock)),
+  );
 
   if (!isSingleSlide) {
     updateActiveSlide(slidesWrapper.querySelector('.carousel-slide'));

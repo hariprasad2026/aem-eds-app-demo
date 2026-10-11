@@ -294,7 +294,14 @@
   "filters": [
     {
       "id": "carousel",
-      "components": ["carousel-item", "hero2-item", "hero2"]
+      "components": [
+        "carousel-item",
+        "hero2-item",
+        "hero",
+        "hero2",
+        "cards",
+        "content-cards"
+      ]
     }
   ]
 }

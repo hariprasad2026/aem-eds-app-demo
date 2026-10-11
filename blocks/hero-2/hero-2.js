@@ -134,13 +134,83 @@ async function applyLottoBackground(block, assetUrl, alt) {
 }
 
 function getFieldElement(block, name) {
-  return block.querySelector(`[data-aue-prop="${name}"]`);
+  const direct = block.querySelector(`[data-aue-prop="${name}"]`);
+  if (direct) return direct;
+
+  const normalizedName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const rows = [...block.querySelectorAll(':scope > div')];
+  const labeledRow = rows.find((row) => {
+    const cells = [...row.children];
+    if (cells.length < 2) return false;
+    const key = cells[0].textContent.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+    return key === normalizedName;
+  });
+  if (labeledRow) {
+    return labeledRow.children.length > 1 ? labeledRow.children[1] : labeledRow;
+  }
+
+  return null;
 }
 
 function getTextValue(block, name, defaultValue = '') {
   const field = getFieldElement(block, name);
 
   return field?.textContent?.trim() || defaultValue;
+}
+
+function getRows(block) {
+  return [...block.querySelectorAll(':scope > div')];
+}
+
+function getPrimaryBackgroundImage(block) {
+  const images = [...block.querySelectorAll('picture img, img')]
+    .filter((img) => !img.closest('a'));
+  if (!images.length) return null;
+
+  return images.reduce((largest, current) => {
+    const currentArea = (Number(current.getAttribute('width')) || 0)
+      * (Number(current.getAttribute('height')) || 0);
+    const largestArea = (Number(largest.getAttribute('width')) || 0)
+      * (Number(largest.getAttribute('height')) || 0);
+    return currentArea > largestArea ? current : largest;
+  });
+}
+
+function getHeroIconImage(block, backgroundImage) {
+  const explicitIcon = getFieldElement(block, 'heroIcon')?.querySelector('img');
+  if (explicitIcon) return explicitIcon;
+
+  return [...block.querySelectorAll('picture img, img')]
+    .filter((img) => img !== backgroundImage && !img.closest('a'))
+    .find((img) => {
+      const width = Number(img.getAttribute('width')) || 0;
+      const height = Number(img.getAttribute('height')) || 0;
+      return width <= 200 && height <= 200;
+    }) || null;
+}
+
+function getTextCandidates(block) {
+  const controlValues = new Set([
+    'default',
+    'lotto',
+    'top',
+    'middle',
+    'bottom',
+    'left',
+    'center',
+    'right',
+    'primary',
+    'secondary',
+    'pill',
+    'black',
+    'white',
+    'new-window',
+  ]);
+
+  return getRows(block)
+    .filter((row) => !row.querySelector('img, picture, a[href]'))
+    .map((row) => row.textContent.trim())
+    .filter((text) => text && !controlValues.has(text.toLowerCase()));
 }
 
 function getAlignment(block) {
@@ -160,40 +230,28 @@ function getAlignment(block) {
 }
 
 function getContent(block) {
-  console.log(
-    'TITLE FIELD :',
-    block.querySelector('div:nth-child(10) p')
-      ?.textContent?.trim(),
-  );
+  const backgroundImage = getPrimaryBackgroundImage(block);
+  const iconImage = getHeroIconImage(block, backgroundImage);
+  const textCandidates = getTextCandidates(block);
+  const titleFromField = getTextValue(block, 'title');
+  const descriptionFromField = getFieldElement(block, 'description');
 
-  console.log(
-    'DESCRIPTION FIELD :',
-    getFieldElement(block, 'description'),
-  );
-
-  console.log(block.innerHTML);
   return {
-    heroIcon: getFieldElement(block, 'heroIcon'),
+    heroIconSrc: iconImage?.getAttribute('src') || '',
     heroIconAlt: getTextValue(block, 'heroIconAlt'),
 
-    heroImageType: getTextValue(block, 'heroImageType'),
+    heroImageType: getTextValue(block, 'heroImageType', 'default'),
     heroImage: getFieldElement(block, 'heroImage'),
     heroLottoImagePath: getFieldElement(block, 'heroLottoImagePath'),
+    heroImageSrc: backgroundImage?.getAttribute('src') || '',
     heroImageAlt: getTextValue(block, 'heroImageAlt'),
     heroView: getTextValue(block, 'heroView'),
 
     eyebrowText: getTextValue(block, 'eyebrowText'),
 
-    title:
-      getFieldElement(block, 'eyebrowText')
-        ?.closest('div')
-        ?.parentElement
-        ?.nextElementSibling
-        ?.querySelector('p')
-        ?.textContent
-        ?.trim(),
+    title: titleFromField || textCandidates[0] || '',
 
-    description: getFieldElement(block, 'description'),
+    description: descriptionFromField || textCandidates[1] || '',
 
     alignment: getAlignment(block),
     bgColor: getTextValue(block, 'bgColor'),
@@ -232,11 +290,12 @@ export default function decorate(block) {
   } else {
     // Default: any image format is allowed.
     const imageField = content.heroImage || content.heroLottoImagePath;
-    if (imageField) {
-      const bgImg = imageField.querySelector('img') || imageField;
-      const bgSrc = bgImg.getAttribute('src');
+    const fallbackSrc = content.heroImageSrc;
+    if (imageField || fallbackSrc) {
+      const bgImg = imageField?.querySelector('img') || imageField;
+      const bgSrc = bgImg?.getAttribute('src') || fallbackSrc;
 
-      if (content.heroImageAlt) {
+      if (bgImg && content.heroImageAlt) {
         bgImg.alt = content.heroImageAlt;
       }
       if (bgSrc) {
@@ -248,14 +307,12 @@ export default function decorate(block) {
   const contentWrapper = document.createElement('div');
   contentWrapper.className = 'hero2-content';
 
-  if (content.heroIcon) {
-    content.heroIcon.classList.add('hero2-icon');
-
-    if (content.heroIconAlt) {
-      content.heroIcon.alt = content.heroIconAlt;
-    }
-
-    contentWrapper.append(content.heroIcon);
+  if (content.heroIconSrc) {
+    const icon = document.createElement('img');
+    icon.className = 'hero2-icon';
+    icon.src = content.heroIconSrc;
+    icon.alt = content.heroIconAlt || '';
+    contentWrapper.append(icon);
   }
 
   if (content.eyebrowText) {
@@ -278,7 +335,11 @@ export default function decorate(block) {
     const description = document.createElement('div');
 
     description.className = 'hero2-description';
-    description.innerHTML = content.description.innerHTML;
+    if (typeof content.description === 'string') {
+      description.textContent = content.description;
+    } else {
+      description.innerHTML = content.description.innerHTML;
+    }
 
     contentWrapper.append(description);
   }

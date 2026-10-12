@@ -87,7 +87,23 @@ const AUTOPLAY_INTERVAL = 5000;
 
 function isConfigRow(row) {
   const cells = row.querySelectorAll(':scope > div');
-  return cells.length === 1 && !cells[0].querySelector('picture, img, a, h1, h2, h3, h4, h5, h6');
+  if (cells.length !== 1) return false;
+
+  const cell = cells[0];
+  if (!cell) return false;
+
+  // Nested authored blocks such as hero-banner are rendered as child block wrappers.
+  // Those rows are not carousel configuration metadata and must stay in the slide list.
+  if (cell.querySelector('.block, [data-aue-resource], [data-block-name], [data-aue-prop]')) {
+    return false;
+  }
+
+  if (cell.querySelector('picture, img, a, h1, h2, h3, h4, h5, h6')) {
+    return false;
+  }
+
+  const value = cell.textContent.trim().toLowerCase();
+  return value.length > 0 && !value.includes(' ') && !!CAROUSEL_TYPES[value];
 }
 
 // Authored carouselType/motionType fields are rendered as leading rows; consume them.

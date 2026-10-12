@@ -1695,12 +1695,62 @@
       {
         "component": "reference",
         "valueType": "string",
-        "name": "arrowIcon",
-        "label": "Arrow Icon",
+        "name": "icon",
+        "label": "Icon",
         "validation": {
           "pattern": ".*\\.svg$",
           "message": "Only SVG files are allowed."
         }
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "iconPosition",
+        "label": "Icon Position",
+        "value": "before",
+        "options": [
+          {
+            "name": "Before Text",
+            "value": "before"
+          },
+          {
+            "name": "After Text",
+            "value": "after"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "iconSize",
+        "label": "Icon Size",
+        "value": "24",
+        "options": [
+          {
+            "name": "16 x 16",
+            "value": "16"
+          },
+          {
+            "name": "20 x 20",
+            "value": "20"
+          },
+          {
+            "name": "24 x 24",
+            "value": "24"
+          },
+          {
+            "name": "32 x 32",
+            "value": "32"
+          },
+          {
+            "name": "40 x 40",
+            "value": "40"
+          },
+          {
+            "name": "48 x 48",
+            "value": "48"
+          }
+        ]
       },
       {
         "component": "select",
@@ -1773,59 +1823,124 @@
         ]
       },
       {
-        "component": "text",
+        "component": "select",
         "valueType": "string",
         "name": "backgroundColor",
         "label": "Background Color",
-        "value": "",
-        "condition": {
-          "===": [
-            {
-              "var": "ctaView"
-            },
-            "primary"
-          ]
-        }
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "textColor",
-        "label": "Text Color",
-        "value": ""
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "borderColor",
-        "label": "Border Color",
-        "value": "",
-        "condition": {
-          "in": [
-            {
-              "var": "ctaView"
-            },
-            [
-              "primary",
-              "secondary"
-            ]
-          ]
-        }
+        "value": "transparent",
+        "options": [
+          {
+            "name": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "name": "Black",
+            "value": "#000000"
+          },
+          {
+            "name": "White",
+            "value": "#ffffff"
+          }
+        ]
       },
       {
         "component": "select",
         "valueType": "string",
-        "name": "arrowDirection",
-        "label": "Arrow",
-        "value": "none",
+        "name": "hoverBackgroundColor",
+        "label": "Hover Background Color",
+        "value": "transparent",
         "options": [
           {
-            "name": "None",
-            "value": "none"
+            "name": "Transparent",
+            "value": "transparent"
           },
+          {
+            "name": "Black",
+            "value": "#000000"
+          },
+          {
+            "name": "White",
+            "value": "#ffffff"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "textColor",
+        "label": "Text Color",
+        "value": "#000000",
+        "options": [
+          {
+            "name": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "name": "Black",
+            "value": "#000000"
+          },
+          {
+            "name": "White",
+            "value": "#ffffff"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "borderColor",
+        "label": "Border Color",
+        "value": "transparent",
+        "options": [
+          {
+            "name": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "name": "Black",
+            "value": "#000000"
+          },
+          {
+            "name": "White",
+            "value": "#ffffff"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "ctaWidth",
+        "label": "Width",
+        "value": "auto",
+        "options": [
+          {
+            "name": "Auto",
+            "value": "auto"
+          },
+          {
+            "name": "Half Width",
+            "value": "half"
+          },
+          {
+            "name": "Full Width",
+            "value": "full"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "alignment",
+        "label": "Alignment",
+        "value": "left",
+        "options": [
           {
             "name": "Left",
             "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
           },
           {
             "name": "Right",
@@ -1838,23 +1953,32 @@
         "valueType": "string",
         "name": "arrowColor",
         "label": "Arrow Color",
-        "value": "white",
-        "condition": {
-          "!==": [
-            {
-              "var": "arrowDirection"
-            },
-            "none"
-          ]
-        },
+        "value": "black",
         "options": [
-          {
-            "name": "White",
-            "value": "white"
-          },
           {
             "name": "Black",
             "value": "black"
+          },
+          {
+            "name": "White",
+            "value": "white"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "contentLayout",
+        "label": "Content Layout",
+        "value": "normal",
+        "options": [
+          {
+            "name": "Normal",
+            "value": "normal"
+          },
+          {
+            "name": "Space Between",
+            "value": "space-between"
           }
         ]
       }

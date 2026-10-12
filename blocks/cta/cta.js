@@ -1,15 +1,20 @@
 const DEFAULTS = {
-  text_cta: '',
+  textcta: '',
   ctaLink: '',
-  arrowIcon: null,
+  icon: null,
+  iconPosition: 'before',
+  iconSize: '24',
   linkTarget: 'default',
   ctaView: 'default',
   shape: 'rectangle',
   backgroundColor: '',
+  hoverBackgroundColor: '',
   textColor: '',
   borderColor: '',
-  arrowDirection: 'none',
-  arrowColor: 'white',
+  ctaWidth: 'auto',
+  alignment: 'left',
+  arrowColor: 'black',
+  contentLayout: 'normal',
 };
 
 const ALLOWED_SHAPES = [
@@ -17,44 +22,6 @@ const ALLOWED_SHAPES = [
   'rounded',
   'pill',
 ];
-
-const ALLOWED_LINK_TARGETS = [
-  'default',
-  'new-window',
-];
-
-function normalizeLinkTarget(value) {
-  if (String(value).trim().toLowerCase() === 'true') {
-    return 'new-window';
-  }
-
-  if (ALLOWED_LINK_TARGETS.includes(value)) {
-    return value;
-  }
-
-  return DEFAULTS.linkTarget;
-}
-
-const ALLOWED_ARROWS = [
-  'none',
-  'left',
-  'right',
-];
-
-const ALLOWED_ARROW_COLORS = [
-  'white',
-  'black',
-];
-
-function normalizeArrowColor(value) {
-  const color = String(value).trim().toLowerCase();
-
-  if (ALLOWED_ARROW_COLORS.includes(color)) {
-    return color;
-  }
-
-  return DEFAULTS.arrowColor;
-}
 
 function getFieldValue(block, index, fallback = '') {
   const field = block.children[index];
@@ -74,141 +41,49 @@ function normalizeShape(value) {
   return DEFAULTS.shape;
 }
 
-function normalizeArrow(value) {
-  if (ALLOWED_ARROWS.includes(value)) {
-    return value;
+function createIcon(icon, size, arrowColor) {
+  if (!icon) {
+    return null;
   }
 
-  return DEFAULTS.arrowDirection;
+  const image = icon.cloneNode(true);
+
+  image.classList.add(
+    'cta-icon',
+    `cta-icon-${arrowColor}`,
+  );
+
+  image.style.width = `${size}px`;
+  image.style.height = `${size}px`;
+
+  return image;
 }
 
-function isValidCssColor(value) {
-  if (!value) {
-    return false;
-  }
-
-  const element = document.createElement('span');
-
-  element.style.color = value;
-
-  return Boolean(element.style.color);
-}
-
-function createArrow(direction, arrowIcon, arrowColor) {
-  const wrapper = document.createElement('span');
-
-  wrapper.className = `cta-arrow cta-arrow-${direction}`;
-  wrapper.setAttribute('aria-hidden', 'true');
-
-  if (!arrowIcon) {
-    return wrapper;
-  }
-
-  const arrow = arrowIcon.cloneNode(true);
-
-  arrow.classList.add('cta-arrow-icon', `cta-arrow-icon-${arrowColor}`);
-
-  const arrowSrc = arrow.getAttribute('src') || '';
-  const arrowPath = arrowSrc.split(/[?#]/)[0].toLowerCase();
-  const isSvgFormat = /[?&]format=svg(&|$)/i.test(arrowSrc);
-
-  if (
-    arrowSrc
-    && !arrowPath.endsWith('.svg')
-    && !isSvgFormat
-  ) {
-    // eslint-disable-next-line no-console
-    console.error(
-      'CTA Arrow Icon must be SVG format only.',
-    );
-
-    return wrapper;
-  }
-
-  if (direction === 'left') {
-    arrow.classList.add('cta-arrow-icon-left');
-  }
-
-  wrapper.appendChild(arrow);
-
-  return wrapper;
-}
 function readBlockContent(block) {
   return {
-    text_cta: getFieldValue(
-      block,
-      0,
-      DEFAULTS.text_cta,
-    ),
-
-    ctaLink: getFieldValue(
-      block,
-      1,
-      DEFAULTS.ctaLink,
-    ),
-
-    arrowIcon: block.children[2]
-      ?.querySelector('img'),
-
-    linkTarget: normalizeLinkTarget(
-      [...block.children]
-        .map((cell) => cell.textContent.trim().toLowerCase())
-        .find((text) => text === 'new-window' || text === 'true')
-        || DEFAULTS.linkTarget,
-    ),
-
-    ctaView: getFieldValue(
-      block,
-      4,
-      'default',
-    ),
-
+    textcta: getFieldValue(block, 0, ''),
+    ctaLink: getFieldValue(block, 1, ''),
+    icon: block.children[2]?.querySelector('img'),
+    iconPosition: getFieldValue(block, 3, 'before'),
+    iconSize: getFieldValue(block, 4, '24'),
+    linkTarget: getFieldValue(block, 5, 'default'),
+    ctaView: getFieldValue(block, 6, 'default'),
     shape: normalizeShape(
-      getFieldValue(
-        block,
-        5,
-        DEFAULTS.shape,
-      ),
+      getFieldValue(block, 7, 'rectangle'),
     ),
-
-    backgroundColor: getFieldValue(
-      block,
-      6,
-      DEFAULTS.backgroundColor,
-    ),
-
-    textColor: getFieldValue(
-      block,
-      7,
-      DEFAULTS.textColor,
-    ),
-
-    borderColor: getFieldValue(
-      block,
-      8,
-      DEFAULTS.borderColor,
-    ),
-
-    arrowDirection: normalizeArrow(
-      getFieldValue(
-        block,
-        9,
-        DEFAULTS.arrowDirection,
-      ),
-    ),
-
-    arrowColor: normalizeArrowColor(
-      getFieldValue(
-        block,
-        10,
-        DEFAULTS.arrowColor,
-      ),
-    ),
+    backgroundColor: getFieldValue(block, 8, ''),
+    hoverBackgroundColor: getFieldValue(block, 9, ''),
+    textColor: getFieldValue(block, 10, ''),
+    borderColor: getFieldValue(block, 11, ''),
+    ctaWidth: getFieldValue(block, 12, 'auto'),
+    alignment: getFieldValue(block, 13, 'left'),
+    arrowColor: getFieldValue(block, 14, 'black'),
+    contentLayout: getFieldValue(block, 15, 'normal'),
   };
 }
 
 function createCta(data) {
-  if (!data.text_cta || !data.ctaLink) {
+  if (!data.textcta || !data.ctaLink) {
     return null;
   }
 
@@ -218,55 +93,48 @@ function createCta(data) {
     'cta-link',
     `cta-link-${data.shape}`,
     `cta-view-${data.ctaView}`,
+    `cta-layout-${data.contentLayout}`,
   ].join(' ');
 
   link.href = data.ctaLink;
 
   link.setAttribute(
     'aria-label',
-    data.text_cta,
+    data.textcta,
   );
 
-  const normalizedTarget = String(data.linkTarget || '')
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, '-');
-
-  const opensNewTab = [
-    '_blank',
-    'blank',
-    'new-tab',
-    'new-window',
-  ].includes(normalizedTarget);
-
-  if (opensNewTab) {
+  if (data.linkTarget === 'new-window') {
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
   }
 
-  if (
-    data.ctaView === 'primary'
-    && isValidCssColor(data.backgroundColor)
-  ) {
+  if (data.backgroundColor) {
     link.style.backgroundColor = data.backgroundColor;
   }
 
-  if (isValidCssColor(data.textColor)) {
+  if (data.textColor) {
     link.style.color = data.textColor;
   }
 
-  if (
-    ['primary', 'secondary'].includes(data.ctaView)
-    && isValidCssColor(data.borderColor)
-  ) {
+  if (data.borderColor) {
     link.style.borderColor = data.borderColor;
   }
 
-  if (data.arrowDirection === 'left') {
-    link.appendChild(
-      createArrow(
-        'left',
-        data.arrowIcon,
+  if (data.hoverBackgroundColor) {
+    link.style.setProperty(
+      '--cta-hover-bg',
+      data.hoverBackgroundColor,
+    );
+  }
+
+  if (
+    data.icon
+    && data.iconPosition === 'before'
+  ) {
+    link.append(
+      createIcon(
+        data.icon,
+        data.iconSize,
         data.arrowColor,
       ),
     );
@@ -275,15 +143,18 @@ function createCta(data) {
   const text = document.createElement('span');
 
   text.className = 'cta-text';
-  text.textContent = data.text_cta;
+  text.textContent = data.textcta;
 
-  link.appendChild(text);
+  link.append(text);
 
-  if (data.arrowDirection === 'right') {
-    link.appendChild(
-      createArrow(
-        'right',
-        data.arrowIcon,
+  if (
+    data.icon
+    && data.iconPosition === 'after'
+  ) {
+    link.append(
+      createIcon(
+        data.icon,
+        data.iconSize,
         data.arrowColor,
       ),
     );
@@ -294,11 +165,33 @@ function createCta(data) {
 
 export default function decorate(block) {
   const data = readBlockContent(block);
+
   const cta = createCta(data);
 
   block.replaceChildren();
 
+  block.classList.add(
+    `cta-align-${data.alignment}`,
+  );
+
   if (cta) {
-    block.appendChild(cta);
+    switch (data.ctaWidth) {
+      case 'half':
+        cta.classList.add(
+          'cta-width-half-link',
+        );
+        break;
+
+      case 'full':
+        cta.classList.add(
+          'cta-width-full-link',
+        );
+        break;
+
+      default:
+        break;
+    }
+
+    block.append(cta);
   }
 }

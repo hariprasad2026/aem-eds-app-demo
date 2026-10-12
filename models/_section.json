@@ -51,7 +51,6 @@
         "article",
         "blog-list",
         "canvas",
-        "canvas-search-hero",
         "cards",
         "carousel",
         "columns",
@@ -61,9 +60,6 @@
         "dm-video",
         "embedv1",
         "form-variations",
-        "tarun-header",
-        "tcs-header",
-        "footer-sai",
         "fragment",
         "hero-banner",
         "industry-list",
@@ -77,15 +73,14 @@
         "statistics-list",
         "table",
         "table-list",
-        "teaser-v1",
-        "title-with-column",
         "tabs-new",
-        "teaser-v2",
-        "text-with-link",
-        "video",
         "tcs-footer",
+        "tcs-header",
+        "teaser-v1",
+        "text-with-link",
+        "title-with-column",
         "topic-list",
-        "title-with-column"
+        "video"
       ]
     }
   ]

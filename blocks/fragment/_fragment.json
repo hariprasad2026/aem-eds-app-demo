@@ -21,9 +21,84 @@
       "id": "fragment",
       "fields": [
         {
+          "component": "select",
+          "name": "fragmentType",
+          "label": "Fragment Type",
+          "valueType": "string",
+          "value": "standard",
+          "options": [
+            {
+              "name": "Standard Fragment",
+              "value": "standard"
+            },
+            {
+              "name": "Hero Fragment",
+              "value": "hero"
+            }
+          ]
+        },
+        {
           "component": "aem-content",
           "name": "reference",
           "label": "Reference"
+        },
+        {
+          "component": "select",
+          "name": "heroLayout",
+          "label": "Hero Layout",
+          "valueType": "string",
+          "value": "full",
+          "condition": {
+            "===": [
+              {
+                "var": "fragmentType"
+              },
+              "hero"
+            ]
+          },
+          "options": [
+            {
+              "name": "Full Hero",
+              "value": "full"
+            },
+            {
+              "name": "Image + Text",
+              "value": "image-text"
+            },
+            {
+              "name": "Without Media",
+              "value": "without-media"
+            },
+            {
+              "name": "Text Only",
+              "value": "text-only"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "imagePosition",
+          "label": "Image Position",
+          "valueType": "string",
+          "value": "left",
+          "condition": {
+            "===": [
+              {
+                "var": "heroLayout"
+              },
+              "image-text"
+            ]
+          },
+          "options": [
+            {
+              "name": "Left",
+              "value": "left"
+            },
+            {
+              "name": "Right",
+              "value": "right"
+            }
+          ]
         }
       ]
     }

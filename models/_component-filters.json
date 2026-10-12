@@ -10,5 +10,115 @@
   },
   {
     "...": "../blocks/*/_*.json#/filters"
+  },
+  {
+    "id": "richtext",
+    "components": [
+      "richtext"
+    ],
+    "rte": {
+      "toolbar": {
+        "format": [
+          "bold",
+          "italic",
+          "underline",
+          "strike",
+          "code_inline",
+          "text_color"
+        ],
+        "alignment": [
+          "left",
+          "center",
+          "right",
+          "justify"
+        ],
+        "direction": [
+          "ltr",
+          "rtl"
+        ],
+        "indentation": [
+          "indent",
+          "outdent"
+        ],
+        "blocks": [
+          "paragraph",
+          "h1",
+          "h2",
+          "h3",
+          "h4",
+          "h5",
+          "h6",
+          "code_block",
+          "blockquote"
+        ],
+        "list": [
+          "bullet_list",
+          "ordered_list"
+        ],
+        "insert": [
+          "link",
+          "unlink",
+          "image",
+          "table",
+          "special_characters"
+        ],
+        "sr_script": [
+          "superscript",
+          "subscript"
+        ],
+        "editor": [
+          "removeformat",
+          "clean_unsupported_tags",
+          "paste_text"
+        ],
+        "advanced": [
+          "classes"
+        ],
+        "sections": [
+          "format",
+          "blocks",
+          "alignment",
+          "direction",
+          "list",
+          "indentation",
+          "insert",
+          "sr_script",
+          "editor",
+          "advanced"
+        ]
+      },
+      "actions": {
+        "bold": {
+          "tag": "strong"
+        },
+        "italic": {
+          "tag": "em"
+        },
+        "strike": {
+          "tag": "del"
+        },
+        "image": {
+          "wrapInPicture": true
+        },
+        "table": {
+          "showTableProperties": true,
+          "showRowProperties": true,
+          "showCellProperties": true
+        },
+        "classes": {
+          "label": "Typography style",
+          "options": [
+            {"value":"rte-font-aptos","label":"Aptos"},
+            {"value":"rte-font-arial","label":"Arial"},
+            {"value":"rte-font-calibri","label":"Calibri"},
+            {"value":"rte-font-cambria","label":"Cambria"},
+            {"value":"rte-font-courier-new","label":"Courier New"},
+            {"value":"rte-font-consolas","label":"Consolas"},
+            {"value":"rte-font-georgia","label":"Georgia"},
+            {"value":"rte-font-roboto","label":"Roboto"}
+          ]
+        }
+      }
+    }
   }
 ]

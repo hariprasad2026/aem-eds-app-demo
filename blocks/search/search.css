@@ -1,0 +1,247 @@
+/* ==========================================================================
+   Base Search Block Styles
+   ========================================================================== */
+
+.search {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--background-color, #fff);
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 4px;
+  padding: 6px 12px;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  padding: 8px;
+  background: transparent;
+}
+
+.search-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+/* Results Formatting */
+.search-results {
+  margin-top: 8px;
+}
+
+.search-results-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-result-item {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.search-result-title {
+  font-weight: 600;
+  color: var(--link-color, #06c);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.search-result-description {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.search-no-results {
+  padding: 12px;
+  color: #666;
+  font-style: italic;
+}
+
+
+/* ==========================================================================
+   Variations
+   ========================================================================== */
+
+/* 1. Minimal Style (Slim bar, minimal padding) */
+.search.minimal {
+  max-width: 400px;
+}
+
+.search.minimal .search-input-wrapper {
+  border-radius: 20px;
+  padding: 2px 8px;
+}
+
+.search.minimal .search-input {
+  font-size: 0.875rem;
+}
+
+
+/* 2. Expanded Style (With categories / filters bar ready) */
+.search.expanded {
+  max-width: 1000px;
+}
+
+.search.expanded .search-input-wrapper {
+  border: 2px solid var(--primary-color, #0275d8);
+  border-radius: 8px;
+  padding: 8px 16px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 5%);
+}
+
+
+/* 3. Modal Search Style */
+.search.modal-search {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 100px;
+}
+
+.search.modal-search.is-active {
+  display: flex;
+}
+
+.search.modal-search .search-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 50%);
+  backdrop-filter: blur(4px);
+  z-index: -1;
+}
+
+.search.modal-search .search-input-wrapper {
+  background: #fff;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgb(0 0 0 / 20%);
+  z-index: 1;
+}
+
+.search.modal-search .search-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+
+/* 4. Hero Banner Search Style */
+.search.hero-search {
+  max-width: 700px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.search.hero-search .search-input-wrapper {
+  padding: 12px 20px;
+  border-radius: 30px;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 12%);
+  border: none;
+}
+
+.search.hero-search .search-input {
+  font-size: 1.125rem;
+}
+
+.search.hero-search .search-button {
+  background: var(--primary-color, #0275d8);
+  color: #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+
+/* ==========================================================================
+   Options (Results Display & Themes)
+   ========================================================================== */
+
+/* Dropdown Results Option */
+.search.results-dropdown .search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+  z-index: 10;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Grid Results Option */
+.search.results-grid .search-results-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.search.results-grid .search-result-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #f9f9f9;
+}
+
+/* Full Width Display Option */
+.search.full-width {
+  max-width: 100%;
+}
+
+/* Dark Theme Option */
+.search.theme-dark {
+  --background-color: #222;
+  --border-color: #444;
+  --link-color: #66b2ff;
+}
+
+.search.theme-dark .search-input {
+  color: #fff;
+}
+
+.search.theme-dark .search-result-description,
+.search.theme-dark .search-no-results {
+  color: #aaa;
+}
+
+.search.theme-dark .search-result-item {
+  border-bottom-color: #333;
+}

@@ -1,0 +1,709 @@
+/* =======================================
+   CANVAS
+======================================= */
+
+.canvas {
+  width: 100%;
+  position: relative;
+}
+
+.canvas-floating-anchor {
+  position: relative;
+  width: 100%;
+}
+
+.canvas-floating-sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* =======================================
+   SEARCH BAR
+======================================= */
+
+.canvas-search {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: min(607px, 100%);
+  max-width: 607px;
+  margin-inline: auto;
+}
+
+.canvas-floating-sticky > .canvas-search.is-floating {
+  position: fixed;
+  z-index: 999;
+  top: auto;
+  bottom: 16px;
+  left: 50%;
+  width: min(812px, calc(100vw - 32px));
+  max-width: none;
+  margin: 0;
+  transform: translateX(-50%);
+  animation: none;
+}
+
+.canvas-floating-sticky > .canvas-search.is-fading-out {
+  position: fixed;
+  z-index: 999;
+  top: auto;
+  bottom: 16px;
+  left: 50%;
+  width: min(812px, calc(100vw - 32px));
+  max-width: none;
+  margin: 0;
+  pointer-events: none;
+  animation: canvas-dock-fade-out 0.3s ease forwards;
+}
+
+.canvas-search-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin: 0 auto 32px;
+}
+
+.canvas-search-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+}
+
+.canvas-menu-btn {
+  box-sizing: border-box;
+  flex: 0 0 59px;
+  width: 59px;
+  height: 59px;
+  min-width: 59px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 2px solid #494c4d;
+  background: rgb(255 255 255 / 60%);
+  backdrop-filter: blur(13px);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 12px;
+}
+
+.canvas-nav-panel {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  margin-top: 14px;
+  padding: 0 8px 8px;
+  box-sizing: border-box;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.canvas-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.canvas-nav-row .canvas-menu-btn {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #dedede;
+  background: rgb(255 255 255 / 80%);
+  color: #222;
+  font-size: 27px;
+  line-height: 1;
+}
+
+.canvas-nav-row .canvas-menu-btn.is-close {
+  border: 1px solid #dedede;
+  background: rgb(255 255 255 / 80%);
+  font-size: 27px;
+}
+
+.canvas-nav-row > * {
+  animation: canvas-nav-enter 0.22s ease both;
+}
+
+.canvas-nav-row .canvas-nav-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  margin: 0;
+  padding: 0 20px;
+  border: 1px solid #e1e1e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #171717;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.canvas-nav-row .canvas-nav-item:hover,
+.canvas-nav-row .canvas-nav-item.is-active {
+  border-color: #477bf5;
+  background: #477bf5;
+  color: #fff;
+}
+
+.canvas-nav-submenu {
+  display: none;
+  width: min(628px, 100%);
+  margin: 0 auto;
+  padding: 14px 24px;
+  border: 1px solid rgb(255 255 255 / 55%);
+  border-radius: 16px;
+  background: rgb(245 245 245 / 88%);
+  box-shadow: 0 12px 28px rgb(0 0 0 / 8%);
+  backdrop-filter: blur(20px);
+  box-sizing: border-box;
+}
+
+.canvas-nav-submenu.is-open {
+  display: block;
+  animation: canvas-nav-enter 0.22s ease both;
+}
+
+@keyframes canvas-nav-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.canvas-nav-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.canvas-nav-list > li {
+  margin: 0;
+  border-bottom: 1px solid rgb(0 0 0 / 12%);
+}
+
+.canvas-nav-list .canvas-nav-l3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 36px;
+  color: #292929;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.canvas-nav-list .canvas-nav-l3::after {
+  content: '\2192';
+  margin-left: 12px;
+}
+
+.canvas-nav-list .canvas-nav-l3:hover {
+  color: #1e5de8;
+}
+
+/* =======================================
+   SEARCH CONTAINER
+======================================= */
+
+.canvas-search-container {
+  box-sizing: border-box;
+  flex: 0 1 530px;
+  width: 530px;
+  max-width: 100%;
+  height: 72px;
+  border-radius: 58px;
+  border: 2px solid #494c4d;
+  background: rgb(255 255 255 / 60%);
+  backdrop-filter: blur(40px);
+  padding: 4px 12px;
+}
+
+.canvas-search-input {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.canvas-search-field {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #0c0c0d;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+.canvas-search-field::placeholder {
+  color: #8d8d8d;
+  opacity: 1;
+}
+
+.canvas-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* =======================================
+   MIC BUTTON
+======================================= */
+
+.canvas-mic-btn {
+  box-sizing: border-box;
+  flex: 0 0 40px;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.canvas-menu-btn img,
+.canvas-mic-btn img {
+  display: block;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.canvas-mic-btn img {
+  width: 28px;
+  height: 28px;
+}
+
+.canvas-mic-btn.is-listening {
+  border-radius: 50%;
+  background: rgb(255 105 180 / 16%);
+  outline: 2px solid #cd2c2c;
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.canvas-mic-btn:hover,
+.canvas-mic-btn:focus {
+  background-color: transparent;
+}
+
+.canvas-mic-btn:focus-visible {
+  outline: 2px solid #cd2c2c;
+  outline-offset: 2px;
+}
+
+.canvas-mic-btn.is-listening:hover,
+.canvas-mic-btn.is-listening:focus {
+  background-color: rgb(255 105 180 / 16%);
+}
+
+.canvas-mic-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* =======================================
+   SUBMIT BUTTON
+======================================= */
+
+.canvas-submit-btn {
+  box-sizing: border-box;
+  flex: 0 0 36px;
+  min-width: 36px;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: #4673db;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+/* =======================================
+   FLOATING STICKY
+======================================= */
+
+/* =======================================
+   INTENT CANVAS
+======================================= */
+
+.canvas-intent {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 64px;
+  overflow: hidden;
+  padding: 160px 80px;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.canvas-intent-content {
+  box-sizing: border-box;
+  width: 1280px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 0 80px;
+  position: relative;
+  z-index: 2;
+}
+
+.canvas-intent-options-frame {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 1120px;
+  max-width: 100%;
+  min-height: 118px;
+  gap: 40px;
+}
+
+/* =======================================
+   TITLE
+======================================= */
+
+.canvas-title {
+  margin: 0;
+  max-width: 1120px;
+  width: 100%;
+  text-align: center;
+  color: #0c0c0d;
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 140%;
+  letter-spacing: 0;
+}
+
+/* =======================================
+   DESCRIPTION
+======================================= */
+
+.canvas-description {
+  max-width: 812px;
+  width: 100%;
+  text-align: center;
+  color: #0c0c0d;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 160%;
+  letter-spacing: 0;
+}
+
+/* =======================================
+   INTENT SEARCH SLOT
+======================================= */
+
+.canvas-search-slot {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* =======================================
+   PILLS
+======================================= */
+
+.canvas-options {
+  width: 100%;
+  max-width: 900px;
+  min-height: 118px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.canvas-options-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.canvas-option-pill:any-link {
+  box-sizing: border-box;
+  min-height: 53px;
+  padding: 12px 32px;
+  border-radius: 999px;
+  border: 1px solid #d8d8d8;
+  background: #fff;
+  color: #0c0c0d;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 160%;
+  letter-spacing: 0;
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.canvas-option-pill:any-link:hover {
+  border-color: #4673db;
+  background: #f4f7ff;
+  color: #0c0c0d;
+  text-decoration: none;
+}
+
+/* =======================================
+   GLOWS
+======================================= */
+
+.canvas-glow {
+  position: absolute;
+  pointer-events: none;
+}
+
+.canvas-glow-yellow {
+  width: 451px;
+  height: 322px;
+  left: 6.46%;
+  top: 679px;
+  background: #e8b931;
+  opacity: 0.4;
+  filter: blur(222px);
+}
+
+.canvas-glow-blue {
+  width: 538px;
+  height: 384px;
+  right: 6.94%;
+  top: 679px;
+  background: #4673db;
+  opacity: 0.4;
+  filter: blur(222px);
+}
+
+/* =======================================
+   RESPONSIVE
+======================================= */
+
+@media (width <= 1024px) {
+  .canvas-intent {
+    min-height: 760px;
+    gap: 48px;
+    padding: 100px 32px;
+  }
+
+  .canvas-intent-content {
+    padding: 0 24px;
+  }
+
+  .canvas-title {
+    font-size: 32px;
+  }
+
+  .canvas-description {
+    font-size: 16px;
+  }
+
+}
+
+@media (width <= 768px) {
+  .canvas-intent {
+    min-height: 680px;
+    gap: 40px;
+    padding: 80px 24px;
+  }
+
+  .canvas-intent-content {
+    gap: 24px;
+    padding: 0;
+  }
+
+  .canvas-intent-options-frame {
+    min-height: 0;
+    gap: 24px;
+  }
+
+  .canvas-options {
+    min-height: 0;
+  }
+
+  .canvas-search-toolbar {
+    gap: 12px;
+  }
+
+  .canvas-search-toolbar > .canvas-menu-btn {
+    flex-basis: 48px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+  }
+
+  .canvas-nav-row {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+  }
+
+  .canvas-nav-row .canvas-nav-item {
+    flex: 0 0 auto;
+  }
+
+  .canvas-nav-submenu {
+    padding: 12px 16px;
+  }
+
+  .canvas-nav-list {
+    grid-template-columns: 1fr;
+  }
+
+  .canvas-search-container {
+    height: 60px;
+    padding: 4px 10px;
+  }
+
+  .canvas-search-field {
+    font-size: 16px;
+  }
+
+  .canvas-controls {
+    gap: 8px;
+  }
+
+  .canvas-submit-btn {
+    flex-basis: 36px;
+    min-width: 36px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .canvas-title {
+    font-size: 28px;
+  }
+
+  .canvas-description {
+    font-size: 16px;
+  }
+
+  .canvas-option-pill:any-link {
+    padding: 10px 12px;
+    font-size: 14px;
+    white-space: normal;
+  }
+
+  .canvas-glow-yellow,
+  .canvas-glow-blue {
+    display: none;
+  }
+}
+
+.canvas[data-motion-type='fade'].is-motion-visible .canvas-search-intro,
+.canvas[data-motion-type='fade'].is-motion-visible .canvas-search:not(.is-floating, .is-fading-out),
+.canvas[data-motion-type='fade'].is-motion-visible > .canvas-intent {
+  animation: canvas-fade-in 0.45s ease both;
+}
+
+.canvas[data-motion-type='slide-up'].is-motion-visible .canvas-search-intro,
+.canvas[data-motion-type='slide-up'].is-motion-visible .canvas-search:not(.is-floating, .is-fading-out),
+.canvas[data-motion-type='slide-up'].is-motion-visible > .canvas-intent {
+  animation: canvas-slide-up 0.45s ease both;
+}
+
+@keyframes canvas-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes canvas-dock-fade-out {
+  from {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, 16px);
+  }
+}
+
+@keyframes canvas-slide-up {
+  from {
+    opacity: 0;
+    translate: 0 18px;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas[data-motion-type='fade'] .canvas-search-intro,
+  .canvas[data-motion-type='fade'] .canvas-search,
+  .canvas[data-motion-type='fade'] > .canvas-intent,
+  .canvas[data-motion-type='slide-up'] .canvas-search-intro,
+  .canvas[data-motion-type='slide-up'] .canvas-search,
+  .canvas[data-motion-type='slide-up'] > .canvas-intent,
+  .canvas-nav-row > *,
+  .canvas-nav-submenu.is-open {
+    animation: none;
+  }
+}

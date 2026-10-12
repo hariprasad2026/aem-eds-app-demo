@@ -4,6 +4,82 @@
       "title": "Hero",
       "id": "hero",
       "plugins": {
+        "da": {
+          "fields": [
+            {
+              "name": "heroType"
+            },
+            {
+              "name": "overline"
+            },
+            {
+              "name": "title"
+            },
+            {
+              "name": "description"
+            },
+            {
+              "name": "image"
+            },
+            {
+              "name": "imageAlt"
+            },
+            {
+              "name": "link1Text"
+            },
+            {
+              "name": "link1Url"
+            },
+            {
+              "name": "link2Text"
+            },
+            {
+              "name": "link2Url"
+            },
+            {
+              "name": "titleType"
+            },
+            {
+              "name": "buttonText"
+            },
+            {
+              "name": "buttonUrl"
+            },
+            {
+              "name": "primaryButtonText"
+            },
+            {
+              "name": "primaryButtonUrl"
+            },
+            {
+              "name": "secondaryButtonText"
+            },
+            {
+              "name": "secondaryButtonUrl"
+            },
+            {
+              "name": "bannerLinkText"
+            },
+            {
+              "name": "bannerLinkUrl"
+            },
+            {
+              "name": "backgroundColor"
+            },
+            {
+              "name": "textColor"
+            },
+            {
+              "name": "buttonColor"
+            },
+            {
+              "name": "imagePosition"
+            },
+            {
+              "name": "buttonPosition"
+            }
+          ]
+        },
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/block/v1/block",
@@ -21,6 +97,55 @@
       "id": "hero",
       "fields": [
         {
+          "component": "select",
+          "name": "heroType",
+          "label": "Hero Type",
+          "valueType": "string",
+          "value": "split",
+          "options": [
+            {
+              "name": "Split Hero",
+              "value": "split"
+            },
+            {
+              "name": "Overlay Hero",
+              "value": "overlay"
+            },
+            {
+              "name": "Centered Hero",
+              "value": "centered"
+            },
+            {
+              "name": "Banner Hero",
+              "value": "banner"
+            }
+          ]
+        },
+        {
+          "component": "tab",
+          "name": "contentTab",
+          "label": "Content"
+        },
+        {
+          "component": "text",
+          "name": "overline",
+          "label": "Overline",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "split"] }
+        },
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Title",
+          "valueType": "string"
+        },
+        {
+          "component": "textarea",
+          "name": "description",
+          "label": "Description",
+          "valueType": "string"
+        },
+        {
           "component": "reference",
           "valueType": "string",
           "name": "image",
@@ -31,18 +156,260 @@
           "component": "text",
           "valueType": "string",
           "name": "imageAlt",
-          "label": "Alt",
-          "value": ""
+          "label": "Image Alt"
         },
         {
-          "component": "richtext",
-          "name": "text",
-          "value": "",
-          "label": "Text",
-          "valueType": "string"
+          "component": "text",
+          "name": "link1Text",
+          "label": "Link 1 Text",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "split"] }
+        },
+        {
+          "component": "text",
+          "name": "link1Url",
+          "label": "Link 1 URL",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "split"] }
+        },
+        {
+          "component": "text",
+          "name": "link2Text",
+          "label": "Link 2 Text",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "split"] }
+        },
+        {
+          "component": "text",
+          "name": "link2Url",
+          "label": "Link 2 URL",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "split"] }
+        },
+        {
+          "component": "text",
+          "name": "buttonText",
+          "label": "Button Text",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "overlay"] }
+        },
+        {
+          "component": "text",
+          "name": "buttonUrl",
+          "label": "Button URL",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "overlay"] }
+        },
+        {
+          "component": "text",
+          "name": "primaryButtonText",
+          "label": "Primary Button Text",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "centered"] }
+        },
+        {
+          "component": "text",
+          "name": "primaryButtonUrl",
+          "label": "Primary Button URL",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "centered"] }
+        },
+        {
+          "component": "text",
+          "name": "secondaryButtonText",
+          "label": "Secondary Button Text",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "centered"] }
+        },
+        {
+          "component": "text",
+          "name": "secondaryButtonUrl",
+          "label": "Secondary Button URL",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "centered"] }
+        },
+        {
+          "component": "text",
+          "name": "bannerLinkText",
+          "label": "Banner Link Text",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "banner"] }
+        },
+        {
+          "component": "text",
+          "name": "bannerLinkUrl",
+          "label": "Banner Link URL",
+          "valueType": "string",
+          "condition": { "===": [{ "var": "heroType" }, "banner"] }
+        },
+        {
+          "component": "tab",
+          "name": "styleTab",
+          "label": "Style"
+        },
+        {
+          "component": "select",
+          "name": "titleType",
+          "label": "Title Tag",
+          "valueType": "string",
+          "value": "h1",
+          "options": [
+            { "name": "H1", "value": "h1" },
+            { "name": "H2", "value": "h2" },
+            { "name": "H3", "value": "h3" },
+            { "name": "H4", "value": "h4" }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "backgroundColor",
+          "label": "Background Color",
+          "valueType": "string",
+          "value": "hero-bg-black",
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "split"
+            ]
+          },
+          "options": [
+            {
+              "name": "Black",
+              "value": "hero-bg-black"
+            },
+            {
+              "name": "White",
+              "value": "hero-bg-white"
+            },
+            {
+              "name": "Dark Gray",
+              "value": "hero-bg-dark-gray"
+            },
+            {
+              "name": "Brand Red",
+              "value": "hero-bg-brand-red"
+            },
+            {
+              "name": "Brand Blue",
+              "value": "hero-bg-brand-blue"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "textColor",
+          "label": "Text Color",
+          "valueType": "string",
+          "value": "hero-text-white",
+          "options": [
+            {
+              "name": "White",
+              "value": "hero-text-white"
+            },
+            {
+              "name": "Black",
+              "value": "hero-text-black"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "buttonColor",
+          "label": "Button Color",
+          "valueType": "string",
+          "value": "hero-button-color-white",
+          "condition": {
+            "in": [
+              {
+                "var": "heroType"
+              },
+              [
+                "overlay",
+                "centered"
+              ]
+            ]
+          },
+          "options": [
+            {
+              "name": "White",
+              "value": "hero-button-color-white"
+            },
+            {
+              "name": "Black",
+              "value": "hero-button-color-black"
+            },
+            {
+              "name": "Brand Red",
+              "value": "hero-button-color-brand-red"
+            },
+            {
+              "name": "Brand Blue",
+              "value": "hero-button-color-brand-blue"
+            }
+          ]
+        },
+       {
+          "component": "select",
+          "name": "imagePosition",
+          "label": "Image Position",
+          "valueType": "string",
+          "value": "hero-image-right",
+          "condition": {
+            "===": [
+              {
+                "var": "heroType"
+              },
+              "split"
+            ]
+          },
+          "options": [
+            {
+              "name": "Left",
+              "value": "hero-image-left"
+            },
+            {
+              "name": "Right",
+              "value": "hero-image-right"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "buttonPosition",
+          "label": "Button Position",
+          "valueType": "string",
+          "value": "hero-button-center",
+          "condition": {
+            "in": [
+              {
+                "var": "heroType"
+              },
+              [
+                "overlay",
+                "centered"
+              ]
+            ]
+          },
+          "options": [
+            {
+              "name": "Left",
+              "value": "hero-content-left"
+            },
+            {
+              "name": "Center",
+              "value": "hero-content-center"
+            },
+            {
+              "name": "Right",
+              "value": "hero-content-right"
+            }
+          ]
         }
       ]
     }
   ],
   "filters": []
 }
+

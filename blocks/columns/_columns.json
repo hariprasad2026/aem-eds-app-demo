@@ -41,8 +41,16 @@
           "value": "default",
           "options": [
             {
-              "name": "Default",
+              "name": "Default Equal Grid",
               "value": "default"
+            },
+            {
+              "name": "Stacked Left (Design 1)",
+              "value": "stacked-left"
+            },
+            {
+              "name": "Stacked Right (Design 2)",
+              "value": "stacked-right"
             },
             {
               "name": "Image and copy",
@@ -55,6 +63,11 @@
           ]
         }
       ]
+    },
+    {
+      "id": "column",
+      "title": "Column",
+      "fields": []
     }
   ],
   "filters": [
@@ -70,7 +83,9 @@
         "text",
         "image",
         "button",
-        "title"
+        "title",
+        "quote",
+        "demo-card-column-item"
       ]
     }
   ]

@@ -1,3 +1,9 @@
 helix-importer-ui
 dompurify.min.js
 *.min.js
+blocks/form/form/rules/**
+blocks/form/form/rules-doc/**
+blocks/form/form/models/**
+component-definition.json
+component-models.json
+component-filters.json

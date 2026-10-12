@@ -1,0 +1,24 @@
+{
+  "options": [
+    {
+      "label": "Solve a business challenge",
+      "url": "/business"
+    },
+    {
+      "label": "Learn about capabilities",
+      "url": "/capabilities"
+    },
+    {
+      "label": "Learn about us",
+      "url": "/about"
+    },
+    {
+      "label": "Careers",
+      "url": "/careers"
+    },
+    {
+      "label": "Investors",
+      "url": "/investors"
+    }
+  ]
+}

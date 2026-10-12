@@ -1,0 +1,215 @@
+/* =========================================
+   EMBED BASE
+   ========================================= */
+
+.embed {
+  width: 100%;
+  margin: 1.5rem auto;
+}
+
+.embed *,
+.embed *::before,
+.embed *::after {
+  box-sizing: border-box;
+}
+
+.embed-frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: rgb(15 23 42);
+}
+
+.embed-iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+}
+
+.embed-iframe:focus {
+  outline: 2px solid #0076a8;
+  outline-offset: 2px;
+}
+
+/* =========================================
+   ALIGNMENT
+   ========================================= */
+
+.embed.left {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.embed.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.embed.right {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/* =========================================
+   SIZE VARIANTS
+   ========================================= */
+
+.embed.small {
+  max-width: 640px;
+}
+
+.embed.medium {
+  max-width: 960px;
+}
+
+.embed.large {
+  max-width: 1200px;
+}
+
+.embed.full-width {
+  width: 100%;
+  max-width: none;
+}
+
+/* =========================================
+   YOUTUBE / VIMEO
+   FLUID 16:9 VIDEO
+   ========================================= */
+
+.embed.youtube .embed-frame,
+.embed.vimeo .embed-frame {
+  aspect-ratio: 16 / 9;
+}
+
+.embed.youtube .embed-iframe,
+.embed.vimeo .embed-iframe {
+  width: 100%;
+  height: 100%;
+}
+
+/* =========================================
+   GENERIC IFRAME / WEBSITE
+   ========================================= */
+
+.embed.iframe .embed-iframe,
+.embed.generic .embed-iframe {
+  width: 100%;
+  height: 75vh;
+  min-height: 650px;
+  max-height: 1200px;
+}
+
+/* =========================================
+   TITLE
+   ========================================= */
+
+.embed-title {
+  margin-top: 0.75rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: rgb(31 41 55);
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* =========================================
+   CAPTION
+   ========================================= */
+
+.embed-caption {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgb(75 85 99);
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* =========================================
+   EMPTY STATE
+   ========================================= */
+
+.embedv1.embed-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  margin: 1.5rem 0;
+  border: 1px dashed rgb(156 163 175);
+  border-radius: 0.75rem;
+  background: rgb(249 250 251);
+  text-align: center;
+}
+
+.embedv1.embed-empty .embed-empty-message {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgb(107 114 128);
+}
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (width <= 767px) {
+  .embed {
+    margin: 1rem 0;
+  }
+
+  .embed-frame {
+    border-radius: 0.5rem;
+  }
+
+  .embed-title,
+  .embed-caption {
+    margin-top: 0.5rem;
+  }
+
+  .embed.iframe .embed-iframe,
+  .embed.generic .embed-iframe {
+    height: 60vh;
+    min-height: 450px;
+  }
+
+  .embedv1.embed-empty {
+    padding: 1rem;
+  }
+}
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (width >= 768px) and (width <= 1023px) {
+  .embed {
+    margin: 1.25rem auto;
+  }
+
+  .embed.iframe .embed-iframe,
+  .embed.generic .embed-iframe {
+    height: 70vh;
+    min-height: 550px;
+  }
+}
+
+/* =========================================
+   DESKTOP
+   ========================================= */
+
+@media (width >= 1024px) {
+  .embed {
+    margin: 1.5rem auto;
+  }
+
+  .embed-frame {
+    border-radius: 1rem;
+  }
+
+  .embed.iframe .embed-iframe,
+  .embed.generic .embed-iframe {
+    height: 75vh;
+    min-height: 650px;
+    max-height: 1200px;
+  }
+}

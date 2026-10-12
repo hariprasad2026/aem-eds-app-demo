@@ -1,0 +1,41 @@
+.topic-list {
+  border-top: 1px solid #d8d8d8;
+}
+
+.topic-list-item {
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.topic-list-item a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 24px 0;
+  color: black !important;
+  text-decoration: none !important;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.topic-list-text {
+  flex: 1;
+  color: black !important;
+}
+
+.topic-list-arrow {
+  margin-left: 24px;
+  color: #222 !important;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.topic-list-item a:hover,
+.topic-list-item a:visited,
+.topic-list-item a:active,
+.topic-list-item a:link {
+  color: #222 !important;
+  text-decoration: none !important;
+}

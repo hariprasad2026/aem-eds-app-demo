@@ -2,8 +2,40 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
 import { getAEMPublish } from '../../scripts/endpointconfig.js';
 
 /**
- * Extract property values safely without destroying UE instrumentation
- */
+* Normalizes tag strings by stripping namespaces, human-readable labels,
+* and slashes into comparison tokens.
+* e.g., "AEM EDS Xwalk : Industries / Banking" -> ["industries/banking", "banking"]
+* e.g., "aem-eds-xwalk:operations" -> ["operations"]
+*/
+function getTagTokens(tagStr) {
+  if (!tagStr) return [];
+  const clean = String(tagStr)
+    .trim()
+    .toLowerCase()
+    .replace(/^.*:/, '') // Strip namespace prefix
+    .replace(/[^a-z0-9/_-]/g, '') // Strip spaces and special chars around separators
+    .replace(/^\/+|\/+$/g, '');
+
+  const segments = clean.split('/').filter(Boolean);
+  const leaf = segments.length ? segments[segments.length - 1] : clean;
+  return Array.from(new Set([clean, leaf, ...segments])).filter(Boolean);
+}
+
+/**
+* Checks if an item's tag matches an authored tag flexibly
+*/
+function isTagMatching(itemTagStr, authoredTagStr) {
+  const itemTokens = getTagTokens(itemTagStr);
+  const authoredTokens = getTagTokens(authoredTagStr);
+
+  return authoredTokens.some((at) => itemTokens.some((it) => (
+    it === at || it.includes(at) || at.includes(it)
+  )));
+}
+
+/**
+* Extract property values safely without destroying UE instrumentation
+*/
 function getProp(block, name, fallback = '') {
   const lowerName = name.toLowerCase();
   const normalizedName = lowerName.replace(/[-_\s]/g, '');
@@ -68,7 +100,10 @@ function getProp(block, name, fallback = '') {
   }
 
   const rows = roots.flatMap((root) => [...root.children])
-    .filter((row) => !row.classList.contains('list-container') && !row.classList.contains('list-header'));
+    .filter((row) => (
+      !row.classList.contains('list-container')
+&& !row.classList.contains('list-header')
+    ));
   const aliases = {
     parentpage: ['parentpagepath'],
     tagsparentpage: ['parentpagepath', 'tagparentpagepath'],
@@ -93,7 +128,10 @@ function getProp(block, name, fallback = '') {
     const stores = [...block.querySelectorAll('.list-ue-store')];
     const storedRows = stores.length
       ? stores.flatMap((store) => [...store.children])
-      : [...block.children].filter((child) => !child.matches('ul.list-container') && !child.matches('.list-header'));
+      : [...block.children].filter((child) => (
+        !child.matches('ul.list-container')
+&& !child.matches('.list-header')
+      ));
     const row = storedRows[fieldIndex];
     if (row) {
       const cells = [...row.children];
@@ -198,8 +236,10 @@ function filterAndSortItems(items, config) {
       return depth >= 1 && depth <= targetDepth;
     });
   } else if (config.listType === 'tags') {
-    const rawTags = Array.isArray(config.tags) ? config.tags.join(',') : String(config.tags || '');
-    const authoredTags = rawTags.split(',').map((t) => t.trim().toLowerCase()).filter(Boolean);
+    const rawTags = Array.isArray(config.tags)
+      ? config.tags.join(',')
+      : String(config.tags || '');
+    const authoredTagList = rawTags.split(',').map((t) => t.trim()).filter(Boolean);
     const scopePath = config.tagsParentPage ? normalizePath(config.tagsParentPage) : null;
     const targetDepth = Number(config.tagsChildDepth) || 1;
 
@@ -215,28 +255,31 @@ function filterAndSortItems(items, config) {
         if (depth < 1 || depth > targetDepth) return false;
       }
 
-      const itemTags = String(item.tags || '').toLowerCase().split(',').map((t) => t.trim());
+      const itemTags = String(item.tags || '').split(',').map((t) => t.trim()).filter(Boolean);
+      if (!authoredTagList.length) return true;
+
       return config.tagMatch === 'all'
-        ? authoredTags.every((t) => itemTags.some((it) => it.includes(t)))
-        : authoredTags.some((t) => itemTags.some((it) => it.includes(t)));
+        ? authoredTagList.every((at) => itemTags.some((it) => isTagMatching(it, at)))
+        : authoredTagList.some((at) => itemTags.some((it) => isTagMatching(it, at)));
     });
 
-    if (config.tagResultType === '1-each' && authoredTags.length > 0) {
+    if (config.tagResultType === '1-each' && authoredTagList.length > 0) {
       const uniqueByTag = [];
       const usedPaths = new Set();
 
-      authoredTags.forEach((tag) => {
+      authoredTagList.forEach((tagKey) => {
         const matchingItem = candidateItems.find((item) => {
           if (usedPaths.has(item.path)) return false;
-          const itemTags = String(item.tags || '').toLowerCase().split(',').map((t) => t.trim());
-          return itemTags.some((it) => it.includes(tag));
+          const itemTags = String(item.tags || '').split(',').map((t) => t.trim()).filter(Boolean);
+          return itemTags.some((it) => isTagMatching(it, tagKey));
         });
 
         if (matchingItem) {
           usedPaths.add(matchingItem.path);
+          const tokens = getTagTokens(tagKey);
           uniqueByTag.push({
             ...matchingItem,
-            primaryTag: tag,
+            primaryTag: tokens[1] || tokens[0] || tagKey,
           });
         }
       });
@@ -269,7 +312,11 @@ function renderItem(item, config, index = 0) {
   card.className = 'list-card';
 
   // Apply Card Theme Color or Fallback Blue if Image is Missing/Hidden
-  const hasImage = Boolean(item.image) && config.showImage;
+  const hasImage = Boolean(item.image)
+&& config.showImage
+&& item.image !== 'about:error'
+&& !item.image.includes('default-meta-image.png');
+
   let effectiveColor = config.cardColor;
   if (!hasImage && config.cardColor === 'grey') {
     effectiveColor = 'blue';
@@ -277,10 +324,12 @@ function renderItem(item, config, index = 0) {
   card.classList.add(`card-color-${effectiveColor}`);
 
   // Media Area
-  if (config.showImage && item.image) {
+  if (config.showImage && item.image && item.image !== 'about:error') {
     const picContainer = document.createElement('div');
     picContainer.className = 'list-media';
-    picContainer.append(createOptimizedPicture(item.image, item.title || '', false, [{ width: '800' }]));
+    picContainer.append(
+      createOptimizedPicture(item.image, item.title || '', false, [{ width: '800' }]),
+    );
     card.append(picContainer);
   } else {
     card.classList.add('no-image');

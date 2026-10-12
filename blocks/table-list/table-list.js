@@ -237,14 +237,24 @@ function createTags(tagCell) {
   return tags;
 }
 
+function normalizeCtaColor(value, fallback) {
+  const colors = {
+    black: '#000000',
+    white: '#ffffff',
+  };
+
+  return colors[(value || '').trim().toLowerCase()] || fallback;
+}
+
 /**
- * Build the arrow-only card action.
+ * Build an individually styled card CTA.
  *
  * @param {Element} cell Authored page-reference cell.
  * @param {string} title Card title for accessibility.
- * @returns {HTMLElement} Arrow action wrapper.
+ * @param {Object} cta Card-specific CTA properties.
+ * @returns {HTMLElement} Card CTA wrapper.
  */
-function createCardAction(cell, title) {
+function createCardAction(cell, title, cta = {}) {
   const wrapper = document.createElement('div');
   wrapper.className = 'table-list-link';
 
@@ -252,17 +262,69 @@ function createCardAction(cell, title) {
   const hasDestination = isValidDestination(destination);
 
   const action = document.createElement(hasDestination ? 'a' : 'span');
-  action.className = 'table-list-arrow';
+
+  const ctaView = VALID_CTA_VIEWS.includes(cta.view)
+    ? cta.view
+    : DEFAULTS.ctaView;
+
+  const ctaShape = VALID_CTA_SHAPES.includes(cta.shape)
+    ? cta.shape
+    : DEFAULTS.ctaShape;
+
+  const ctaTitle = (cta.title || '').trim();
+
+  action.className = [
+    'table-list-arrow',
+    'table-list-card-cta',
+    'table-list-cta',
+    `cta-${ctaView}`,
+    `cta-shape-${ctaShape}`,
+    `cta-background-${cta.backgroundColor || 'black'}`,
+    `cta-text-${cta.textColor || 'white'}`,
+    `cta-border-${cta.borderStyle || 'border'}`,
+  ].join(' ');
+
+  action.style.setProperty(
+    '--cta-background-color',
+    normalizeCtaColor(cta.backgroundColor, '#111820'),
+  );
+
+  action.style.setProperty(
+    '--cta-text-color',
+    normalizeCtaColor(cta.textColor, '#ffffff'),
+  );
+
+  action.style.setProperty(
+    '--cta-border-color',
+    cta.borderStyle === 'borderless'
+      ? 'transparent'
+      : normalizeCtaColor(cta.backgroundColor, '#111820'),
+  );
 
   if (hasDestination) {
     action.href = destination;
-    action.setAttribute('aria-label', `Explore ${title || 'card'}`);
+    action.setAttribute(
+      'aria-label',
+      ctaTitle ? `${ctaTitle}: ${title || 'card'}` : `Explore ${title || 'card'}`,
+    );
   } else {
     action.setAttribute('aria-hidden', 'true');
   }
 
+  if (ctaTitle) {
+    const text = document.createElement('span');
+    text.className = 'table-list-cta-title';
+    text.textContent = ctaTitle;
+    action.append(text);
+  }
+
+  const arrow = document.createElement('span');
+  arrow.className = 'table-list-cta-icon';
+  arrow.setAttribute('aria-hidden', 'true');
+  arrow.textContent = '→';
+  action.append(arrow);
+
   wrapper.append(action);
-  action.textContent = '→';
   return wrapper;
 }
 
@@ -340,7 +402,14 @@ export default function decorate(block) {
     descriptionCell.className = 'table-list-description';
     descriptionGroup.append(descriptionCell);
 
-    const action = createCardAction(pageReferenceCell, titleText);
+    const action = createCardAction(pageReferenceCell, titleText, {
+      title: getText(cells[5]),
+      view: getText(cells[6]),
+      shape: getText(cells[7]),
+      backgroundColor: getText(cells[8]),
+      textColor: getText(cells[9]),
+      borderStyle: getText(cells[10]),
+    });
 
     row.className = 'table-list-card';
     row.replaceChildren(numberCell, titleGroup, descriptionGroup, action);

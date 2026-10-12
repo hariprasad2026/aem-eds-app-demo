@@ -320,6 +320,100 @@
           "label": "Tags",
           "description": "Optional. Displayed above the description when Show Tags is enabled.",
           "value": []
+        },
+        {
+          "component": "text",
+          "name": "ctaTitle",
+          "label": "CTA Title",
+          "valueType": "string"
+        },
+        {
+          "component": "select",
+          "name": "ctaView",
+          "label": "CTA Style",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Primary",
+              "value": "primary"
+            },
+            {
+              "name": "Secondary",
+              "value": "secondary"
+            },
+            {
+              "name": "Text",
+              "value": "text"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "ctaShape",
+          "label": "CTA Shape",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Rectangle",
+              "value": "rectangle"
+            },
+            {
+              "name": "Rounded",
+              "value": "rounded"
+            },
+            {
+              "name": "Pill",
+              "value": "pill"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "ctaBackgroundColor",
+          "label": "CTA Background Color",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Black",
+              "value": "black"
+            },
+            {
+              "name": "White",
+              "value": "white"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "ctaTextColor",
+          "label": "CTA Text Color",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Black",
+              "value": "black"
+            },
+            {
+              "name": "White",
+              "value": "white"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "ctaBorderStyle",
+          "label": "CTA Border Style",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Border",
+              "value": "border"
+            },
+            {
+              "name": "Borderless",
+              "value": "borderless"
+            }
+          ]
         }
       ]
     }

@@ -1,6 +1,5 @@
 /* stylelint-disable no-descending-specificity */
 
-
 /* =========================================
    TABLE LIST — BASE
    ========================================= */
@@ -79,7 +78,7 @@
     filter 180ms ease;
 }
 
-.table-list .table-list-cta::after,
+.table-list .table-list-header .table-list-cta::after,
 .table-list .table-list-explore a::after {
   position: static;
   display: inline-block;
@@ -165,13 +164,13 @@
 
 /* =========================================
    CARD BASE
-   Default: number | title | description | arrow
+   Default: number | title | description | CTA
    ========================================= */
 
 .table-list .table-list-card {
   display: grid;
   grid-template-columns:
-    70px minmax(0, 0.95fr) minmax(0, 1.05fr) 40px;
+    70px minmax(0, 0.95fr) minmax(0, 1.05fr) minmax(42px, auto);
   align-items: center;
   gap: 0 24px;
   width: 100%;
@@ -233,6 +232,8 @@
   align-items: center;
   justify-content: flex-end;
   min-width: 0;
+  max-width: 100%;
+  overflow: visible;
 }
 
 .table-list .table-list-arrow {
@@ -328,11 +329,11 @@
 
 /* =========================================
    DESCRIPTION FIRST
-   Description | number | title | arrow
+   Description | number | title | CTA
    ========================================= */
 
 .table-list.description-first .table-list-card {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(42px, auto);
   min-height: 170px;
   padding: 28px 0;
 }
@@ -428,12 +429,12 @@
 
 /* =========================================
    TITLE RIGHT
-   Description | title | arrow
+   Description | title | CTA
    ========================================= */
 
 .table-list.title-right .table-list-card {
   grid-template-columns:
-    minmax(0, 1fr) minmax(0, 0.8fr) 40px;
+    minmax(0, 1fr) minmax(0, 0.8fr) minmax(42px, auto);
   min-height: 108px;
   padding: 20px 0;
 }
@@ -968,14 +969,14 @@
   }
 }
 
-
-/* Fix Description First alignment */
-
-
+/* =========================================
+   DESCRIPTION FIRST — ALIGNMENT FIXES
+   ========================================= */
 
 @media (width < 900px) {
   .table-list.description-first .table-list-card {
-    grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr) 32px;
+    grid-template-columns:
+      minmax(0, 1fr) 48px minmax(0, 1fr) 32px;
     column-gap: 8px;
   }
 }
@@ -1008,9 +1009,211 @@
   }
 }
 
-/* Fix vertical alignment of Default layout numbers */
+/* =========================================
+   DEFAULT LAYOUT — NUMBER ALIGNMENT
+   ========================================= */
 
 .table-list:not(.description-first, .title-right) .table-list-number {
   align-self: center;
   grid-row: 1;
+}
+
+/* =========================================
+   CHILD CARD CTA — COMPLETE BUTTON
+   Text and arrow must remain inside one border.
+   ========================================= */
+
+.table-list .table-list-link .table-list-arrow.table-list-card-cta {
+  display: inline-flex !important;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: max-content !important;
+  min-width: 0;
+  height: auto !important;
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 1px solid var(--cta-border-color, #111820);
+  border-radius: 999px;
+  background-color: var(--cta-background-color, #111820);
+  color: var(--cta-text-color, #fff);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: visible;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    filter 180ms ease;
+}
+
+/* Child CTA shape: rectangle */
+
+.table-list .table-list-link .table-list-arrow.table-list-card-cta.cta-shape-rectangle {
+  border-radius: 0 !important;
+}
+
+/* Child CTA shape: rounded */
+
+.table-list .table-list-link .table-list-arrow.table-list-card-cta.cta-shape-rounded {
+  border-radius: 8px !important;
+}
+
+/* Child CTA shape: pill */
+
+.table-list .table-list-link .table-list-arrow.table-list-card-cta.cta-shape-pill {
+  border-radius: 999px !important;
+}
+
+/* Child CTA style: primary */
+
+.table-list .table-list-link .table-list-arrow.table-list-card-cta.cta-primary:any-link {
+  border-color: var(--cta-border-color, #111820);
+  background-color: var(--cta-background-color, #111820);
+  color: var(--cta-text-color, #fff);
+}
+
+.table-list .table-list-link .table-list-arrow.table-list-card-cta.cta-primary:hover {
+  filter: brightness(0.88);
+}
+
+/* Child CTA style: secondary */
+
+.table-list .table-list-link .table-list-arrow.table-list-card-cta.cta-secondary:any-link {
+  border-color: var(--cta-border-color, #111820);
+  background-color: transparent;
+  color: var(--cta-text-color, #111820);
+}
+
+.table-list .table-list-link .table-list-arrow.table-list-card-cta.cta-secondary:hover {
+  background-color: rgb(127 127 127 / 10%);
+}
+
+/* Child CTA style: text */
+
+.table-list .table-list-link .table-list-arrow.table-list-card-cta.cta-text:any-link {
+  min-height: auto;
+  padding: 4px 0;
+  border-color: transparent;
+  background-color: transparent;
+  color: var(--cta-text-color, inherit);
+}
+
+.table-list .table-list-link .table-list-arrow.table-list-card-cta.cta-text:hover {
+  text-decoration: underline;
+}
+
+/* Child CTA border selection */
+
+.table-list .table-list-link .table-list-arrow.table-list-card-cta.cta-border-borderless {
+  border-color: transparent;
+}
+
+/* Ensure text and arrow are normal inline elements */
+
+.table-list .table-list-link .table-list-card-cta .table-list-cta-title,
+.table-list .table-list-link .table-list-card-cta .table-list-cta-icon {
+  position: static;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  line-height: 1;
+}
+
+/* Text label */
+
+.table-list .table-list-link .table-list-card-cta .table-list-cta-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+/* Arrow icon */
+
+.table-list .table-list-link .table-list-card-cta .table-list-cta-icon {
+  font-size: 19px;
+  white-space: nowrap;
+}
+
+/* Prevent duplicate CSS-generated arrow */
+
+.table-list .table-list-link .table-list-card-cta::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Arrow-only CTA */
+
+.table-list .table-list-link .table-list-arrow.table-list-card-cta:not(:has(.table-list-cta-title)) {
+  width: 42px !important;
+  min-width: 42px;
+  height: 42px !important;
+  padding: 0;
+}
+
+/* Focus accessibility */
+
+.table-list .table-list-link .table-list-card-cta:focus-visible {
+  outline: 2px solid currentcolor;
+  outline-offset: 4px;
+}
+
+.table-list.dark .table-list-link .table-list-card-cta:focus-visible,
+.table-list.card-black .table-list-link .table-list-card-cta:focus-visible {
+  outline-color: #fff;
+}
+
+/* Mobile child CTA */
+
+@media (width < 600px) {
+  .table-list .table-list-link .table-list-arrow.table-list-card-cta {
+    gap: 8px;
+    min-height: 36px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .table-list .table-list-link .table-list-card-cta .table-list-cta-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .table-list .table-list-link .table-list-arrow.table-list-card-cta:not(:has(.table-list-cta-title)) {
+    width: 28px !important;
+    min-width: 28px;
+    height: 28px !important;
+    padding: 0;
+  }
+}
+
+/* FINAL FIX: keep child CTA inside its own grid column */
+.table-list .table-list-link .table-list-card-cta {
+  box-sizing: border-box;
+  width: auto !important;
+  max-width: 100%;
+  min-width: 42px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  gap: 6px;
+  padding: 8px;
+}
+
+/* Keep arrow-only CTA compact */
+.table-list .table-list-link .table-list-card-cta:not(:has(.table-list-cta-title)) {
+  width: 42px !important;
+  min-width: 42px;
+  height: 42px !important;
+  padding: 0;
 }

@@ -10,29 +10,29 @@ const CAROUSEL_TYPES = {
   'with-captions': { controls: true, indicators: true },
 };
 
+const NESTED_BLOCK_SELECTORS = [
+  '.block',
+  '[data-block-name]',
+  '.hero-banner',
+  '.cards',
+  '.columns',
+  '.content-cards',
+  '.accordion',
+  '.cta',
+  '.fragment',
+  '.spotlight',
+  '.statistics-list',
+  '.teaser-v1',
+  '.table',
+  '.quote',
+];
+
+const NESTED_BLOCK_SELECTOR = NESTED_BLOCK_SELECTORS.join(', ');
+
 function isBlockLikeNode(node) {
   if (!node) return false;
 
-  const blockSelectors = [
-    '.block',
-    '[data-aue-resource]',
-    '[data-block-name]',
-    '[data-aue-prop]',
-    '.hero-banner',
-    '.cards',
-    '.columns',
-    '.content-cards',
-    '.accordion',
-    '.cta',
-    '.fragment',
-    '.spotlight',
-    '.statistics-list',
-    '.teaser-v1',
-    '.table',
-    '.quote',
-  ];
-
-  return node.matches?.(blockSelectors.join(', ')) || !!node.querySelector?.(blockSelectors.join(', '));
+  return node.matches?.(NESTED_BLOCK_SELECTOR) || !!node.querySelector?.(NESTED_BLOCK_SELECTOR);
 }
 
 function updateActiveSlide(slide) {
@@ -160,9 +160,9 @@ function createSlide(row, slideIndex, carouselId) {
   const nestedBlock = directChildren.find((child) => isBlockLikeNode(child));
 
   if (nestedBlock) {
-    const contentNode = nestedBlock.matches?.('.block, [data-aue-resource], [data-block-name], [data-aue-prop], .hero-banner, .cards, .columns, .content-cards, .accordion, .cta, .fragment, .spotlight, .statistics-list, .teaser-v1, .table, .quote')
+    const contentNode = nestedBlock.matches?.(NESTED_BLOCK_SELECTOR)
       ? nestedBlock
-      : nestedBlock.querySelector('.block, [data-aue-resource], [data-block-name], [data-aue-prop], .hero-banner, .cards, .columns, .content-cards, .accordion, .cta, .fragment, .spotlight, .statistics-list, .teaser-v1, .table, .quote');
+      : nestedBlock.querySelector(NESTED_BLOCK_SELECTOR);
 
     if (contentNode) {
       contentNode.classList.add('carousel-slide-item');

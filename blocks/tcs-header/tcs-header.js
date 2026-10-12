@@ -262,16 +262,6 @@ function createPill(item, isExpanded, onSelect) {
   return button;
 }
 
-function createNavigationBackButton(onClick) {
-  const button = document.createElement('button');
-  button.className = 'dock-nav-back-btn';
-  button.type = 'button';
-  button.setAttribute('aria-label', 'Back to top-level navigation');
-  button.innerHTML = '<span aria-hidden="true"></span>';
-  button.addEventListener('click', onClick);
-  return button;
-}
-
 function createLevel(items, className, activeItem, onSelect) {
   const list = document.createElement('ul');
   list.className = `dock-list ${className}`;
@@ -325,7 +315,6 @@ function decorateNavigationDock(container, taxonomy, config) {
   let activeL1 = initialActiveL1;
   let activeL2 = initialActiveL2;
   let menuOpen = false;
-  let showingL2 = false;
 
   container.className = 'navigation-dock-wrapper floating-bottom-dock';
 
@@ -348,20 +337,18 @@ function decorateNavigationDock(container, taxonomy, config) {
 
   const render = () => {
     nav.replaceChildren();
-    container.classList.toggle('is-menu-open', menuOpen);
     hamburger.classList.toggle('is-open', menuOpen);
     hamburger.setAttribute('aria-expanded', String(menuOpen));
-    hamburger.setAttribute('aria-label', menuOpen ? 'Close navigation' : 'Open navigation');
 
     if (!menuOpen) {
       return;
     }
 
-    if (!showingL2 || !activeL1) {
-      nav.append(createLevel(taxonomy, 'dock-level-one', null, (item, button) => {
+    if (!activeL1) {
+      nav.append(createLevel(taxonomy, 'dock-level-one', activeL1, (item, button) => {
         activeL1 = item;
         activeL2 = null;
-        showingL2 = true;
+        menuOpen = true;
         render();
         button.blur();
       }));
@@ -370,11 +357,6 @@ function decorateNavigationDock(container, taxonomy, config) {
 
     const levelTwoItems = document.createElement('div');
     levelTwoItems.className = 'dock-level-two-row';
-    levelTwoItems.append(createNavigationBackButton(() => {
-      showingL2 = false;
-      activeL2 = null;
-      render();
-    }));
     levelTwoItems.append(createLevel(activeL1.children, 'dock-level-two', activeL2, (item, button) => {
       activeL2 = activeL2 === item ? null : item;
       render();
@@ -393,11 +375,11 @@ function decorateNavigationDock(container, taxonomy, config) {
   hamburger.addEventListener('click', () => {
     if (menuOpen) {
       menuOpen = false;
+      activeL1 = null;
       activeL2 = null;
-      showingL2 = false;
     } else {
       menuOpen = true;
-      showingL2 = false;
+      activeL1 = activeL1 || taxonomy[0] || null;
       activeL2 = null;
     }
     render();

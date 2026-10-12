@@ -315,16 +315,12 @@
 
 /* Navigation List */
 .tcs-header .dock-navigation {
-  display: none;
+  display: flex;
   justify-content: center;
   max-width: min(1200px, calc(100vw - 120px));
   overflow-x: auto;
   scrollbar-width: none;
   pointer-events: auto;
-}
-
-.tcs-header .floating-bottom-dock.is-menu-open .dock-navigation {
-  display: flex;
 }
 
 .tcs-header .dock-navigation::-webkit-scrollbar {
@@ -344,64 +340,6 @@
 .tcs-header .dock-item {
   position: relative;
   flex: 0 0 auto;
-}
-
-.tcs-header .dock-level-two-row {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.tcs-header .dock-nav-back-btn {
-  position: relative;
-  display: inline-flex;
-  flex: 0 0 44px;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 1px solid rgb(0 0 0 / 10%);
-  border-radius: 50%;
-  background: rgb(255 255 255 / 96%);
-  cursor: pointer;
-}
-
-.tcs-header .dock-nav-back-btn span,
-.tcs-header .dock-nav-back-btn span::before,
-.tcs-header .dock-nav-back-btn span::after {
-  position: absolute;
-  width: 15px;
-  height: 2px;
-  background: #4a4a4a;
-  content: '';
-}
-
-.tcs-header .dock-nav-back-btn span::before,
-.tcs-header .dock-nav-back-btn span::after {
-  top: 0;
-  left: 0;
-}
-
-.tcs-header .dock-nav-back-btn span::before {
-  transform: translateY(-5px);
-}
-
-.tcs-header .dock-nav-back-btn span::after {
-  transform: translateY(5px);
-}
-
-.tcs-header .dock-hamburger-btn.is-open span {
-  background: transparent;
-}
-
-.tcs-header .dock-hamburger-btn.is-open span::before {
-  transform: rotate(45deg);
-}
-
-.tcs-header .dock-hamburger-btn.is-open span::after {
-  transform: rotate(-45deg);
 }
 
 .tcs-header .dock-pill-btn {

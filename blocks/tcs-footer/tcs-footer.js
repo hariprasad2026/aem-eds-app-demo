@@ -1,6 +1,15 @@
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
 /**
+ * SVG Chevron Icon Helper
+ */
+const getChevronSvg = () => `
+  <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="6 9 12 15 18 9"></polyline>
+  </svg>
+`;
+
+/**
  * Resolves content paths for AEM authoring/publishing environments
  */
 function formatHtmlPath(path) {
@@ -160,18 +169,12 @@ export default function decorate(block) {
   let currentViewLevel = 'L1';
   let searchQueryVariable = '';
 
-  /**
-   * Fail-Safe Model Classification Logic
-   * Uses explicit data-aue-model attributes first, content string matching second,
-   * and strict row position index as the ultimate fallback.
-   */
   const getModelType = (row, index) => {
     const explicitModel = row.getAttribute('data-aue-model') || row.dataset?.aueModel;
     if (explicitModel) return explicitModel;
 
     const text = row.textContent.trim().toLowerCase();
 
-    // Explicit string checks
     if (text.includes('both') || text.includes('text-only') || text.includes('voice-only') || text.includes('ask canvas') || text.includes('ask us')) {
       return 'tcs-footer-search';
     }
@@ -182,7 +185,6 @@ export default function decorate(block) {
       return 'tcs-footer-legal-item';
     }
 
-    // Index-based structural map fallback matching your AEM authoring tree (image_04f79f.png)
     if (index === 0) return 'tcs-footer-hamburger';
     if (index === 1) return 'tcs-footer-search';
     if (index === 2) return 'tcs-footer-cta';
@@ -421,7 +423,7 @@ export default function decorate(block) {
 
       l2Pill.innerHTML = `
         <a href="${l2.path}" class="tcs-pill-link">${l2.title}</a>
-        ${hasL3 ? '<button class="chevron-btn" aria-label="Expand subpages">∨</button>' : ''}
+        ${hasL3 ? `<button class="chevron-btn" aria-label="Expand subpages">${getChevronSvg()}</button>` : ''}
       `;
 
       const triggerL3View = (e) => {
@@ -456,14 +458,14 @@ export default function decorate(block) {
       navTreeData = await fetchHierarchicalNavData();
     }
 
-    navTreeData.forEach((l1) => {
+    navTreeData.forEach((l1, idx) => {
       const l1Pill = document.createElement('div');
-      l1Pill.className = 'tcs-nav-pill';
+      l1Pill.className = `tcs-nav-pill ${idx === 0 ? 'active' : ''}`;
       const hasL2 = l1.children && l1.children.length > 0;
 
       l1Pill.innerHTML = `
         <a href="${l1.path}" class="tcs-pill-link">${l1.title}</a>
-        ${hasL2 ? '<button class="chevron-btn" aria-label="Expand subpages">∨</button>' : ''}
+        ${hasL2 ? `<button class="chevron-btn" aria-label="Expand subpages">${getChevronSvg()}</button>` : ''}
       `;
 
       const enterSubPageNavigation = (e) => {
@@ -472,6 +474,8 @@ export default function decorate(block) {
       };
 
       l1Pill.addEventListener('mouseenter', () => {
+        navPillsRow.querySelectorAll('.tcs-nav-pill').forEach((p) => p.classList.remove('active'));
+        l1Pill.classList.add('active');
         if (hasL2) renderSubmenuCard(l1.children);
       });
 
@@ -480,6 +484,10 @@ export default function decorate(block) {
 
       navPillsRow.append(l1Pill);
     });
+
+    if (navTreeData[0] && navTreeData[0].children && navTreeData[0].children.length > 0) {
+      renderSubmenuCard(navTreeData[0].children);
+    }
 
     navPillsRow.classList.remove('hidden');
   };

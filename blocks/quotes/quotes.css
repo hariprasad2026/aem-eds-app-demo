@@ -148,7 +148,7 @@
 
 .quotes blockquote.image .quote-profile {
     display: block;
-    margin-top: 20px;
+    margin-top: 4px;
 }
 
 .quotes blockquote.image .quote-author-image {
@@ -176,7 +176,7 @@
         grid-template-columns: 240px 480px;
         justify-content: center;
         padding: 60px 20px;
-    }   
+    }
 
     .quotes blockquote.image .quote-content {
         margin-top: 100px;
@@ -188,7 +188,7 @@
     }
 }
 
-@media (width <=1024px) and (width > 768px) {
+@media (width <=1024px) and (width >=768px) {
     .quotes blockquote.image {
         grid-template-columns: 260px 420px;
         justify-content: center;
@@ -216,19 +216,26 @@
         top: -8px;
         font-size: 50px;
     }
+
+    .quotes blockquote.image .quote-quotation p:last-child::after {
+        right: 8px;
+        bottom: -25px;
+        font-size: 50px;
+    }
 }
 
-@media (width <=768px) {
+@media (width < 768px) {
     .quotes blockquote.image {
         display: flex;
         flex-direction: column-reverse;
     }
 
     .quotes blockquote.image .quote-content {
-        width: calc(100% - 32px);
-        margin: -50px 16px 0;
-        padding: 24px 20px 24px 36px;
+        width: calc(100% - 8px);
+        margin: -50px 4px 0;
+        padding: 20px 24px;
         box-sizing: border-box;
+        max-width: none;
     }
 
     .quotes blockquote.image .quote-media {
@@ -237,21 +244,22 @@
     }
 
     .quotes blockquote.image .quote-quotation {
-        max-width: none;
-        font-size: 18px;
-        line-height: 1.5;
+        max-width: 100%;
+        font-size: 15px;
+        line-height: 1.4;
+        padding-left: 8px;
     }
 
     .quotes blockquote.image .quote-quotation p:first-child::before {
-        left: -24px;
+        left: -14px;
         top: -4px;
         font-size: 40px;
     }
 
     .quotes blockquote.image .quote-quotation p:last-child::after {
-        right: 4px;
-        bottom: -40px;
-        font-size: 40px;
+        right: 8px;
+        bottom: -28px;
+        font-size: 32px;
     }
 }
 

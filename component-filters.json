@@ -31,7 +31,6 @@
       "footer-sai",
       "fragment",
       "hero",
-      "hero2",
       "hero-banner",
       "industry-list",
       "intro-statement",
@@ -135,12 +134,6 @@
       "field-checkbox",
       "contact-card",
       "field-submit"
-    ]
-  },
-  {
-    "id": "hero2",
-    "components": [
-      "cta-item"
     ]
   },
   {

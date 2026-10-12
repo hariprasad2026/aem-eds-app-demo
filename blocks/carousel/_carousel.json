@@ -138,7 +138,7 @@
       ]
     },
     {
-      "id": "hero2",
+      "id": "hero-banner",
       "fields": [
         {
           "component": "reference",

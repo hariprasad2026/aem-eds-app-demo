@@ -71,9 +71,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   width: 100%;
-  max-width: 686px;
+  max-width: 780px;
   transition: transform 0.2s ease, position 0.2s ease;
   z-index: 100;
 }
@@ -102,30 +102,31 @@
 
 .tcs-footer-hamburger {
   box-sizing: border-box;
-  width: 59px;
-  height: 59px;
-  background: rgb(255 255 255 / 60%);
-  border: 2px solid #494c4d;
-  backdrop-filter: blur(13.7px);
-  border-radius: 151px;
+  width: 48px;
+  height: 48px;
+  background: rgb(255 255 255 / 80%);
+  border: 1px solid rgb(0 0 0 / 10%);
+  backdrop-filter: blur(14px);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 12px;
+  padding: 10px;
   flex-shrink: 0;
   transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 5%);
 }
 
 .tcs-footer-hamburger svg {
-  width: 20px;
-  height: 20px;
-  stroke: #494c4d;
+  width: 18px;
+  height: 18px;
+  stroke: #2b2b2b;
 }
 
 .tcs-footer-hamburger:hover {
-  background: rgb(255 255 255 / 90%);
-  border-color: #1e2222;
+  background: #fff;
+  border-color: rgb(0 0 0 / 20%);
 }
 
 /* Search Container */
@@ -137,12 +138,13 @@
   align-items: center;
   width: 100%;
   max-width: 530px;
-  height: 72px;
-  background: rgb(255 255 255 / 60%);
-  border: 2px solid #494c4d;
-  backdrop-filter: blur(40px);
-  border-radius: 58px;
-  padding: 12px 16px;
+  height: 60px;
+  background: rgb(255 255 255 / 80%);
+  border: 1px solid rgb(0 0 0 / 12%);
+  backdrop-filter: blur(30px);
+  border-radius: 50px;
+  padding: 8px 16px;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 4%);
 }
 
 .tcs-search-form {
@@ -157,38 +159,36 @@
   height: 100%;
   border: none;
   background: transparent;
-  padding: 0 90px 0 16px;
+  padding: 0 90px 0 12px;
   font-family: Inter, sans-serif;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 16px;
   line-height: 140%;
-  letter-spacing: -0.005em;
-  color: #0c0c0d;
+  color: #1e2222;
   outline: none;
   box-sizing: border-box;
 }
 
 .tcs-footer-search-box input::placeholder {
-  color: #0c0c0d;
-  opacity: 0.8;
+  color: #555;
 }
 
 .tcs-footer-search-actions {
   position: absolute;
-  right: 16px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .tcs-footer-search-actions .mic-btn {
   background: none;
   border: none;
   cursor: pointer;
-  color: #1e1e1e;
+  color: #333;
   padding: 0;
   width: 24px;
   height: 24px;
@@ -213,37 +213,42 @@
 .tcs-footer-search-actions .submit-btn {
   width: 36px;
   height: 36px;
-  background: #4673db;
-  border-radius: 9999px;
+  background: #4e82f7;
+  border-radius: 50%;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 8px;
+  padding: 0;
   box-sizing: border-box;
+  transition: background 0.2s ease;
+}
+
+.tcs-footer-search-actions .submit-btn:hover {
+  background: #3b71e6;
 }
 
 .tcs-footer-search-actions .submit-btn svg {
-  width: 20px;
-  height: 20px;
-  stroke: #e6e6e6;
+  width: 18px;
+  height: 18px;
+  stroke: #fff;
 }
 
-/* Horizontal Navigation Pills Row */
+/* Navigation Row - Seamless styling matching Fig 2 */
 .tcs-footer-nav-pills-row {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
   flex-wrap: wrap;
   width: 100%;
-  padding: 4px 0;
+  padding: 6px 0;
 }
 
 .tcs-l2-pills-group {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -253,26 +258,23 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 48px;
-  padding: 12px 24px;
-  background: #fff;
-  border: 2px solid #494c4e;
-  backdrop-filter: blur(8px);
-  border-radius: 9999px;
+  gap: 6px;
+  height: 42px;
+  padding: 8px 18px;
+  background: transparent;
+  border: none;
+  border-radius: 24px;
   font-family: Inter, sans-serif;
   font-style: normal;
   font-weight: 500;
-  font-size: 16px;
-  line-height: 100%;
-  letter-spacing: 0.01em;
-  color: #0c0c0d;
+  font-size: 15px;
+  color: #2c2d30;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .tcs-nav-pill .tcs-pill-link {
-  color: #0c0c0d;
+  color: inherit;
   text-decoration: none !important;
 }
 
@@ -280,38 +282,54 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 14px;
-  color: #0c0c0d;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
   padding: 0;
+  margin-left: 2px;
 }
 
-.tcs-nav-pill:hover,
+.tcs-nav-pill .chevron-icon {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.25s ease;
+}
+
+/* Active State - Blue Pill matching Fig 2 */
 .tcs-nav-pill.active {
-  background: #f3f4f6;
-  border-color: #1e2222;
+  background: #4e82f7;
+  color: #fff;
 }
 
-.tcs-nav-pill.active .chevron-btn {
+.tcs-nav-pill.active .chevron-icon {
   transform: rotate(180deg);
+  stroke: #fff;
 }
 
-/* Glassmorphism Submenu Grid Panel */
+.tcs-nav-pill:not(.active):hover {
+  color: #000;
+  background: rgb(0 0 0 / 4%);
+}
+
+/* Frosted Glass Submenu Panel - Fig 2 Visual Match (Stylelint Compliant) */
 .tcs-footer-submenu-panel {
   width: 100%;
-  max-width: 686px;
-  background: rgb(255 255 255 / 95%);
-  border: 2px solid #494c4d;
-  backdrop-filter: blur(40px);
-  border-radius: 28px;
-  padding: 24px;
-  margin-bottom: 16px;
+  max-width: 760px;
+  background: rgb(255 255 255 / 75%);
+  border: 1px solid rgb(255 255 255 / 60%);
+  backdrop-filter: blur(24px);
+  border-radius: 24px;
+  padding: 28px 36px;
+  margin-bottom: 20px;
   z-index: 99;
   box-sizing: border-box;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 6%), 0 2px 6px rgb(0 0 0 / 3%);
 }
 
 .tcs-footer-submenu-panel.is-fixed {
   position: fixed;
-  bottom: 160px;
+  bottom: 140px;
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 0;
@@ -320,47 +338,43 @@
 .tcs-submenu-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px 24px;
-}
-
-/* CTA Arrow Styling */
-.tcs-footer-cta-btn .arrow {
-  font-size: 18px;
+  gap: 16px 40px;
 }
 
 .tcs-submenu-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 18px;
-  border-bottom: 1px solid rgb(73 76 77 / 20%);
-  color: #0c0c0d;
+  padding: 10px 0;
+  border-bottom: 1px solid rgb(0 0 0 / 10%);
+  color: #2b2c2e;
   font-family: Inter, sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   text-decoration: none !important;
   background: transparent !important;
-  transition: opacity 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .tcs-submenu-item span {
-  color: #0c0c0d;
+  color: inherit;
 }
 
 .tcs-submenu-item:hover {
-  background: transparent !important;
-  color: #0c0c0d;
+  color: #000;
+  border-bottom-color: rgb(0 0 0 / 30%);
 }
 
 .tcs-submenu-item .arrow {
-  color: #0c0c0d;
-  opacity: 0.8;
+  color: #2b2c2e;
+  font-size: 15px;
+  opacity: 0.7;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .tcs-submenu-item:hover .arrow {
   opacity: 1;
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 
 /* Helper Utilities */
@@ -391,7 +405,7 @@
   min-width: 228px;
   height: 50px;
   background: #fff;
-  border: 2px solid #494c4e;
+  border: 1px solid rgb(0 0 0 / 15%);
   backdrop-filter: blur(8px);
   border-radius: 9999px;
   font-family: Inter, sans-serif;
@@ -403,6 +417,7 @@
   color: #000;
   text-decoration: none !important;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 3%);
 }
 
 .tcs-footer-cta-btn:hover,
@@ -507,13 +522,13 @@
   }
 
   .tcs-footer-hamburger {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
   }
 
   .tcs-footer-search-box {
-    height: 60px;
-    padding: 8px 12px;
+    height: 54px;
+    padding: 6px 12px;
   }
 
   .tcs-footer-search-box input {
@@ -533,7 +548,7 @@
 
   .tcs-submenu-grid {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: 12px;
   }
 
   .tcs-footer-cta-row {

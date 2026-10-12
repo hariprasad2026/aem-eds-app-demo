@@ -4812,6 +4812,66 @@
     ]
   },
   {
+    "id": "testimonial",
+    "fields": [
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showEyebrow",
+        "label": "Show Eyebrow Text",
+        "value": true
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "eyebrow",
+        "label": "Eyebrow Text",
+        "value": "",
+        "filter": "richtext"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "quotation",
+        "label": "Quote",
+        "value": "",
+        "filter": "richtext"
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showAttribution",
+        "label": "Show Attribution",
+        "value": true
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "attribution",
+        "label": "Attribution",
+        "value": "",
+        "filter": "richtext"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "background",
+        "value": "white",
+        "label": "Background Color",
+        "options": [
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Grey",
+            "value": "grey"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "text-with-link",
     "fields": [
       {

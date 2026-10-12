@@ -41,6 +41,7 @@
       "tcs-footer",
       "tcs-header",
       "teaser-v1",
+      "testimonial",
       "text-with-link",
       "title-with-column",
       "topic-list",
@@ -200,6 +201,17 @@
     "components": [
       "teaser-v1-link"
     ]
+  },
+  {
+    "id": "richtext",
+    "components": [
+      "richtext"
+    ],
+    "rte": {
+      "toolbar": {
+        "format": []
+      }
+    }
   },
   {
     "id": "title-with-column",

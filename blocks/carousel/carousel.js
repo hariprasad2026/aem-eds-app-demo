@@ -86,6 +86,8 @@ const CAROUSEL_TYPES = {
 
 const AUTOPLAY_INTERVAL = 5000;
 const MOTION_ROW_VALUES = new Set(['select', 'default', 'slide', 'fade']);
+const HERO_ALIGNMENT_VALUES = new Set(['top', 'middle', 'bottom']);
+const HERO_BG_VALUES = new Set(['none', 'white', 'black']);
 
 function isConfigRow(row) {
   const cells = row.querySelectorAll(':scope > div');
@@ -105,7 +107,48 @@ function isRenderableSlideRow(row) {
   const cells = row.querySelectorAll(':scope > div');
   if (!cells.length) return false;
   if (isConfigRow(row) || isMotionRow(row)) return false;
-  return true;
+
+  return Array.from(cells).some((cell) => {
+    const hasMedia = cell.querySelector('picture, img, a[href]');
+    const hasNestedBlock = cell.querySelector(':scope > div[class]');
+    const hasText = cell.textContent.trim().length > 0;
+    return hasMedia || hasNestedBlock || hasText;
+  });
+}
+
+function isHeroBannerRow(row) {
+  const cells = Array.from(row.querySelectorAll(':scope > div'));
+  if (cells.length < 6) return false;
+
+  const hasHeroFields = row.querySelector('[data-aue-prop="heroImageType"], [data-aue-prop="heroImage"], [data-aue-prop="heroLottoImagePath"], [data-aue-prop="heroIcon"], [data-aue-prop="eyebrowText"], [data-aue-prop="alignment"], [data-aue-prop="bgColor"]');
+  if (hasHeroFields) return true;
+
+  const values = cells
+    .map((cell) => cell.textContent.trim().toLowerCase())
+    .filter(Boolean);
+  const hasImageType = values.includes('default') || values.includes('lotto');
+  const hasBgColor = values.some((value) => HERO_BG_VALUES.has(value));
+  const hasMedia = cells.some((cell) => cell.querySelector('picture, img'));
+  const hasContentText = values.some((value) => !HERO_BG_VALUES.has(value)
+    && !HERO_ALIGNMENT_VALUES.has(value)
+    && value !== 'default'
+    && value !== 'lotto');
+
+  return hasImageType && hasMedia && (hasBgColor || hasContentText);
+}
+
+function createHeroBannerBlock(row) {
+  const heroBlock = document.createElement('div');
+  heroBlock.classList.add('block', 'hero-banner');
+  heroBlock.dataset.blockName = 'hero-banner';
+
+  Array.from(row.querySelectorAll(':scope > div')).forEach((cell) => {
+    const fieldRow = document.createElement('div');
+    fieldRow.append(cell);
+    heroBlock.append(fieldRow);
+  });
+
+  return heroBlock;
 }
 
 // Authored carouselType/motionType fields are rendered as leading rows; consume them.
@@ -196,6 +239,16 @@ function createSlide(row, slideIndex, carouselId, pendingBlocks) {
     const heroBlock = createLegacyHero2Block(row);
     content.append(heroBlock);
     slide.append(content);
+    pendingBlocks.push(heroBlock);
+    return slide;
+  }
+
+  if (isHeroBannerRow(row)) {
+    const heroHost = document.createElement('div');
+    heroHost.className = 'carousel-slide-item-host';
+    const heroBlock = createHeroBannerBlock(row);
+    heroHost.append(heroBlock);
+    slide.append(heroHost);
     pendingBlocks.push(heroBlock);
     return slide;
   }

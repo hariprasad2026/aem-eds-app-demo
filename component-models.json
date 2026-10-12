@@ -1248,7 +1248,7 @@
         "component": "select",
         "valueType": "string",
         "name": "carouselType",
-        "label": "Carousel Type",
+        "label": "carousel type",
         "value": "slider",
         "options": [
           {
@@ -1270,48 +1270,6 @@
           {
             "name": "With Captions",
             "value": "with-captions"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "slideAlignment",
-        "label": "Slide Alignment",
-        "value": "center",
-        "options": [
-          {
-            "name": "Left",
-            "value": "left"
-          },
-          {
-            "name": "Center",
-            "value": "center"
-          },
-          {
-            "name": "Right",
-            "value": "right"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "slideVerticalAlignment",
-        "label": "Vertical Alignment",
-        "value": "middle",
-        "options": [
-          {
-            "name": "Top",
-            "value": "top"
-          },
-          {
-            "name": "Middle",
-            "value": "middle"
-          },
-          {
-            "name": "Bottom",
-            "value": "bottom"
           }
         ]
       },
@@ -1387,6 +1345,203 @@
             "value": "bottom"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "hero2",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "heroIcon",
+        "label": "Icon",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heroIconAlt",
+        "label": "Icon Image Alt Text"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "heroImageType",
+        "label": "Hero Image Type",
+        "options": [
+          {
+            "name": "Lotto",
+            "value": "lotto"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "heroImage",
+        "label": "Hero Image",
+        "multi": false,
+        "condition": {
+          "===": [
+            {
+              "var": "heroImageType"
+            },
+            "default"
+          ]
+        }
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "heroLottoImagePath",
+        "label": "Hero Lotto Image Path",
+        "multi": false,
+        "condition": {
+          "===": [
+            {
+              "var": "heroImageType"
+            },
+            "lotto"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heroImageAlt",
+        "label": "Hero Image Alt Text"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "heroView",
+        "label": "Hero View",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrowText",
+        "label": "Eyebrow"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaTitle",
+        "label": "CTA Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "ctaLink",
+        "label": "CTA Link"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "ctaLinkType",
+        "label": "CTA Link Type",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Open In New Window",
+            "value": "new-window"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "ctaView",
+        "label": "CTA View",
+        "options": [
+          {
+            "name": "Button",
+            "value": "button"
+          },
+          {
+            "name": "Link",
+            "value": "link"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "alignment",
+        "label": "Alignment",
+        "options": [
+          {
+            "name": "Top",
+            "value": "top"
+          },
+          {
+            "name": "Middle",
+            "value": "middle"
+          },
+          {
+            "name": "Bottom",
+            "value": "bottom"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "bgColor",
+        "label": "BG Color",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "icon",
+        "label": "Legacy Icon (Deprecated)",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "iconAlt",
+        "label": "Legacy Icon Alt (Deprecated)"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrow",
+        "label": "Legacy Eyebrow (Deprecated)"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "motionType",
+        "label": "Motion Type"
       }
     ]
   },

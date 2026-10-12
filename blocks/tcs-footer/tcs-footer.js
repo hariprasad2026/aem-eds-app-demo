@@ -535,19 +535,37 @@ export default function decorate(block) {
 
   // Smooth Scroll Fixed Position Monitor
   let ticking = false;
+
   const handleScroll = () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
-        const footerRect = block.getBoundingClientRect();
         const windowHeight = window.innerHeight;
 
-        if (footerRect.top < windowHeight - 140) {
+        // Select Canvas block & Footer block
+        const canvasEl = document.querySelector('.canvas') || document.querySelector('.canvas-wrapper');
+        const footerEl = block;
+
+        let isCanvasInView = false;
+        if (canvasEl) {
+          const canvasRect = canvasEl.getBoundingClientRect();
+          // Canvas is active when top is within viewport and bottom hasn't scrolled fully past
+          isCanvasInView = canvasRect.top < windowHeight && canvasRect.bottom > 100;
+        }
+
+        // Check if user reached Footer
+        const footerRect = footerEl.getBoundingClientRect();
+        const isAtFooter = footerRect.top < windowHeight - 140;
+
+        // Un-fix bar while inside Canvas OR reached Footer
+        if (isCanvasInView || isAtFooter) {
           floatingNav.classList.remove('is-fixed');
           subMenuPanel.classList.remove('is-fixed');
         } else {
+          // Fix bar to bottom while scrolling between Canvas and Footer
           floatingNav.classList.add('is-fixed');
           subMenuPanel.classList.add('is-fixed');
         }
+
         ticking = false;
       });
       ticking = true;

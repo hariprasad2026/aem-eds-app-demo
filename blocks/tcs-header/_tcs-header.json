@@ -37,27 +37,7 @@
           "component": "reference",
           "valueType": "string",
           "name": "tcsLogo",
-          "label": "TCS Logo Image"
-        },
-        {
-          "component": "text-input",
-          "valueType": "string",
-          "name": "tcsLogoLink",
-          "label": "TCS Logo Target URL",
-          "value": "/"
-        },
-        {
-          "component": "reference",
-          "valueType": "string",
-          "name": "tataLogo",
-          "label": "Tata Logo Image"
-        },
-        {
-          "component": "text-input",
-          "valueType": "string",
-          "name": "tataLogoLink",
-          "label": "Tata Logo Target URL",
-          "value": "https://www.tata.com"
+          "label": "TCS Logo (Image)"
         },
         {
           "component": "text-input",
@@ -69,9 +49,60 @@
         {
           "component": "text-input",
           "valueType": "string",
+          "name": "tcsLogoLink",
+          "label": "TCS Logo Link",
+          "value": "/"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "tataLogo",
+          "label": "Tata Logo (Image)"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
           "name": "tataLogoAlt",
           "label": "Tata Logo Alt Text",
           "value": "TATA Group"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "tataLogoLink",
+          "label": "Tata Logo Link",
+          "value": "https://www.tata.com"
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "searchVariation",
+          "label": "Search Variation",
+          "value": "both",
+          "options": [
+            { "name": "Text & Voice", "value": "both" },
+            { "name": "Text Only", "value": "text-only" },
+            { "name": "Voice Only", "value": "voice-only" }
+          ]
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "searchPlaceholder",
+          "label": "Search Placeholder Text",
+          "value": "Ask TCS..."
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "motionType",
+          "label": "Motion Type",
+          "value": "slide",
+          "options": [
+            { "name": "Slide", "value": "slide" },
+            { "name": "Fade", "value": "fade" },
+            { "name": "None", "value": "none" }
+          ]
         }
       ]
     }

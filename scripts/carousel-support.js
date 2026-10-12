@@ -1,21 +1,15 @@
-export default function showSlide(block, nextIndex) {
+export default function showSlide(block, slideIndex = 0, behavior = 'smooth') {
   const slides = block.querySelectorAll('.carousel-slide');
-  if (!slides.length) {
-    return;
-  }
+  let realSlideIndex = slideIndex < 0 ? slides.length - 1 : slideIndex;
+  if (slideIndex >= slides.length) realSlideIndex = 0;
+  const activeSlide = slides[realSlideIndex];
 
-  const safeIndex = Math.max(0, Math.min(nextIndex, slides.length - 1));
-  block.dataset.activeSlide = String(safeIndex);
-
-  slides.forEach((slide, index) => {
-    const isActive = index === safeIndex;
-    slide.setAttribute('aria-hidden', String(!isActive));
-    slide.hidden = !isActive;
-  });
-
-  block.querySelectorAll('.carousel-slide-indicator button').forEach((button, index) => {
-    const isActive = index === safeIndex;
-    button.disabled = isActive;
-    button.setAttribute('aria-current', isActive ? 'true' : 'false');
+  activeSlide
+    .querySelectorAll('a')
+    .forEach((link) => link.removeAttribute('tabindex'));
+  block.querySelector('.carousel-slides').scrollTo({
+    top: 0,
+    left: activeSlide.offsetLeft,
+    behavior,
   });
 }

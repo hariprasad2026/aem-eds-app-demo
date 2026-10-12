@@ -71,14 +71,20 @@ export default async function decorate(block) {
     media.className = 'quote-media';
     media.innerHTML = profileImageField.innerHTML;
   } else {
-    media.className = 'quote-media quote-media-alt';
+    media.className = 'quote-media-alt';
 
     const altText = imageAltTextField?.textContent?.trim();
 
-    media.textContent = altText || '';
+    if (altText) {
+      media.textContent = altText;
+    }
   }
 
-  blockquote.append(content, media);
+  blockquote.append(content);
+
+  if (hasImage || media.textContent.trim()) {
+    blockquote.append(media);
+  }
 
   const ems = blockquote.querySelectorAll('em');
 

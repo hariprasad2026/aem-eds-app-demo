@@ -1067,6 +1067,13 @@
     filter 180ms ease;
 }
  
+.table-list .table-list-link a,
+.table-list .table-list-link a.table-list-card-cta,
+.table-list .table-list-link a .table-list-cta-icon,
+.table-list .table-list-link a .table-list-cta-title {
+  cursor: pointer;
+}
+ 
 /* Child CTA shape: rectangle */
  
 .table-list .table-list-link .table-list-arrow.table-list-card-cta.cta-shape-rectangle {

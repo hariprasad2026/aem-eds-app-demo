@@ -61,6 +61,19 @@ const VALID_LINK_STYLES = [
   'secondary',
 ];
 
+const CONTROL_TEXT_VALUES = new Set([
+  'default',
+  'grey',
+  'left',
+  'right',
+  'true',
+  'false',
+  'dd-mm-yyyy',
+  'mm-dd-yyyy',
+  'mmm-d-yyyy',
+  ...VALID_LINK_STYLES,
+]);
+
 function normalizeKey(value = '') {
   return value
     .trim()
@@ -316,6 +329,103 @@ function parsePositionalProperties(block, existingData) {
       data[key] = value;
     }
   });
+
+  return data;
+}
+
+function getRowValueElement(row) {
+  return row?.children?.[0] || row;
+}
+
+function getImageArea(image) {
+  const width = Number(image?.getAttribute('width')) || 0;
+  const height = Number(image?.getAttribute('height')) || 0;
+  return width * height;
+}
+
+function parseLiveFallbackProperties(block, existingData) {
+  const data = { ...existingData };
+  const rows = getParentPropertyRows(block).map((row) => getRowValueElement(row));
+
+  const headingRow = rows.find((row) => row.querySelector('h1, h2, h3, h4, h5, h6'));
+  if (!data.title && headingRow) {
+    data.title = headingRow.textContent.trim();
+  }
+
+  const imageRows = rows.filter((row) => row.querySelector('picture, img'));
+  if (!data.image && imageRows.length) {
+    const largestRow = [...imageRows].sort((left, right) => {
+      const leftArea = getImageArea(left.querySelector('img'));
+      const rightArea = getImageArea(right.querySelector('img'));
+      return rightArea - leftArea;
+    })[0];
+
+    const imageValue = extractValue('image', largestRow);
+    data.imagePicture = imageValue.picture;
+    data.image = imageValue.src;
+  }
+
+  if (!data.arrowIcon && imageRows.length) {
+    const smallestRow = [...imageRows].sort((left, right) => {
+      const leftArea = getImageArea(left.querySelector('img'));
+      const rightArea = getImageArea(right.querySelector('img'));
+      return leftArea - rightArea;
+    })[0];
+
+    const arrowValue = extractValue('arrowIcon', smallestRow);
+    data.arrowIcon = arrowValue.src;
+  }
+
+  const descriptionRow = rows.find((row) => {
+    if (row === headingRow) return false;
+    if (row.querySelector('picture, img, a[href]')) return false;
+
+    const text = row.textContent.trim().toLowerCase();
+    if (!text || CONTROL_TEXT_VALUES.has(text)) return false;
+
+    return row.querySelectorAll('p').length > 0 || text.length > 40;
+  });
+  if (!data.description && descriptionRow) {
+    data.description = descriptionRow.innerHTML.trim();
+  }
+
+  const ctaCandidates = rows.reduce((accumulator, row, index) => {
+    const anchor = row.querySelector('a[href]');
+    if (!anchor) return accumulator;
+
+    let label = '';
+    for (let cursor = index - 1; cursor >= 0; cursor -= 1) {
+      const previousRow = rows[cursor];
+      const hasMediaOrLink = previousRow.querySelector('a[href], picture, img');
+      if (!hasMediaOrLink) {
+        const candidate = stripHtml(previousRow.textContent || '').trim();
+        const isValidCandidate = candidate
+          && !CONTROL_TEXT_VALUES.has(candidate.toLowerCase());
+
+        if (isValidCandidate) {
+          label = candidate;
+          break;
+        }
+      }
+    }
+
+    if (label) {
+      accumulator.push({
+        title: label,
+        link: anchor.getAttribute('href') || '',
+      });
+    }
+    return accumulator;
+  }, []);
+
+  if (!data.primaryCtaTitle && ctaCandidates[0]) {
+    data.primaryCtaTitle = ctaCandidates[0].title;
+    data.primaryCtaLink = ctaCandidates[0].link;
+  }
+  if (!data.secondaryCtaTitle && ctaCandidates[1]) {
+    data.secondaryCtaTitle = ctaCandidates[1].title;
+    data.secondaryCtaLink = ctaCandidates[1].link;
+  }
 
   return data;
 }
@@ -657,14 +767,11 @@ function readBlockData(block) {
 
   const parentRows = getParentPropertyRows(block);
 
-  /*
-   * Positional parsing is safe only when every model field produced
-   * exactly one parent row. Otherwise values shift into wrong fields.
-   */
   if (parentRows.length === FIELD_ORDER.length) {
     data = parsePositionalProperties(block, data);
   }
 
+  data = parseLiveFallbackProperties(block, data);
   data = assignFixedLinksFromDom(data, block);
   data = applyDefaults(data);
   data = normalizeConfiguration(data);
@@ -714,10 +821,8 @@ function formatDate(dateValue, format = 'mmm-d-yyyy') {
   switch (String(format).toLowerCase()) {
     case 'dd-mm-yyyy':
       return `${day}-${month}-${year}`;
-
     case 'mm-dd-yyyy':
       return `${month}-${day}-${year}`;
-
     case 'mmm-d-yyyy':
     default:
       return `${monthName} ${date.getDate()}, ${year}`;
@@ -781,7 +886,6 @@ function createCTAArrow(arrowIcon) {
   }
 
   const arrow = document.createElement('img');
-
   arrow.src = arrowIcon;
   arrow.alt = '';
   arrow.className = 'teaser-cta-arrow';
@@ -812,12 +916,10 @@ function createCTA(link, arrowIcon) {
   const label = document.createElement('span');
   label.className = 'teaser-cta-label';
   label.textContent = link.title;
-
   anchor.append(label);
 
   if (style === 'list') {
     const arrow = createCTAArrow(arrowIcon);
-
     if (arrow) {
       anchor.append(arrow);
     }
@@ -836,7 +938,6 @@ function createCTAs(links = [], arrowIcon = '') {
 
   links.forEach((link) => {
     const anchor = createCTA(link, arrowIcon);
-
     if (anchor) {
       wrapper.append(anchor);
     }
@@ -849,7 +950,6 @@ function createViewAll(data) {
   const text = typeof data.viewAllText === 'string'
     ? data.viewAllText.trim()
     : '';
-
   const href = typeof data.viewAllLink === 'string'
     ? data.viewAllLink.trim()
     : '';
@@ -867,11 +967,9 @@ function createViewAll(data) {
   }
 
   const anchor = document.createElement('a');
-
   anchor.className = 'teaser-view-all';
   anchor.href = href;
   anchor.textContent = stripHtml(text);
-
   return anchor;
 }
 
@@ -893,7 +991,6 @@ function renderImage(data) {
   if (data.imagePicture) {
     const picture = data.imagePicture.cloneNode(true);
     const image = picture.querySelector('img');
-
     if (image) {
       image.alt = altText;
     }
@@ -907,7 +1004,6 @@ function renderImage(data) {
   }
 
   const imageSrc = stripHtml(data.image).trim();
-
   if (!imageSrc) {
     return null;
   }
@@ -959,7 +1055,6 @@ function renderContent(data) {
       data.date || data.lastModified,
       data.dateFormat,
     );
-
     wrapper.append(date);
   }
 
@@ -971,18 +1066,15 @@ function renderContent(data) {
     description.className = 'teaser-description';
     description.innerHTML = data.description
       || data.shortDescription;
-
     wrapper.append(description);
   }
 
   const ctas = createCTAs(data.links, data.arrowIcon);
-
   if (ctas) {
     wrapper.append(ctas);
   }
 
   const viewAll = createViewAll(data);
-
   if (viewAll) {
     wrapper.append(viewAll);
   }
@@ -995,7 +1087,6 @@ function renderTeaser(data) {
   wrapper.className = 'teaser-wrapper';
 
   const image = renderImage(data);
-
   if (image) {
     wrapper.append(image);
   }
@@ -1019,7 +1110,6 @@ async function renderPersonalized(block, data) {
         true,
         'fallback',
       );
-
       return renderTeaser(data);
     }
 
@@ -1055,7 +1145,6 @@ async function renderPersonalized(block, data) {
     );
 
     await sendPropositionDisplay(decision);
-
     return renderTeaser(personalizedData);
   } catch (error) {
     setPersonalizationAttributes(
@@ -1063,7 +1152,6 @@ async function renderPersonalized(block, data) {
       true,
       'fallback',
     );
-
     return renderTeaser(data);
   }
 }
@@ -1078,7 +1166,6 @@ function createBackground(backgroundImage) {
   background.setAttribute('aria-hidden', 'true');
 
   const image = document.createElement('img');
-
   image.src = backgroundImage;
   image.alt = '';
   image.decoding = 'async';
@@ -1088,7 +1175,6 @@ function createBackground(backgroundImage) {
   });
 
   background.append(image);
-
   return background;
 }
 

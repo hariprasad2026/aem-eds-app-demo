@@ -606,13 +606,17 @@ function setupVoiceSearch(button, input) {
     recognition.interimResults = true;
     recognition.onstart = () => setListening(true);
     recognition.onresult = (event) => {
-      const transcript = [...event.results]
-        .map((result) => result[0].transcript)
-        .join(' ')
-        .trim();
+      const transcriptParts = [];
+      for (let index = 0; index < event.results.length; index += 1) {
+        const result = event.results[index];
+        const resultText = result?.[0]?.transcript?.trim();
+        if (resultText) transcriptParts.push(resultText);
+      }
+      const transcript = transcriptParts.join(' ').trim();
       if (transcript) {
         input.value = transcript;
         input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
       }
     };
     recognition.onerror = () => setListening(false);
@@ -685,7 +689,10 @@ function createSearchBar({
   submit.type = 'button';
   submit.className = 'canvas-submit-btn';
   submit.setAttribute('aria-label', 'Submit search');
-  submit.textContent = '→';
+  const submitArrow = document.createElement('span');
+  submitArrow.className = 'canvas-submit-arrow';
+  submitArrow.setAttribute('aria-hidden', 'true');
+  submit.appendChild(submitArrow);
   controls.appendChild(submit);
 
   searchInput.appendChild(controls);

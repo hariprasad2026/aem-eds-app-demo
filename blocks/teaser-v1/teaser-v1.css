@@ -109,7 +109,7 @@
 .teaser-v1 .teaser-description {
   width: 100%;
   margin: 0 0 80px;
-  color: #f8f8f8;
+  color: #f8f8f8 !important;
   font-family: Inter, Arial, sans-serif;
   font-size: 18px;
   font-weight: 400;

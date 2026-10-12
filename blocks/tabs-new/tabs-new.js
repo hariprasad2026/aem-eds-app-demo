@@ -3,8 +3,79 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 
 let tabBlockCount = 0;
 
+function getTabAlignment(block) {
+  const alignmentRow = [...block.children].find((row) => {
+    if (row.classList.contains('tabs-item')) return false;
+
+    const key = row.firstElementChild?.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
+    const value = row.children[1]?.textContent.trim().toLowerCase();
+    const rowText = row.textContent.trim().toLowerCase();
+
+    return ['tabalignment', 'alignment'].includes(key)
+      || (!value && ['left', 'center', 'right'].includes(rowText));
+  });
+  const rowValue = (
+    alignmentRow?.children[1]?.textContent || alignmentRow?.textContent || ''
+  ).trim().toLowerCase();
+  const alignment = (block.dataset.tabAlignment || rowValue || 'left').toLowerCase();
+  alignmentRow?.remove();
+
+  return ['left', 'center', 'right'].includes(alignment) ? alignment : 'left';
+}
+
+function renderPanelVideo(panel, tabTitle) {
+  const videoPattern = /\.(mp4|m4v|mov|webm|ogv)(?:[?#].*)?$/i;
+  const video = panel.querySelector('video');
+  const existingSource = video?.querySelector('source[src]')?.getAttribute('src')
+    || video?.getAttribute('src');
+  const videoLink = [...panel.querySelectorAll('a[href]')].find((link) => (
+    videoPattern.test(link.getAttribute('href'))
+  ));
+  const pathMatch = panel.textContent.match(/(?:https?:\/\/|\/)[^\s<>"']+\.(?:mp4|m4v|mov|webm|ogv)(?:[?#][^\s<>"']*)?/i);
+  const videoSource = existingSource || videoLink?.getAttribute('href') || pathMatch?.[0];
+  if (!videoSource && !video) return;
+
+  const media = video || document.createElement('video');
+  if (!video) {
+    const source = document.createElement('source');
+    source.src = new URL(videoSource, document.baseURI).href;
+    media.appendChild(source);
+  }
+
+  media.controls = true;
+  media.preload = 'metadata';
+  media.setAttribute('playsinline', '');
+  media.setAttribute('aria-label', `${tabTitle} video`);
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'tabs-media tabs-video-wrapper';
+  wrapper.appendChild(media);
+
+  if (videoLink) {
+    videoLink.replaceWith(wrapper);
+  } else if (video?.parentElement) {
+    video.replaceWith(wrapper);
+  } else {
+    const videoRow = [...panel.children].find((row) => (
+      pathMatch && row.textContent.includes(pathMatch[0])
+    ));
+    if (videoRow) {
+      videoRow.replaceChildren(wrapper);
+    } else {
+      panel.appendChild(wrapper);
+    }
+  }
+
+  const imageRow = [...panel.children].find((row) => row.querySelector('picture, img'));
+  imageRow?.remove();
+}
+
 export default async function decorate(block) {
   tabBlockCount += 1;
+
+  const alignment = getTabAlignment(block);
+  block.classList.remove('align-left', 'align-center', 'align-right');
+  block.classList.add(`align-${alignment}`);
 
   const tabList = document.createElement('div');
   tabList.className = 'tabs-list';
@@ -25,6 +96,8 @@ export default async function decorate(block) {
     const tabTitle = tabTitleElement
       ? tabTitleElement.textContent.trim()
       : `Tab ${index + 1}`;
+
+    renderPanelVideo(panel, tabTitle);
 
     const panelId = `tabs-new-panel-${tabBlockCount}-${index + 1}`;
     const buttonId = `tabs-new-tab-${tabBlockCount}-${index + 1}`;

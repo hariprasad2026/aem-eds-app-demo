@@ -1,4 +1,9 @@
-export default function decorate(block) {
+import {
+  decorateBlock,
+  loadBlock,
+} from '../../scripts/aem.js';
+
+export default async function decorate(block) {
   // 1. Get layout property from XWalk dataset attribute or fallback to inner text
 
   const layoutAttr = block.dataset.layout || '';
@@ -82,4 +87,14 @@ export default function decorate(block) {
       }
     }
   });
+
+  const nestedBlocks = block.querySelectorAll('.topic-list, .cta:not(.topic-list .cta)');
+
+  nestedBlocks.forEach((nestedBlock) => {
+    decorateBlock(nestedBlock);
+  });
+
+  await Promise.all(
+    [...nestedBlocks].map((nestedBlock) => loadBlock(nestedBlock)),
+  );
 }

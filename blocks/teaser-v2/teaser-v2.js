@@ -1,42 +1,164 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
-/* eslint-disable */
-export function decorateButtons(...buttons) {
-  return buttons
-    .map((div) => {
-      const a = div.querySelector('a');
-      if (a) {
-        a.classList.add('button');
-        if (a.parentElement.tagName === 'EM') {
-          a.classList.add('secondary');
-        }
+const CONTROL_TEXT_VALUES = new Set([
+  'default',
+  'light',
+  'dark',
+  'left',
+  'right',
+  'center',
+  'split',
+  'card',
+  'hero',
+]);
 
-        if (a.parentElement.tagName === 'STRONG') {
-          a.classList.add('primary');
-        }
-
-        a.classList.add('teaser-cta');
-        return a.outerHTML;
-      }
-      return '';
-    })
-    .join('');
+function createEmptyCell() {
+  return document.createElement('div');
 }
 
-export function generateTeaserDOM(props, classes) {
-  // Extract properties, always same order as in model, empty string if not set
+function cloneOrEmpty(element) {
+  return element ? element.cloneNode(true) : createEmptyCell();
+}
+
+function normalizeValue(value = '') {
+  return String(value).trim().toLowerCase();
+}
+
+function isControlText(value = '') {
+  return CONTROL_TEXT_VALUES.has(normalizeValue(value));
+}
+
+function getNamedField(block, name) {
+  return block.querySelector(`[data-aue-prop="${name}"]`);
+}
+
+function getCellRows(block) {
+  return [...block.children].map((row) => row.firstElementChild || row);
+}
+
+function getLargestImageRow(rows) {
+  const imageRows = rows.filter((row) => row.querySelector('picture, img'));
+  if (!imageRows.length) return null;
+
+  return [...imageRows].sort((left, right) => {
+    const leftImage = left.querySelector('img');
+    const rightImage = right.querySelector('img');
+    const leftArea = (Number(leftImage?.getAttribute('width')) || 0)
+      * (Number(leftImage?.getAttribute('height')) || 0);
+    const rightArea = (Number(rightImage?.getAttribute('width')) || 0)
+      * (Number(rightImage?.getAttribute('height')) || 0);
+    return rightArea - leftArea;
+  })[0];
+}
+
+function resolveProps(block) {
+  const rows = getCellRows(block);
+  const props = rows.slice(0, 7).map((row) => cloneOrEmpty(row));
+
+  while (props.length < 7) {
+    props.push(createEmptyCell());
+  }
+
+  const namedPicture = getNamedField(block, 'fileReference');
+  const namedEyebrow = getNamedField(block, 'eyebrow');
+  const namedTitle = getNamedField(block, 'title');
+  const namedLongDescr = getNamedField(block, 'longDescr');
+  const namedShortDescr = getNamedField(block, 'shortDescr');
+  const namedCta1 = getNamedField(block, 'cta1')?.closest(':scope > div > div')
+    || getNamedField(block, 'cta1');
+  const namedCta2 = getNamedField(block, 'cta2')?.closest(':scope > div > div')
+    || getNamedField(block, 'cta2');
+
+  if (namedPicture) props[0] = cloneOrEmpty(namedPicture);
+  if (namedEyebrow) props[1] = cloneOrEmpty(namedEyebrow);
+  if (namedTitle) props[2] = cloneOrEmpty(namedTitle);
+  if (namedLongDescr) props[3] = cloneOrEmpty(namedLongDescr);
+  if (namedShortDescr) props[4] = cloneOrEmpty(namedShortDescr);
+  if (namedCta1) props[5] = cloneOrEmpty(namedCta1);
+  if (namedCta2) props[6] = cloneOrEmpty(namedCta2);
+
+  const hasNamedData = [
+    namedPicture,
+    namedEyebrow,
+    namedTitle,
+    namedLongDescr,
+    namedShortDescr,
+    namedCta1,
+    namedCta2,
+  ].some(Boolean);
+
+  if (hasNamedData) return props;
+
+  const largestImageRow = getLargestImageRow(rows);
+  if (!props[0].querySelector('picture, img') && largestImageRow) {
+    props[0] = cloneOrEmpty(largestImageRow);
+  }
+
+  const ctaRows = rows.filter((row) => row.querySelector('a[href]'));
+  if (!props[5].querySelector('a[href]') && ctaRows[0]) props[5] = cloneOrEmpty(ctaRows[0]);
+  if (!props[6].querySelector('a[href]') && ctaRows[1]) props[6] = cloneOrEmpty(ctaRows[1]);
+
+  const textRows = rows.filter((row) => {
+    if (row.querySelector('picture, img, a[href]')) return false;
+    const text = row.textContent.trim();
+    return text && !isControlText(text);
+  });
+
+  const titleRow = textRows.find((row) => row.querySelector('h1, h2, h3, h4, h5, h6')) || textRows[0];
+  if (!props[2].textContent.trim() && titleRow) props[2] = cloneOrEmpty(titleRow);
+
+  const remainingTextRows = textRows.filter((row) => row !== titleRow);
+  if (!props[1].textContent.trim() && remainingTextRows[0]) {
+    const candidate = remainingTextRows[0].textContent.trim();
+    if (candidate.length < 80) props[1] = cloneOrEmpty(remainingTextRows[0]);
+  }
+
+  const descriptionRows = remainingTextRows.filter((row) => row !== props[1]);
+  if (!props[3].textContent.trim() && descriptionRows[0]) {
+    props[3] = cloneOrEmpty(descriptionRows[0]);
+  }
+  if (!props[4].textContent.trim() && descriptionRows[1]) {
+    props[4] = cloneOrEmpty(descriptionRows[1]);
+  }
+
+  return props;
+}
+
+function createButton(cell) {
+  const anchor = cell?.querySelector('a[href]');
+  if (!anchor) return null;
+
+  const button = anchor.cloneNode(true);
+  button.classList.add('button', 'teaser-cta');
+
+  if (anchor.closest('em')) button.classList.add('secondary');
+  if (anchor.closest('strong')) button.classList.add('primary');
+
+  return button;
+}
+
+export function decorateButtons(...cells) {
+  return cells.map((cell) => createButton(cell)).filter(Boolean);
+}
+
+function appendIfContent(container, className, sourceElement) {
+  const html = sourceElement?.innerHTML?.trim();
+  if (!html) return;
+
+  const wrapper = document.createElement('div');
+  wrapper.className = className;
+  wrapper.innerHTML = html;
+  container.append(wrapper);
+}
+
+export function generateTeaserDOM(props) {
   const [pictureContainer, eyebrow, title, longDescr, shortDescr, firstCta, secondCta] = props;
-  const picture = pictureContainer.querySelector('picture');
+  const fragment = document.createDocumentFragment();
 
-  // if (picture) {
-  //   const pictureSrc = picture.querySelector('img').src;
-  //   const optimizedPicture = createOptimizedPicture(pictureSrc, '', false, [{ width: '1360' }]);
-  //   pictureContainer.textContent = '';
-  //   pictureContainer.appendChild(optimizedPicture);
-  // }
+  const background = document.createElement('div');
+  background.className = 'background';
 
-  const image = picture?.querySelector('img');
-
+  const image = pictureContainer.querySelector('img');
   if (image?.src) {
     const optimizedPicture = createOptimizedPicture(
       image.src,
@@ -44,61 +166,44 @@ export function generateTeaserDOM(props, classes) {
       false,
       [{ width: '1360' }],
     );
-
-    pictureContainer.textContent = '';
-    pictureContainer.appendChild(optimizedPicture);
+    background.append(optimizedPicture);
   }
 
-  const hasShortDescr = shortDescr.textContent.trim() !== '';
+  const foreground = document.createElement('div');
+  foreground.className = 'foreground';
 
-  // Build DOM: .background holds the image, .foreground holds .text + .spacer
-  const teaserDOM = document.createRange().createContextualFragment(`
-    <div class="background">
-      ${picture ? picture.outerHTML : ''}
-    </div>
-    <div class="foreground">
-      <div class="text">
-        ${eyebrow.textContent.trim() !== ''
-      ? `<p class="eyebrow">${eyebrow.textContent.trim().toUpperCase()}</p>`
-      : ''
-    }
-        <div class="title">${title.innerHTML}</div>
-        <div class="long-description">${longDescr.innerHTML}</div>
-        ${hasShortDescr ? `<div class="short-description">${shortDescr.innerHTML}</div>` : ''}
-        <div class="cta">${decorateButtons(firstCta, secondCta)}</div>
-      </div>
-      <div class="spacer"></div>
-    </div>
-  `);
+  const text = document.createElement('div');
+  text.className = 'text';
 
-  // set the mobile/desktop background color from the tcs-background-* variant class
-  const backgroundColor = [...classes].find((cls) => cls.startsWith('tcs-background-'));
-  if (backgroundColor) {
-    const colorName = backgroundColor.substring('tcs-background-'.length);
-    const colorMap = {
-      red: '#eb1c24',
-      yellow: '#ffcc00',
-      blue: '#0076a8',
-      beige: '#f5f0eb',
-      black: '#111111',
-    };
-    const fallbackColor = colorMap[colorName] || colorName;
-    teaserDOM
-      .querySelector('.foreground')
-      .style.setProperty(
-        '--teaser-background-color',
-        `var(--${colorName}, var(--tcs-background-${colorName}, ${fallbackColor}))`,
-      );
+  const eyebrowText = eyebrow.textContent.trim();
+  if (eyebrowText) {
+    const eyebrowElement = document.createElement('p');
+    eyebrowElement.className = 'eyebrow';
+    eyebrowElement.textContent = eyebrowText.toUpperCase();
+    text.append(eyebrowElement);
   }
 
-  // return final teaser DOM, used as child component
-  return teaserDOM;
+  appendIfContent(text, 'title', title);
+  appendIfContent(text, 'long-description', longDescr);
+  appendIfContent(text, 'short-description', shortDescr);
+
+  const cta = document.createElement('div');
+  cta.className = 'cta';
+  decorateButtons(firstCta, secondCta).forEach((button) => cta.append(button));
+  if (cta.childElementCount) text.append(cta);
+
+  const spacer = document.createElement('div');
+  spacer.className = 'spacer';
+
+  foreground.append(text, spacer);
+  fragment.append(background, foreground);
+
+  return fragment;
 }
 
 export default function decorate(block) {
-  // get the first and only cell from each row
-  const props = [...block.children].map((row) => row.firstElementChild);
-  const teaserDOM = generateTeaserDOM(props, block.classList);
+  const props = resolveProps(block);
+  const teaserDOM = generateTeaserDOM(props);
   block.textContent = '';
   block.append(teaserDOM);
 }

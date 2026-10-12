@@ -100,6 +100,43 @@
   background-color: var(--footer-bg);
 }
 
+.footer-sai-wrapper.footer-sai-motion-fade .footer-sai-content {
+  animation: footer-sai-fade-in 600ms ease-out both;
+}
+
+.footer-sai-wrapper.footer-sai-motion-slide-up .footer-sai-content {
+  animation: footer-sai-slide-up 600ms ease-out both;
+}
+
+@keyframes footer-sai-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes footer-sai-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-sai-wrapper.footer-sai-motion-fade .footer-sai-content,
+  .footer-sai-wrapper.footer-sai-motion-slide-up .footer-sai-content {
+    animation: none;
+  }
+}
+
 /* Hero Section: Heading & Search Input */
 .footer-sai .footer-sai-hero {
   display: flex;

@@ -32,15 +32,19 @@
   min-height: min(50vw, calc(100dvh - var(--header-height)));
 }
 
-.carousel .carousel-slide:has(.carousel-slide-content[data-align='left']) {
+/* Alignments */
+.carousel .carousel-slide:has(.carousel-slide-content[data-align='left']),
+.carousel .carousel-slide[data-align='left'] {
   align-items: flex-start;
 }
 
-.carousel .carousel-slide:has(.carousel-slide-content[data-align='center']) {
+.carousel .carousel-slide:has(.carousel-slide-content[data-align='center']),
+.carousel .carousel-slide[data-align='center'] {
   align-items: center;
 }
 
-.carousel .carousel-slide:has(.carousel-slide-content[data-align='right']) {
+.carousel .carousel-slide:has(.carousel-slide-content[data-align='right']),
+.carousel .carousel-slide[data-align='right'] {
   align-items: flex-end;
 }
 
@@ -56,6 +60,7 @@
   justify-content: flex-end;
 }
 
+/* Background/Hero Image */
 .carousel .carousel-slide .carousel-slide-image picture {
   position: absolute;
   inset: 0;
@@ -67,6 +72,7 @@
   object-fit: cover;
 }
 
+/* Content Box */
 .carousel .carousel-slide .carousel-slide-content {
   z-index: 1;
   margin: 68px;
@@ -77,6 +83,50 @@
   width: var(--slide-content-width, auto);
 }
 
+/* Hero 2 Specific Elements */
+.carousel .carousel-slide .hero-icon {
+  width: 48px;
+  height: auto;
+  margin-bottom: 12px;
+}
+
+.carousel .carousel-slide .hero-eyebrow {
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.carousel .carousel-slide .hero-title {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.carousel .carousel-slide .hero-description {
+  margin-bottom: 20px;
+}
+
+.carousel .carousel-slide .hero-cta {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.carousel .carousel-slide .hero-cta.button-primary {
+  background-color: var(--link-color, #06c);
+  color: #fff;
+}
+
+.carousel .carousel-slide .hero-cta.button-secondary {
+  background-color: transparent;
+  border: 2px solid currentcolor;
+  color: inherit;
+}
+
+/* Carousel Indicators */
 .carousel .carousel-slide-indicators {
   display: flex;
   flex-wrap: wrap;
@@ -97,12 +147,7 @@
   transition: background-color 0.2s;
 }
 
-.carousel .carousel-slide-indicator button:disabled,
-.carousel .carousel-slide-indicator button:hover,
-.carousel .carousel-slide-indicator button:focus-visible {
-  background-color: var(--text-color);
-}
-
+/* Navigation Buttons */
 .carousel .carousel-navigation-buttons {
   position: absolute;
   top: 50%;
@@ -115,7 +160,6 @@
   z-index: 1;
 }
 
-/* stylelint-disable-next-line no-descending-specificity */
 .carousel .carousel-navigation-buttons button {
   position: relative;
   width: 44px;
@@ -125,11 +169,6 @@
   padding: 0;
   background-color: rgb(19 19 19 / 25%);
   transition: background-color 0.2s;
-}
-
-.carousel .carousel-navigation-buttons button:hover,
-.carousel .carousel-navigation-buttons button:focus-visible {
-  background-color: rgb(19 19 19 / 75%);
 }
 
 .carousel .carousel-navigation-buttons button::after {
@@ -151,6 +190,18 @@
   left: calc(50% - 2px);
 }
 
+/* Button State Pseudo-Classes placed after base button rules */
+.carousel .carousel-slide-indicator button:disabled,
+.carousel .carousel-slide-indicator button:hover,
+.carousel .carousel-slide-indicator button:focus-visible {
+  background-color: var(--text-color);
+}
+
+.carousel .carousel-navigation-buttons button:hover,
+.carousel .carousel-navigation-buttons button:focus-visible {
+  background-color: rgb(19 19 19 / 75%);
+}
+
 @media (width >= 600px) {
   .carousel .carousel-navigation-buttons {
     left: 24px;
@@ -165,5 +216,86 @@
 
   .carousel .carousel-slide .carousel-slide-content[data-align='justify'] {
     --slide-content-width: auto;
+  }
+}
+
+/* Type: slides only (no controls, no indicators) */
+.carousel[data-carousel-type='slides-only'] .carousel-navigation-buttons,
+.carousel[data-carousel-type='slides-only'] .carousel-slide-indicators {
+  display: none;
+}
+
+/* Type: with controls (no indicators) */
+.carousel[data-carousel-type='with-controls'] .carousel-slide-indicators {
+  display: none;
+}
+
+/* Type: with indicators (overlaid on slides, Bootstrap style) */
+.carousel[data-carousel-type='with-indicators'],
+.carousel[data-carousel-type='with-captions'] {
+  position: relative;
+}
+
+.carousel[data-carousel-type='with-indicators'] > nav,
+.carousel[data-carousel-type='with-captions'] > nav {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.carousel[data-carousel-type='with-indicators'] .carousel-slide-indicators,
+.carousel[data-carousel-type='with-captions'] .carousel-slide-indicators {
+  background-color: transparent;
+  padding: 12px;
+  gap: 6px;
+}
+
+.carousel[data-carousel-type='with-indicators'] .carousel-slide-indicator button,
+.carousel[data-carousel-type='with-captions'] .carousel-slide-indicator button {
+  width: 30px;
+  height: 4px;
+  border-radius: 0;
+  background-color: rgb(255 255 255 / 50%);
+}
+
+.carousel[data-carousel-type='with-indicators'] .carousel-slide-indicator button:disabled,
+.carousel[data-carousel-type='with-indicators'] .carousel-slide-indicator button:hover,
+.carousel[data-carousel-type='with-indicators'] .carousel-slide-indicator button:focus-visible,
+.carousel[data-carousel-type='with-captions'] .carousel-slide-indicator button:disabled,
+.carousel[data-carousel-type='with-captions'] .carousel-slide-indicator button:hover,
+.carousel[data-carousel-type='with-captions'] .carousel-slide-indicator button:focus-visible {
+  background-color: #fff;
+}
+
+/* Type: with captions (centered caption at the bottom of the slide) */
+.carousel[data-carousel-type='with-captions'] .carousel-slide:has(.carousel-slide-content) {
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.carousel[data-carousel-type='with-captions'] .carousel-slide .carousel-slide-content {
+  --slide-content-width: auto;
+
+  width: 70%;
+  margin: 0 auto 48px;
+  padding: 12px 16px;
+  text-align: center;
+  background-color: transparent;
+  text-shadow: 0 1px 3px rgb(0 0 0 / 60%);
+}
+
+.carousel[data-carousel-type='with-captions'] .carousel-slide .carousel-slide-content :is(h1, h2, h3, h4, h5, h6) {
+  margin-top: 0;
+}
+
+.carousel[data-carousel-type='with-captions'] .carousel-slide .carousel-slide-content p:last-child {
+  margin-bottom: 0;
+}
+
+@media (width < 768px) {
+  .carousel[data-carousel-type='with-captions'] .carousel-slide .carousel-slide-content {
+    display: none;
   }
 }

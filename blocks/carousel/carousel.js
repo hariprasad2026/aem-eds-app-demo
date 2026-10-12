@@ -1,6 +1,7 @@
 import { moveInstrumentation } from '../../scripts/scripts.js';
 import { fetchPlaceholders } from '../../scripts/placeholders.js';
 import showSlide from '../../scripts/carousel-support.js';
+import { decorateBlock, loadBlock } from '../../scripts/aem.js';
 
 const CAROUSEL_TYPES = {
   slider: { controls: true, indicators: true },
@@ -12,6 +13,7 @@ const CAROUSEL_TYPES = {
 
 const NESTED_BLOCK_SELECTORS = [
   '.block',
+  '[data-aue-resource]',
   '[data-block-name]',
   '.hero-banner',
   '.cards',
@@ -31,6 +33,8 @@ const NESTED_BLOCK_SELECTOR = NESTED_BLOCK_SELECTORS.join(', ');
 const DEFAULT_AUTOPLAY_INTERVAL = 5000;
 const VALID_ALIGNMENTS = new Set(['left', 'center', 'right', 'justify']);
 const VALID_VERTICAL_ALIGNMENTS = new Set(['top', 'middle', 'bottom']);
+const HERO_ALIGNMENT_VALUES = new Set(['top', 'middle', 'bottom']);
+const HERO_BG_VALUES = new Set(['none', 'white', 'black']);
 
 function isBlockLikeNode(node) {
   if (!node) return false;
@@ -51,6 +55,39 @@ function parseAutoplayInterval(rawMotion) {
   }
 
   return DEFAULT_AUTOPLAY_INTERVAL;
+}
+
+function isHeroBannerSlide(row) {
+  const cells = Array.from(row.querySelectorAll(':scope > div'));
+  if (cells.length < 6) return false;
+
+  if (row.querySelector('[data-aue-prop="heroImageType"], [data-aue-prop="heroImage"], [data-aue-prop="heroLottoImagePath"], [data-aue-prop="heroIcon"], [data-aue-prop="eyebrowText"], [data-aue-prop="bgColor"], [data-aue-prop="alignment"]')) {
+    return true;
+  }
+
+  const values = cells
+    .map((cell) => cell.textContent.trim().toLowerCase())
+    .filter(Boolean);
+
+  const hasImageType = values.includes('default') || values.includes('lotto');
+  const hasAlignment = values.some((value) => HERO_ALIGNMENT_VALUES.has(value));
+  const hasBgColor = values.some((value) => HERO_BG_VALUES.has(value));
+
+  return hasImageType && hasAlignment && hasBgColor;
+}
+
+function createHeroBannerBlock(row) {
+  const heroBlock = document.createElement('div');
+  heroBlock.classList.add('block', 'hero-banner');
+  heroBlock.dataset.blockName = 'hero-banner';
+
+  Array.from(row.querySelectorAll(':scope > div')).forEach((cell) => {
+    const fieldRow = document.createElement('div');
+    fieldRow.append(cell);
+    heroBlock.append(fieldRow);
+  });
+
+  return heroBlock;
 }
 
 function updateActiveSlide(slide) {
@@ -230,6 +267,11 @@ function createSlide(row, slideIndex, carouselId) {
     }
   }
 
+  if (isHeroBannerSlide(row)) {
+    slidePanel.append(createHeroBannerBlock(row));
+    return slide;
+  }
+
   const columns = row.querySelectorAll(':scope > div');
 
   columns.forEach((column, colIdx) => {
@@ -327,6 +369,14 @@ export default async function decorate(block) {
 
   container.append(slidesWrapper);
   block.prepend(container);
+
+  const nestedBlocks = Array.from(block.querySelectorAll('.carousel-slide .block'));
+  nestedBlocks.forEach((nestedBlock) => {
+    decorateBlock(nestedBlock);
+  });
+  await Promise.all(
+    nestedBlocks.map((nestedBlock) => loadBlock(nestedBlock)),
+  );
 
   if (!isSingleSlide) {
     showSlide(block, 0);

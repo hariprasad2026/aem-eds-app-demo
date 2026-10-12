@@ -37,3 +37,9 @@
   font-size: var(--body-font-size-s);
   margin-top: var(--spacing-xl);
 }
+
+.testimonial .testimonial-quote {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-inline: var(--spacing-l);
+}

@@ -1158,7 +1158,9 @@
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
                   "name": "Statistic",
-                  "model": "statistics-list-item"
+                  "model": "statistics-list-item",
+                  "title": "Title",
+                  "value": "Value"
                 }
               }
             }

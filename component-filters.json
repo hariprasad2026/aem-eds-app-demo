@@ -174,8 +174,7 @@
   {
     "id": "statistics-list",
     "components": [
-      "statistics-list-item",
-      "text"
+      "statistics-list-item"
     ]
   },
   {

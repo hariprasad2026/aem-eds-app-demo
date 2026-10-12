@@ -35,6 +35,8 @@ const VALID_ALIGNMENTS = new Set(['left', 'center', 'right', 'justify']);
 const VALID_VERTICAL_ALIGNMENTS = new Set(['top', 'middle', 'bottom']);
 const HERO_ALIGNMENT_VALUES = new Set(['top', 'middle', 'bottom']);
 const HERO_BG_VALUES = new Set(['none', 'white', 'black']);
+const MOTION_ROW_VALUES = new Set(['select', 'default', 'slide', 'fade']);
+const SWIPE_THRESHOLD_PX = 40;
 
 function isBlockLikeNode(node) {
   if (!node) return false;
@@ -125,6 +127,32 @@ function updateActiveSlide(slide) {
   });
 }
 
+function getSlides(block) {
+  return Array.from(block.querySelectorAll('.carousel-slide'));
+}
+
+function getActiveSlideIndex(block) {
+  const current = Number.parseInt(block.dataset.activeSlide, 10);
+  return Number.isNaN(current) ? 0 : current;
+}
+
+function goToSlide(block, targetIndex, behavior = 'smooth') {
+  const slides = getSlides(block);
+  if (!slides.length) return;
+
+  let nextIndex = targetIndex;
+  if (targetIndex < 0) nextIndex = slides.length - 1;
+  if (targetIndex >= slides.length) nextIndex = 0;
+
+  showSlide(block, nextIndex, behavior);
+  updateActiveSlide(slides[nextIndex]);
+}
+
+function isKeyboardEditableTarget(target) {
+  if (!target || !(target instanceof HTMLElement)) return false;
+  return Boolean(target.closest('input, textarea, select, [contenteditable="true"]'));
+}
+
 export { showSlide };
 
 function isConfigRow(row) {
@@ -145,6 +173,33 @@ function isConfigRow(row) {
   return value && !value.includes(' ') && !!CAROUSEL_TYPES[value];
 }
 
+function isMotionRow(row) {
+  const cells = row.querySelectorAll(':scope > div');
+  if (cells.length !== 1) return false;
+
+  const cell = cells[0];
+  if (!cell || isBlockLikeNode(cell)) return false;
+  if (cell.matches?.('picture, img, a[href], h1, h2, h3, h4, h5, h6')
+    || cell.querySelector('picture, img, a[href], h1, h2, h3, h4, h5, h6')) {
+    return false;
+  }
+
+  const value = cell.textContent.trim().toLowerCase();
+  return Boolean(value)
+    && (MOTION_ROW_VALUES.has(value) || /^\d+(\.\d+)?s?$/.test(value));
+}
+
+function isRenderableSlideRow(row) {
+  const cells = Array.from(row.querySelectorAll(':scope > div'));
+  if (!cells.length) return false;
+  if (isConfigRow(row) || isMotionRow(row)) return false;
+  if (isHeroBannerSlide(row)) return true;
+  if (cells.some((cell) => isBlockLikeNode(cell))) return true;
+  if (cells.length > 1) return true;
+
+  return cells[0].textContent.trim().length > 0;
+}
+
 function extractConfig(block, rows) {
   const config = {};
   const classType = Object.keys(CAROUSEL_TYPES).find((type) => block.classList.contains(type));
@@ -156,13 +211,20 @@ function extractConfig(block, rows) {
       config.type = value;
       rows[0].remove();
       rows.shift();
-      if (rows.length && isConfigRow(rows[0])) {
+      if (rows.length && isMotionRow(rows[0])) {
         config.motion = rows[0].textContent.trim();
         rows[0].remove();
         rows.shift();
       }
     }
   }
+
+  if (rows.length && isMotionRow(rows[0])) {
+    config.motion = rows[0].textContent.trim();
+    rows[0].remove();
+    rows.shift();
+  }
+
   return config;
 }
 
@@ -170,12 +232,14 @@ function bindEvents(block) {
   const slides = block.querySelectorAll('.carousel-slide');
   if (slides.length < 2) return;
 
+  const slidesWrapper = block.querySelector('.carousel-slides');
+
   const slideIndicators = block.querySelector('.carousel-slide-indicators');
   if (slideIndicators) {
     slideIndicators.querySelectorAll('button').forEach((button) => {
       button.addEventListener('click', (e) => {
         const slideIndicator = e.currentTarget.parentElement;
-        showSlide(block, Number.parseInt(slideIndicator.dataset.targetSlide, 10));
+        goToSlide(block, Number.parseInt(slideIndicator.dataset.targetSlide, 10));
       });
     });
   }
@@ -183,26 +247,66 @@ function bindEvents(block) {
   const prevBtn = block.querySelector('.slide-prev');
   if (prevBtn) {
     prevBtn.addEventListener('click', () => {
-      showSlide(block, Number.parseInt(block.dataset.activeSlide, 10) - 1);
+      goToSlide(block, getActiveSlideIndex(block) - 1);
     });
   }
 
   const nextBtn = block.querySelector('.slide-next');
   if (nextBtn) {
     nextBtn.addEventListener('click', () => {
-      showSlide(block, Number.parseInt(block.dataset.activeSlide, 10) + 1);
+      goToSlide(block, getActiveSlideIndex(block) + 1);
     });
   }
 
   block.addEventListener('keydown', (event) => {
+    if (isKeyboardEditableTarget(event.target)) return;
+
     if (event.key === 'ArrowLeft') {
       event.preventDefault();
-      showSlide(block, Number.parseInt(block.dataset.activeSlide, 10) - 1);
+      goToSlide(block, getActiveSlideIndex(block) - 1);
     } else if (event.key === 'ArrowRight') {
       event.preventDefault();
-      showSlide(block, Number.parseInt(block.dataset.activeSlide, 10) + 1);
+      goToSlide(block, getActiveSlideIndex(block) + 1);
     }
   });
+
+  if (slidesWrapper) {
+    let pointerStartX = 0;
+    let pointerDeltaX = 0;
+    let trackingPointer = false;
+
+    const resetPointer = () => {
+      trackingPointer = false;
+      pointerStartX = 0;
+      pointerDeltaX = 0;
+    };
+
+    slidesWrapper.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'mouse') return;
+      trackingPointer = true;
+      pointerStartX = event.clientX;
+      pointerDeltaX = 0;
+    });
+
+    slidesWrapper.addEventListener('pointermove', (event) => {
+      if (!trackingPointer) return;
+      pointerDeltaX = event.clientX - pointerStartX;
+    });
+
+    slidesWrapper.addEventListener('pointerup', () => {
+      if (!trackingPointer) return;
+
+      if (Math.abs(pointerDeltaX) >= SWIPE_THRESHOLD_PX) {
+        const direction = pointerDeltaX < 0 ? 1 : -1;
+        goToSlide(block, getActiveSlideIndex(block) + direction);
+      }
+
+      resetPointer();
+    });
+
+    slidesWrapper.addEventListener('pointercancel', resetPointer);
+    slidesWrapper.addEventListener('pointerleave', resetPointer);
+  }
 
   const slideObserver = new IntersectionObserver(
     (entries) => {
@@ -220,12 +324,13 @@ function bindEvents(block) {
   if (block.dataset.autoplay === 'true') {
     const autoplayInterval = Number.parseInt(block.dataset.autoplayInterval, 10)
       || DEFAULT_AUTOPLAY_INTERVAL;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let autoplayTimer;
 
     const startAutoplay = () => {
-      if (autoplayTimer) return;
+      if (autoplayTimer || prefersReducedMotion || document.hidden) return;
       autoplayTimer = window.setInterval(() => {
-        showSlide(block, Number.parseInt(block.dataset.activeSlide, 10) + 1);
+        goToSlide(block, getActiveSlideIndex(block) + 1);
       }, autoplayInterval);
     };
 
@@ -239,7 +344,18 @@ function bindEvents(block) {
     block.addEventListener('mouseenter', stopAutoplay);
     block.addEventListener('mouseleave', startAutoplay);
     block.addEventListener('focusin', stopAutoplay);
-    block.addEventListener('focusout', startAutoplay);
+    block.addEventListener('focusout', (event) => {
+      const nextTarget = event.relatedTarget;
+      if (nextTarget instanceof Node && block.contains(nextTarget)) return;
+      startAutoplay();
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopAutoplay();
+      } else {
+        startAutoplay();
+      }
+    });
   }
 }
 
@@ -307,17 +423,19 @@ export default async function decorate(block) {
 
   const rows = Array.from(block.querySelectorAll(':scope > div'));
   const config = extractConfig(block, rows);
+  const slideRows = rows.filter((row) => isRenderableSlideRow(row));
   let carouselType = config.type || block.getAttribute('data-carousel-type') || 'slider';
   if (!CAROUSEL_TYPES[carouselType]) carouselType = 'slider';
   block.setAttribute('data-carousel-type', carouselType);
   const typeConfig = CAROUSEL_TYPES[carouselType];
 
-  const isSingleSlide = rows.length < 2;
+  const isSingleSlide = slideRows.length < 2;
   const placeholders = await fetchPlaceholders();
   const isAutoplay = Boolean(typeConfig.autoplay);
   const autoplayInterval = parseAutoplayInterval(config.motion);
 
   block.setAttribute('role', 'region');
+  block.setAttribute('aria-label', placeholders.carousel || 'Carousel');
   block.setAttribute('aria-roledescription', placeholders.carousel || 'Carousel');
   block.setAttribute('aria-live', isAutoplay ? 'off' : 'polite');
   block.setAttribute('tabindex', '0');
@@ -328,6 +446,7 @@ export default async function decorate(block) {
   container.classList.add('carousel-slides-container');
 
   const slidesWrapper = document.createElement('ul');
+  slidesWrapper.setAttribute('id', `carousel-${carouselId}-slides`);
   slidesWrapper.classList.add('carousel-slides');
 
   let slideIndicators;
@@ -345,15 +464,18 @@ export default async function decorate(block) {
       const slideNavButtons = document.createElement('div');
       slideNavButtons.classList.add('carousel-navigation-buttons');
       slideNavButtons.innerHTML = `
-        <button type="button" class="slide-prev" aria-label="${placeholders.previousSlide || 'Previous Slide'}"></button>
-        <button type="button" class="slide-next" aria-label="${placeholders.nextSlide || 'Next Slide'}"></button>
+        <button type="button" class="slide-prev" aria-controls="carousel-${carouselId}-slides" aria-label="${placeholders.previousSlide || 'Previous Slide'}"></button>
+        <button type="button" class="slide-next" aria-controls="carousel-${carouselId}-slides" aria-label="${placeholders.nextSlide || 'Next Slide'}"></button>
       `;
       container.append(slideNavButtons);
     }
   }
 
-  rows.forEach((row, idx) => {
+  slideRows.forEach((row, idx) => {
     const slide = createSlide(row, idx, carouselId);
+    slide.setAttribute('role', 'group');
+    slide.setAttribute('aria-roledescription', 'slide');
+    slide.setAttribute('aria-label', `${idx + 1} ${placeholders.of || 'of'} ${slideRows.length}`);
     moveInstrumentation(row, slide);
     slidesWrapper.append(slide);
 
@@ -361,7 +483,7 @@ export default async function decorate(block) {
       const indicator = document.createElement('li');
       indicator.classList.add('carousel-slide-indicator');
       indicator.dataset.targetSlide = idx;
-      indicator.innerHTML = `<button type="button" aria-label="${placeholders.showSlide || 'Show Slide'} ${idx + 1} ${placeholders.of || 'of'} ${rows.length}"></button>`;
+      indicator.innerHTML = `<button type="button" aria-label="${placeholders.showSlide || 'Show Slide'} ${idx + 1} ${placeholders.of || 'of'} ${slideRows.length}"></button>`;
       slideIndicators.append(indicator);
     }
     row.remove();
@@ -379,7 +501,7 @@ export default async function decorate(block) {
   );
 
   if (!isSingleSlide) {
-    showSlide(block, 0);
+    goToSlide(block, 0, 'auto');
     bindEvents(block);
   } else {
     const singleSlide = block.querySelector('.carousel-slide');

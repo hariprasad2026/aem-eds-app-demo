@@ -9,6 +9,7 @@ const DEFAULTS = {
   textColor: '',
   borderColor: '',
   arrowDirection: 'none',
+  arrowColor: 'white',
 };
 
 const ALLOWED_SHAPES = [
@@ -39,6 +40,21 @@ const ALLOWED_ARROWS = [
   'left',
   'right',
 ];
+
+const ALLOWED_ARROW_COLORS = [
+  'white',
+  'black',
+];
+
+function normalizeArrowColor(value) {
+  const color = String(value).trim().toLowerCase();
+
+  if (ALLOWED_ARROW_COLORS.includes(color)) {
+    return color;
+  }
+
+  return DEFAULTS.arrowColor;
+}
 
 function getFieldValue(block, index, fallback = '') {
   const field = block.children[index];
@@ -78,7 +94,7 @@ function isValidCssColor(value) {
   return Boolean(element.style.color);
 }
 
-function createArrow(direction, arrowIcon) {
+function createArrow(direction, arrowIcon, arrowColor) {
   const wrapper = document.createElement('span');
 
   wrapper.className = `cta-arrow cta-arrow-${direction}`;
@@ -90,13 +106,16 @@ function createArrow(direction, arrowIcon) {
 
   const arrow = arrowIcon.cloneNode(true);
 
-  arrow.classList.add('cta-arrow-icon');
+  arrow.classList.add('cta-arrow-icon', `cta-arrow-icon-${arrowColor}`);
 
   const arrowSrc = arrow.getAttribute('src') || '';
+  const arrowPath = arrowSrc.split(/[?#]/)[0].toLowerCase();
+  const isSvgFormat = /[?&]format=svg(&|$)/i.test(arrowSrc);
 
   if (
     arrowSrc
-    && !arrowSrc.toLowerCase().endsWith('.svg')
+    && !arrowPath.endsWith('.svg')
+    && !isSvgFormat
   ) {
     // eslint-disable-next-line no-console
     console.error(
@@ -177,6 +196,14 @@ function readBlockContent(block) {
         DEFAULTS.arrowDirection,
       ),
     ),
+
+    arrowColor: normalizeArrowColor(
+      getFieldValue(
+        block,
+        10,
+        DEFAULTS.arrowColor,
+      ),
+    ),
   };
 }
 
@@ -240,6 +267,7 @@ function createCta(data) {
       createArrow(
         'left',
         data.arrowIcon,
+        data.arrowColor,
       ),
     );
   }
@@ -256,6 +284,7 @@ function createCta(data) {
       createArrow(
         'right',
         data.arrowIcon,
+        data.arrowColor,
       ),
     );
   }

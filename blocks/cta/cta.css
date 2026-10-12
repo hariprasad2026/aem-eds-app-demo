@@ -91,10 +91,17 @@
 
 .cta-arrow-icon {
   display: block;
-  width: 24px;
-  height: 24px;
+  width: 14px;
+  height: 14px;
   object-fit: contain;
+}
+
+.cta-arrow-icon.cta-arrow-icon-white {
   filter: brightness(0) invert(1);
+}
+
+.cta-arrow-icon.cta-arrow-icon-black {
+  filter: brightness(0);
 }
 
 .cta-link:hover {

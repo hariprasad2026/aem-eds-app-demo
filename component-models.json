@@ -756,6 +756,38 @@
             "component": "richtext",
             "name": "canvasDescription",
             "label": "Canvas Description"
+          },
+          {
+            "component": "select",
+            "name": "showNavigation",
+            "label": "Show Navigation",
+            "value": "true",
+            "options": [
+              {
+                "name": "Enabled",
+                "value": "true"
+              },
+              {
+                "name": "Disabled",
+                "value": "false"
+              }
+            ]
+          },
+          {
+            "component": "select",
+            "name": "showMicrophone",
+            "label": "Show Microphone",
+            "value": "true",
+            "options": [
+              {
+                "name": "Enabled",
+                "value": "true"
+              },
+              {
+                "name": "Disabled",
+                "value": "false"
+              }
+            ]
           }
         ]
       },
@@ -773,18 +805,6 @@
           ]
         },
         "fields": [
-          {
-            "component": "checkbox",
-            "name": "showNavigation",
-            "label": "Show Navigation",
-            "value": true
-          },
-          {
-            "component": "checkbox",
-            "name": "showMicrophone",
-            "label": "Show Microphone",
-            "value": true
-          },
           {
             "component": "aem-content",
             "name": "canvasNavRootPath",
@@ -813,22 +833,20 @@
         },
         "fields": [
           {
-            "component": "checkbox",
+            "component": "select",
             "name": "enableSearch",
             "label": "Enable Search",
-            "value": true
-          },
-          {
-            "component": "checkbox",
-            "name": "showNavigation",
-            "label": "Show Navigation",
-            "value": true
-          },
-          {
-            "component": "checkbox",
-            "name": "showMicrophone",
-            "label": "Show Microphone",
-            "value": true
+            "value": "true",
+            "options": [
+              {
+                "name": "Enabled",
+                "value": "true"
+              },
+              {
+                "name": "Disabled",
+                "value": "false"
+              }
+            ]
           },
           {
             "component": "number",
@@ -849,21 +867,6 @@
             ]
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "canvas-option",
-    "fields": [
-      {
-        "component": "text",
-        "name": "optionLabel",
-        "label": "Option Label"
-      },
-      {
-        "component": "text",
-        "name": "optionLink",
-        "label": "Option Link"
       }
     ]
   },
@@ -1503,6 +1506,31 @@
           {
             "name": "Right",
             "value": "right"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "arrowColor",
+        "label": "Arrow Color",
+        "value": "white",
+        "condition": {
+          "!==": [
+            {
+              "var": "arrowDirection"
+            },
+            "none"
+          ]
+        },
+        "options": [
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
           }
         ]
       }
@@ -2478,6 +2506,167 @@
           {
             "name": "Default",
             "value": "default"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hero-banner",
+    "fields": [
+      {
+        "component": "fieldset",
+        "name": "imageSection",
+        "label": "Image Section"
+      },
+      {
+        "component": "reference",
+        "name": "heroIcon",
+        "label": "Icon"
+      },
+      {
+        "component": "text",
+        "name": "heroIconAlt",
+        "label": "Icon Image Alt Text"
+      },
+      {
+        "component": "select",
+        "name": "heroImageType",
+        "label": "Hero Image Type",
+        "valueType": "string",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Lotto",
+            "value": "lotto"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "name": "heroImage",
+        "label": "Hero Image",
+        "description": "Default: any image format is allowed.",
+        "valueType": "string",
+        "multi": false,
+        "condition": {
+          "===": [
+            {
+              "var": "heroImageType"
+            },
+            "default"
+          ]
+        }
+      },
+      {
+        "component": "reference",
+        "name": "heroLottoImagePath",
+        "label": "Hero Lotto Image Path",
+        "description": "Lotto: only .zip or .svg files are allowed.",
+        "valueType": "string",
+        "multi": false,
+        "condition": {
+          "===": [
+            {
+              "var": "heroImageType"
+            },
+            "lotto"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "heroImageAlt",
+        "label": "Hero Image Alt Text"
+      },
+      {
+        "component": "select",
+        "name": "heroView",
+        "label": "Hero View",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          }
+        ]
+      },
+      {
+        "component": "fieldset",
+        "name": "contentSection",
+        "label": "Content Section"
+      },
+      {
+        "component": "text",
+        "name": "eyebrowText",
+        "label": "Eyebrow"
+      },
+      {
+        "component": "textarea",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "select",
+        "name": "motionType",
+        "label": "Motion Type",
+        "options": [
+          {
+            "name": "Select",
+            "value": "Select"
+          }
+        ]
+      },
+      {
+        "component": "fieldset",
+        "name": "styleSection",
+        "label": "Style"
+      },
+      {
+        "component": "select",
+        "name": "alignment",
+        "label": "Alignment",
+        "options": [
+          {
+            "name": "Top",
+            "value": "top"
+          },
+          {
+            "name": "Middle",
+            "value": "middle"
+          },
+          {
+            "name": "Bottom",
+            "value": "bottom"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "bgColor",
+        "label": "BackGround Color",
+        "valueType": "string",
+        "value": "none",
+        "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
           }
         ]
       }

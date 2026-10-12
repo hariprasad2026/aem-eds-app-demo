@@ -1,0 +1,234 @@
+.hero-banner {
+  position: relative;
+  min-height: 1000px;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Lotto background: images extracted from a zip (or an svg) layered behind the content */
+.hero-banner-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.hero-banner-bg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  z-index: 0;
+}
+
+.hero-banner.hero-banner-bg-white::before {
+  background: rgb(255 255 255 / 80%);
+}
+
+.hero-banner.hero-banner-bg-black::before {
+  background: rgb(0 0 0 / 80%);
+}
+
+.hero-banner-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 1000px;
+  padding: 0 24px;
+}
+
+.hero-banner-icon {
+  display: block;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+  background-color: #4673DB;
+  mask-image: var(--hero-banner-icon-src);
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+}
+
+.hero-banner-eyebrow {
+  font-family: Inter, sans-serif;
+  color: #4673DB;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 160%;
+}
+
+.hero-banner-title {
+  font-family: Inter, sans-serif;
+  width: 100%;
+  max-width: 1352px;
+  margin:0;
+  margin-top: 24px;
+  margin-bottom: 40px;
+  color: #000;
+  font-size: 64px;
+  font-weight: 500;
+  line-height: 120%;
+  letter-spacing: -0.025em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.hero-banner-description {
+  max-width: 850px;
+  margin: 0 0 32px;
+  text-align: center;
+}
+
+.hero-banner-description p {
+  font-family: Inter, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 120%;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.hero-banner.hero-banner-bg-black .hero-banner-title,
+.hero-banner.hero-banner-bg-black .hero-banner-description {
+  color: #fff;
+}
+
+
+.hero-banner-cta-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.hero-banner-cta-items > div {
+  display: block;
+  justify-content: center;
+}
+
+.hero-banner-align-top .hero-banner-content {
+  justify-content: flex-start;
+  padding-top: 80px;
+  padding-bottom: 0;
+}
+
+.hero-banner-align-middle .hero-banner-content {
+  justify-content: center;
+}
+
+.hero-banner-align-bottom .hero-banner-content {
+  justify-content: flex-end;
+  padding-top: 0;
+  padding-bottom: 80px;
+}
+
+@media (width <= 1024px) {
+  .hero-banner,
+  .hero-banner-content {
+    min-height: 750px;
+  }
+
+  .hero-banner-content {
+    padding: 0 32px;
+  }
+
+  .hero-banner-title {
+    font-size: 48px;
+    margin-top: 20px;
+    margin-bottom: 32px;
+  }
+
+  .hero-banner-description {
+    max-width: 680px;
+  }
+
+  .hero-banner-description p {
+    font-size: 20px;
+  }
+
+  .hero-banner-cta-items {
+    margin-top: 32px;
+  }
+
+  .hero-banner-align-top .hero-banner-content {
+    padding-top: 64px;
+  }
+
+  .hero-banner-align-bottom .hero-banner-content {
+    padding-bottom: 64px;
+  }
+}
+
+@media (width <= 767px) {
+  .hero-banner,
+  .hero-banner-content {
+    min-height: 600px;
+  }
+
+  .hero-banner-content {
+    padding: 0 20px;
+  }
+
+  .hero-banner-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 12px;
+  }
+
+  .hero-banner-eyebrow {
+    font-size: 14px;
+  }
+
+  .hero-banner-title {
+    font-size: 32px;
+    margin-top: 16px;
+    margin-bottom: 24px;
+  }
+
+  .hero-banner-description {
+    margin-bottom: 24px;
+  }
+
+  .hero-banner-description p {
+    font-size: 16px;
+  }
+
+  .hero-banner-cta-items {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .hero-banner-align-top .hero-banner-content {
+    padding-top: 48px;
+  }
+
+  .hero-banner-align-bottom .hero-banner-content {
+    padding-bottom: 48px;
+  }
+}

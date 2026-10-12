@@ -165,6 +165,26 @@
               "value": "right"
             }
           ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "arrowColor",
+          "label": "Arrow Color",
+          "value": "white",
+          "condition": {
+            "!==": [{ "var": "arrowDirection" }, "none"]
+          },
+          "options": [
+            {
+              "name": "White",
+              "value": "white"
+            },
+            {
+              "name": "Black",
+              "value": "black"
+            }
+          ]
         }
       ]
     }

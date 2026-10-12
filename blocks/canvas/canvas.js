@@ -119,6 +119,123 @@ function toPositiveInt(value, fallback = 0) {
   return Math.max(parsed, 0);
 }
 
+function normalizeMotionType(value) {
+  const normalized = String(value || 'none').trim().toLowerCase().replace(/\s+/g, '-');
+  return ['none', 'fade', 'slide-up'].includes(normalized) ? normalized : 'none';
+}
+
+function normalizeCanvasStyle(value) {
+  const normalized = String(value || 'default').trim().toLowerCase().replace(/\s+/g, '-');
+  return ['default', 'floating-sticky'].includes(normalized) ? normalized : 'default';
+}
+
+const floatingCanvasSearches = new Set();
+let floatingSearchListenersAttached = false;
+
+function updateFloatingCanvasSearches() {
+  const entries = [...floatingCanvasSearches]
+    .filter((entry) => {
+      if (entry.block.isConnected) return true;
+      entry.scrollTargets.forEach((target) => {
+        target.removeEventListener('scroll', updateFloatingCanvasSearches);
+      });
+      floatingCanvasSearches.delete(entry);
+      return false;
+    })
+    .sort((first, second) => {
+      const relation = first.block.compareDocumentPosition(second.block);
+      return relation === Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+    });
+  const passedEntries = entries.filter((entry) => {
+    const dockTop = window.innerHeight - entry.search.offsetHeight - 16;
+    return entry.sentinel.getBoundingClientRect().top <= dockTop + 1;
+  });
+  const activeEntry = passedEntries.findLast((entry) => {
+    const dockTop = window.innerHeight - entry.search.offsetHeight - 16;
+    return entry.block.getBoundingClientRect().bottom > dockTop;
+  }) || null;
+  const exitingEntry = activeEntry
+    ? null
+    : passedEntries[passedEntries.length - 1] || null;
+
+  entries.forEach((entry) => {
+    const isFloating = entry === activeEntry;
+    const isFadingOut = entry === exitingEntry;
+    entry.anchor.classList.toggle('is-floating', isFloating);
+    entry.anchor.classList.toggle('is-fading-out', isFadingOut);
+    entry.anchor.style.height = isFloating ? `${entry.search.offsetHeight}px` : '';
+
+    if (isFloating || isFadingOut) {
+      entry.search.classList.toggle('is-floating', isFloating);
+      entry.search.classList.toggle('is-fading-out', isFadingOut);
+      if (entry.search.parentElement !== entry.block) entry.block.append(entry.search);
+    } else {
+      entry.search.classList.remove('is-floating', 'is-fading-out');
+      if (entry.search.parentElement !== entry.anchor) entry.anchor.append(entry.search);
+    }
+  });
+}
+
+function attachCanvasEffects(block, search) {
+  if (block.classList.contains('canvas-floating-sticky')) {
+    const anchor = document.createElement('div');
+    anchor.className = 'canvas-floating-anchor';
+    const sentinel = document.createElement('span');
+    sentinel.className = 'canvas-floating-sentinel';
+    sentinel.setAttribute('aria-hidden', 'true');
+    search.before(anchor);
+    anchor.append(sentinel, search);
+    const entry = {
+      block,
+      anchor,
+      search,
+      sentinel,
+      scrollTargets: [],
+    };
+    floatingCanvasSearches.add(entry);
+    let ancestor = block.parentElement;
+    while (ancestor && ancestor !== document.body) {
+      const { overflowX, overflowY } = getComputedStyle(ancestor);
+      if (/(auto|scroll)/.test(`${overflowX} ${overflowY}`)) {
+        ancestor.addEventListener('scroll', updateFloatingCanvasSearches, {
+          passive: true,
+        });
+        entry.scrollTargets.push(ancestor);
+      }
+      ancestor = ancestor.parentElement;
+    }
+    if (!floatingSearchListenersAttached) {
+      document.addEventListener(
+        'scroll',
+        updateFloatingCanvasSearches,
+        true,
+      );
+      window.addEventListener(
+        'scroll',
+        updateFloatingCanvasSearches,
+        {
+          passive: true,
+        },
+      );
+      window.addEventListener('resize', updateFloatingCanvasSearches);
+      floatingSearchListenersAttached = true;
+    }
+    updateFloatingCanvasSearches();
+  }
+}
+
+function attachCanvasMotion(block) {
+  if (block.dataset.motionType === 'none') return;
+
+  const observer = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) {
+      block.classList.add('is-motion-visible');
+      observer.disconnect();
+    }
+  });
+  observer.observe(block);
+}
+
 function createImageElement(source, altText) {
   if (!source) return null;
 
@@ -148,9 +265,10 @@ function createImageElement(source, altText) {
       return null;
     }
 
-    if (trimmed.startsWith('/') || trimmed.startsWith('http') || trimmed.startsWith('data:')) {
+    const isRelativeImagePath = /\.(avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(trimmed);
+    if (trimmed.startsWith('/') || trimmed.startsWith('http') || trimmed.startsWith('data:') || isRelativeImagePath) {
       const image = document.createElement('img');
-      image.src = trimmed;
+      image.src = new URL(trimmed, document.baseURI).href;
       image.alt = altText || 'Canvas icon';
       image.setAttribute('loading', 'lazy');
       return image;
@@ -205,188 +323,311 @@ function normalizeNavigationPath(value = '') {
     : `/${candidate.replace(/\/+$/, '')}`;
 }
 
-function buildNavigationCandidates(rootPath, depth = 3) {
+function buildNavigationTree(indexData, rootPath, depth = 3) {
   const normalizedRoot = normalizeNavigationPath(rootPath);
-  const paths = new Set();
-
-  if (normalizedRoot && normalizedRoot !== '/') {
-    paths.add(normalizedRoot);
-    paths.add(`${normalizedRoot}/`);
-    paths.add(`${normalizedRoot}/.nav.json`);
-    paths.add(`${normalizedRoot}/nav.json`);
-    paths.add(`${normalizedRoot}/nav`);
-    paths.add(`${normalizedRoot}/navigation.json`);
-    paths.add(`${normalizedRoot}/index.json`);
-    paths.add(`${normalizedRoot}.json`);
-  }
-
-  paths.add('/nav');
-  paths.add('/nav.json');
-  paths.add('/.nav.json');
-  paths.add('/content.json');
-
-  const maxDepth = Math.max(1, Number.isFinite(depth) ? depth : 3);
-  if (maxDepth > 1) {
-    paths.add(
-      `/${normalizedRoot
-        .replace(/^\//, '')
-        .split('/')
-        .filter(Boolean)
-        .slice(0, maxDepth)
-        .join('/')}`,
-    );
-  }
-
-  return [...paths].filter(Boolean);
-}
-
-function extractNavItemsFromJson(payload) {
-  if (!payload) return [];
-
-  const nodes = Array.isArray(payload)
-    ? payload
-    : payload.items || payload.children || payload.data || payload.nav || payload.navigation || [];
-
-  if (!Array.isArray(nodes)) {
-    return [];
-  }
-
-  const items = [];
-
-  const walk = (list, depth = 0, maxDepth = 3) => {
-    if (!Array.isArray(list) || depth > maxDepth) return;
-
-    list.forEach((item) => {
-      if (!item) return;
-
-      const title = item.title || item.name || item.label || item.text || '';
-      const href = item.path || item.href || item.url || item.link || '';
-
-      if (title && href) {
-        items.push({ title: String(title).trim(), href: String(href).trim() });
-      }
-
-      const children = item.items || item.children || item.subItems || item.subitems || [];
-      if (children.length) {
-        walk(children, depth + 1, maxDepth);
-      }
+  const maxDepth = Math.min(3, Math.max(1, toPositiveInt(depth, 3)));
+  const entries = indexData
+    .filter((item) => item.path && String(item.hideInNav).toLowerCase() !== 'true')
+    .map((item) => ({
+      title: String(item.title || item.path.split('/').filter(Boolean).pop()).trim(),
+      href: normalizeNavigationPath(item.path),
+      navOrder: Number(item.navOrder) || 99,
+    }))
+    .filter((item) => item.title)
+    .filter((item) => {
+      if (normalizedRoot === '/') return item.href !== '/';
+      return item.href === normalizedRoot || item.href.startsWith(`${normalizedRoot}/`);
     });
+
+  const getRelativeDepth = (path) => {
+    const relativePath = normalizedRoot === '/'
+      ? path
+      : path.slice(normalizedRoot.length);
+    return relativePath.split('/').filter(Boolean).length;
   };
 
-  walk(nodes);
-
-  return items.filter((item, index, array) => {
-    const key = `${item.title}|${item.href}`;
-    return array.findIndex((entry) => `${entry.title}|${entry.href}` === key) === index;
+  const byOrder = (first, second) => first.navOrder - second.navOrder;
+  const makeNode = (entry, children = []) => ({
+    title: entry.title,
+    href: entry.href,
+    children,
   });
+
+  return entries
+    .filter((entry) => getRelativeDepth(entry.href) === 1)
+    .sort(byOrder)
+    .map((l1) => {
+      const l2Items = maxDepth >= 2
+        ? entries
+          .filter((entry) => getRelativeDepth(entry.href) === 2
+            && entry.href.startsWith(`${l1.href}/`))
+          .sort(byOrder)
+        : [];
+
+      const children = l2Items.map((l2) => {
+        const l3Items = maxDepth >= 3
+          ? entries
+            .filter((entry) => getRelativeDepth(entry.href) === 3
+              && entry.href.startsWith(`${l2.href}/`))
+            .sort(byOrder)
+            .map((l3) => makeNode(l3))
+          : [];
+        return makeNode(l2, l3Items);
+      });
+
+      return makeNode(l1, children);
+    });
 }
 
 async function fetchNavigationData(rootPath, depth = 3) {
-  const candidates = buildNavigationCandidates(rootPath, depth);
-
-  const results = await Promise.all(candidates.map(async (candidate) => {
-    try {
-      const url = candidate.startsWith('http')
-        ? candidate
-        : `${window.location.origin}${candidate}`;
-      const response = await fetch(url, { cache: 'no-store' });
-
-      if (!response.ok) return [];
-
-      const contentType = response.headers.get('content-type') || '';
-      const text = await response.text();
-
-      if (!text) return [];
-
-      if (contentType.includes('application/json')
-                || text.trim().startsWith('{')
-                || text.trim().startsWith('[')) {
-        try {
-          const payload = JSON.parse(text);
-          const items = extractNavItemsFromJson(payload);
-          if (items.length) return items;
-        } catch (error) {
-          // ignore malformed JSON and continue to next candidate
-        }
-      }
-
-      const doc = new DOMParser().parseFromString(text, 'text/html');
-      const scriptPattern = /^javascript:/i;
-      const links = [...doc.querySelectorAll('a[href]')]
-        .map((link) => ({
-          title: link.textContent.trim(),
-          href: link.getAttribute('href') || '',
-        }))
-        .filter((item) => item.title && item.href && !scriptPattern.test(item.href))
-        .map((item) => ({
-          title: item.title,
-          href: item.href.startsWith('/')
-            ? item.href
-            : new URL(item.href, window.location.origin).href,
-        }));
-
-      return links.length ? links.slice(0, 10) : [];
-    } catch (error) {
-      return [];
-    }
-  }));
-
-  return results.find((items) => items.length) || [];
+  try {
+    const response = await fetch('/query-index.json', { cache: 'no-store' });
+    if (!response.ok) return [];
+    const payload = await response.json();
+    const indexData = Array.isArray(payload) ? payload : payload.data || [];
+    return buildNavigationTree(indexData, rootPath, depth);
+  } catch (error) {
+    return [];
+  }
 }
 
 async function renderNavigationMenu(menuButton, data) {
-  const navPanel = menuButton.parentElement?.querySelector('.canvas-nav-panel');
-
-  if (navPanel && navPanel.dataset.loaded === 'true') {
-    navPanel.classList.toggle('is-open');
-    return;
-  }
-
-  const panel = document.createElement('div');
-  panel.className = 'canvas-nav-panel';
-
-  const list = document.createElement('ul');
-  list.className = 'canvas-nav-list';
-
   const rootPath = normalizeNavigationPath(data.canvasNavRootPath || data.canvasnavrootpath || '/');
   const depth = toPositiveInt(data.canvasNavDepth || data.canvasnavdepth, 3);
   const items = await fetchNavigationData(rootPath, depth);
+  const wrapper = menuButton.closest('.canvas-search');
+  const toolbar = wrapper.querySelector('.canvas-search-toolbar');
+  const panel = document.createElement('div');
+  panel.className = 'canvas-nav-panel';
 
-  if (!items.length) {
-    const fallbackItem = document.createElement('li');
-    fallbackItem.className = 'canvas-nav-item';
-    const fallbackLink = document.createElement('a');
-    fallbackLink.href = '/';
-    fallbackLink.textContent = 'Home';
-    fallbackItem.appendChild(fallbackLink);
-    list.appendChild(fallbackItem);
-  } else {
-    items.forEach((item) => {
-      const navItem = document.createElement('li');
-      navItem.className = 'canvas-nav-item';
-      const link = document.createElement('a');
-      link.href = item.href;
-      link.textContent = item.title;
-      navItem.appendChild(link);
-      list.appendChild(navItem);
+  const submenu = document.createElement('div');
+  submenu.className = 'canvas-nav-submenu';
+  submenu.setAttribute('aria-live', 'polite');
+
+  const navRow = document.createElement('div');
+  navRow.className = 'canvas-nav-row';
+  panel.append(submenu, navRow);
+
+  const state = {
+    level: 'l1',
+    activeL1: null,
+    activeL2: null,
+  };
+
+  let closeNavigation;
+
+  const onOutsideClick = (event) => {
+    if (!wrapper.contains(event.target)) closeNavigation();
+  };
+
+  closeNavigation = () => {
+    panel.remove();
+    menuButton.classList.remove('is-close');
+    menuButton.setAttribute('aria-label', 'Open navigation');
+    menuButton.setAttribute('aria-expanded', 'false');
+    menuButton.replaceChildren();
+    const icon = createImageElement(data.canvasMenuIcon || data.menuIcon, 'Open navigation');
+    if (icon) menuButton.appendChild(icon);
+    else {
+      const fallback = document.createElement('span');
+      fallback.className = 'canvas-icon-fallback';
+      fallback.textContent = 'Menu';
+      menuButton.appendChild(fallback);
+    }
+    menuButton.onclick = async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      await renderNavigationMenu(menuButton, data);
+    };
+    toolbar.prepend(menuButton);
+    document.removeEventListener('click', onOutsideClick);
+  };
+
+  const setToggle = () => {
+    menuButton.replaceChildren();
+    const isL1 = state.level === 'l1';
+    menuButton.setAttribute('aria-label', isL1 ? 'Close navigation' : 'Show L1 navigation');
+    menuButton.setAttribute('aria-expanded', 'true');
+    menuButton.classList.toggle('is-close', isL1);
+
+    if (isL1) {
+      menuButton.textContent = '×';
+    } else {
+      const icon = createImageElement(data.canvasMenuIcon || data.menuIcon, '');
+      if (icon) menuButton.appendChild(icon);
+      else menuButton.textContent = '☰';
+    }
+  };
+
+  const makeLink = (item, className) => {
+    const link = document.createElement('a');
+    link.className = className;
+    link.href = item.href || '#';
+    link.textContent = item.title;
+    if (!item.href) link.setAttribute('aria-disabled', 'true');
+    return link;
+  };
+
+  const makeLevelButton = (item, className, onActivate) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = className;
+    button.textContent = item.title;
+    button.setAttribute('aria-expanded', 'false');
+    button.addEventListener('mouseenter', onActivate);
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      onActivate();
     });
+    return button;
+  };
+
+  const render = () => {
+    navRow.replaceChildren();
+    submenu.replaceChildren();
+    setToggle();
+
+    if (state.level === 'l1') {
+      navRow.appendChild(menuButton);
+      items.forEach((item) => {
+        if (item.children.length) {
+          navRow.appendChild(makeLevelButton(item, 'canvas-nav-item canvas-nav-l1', () => {
+            state.level = 'l2';
+            state.activeL1 = item;
+            state.activeL2 = null;
+            render();
+          }));
+        } else {
+          navRow.appendChild(makeLink(item, 'canvas-nav-item canvas-nav-l1'));
+        }
+      });
+      return;
+    }
+
+    navRow.appendChild(menuButton);
+    const activeL1Button = document.createElement('button');
+    activeL1Button.type = 'button';
+    activeL1Button.className = 'canvas-nav-item canvas-nav-l1 is-active';
+    activeL1Button.textContent = state.activeL1.title;
+    activeL1Button.setAttribute('aria-label', `Show ${state.activeL1.title} subnavigation`);
+    activeL1Button.addEventListener('click', () => {
+      state.level = 'l1';
+      state.activeL1 = null;
+      state.activeL2 = null;
+      render();
+    });
+    navRow.appendChild(activeL1Button);
+
+    state.activeL1.children.forEach((item) => {
+      const activateL2 = () => {
+        if (state.activeL2 === item) return;
+        state.activeL2 = item.children.length ? item : null;
+        render();
+      };
+      if (item.children.length) {
+        const button = makeLevelButton(item, 'canvas-nav-item canvas-nav-l2', activateL2);
+        if (state.activeL2 === item) {
+          button.classList.add('is-active');
+          button.setAttribute('aria-expanded', 'true');
+        }
+        navRow.appendChild(button);
+      } else {
+        navRow.appendChild(makeLink(item, 'canvas-nav-item canvas-nav-l2'));
+      }
+    });
+
+    if (state.activeL2) {
+      const list = document.createElement('ul');
+      list.className = 'canvas-nav-list';
+      state.activeL2.children.forEach((item) => {
+        const entry = document.createElement('li');
+        entry.className = 'canvas-nav-item';
+        entry.appendChild(makeLink(item, 'canvas-nav-l3'));
+        list.appendChild(entry);
+      });
+      submenu.appendChild(list);
+      submenu.classList.add('is-open');
+    }
+  };
+
+  menuButton.onclick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (state.level === 'l1') {
+      closeNavigation();
+      return;
+    }
+    state.level = 'l1';
+    state.activeL1 = null;
+    state.activeL2 = null;
+    render();
+  };
+
+  panel.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeNavigation();
+    }
+  });
+
+  wrapper.appendChild(panel);
+  document.addEventListener('click', onOutsideClick);
+  render();
+}
+
+function setupVoiceSearch(button, input) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    button.disabled = true;
+    button.setAttribute('aria-disabled', 'true');
+    button.title = 'Voice search is not supported in this browser';
+    return;
   }
 
-  panel.appendChild(list);
-  panel.dataset.loaded = 'true';
+  let recognition;
+  let isListening = false;
 
-  if (navPanel) {
-    navPanel.replaceWith(panel);
-  } else {
-    menuButton.parentElement.appendChild(panel);
-  }
+  const setListening = (listening) => {
+    isListening = listening;
+    button.classList.toggle('is-listening', listening);
+    button.setAttribute('aria-pressed', String(listening));
+    button.setAttribute('aria-label', listening ? 'Stop voice search' : 'Use microphone');
+    button.title = listening ? 'Listening...' : 'Use microphone';
+  };
 
-  panel.classList.add('is-open');
+  button.addEventListener('click', () => {
+    if (isListening) {
+      recognition.stop();
+      return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.lang = document.documentElement.lang || navigator.language || 'en-US';
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.onstart = () => setListening(true);
+    recognition.onresult = (event) => {
+      const transcript = [...event.results]
+        .map((result) => result[0].transcript)
+        .join(' ')
+        .trim();
+      if (transcript) {
+        input.value = transcript;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    };
+    recognition.onerror = () => setListening(false);
+    recognition.onend = () => setListening(false);
+
+    try {
+      recognition.start();
+    } catch (error) {
+      setListening(false);
+    }
+  });
 }
 
 function createSearchBar({
   watermark,
-  showNavigation,
   showMicrophone,
   menuIcon,
   microphoneIcon,
@@ -395,22 +636,23 @@ function createSearchBar({
   const wrapper = document.createElement('div');
   wrapper.className = 'canvas-search';
 
-  if (showNavigation) {
-    const menuButton = createIconButton({
-      className: 'canvas-menu-btn',
-      label: 'Open navigation',
-      iconSource: menuIcon,
-      fallbackText: 'Menu',
-    });
+  const toolbar = document.createElement('div');
+  toolbar.className = 'canvas-search-toolbar';
 
-    menuButton.addEventListener('click', async (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      await renderNavigationMenu(menuButton, data);
-    });
+  const menuButton = createIconButton({
+    className: 'canvas-menu-btn',
+    label: 'Open navigation',
+    iconSource: menuIcon,
+    fallbackText: 'Menu',
+  });
 
-    wrapper.append(menuButton);
-  }
+  menuButton.onclick = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    await renderNavigationMenu(menuButton, data);
+  };
+
+  toolbar.append(menuButton);
 
   const container = document.createElement('div');
   container.className = 'canvas-search-container';
@@ -418,23 +660,25 @@ function createSearchBar({
   const searchInput = document.createElement('div');
   searchInput.className = 'canvas-search-input';
 
-  const placeholder = document.createElement('span');
-  placeholder.className = 'canvas-placeholder';
-  placeholder.textContent = watermark || DEFAULT_SEARCH_WATERMARK;
-  searchInput.appendChild(placeholder);
+  const searchField = document.createElement('input');
+  searchField.type = 'search';
+  searchField.className = 'canvas-search-field';
+  searchField.placeholder = watermark || DEFAULT_SEARCH_WATERMARK;
+  searchField.setAttribute('aria-label', watermark || DEFAULT_SEARCH_WATERMARK);
+  searchInput.appendChild(searchField);
 
   const controls = document.createElement('div');
   controls.className = 'canvas-controls';
 
   if (showMicrophone) {
-    controls.append(
-      createIconButton({
-        className: 'canvas-mic-btn',
-        label: 'Use microphone',
-        iconSource: microphoneIcon,
-        fallbackText: 'Mic',
-      }),
-    );
+    const microphoneButton = createIconButton({
+      className: 'canvas-mic-btn',
+      label: 'Use microphone',
+      iconSource: microphoneIcon,
+      fallbackText: 'Mic',
+    });
+    setupVoiceSearch(microphoneButton, searchField);
+    controls.append(microphoneButton);
   }
 
   const submit = document.createElement('button');
@@ -446,21 +690,39 @@ function createSearchBar({
 
   searchInput.appendChild(controls);
   container.appendChild(searchInput);
-  wrapper.appendChild(container);
-
-  document.addEventListener('click', (event) => {
-    const navPanel = wrapper.querySelector('.canvas-nav-panel');
-    if (!navPanel || wrapper.contains(event.target)) return;
-    navPanel.classList.remove('is-open');
-  });
+  toolbar.appendChild(container);
+  wrapper.appendChild(toolbar);
 
   return wrapper;
 }
 
 function renderSearchCanvas(block, data) {
+  const titleText = data.canvasTitle || data.canvastitle || '';
+  const descriptionText = data.canvasDescription || data.canvasdescription || '';
+
+  if (titleText || descriptionText) {
+    const intro = document.createElement('div');
+    intro.className = 'canvas-search-intro';
+
+    if (titleText) {
+      const title = document.createElement('h2');
+      title.className = 'canvas-title';
+      title.textContent = titleText;
+      intro.appendChild(title);
+    }
+
+    if (descriptionText) {
+      const description = document.createElement('div');
+      description.className = 'canvas-description';
+      description.innerHTML = descriptionText;
+      intro.appendChild(description);
+    }
+
+    block.appendChild(intro);
+  }
+
   const search = createSearchBar({
     watermark: data.canvasSearchWatermark || data.searchWatermark || '',
-    showNavigation: asBoolean(data.showNavigation, true),
     showMicrophone: asBoolean(data.showMicrophone, true),
     menuIcon: data.canvasMenuIcon || data.menuIcon,
     microphoneIcon: data.canvasMicrophoneIcon || data.microphoneIcon || data.searchIcon,
@@ -468,6 +730,8 @@ function renderSearchCanvas(block, data) {
   });
 
   block.appendChild(search);
+  attachCanvasEffects(block, search);
+  attachCanvasMotion(block);
 }
 
 async function fetchIntentOptions(maxOptions = 5) {
@@ -498,6 +762,8 @@ async function renderIntentCanvas(block, data) {
 
   const content = document.createElement('div');
   content.className = 'canvas-intent-content';
+  const optionsFrame = document.createElement('div');
+  optionsFrame.className = 'canvas-intent-options-frame';
 
   const titleText = data.canvasTitle || data.canvastitle || '';
   if (titleText) {
@@ -522,7 +788,6 @@ async function renderIntentCanvas(block, data) {
     searchSlot.append(
       createSearchBar({
         watermark: data.canvasSearchWatermark || data.searchWatermark || '',
-        showNavigation: asBoolean(data.showNavigation, true),
         showMicrophone: asBoolean(data.showMicrophone, true),
         menuIcon: data.canvasMenuIcon || data.menuIcon,
         microphoneIcon: data.canvasMicrophoneIcon || data.microphoneIcon || data.searchIcon,
@@ -536,26 +801,38 @@ async function renderIntentCanvas(block, data) {
   const optionsContainer = document.createElement('div');
   optionsContainer.className = 'canvas-options';
 
-  const maxOptions = Math.max(
-    0,
+  const maxOptions = Math.min(
+    5,
     toPositiveInt(data.maximumOptions || data.maximumoptions, 5),
   );
 
   const options = await fetchIntentOptions(maxOptions);
 
-  options.forEach((item) => {
+  options.forEach((item, index) => {
     const option = document.createElement('a');
 
     option.className = 'canvas-option-pill';
     option.href = item.url || '#';
     option.textContent = item.label || '';
 
-    optionsContainer.appendChild(option);
+    const rowIndex = Math.floor(index / 3);
+    let row = optionsContainer.children[rowIndex];
+    if (!row) {
+      row = document.createElement('div');
+      row.className = 'canvas-options-row';
+      optionsContainer.appendChild(row);
+    }
+    row.appendChild(option);
   });
 
-  content.appendChild(optionsContainer);
+  optionsFrame.appendChild(optionsContainer);
   section.appendChild(content);
+  section.appendChild(optionsFrame);
   block.appendChild(section);
+
+  const search = searchSlot.querySelector('.canvas-search');
+  if (search) attachCanvasEffects(block, search);
+  attachCanvasMotion(block);
 }
 
 export default function decorate(block) {
@@ -572,16 +849,15 @@ export default function decorate(block) {
 
   const canvasType = String(data.canvasType || data.canvastype || 'search').trim().toLowerCase();
   const normalizedType = canvasType === 'intent' ? 'intent' : 'search';
-  const canvasStyle = String(data.canvasStyle || data.canvasstyle || 'default').trim().toLowerCase();
+  const canvasStyle = normalizeCanvasStyle(data.canvasStyle || data.canvasstyle);
+  const motionType = normalizeMotionType(data.motionType || data.motiontype);
 
   block.classList.add('canvas');
   block.classList.add(`canvas-${normalizedType}`);
+  block.dataset.motionType = motionType;
 
-  if (canvasStyle === 'floating-sticky' || canvasStyle === 'floatingsticky') {
-    block.classList.add('canvas-floating-sticky');
-  } else {
-    block.classList.add('canvas-default');
-  }
+  block.dataset.canvasStyle = canvasStyle;
+  block.classList.add('canvas-default');
 
   if (normalizedType === 'intent') {
     renderIntentCanvas(block, data, optionList);

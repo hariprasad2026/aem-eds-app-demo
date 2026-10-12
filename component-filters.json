@@ -32,6 +32,7 @@
       "fragment",
       "hero",
       "hero2",
+      "hero-banner",
       "industry-list",
       "intro-statement",
       "list",
@@ -68,12 +69,6 @@
     "components": [
       "canvas-search-hero-settings",
       "canvas-search-hero-cta"
-    ]
-  },
-  {
-    "id": "canvas",
-    "components": [
-      "canvas-option"
     ]
   },
   {
@@ -142,6 +137,12 @@
   },
   {
     "id": "hero2",
+    "components": [
+      "cta-item"
+    ]
+  },
+  {
+    "id": "hero-banner",
     "components": [
       "cta-item"
     ]

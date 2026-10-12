@@ -131,6 +131,38 @@
               "component": "richtext",
               "name": "canvasDescription",
               "label": "Canvas Description"
+            },
+            {
+              "component": "select",
+              "name": "showNavigation",
+              "label": "Show Navigation",
+              "value": "true",
+              "options": [
+                {
+                  "name": "Enabled",
+                  "value": "true"
+                },
+                {
+                  "name": "Disabled",
+                  "value": "false"
+                }
+              ]
+            },
+            {
+              "component": "select",
+              "name": "showMicrophone",
+              "label": "Show Microphone",
+              "value": "true",
+              "options": [
+                {
+                  "name": "Enabled",
+                  "value": "true"
+                },
+                {
+                  "name": "Disabled",
+                  "value": "false"
+                }
+              ]
             }
           ]
         },
@@ -139,20 +171,15 @@
           "name": "searchCanvasSettings",
           "label": "Search Canvas Settings",
           "collapsible": false,
-          "condition": { "==": [{ "var": "canvasType" }, "search"] },
+          "condition": {
+            "==": [
+              {
+                "var": "canvasType"
+              },
+              "search"
+            ]
+          },
           "fields": [
-            {
-              "component": "checkbox",
-              "name": "showNavigation",
-              "label": "Show Navigation",
-              "value": true
-            },
-            {
-              "component": "checkbox",
-              "name": "showMicrophone",
-              "label": "Show Microphone",
-              "value": true
-            },
             {
               "component": "aem-content",
               "name": "canvasNavRootPath",
@@ -171,25 +198,30 @@
           "name": "intentCanvasSettings",
           "label": "Intent Canvas Settings",
           "collapsible": false,
-          "condition": { "==": [{ "var": "canvasType" }, "intent"] },
+          "condition": {
+            "==": [
+              {
+                "var": "canvasType"
+              },
+              "intent"
+            ]
+          },
           "fields": [
             {
-              "component": "checkbox",
+              "component": "select",
               "name": "enableSearch",
               "label": "Enable Search",
-              "value": true
-            },
-            {
-              "component": "checkbox",
-              "name": "showNavigation",
-              "label": "Show Navigation",
-              "value": true
-            },
-            {
-              "component": "checkbox",
-              "name": "showMicrophone",
-              "label": "Show Microphone",
-              "value": true
+              "value": "true",
+              "options": [
+                {
+                  "name": "Enabled",
+                  "value": "true"
+                },
+                {
+                  "name": "Disabled",
+                  "value": "false"
+                }
+              ]
             },
             {
               "component": "number",
@@ -212,29 +244,7 @@
           ]
         }
       ]
-    },
-    {
-      "id": "canvas-option",
-      "fields": [
-        {
-          "component": "text",
-          "name": "optionLabel",
-          "label": "Option Label"
-        },
-        {
-          "component": "text",
-          "name": "optionLink",
-          "label": "Option Link"
-        }
-      ]
     }
   ],
-  "filters": [
-    {
-      "id": "canvas",
-      "components": [
-        "canvas-option"
-      ]
-    }
-  ]
+  "filters": []
 }

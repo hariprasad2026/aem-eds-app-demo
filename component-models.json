@@ -1242,6 +1242,89 @@
     ]
   },
   {
+    "id": "carousel",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "carouselType",
+        "label": "Carousel Type",
+        "value": "slider",
+        "options": [
+          {
+            "name": "Slider (default)",
+            "value": "slider"
+          },
+          {
+            "name": "Slides Only",
+            "value": "slides-only"
+          },
+          {
+            "name": "With Controls",
+            "value": "with-controls"
+          },
+          {
+            "name": "With Indicators",
+            "value": "with-indicators"
+          },
+          {
+            "name": "With Captions",
+            "value": "with-captions"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "slideAlignment",
+        "label": "Slide Alignment",
+        "value": "center",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "slideVerticalAlignment",
+        "label": "Vertical Alignment",
+        "value": "middle",
+        "options": [
+          {
+            "name": "Top",
+            "value": "top"
+          },
+          {
+            "name": "Middle",
+            "value": "middle"
+          },
+          {
+            "name": "Bottom",
+            "value": "bottom"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "motionType",
+        "label": "Motion Type",
+        "value": ""
+      }
+    ]
+  },
+  {
     "id": "carousel-item",
     "fields": [
       {
@@ -1256,7 +1339,7 @@
         "valueType": "string",
         "name": "media_imageAlt",
         "value": "",
-        "label": "Bacgkround Alt"
+        "label": "Background Alt"
       },
       {
         "component": "richtext",
@@ -1264,6 +1347,46 @@
         "value": "",
         "label": "Text",
         "valueType": "string"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "content_align",
+        "label": "Horizontal Alignment",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "content_valign",
+        "label": "Vertical Alignment",
+        "options": [
+          {
+            "name": "Top",
+            "value": "top"
+          },
+          {
+            "name": "Middle",
+            "value": "middle"
+          },
+          {
+            "name": "Bottom",
+            "value": "bottom"
+          }
+        ]
       }
     ]
   },

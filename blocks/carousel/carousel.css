@@ -56,6 +56,33 @@
   margin: 0;
 }
 
+.carousel .carousel-slide:has(.carousel-slide-content[data-align='left']),
+.carousel .carousel-slide[data-align='left'] {
+  align-items: flex-start;
+}
+
+.carousel .carousel-slide:has(.carousel-slide-content[data-align='center']),
+.carousel .carousel-slide[data-align='center'] {
+  align-items: center;
+}
+
+.carousel .carousel-slide:has(.carousel-slide-content[data-align='right']),
+.carousel .carousel-slide[data-align='right'] {
+  align-items: flex-end;
+}
+
+.carousel .carousel-slide:has(.carousel-slide-content[data-valign='top']) {
+  justify-content: flex-start;
+}
+
+.carousel .carousel-slide:has(.carousel-slide-content[data-valign='middle']) {
+  justify-content: center;
+}
+
+.carousel .carousel-slide:has(.carousel-slide-content[data-valign='bottom']) {
+  justify-content: flex-end;
+}
+
 .carousel .carousel-slide .carousel-slide-image picture {
   position: absolute;
   inset: 0;

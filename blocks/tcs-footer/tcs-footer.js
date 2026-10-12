@@ -128,14 +128,17 @@ export default function decorate(block) {
 
   // 1. Heading Title (First row of block)
   const mainTitleRow = blockRows.shift();
-  const titleText = mainTitleRow?.textContent.trim() || "Let's build the future together";
+  const rawTitle = mainTitleRow?.textContent.trim();
+  const titleText = rawTitle
+    ? rawTitle.replace("Let's build the future together", "Let's build the<br>future together")
+    : "Let's build the<br>future together";
 
   const footerContainer = document.createElement('div');
   footerContainer.className = 'tcs-footer-container';
 
   const heading = document.createElement('h2');
   heading.className = 'tcs-footer-heading';
-  heading.textContent = titleText;
+  heading.innerHTML = titleText;
   footerContainer.append(heading);
 
   // Floating Control Bar Containers

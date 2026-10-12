@@ -182,22 +182,10 @@
 .tcs-header .dock-hamburger-btn span::before,
 .tcs-header .dock-hamburger-btn span::after {
   position: absolute;
-  width: 16px;
+  width: 18px;
   height: 2px;
   background: #4a4a4a;
   content: '';
-}
-
-.tcs-header .dock-hamburger-btn span {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.tcs-header .dock-hamburger-btn span::before,
-.tcs-header .dock-hamburger-btn span::after {
-  top: 0;
-  left: 0;
 }
 
 .tcs-header .dock-hamburger-btn span::before {
@@ -257,16 +245,11 @@
 
 .tcs-header .dock-mic-btn svg {
   width: 20px;
-  height: 24px;
-  fill: none;
-  stroke: currentcolor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  height: 20px;
+  fill: currentcolor;
 }
 
 .tcs-header .dock-submit-btn {
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -285,32 +268,11 @@
 }
 
 .tcs-header .dock-submit-btn svg {
-  display: none;
-}
-
-.tcs-header .dock-submit-btn::before,
-.tcs-header .dock-submit-btn::after {
-  position: absolute;
-  top: 50%;
-  content: '';
-}
-
-.tcs-header .dock-submit-btn::before {
-  left: calc(50% - 9px);
-  width: 16px;
-  height: 2px;
-  border-radius: 1px;
-  background: #fff;
-  transform: translateY(-50%);
-}
-
-.tcs-header .dock-submit-btn::after {
-  left: calc(50% + 1px);
-  width: 7px;
-  height: 7px;
-  border-top: 2px solid #fff;
-  border-right: 2px solid #fff;
-  transform: translateY(-50%) rotate(45deg);
+  width: 18px;
+  height: 18px;
+  stroke: currentcolor;
+  stroke-width: 2.5;
+  fill: none;
 }
 
 /* Navigation List */

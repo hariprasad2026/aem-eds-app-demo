@@ -10,6 +10,31 @@ const CAROUSEL_TYPES = {
   'with-captions': { controls: true, indicators: true },
 };
 
+function isBlockLikeNode(node) {
+  if (!node) return false;
+
+  const blockSelectors = [
+    '.block',
+    '[data-aue-resource]',
+    '[data-block-name]',
+    '[data-aue-prop]',
+    '.hero-banner',
+    '.cards',
+    '.columns',
+    '.content-cards',
+    '.accordion',
+    '.cta',
+    '.fragment',
+    '.spotlight',
+    '.statistics-list',
+    '.teaser-v1',
+    '.table',
+    '.quote',
+  ];
+
+  return node.matches?.(blockSelectors.join(', ')) || !!node.querySelector?.(blockSelectors.join(', '));
+}
+
 function updateActiveSlide(slide) {
   const block = slide.closest('.carousel');
   const slideIndex = Number.parseInt(slide.dataset.slideIndex, 10);
@@ -53,10 +78,11 @@ function isConfigRow(row) {
 
   const cell = cells[0];
   if (!cell) return false;
-  if (cell.querySelector('.block, [data-aue-resource], [data-block-name], [data-aue-prop]')) {
+  if (isBlockLikeNode(cell)) {
     return false;
   }
-  if (cell.querySelector('picture, img, a[href], h1, h2, h3, h4, h5, h6')) {
+  if (cell.matches?.('picture, img, a[href], h1, h2, h3, h4, h5, h6')
+    || cell.querySelector('picture, img, a[href], h1, h2, h3, h4, h5, h6')) {
     return false;
   }
 
@@ -131,10 +157,13 @@ function createSlide(row, slideIndex, carouselId) {
   slide.classList.add('carousel-slide');
 
   const directChildren = Array.from(row.children);
-  const nestedBlock = directChildren.find((child) => child.classList.contains('block') || child.querySelector('.block'));
+  const nestedBlock = directChildren.find((child) => isBlockLikeNode(child));
 
   if (nestedBlock) {
-    const contentNode = nestedBlock.classList.contains('block') ? nestedBlock : nestedBlock.querySelector('.block');
+    const contentNode = nestedBlock.matches?.('.block, [data-aue-resource], [data-block-name], [data-aue-prop], .hero-banner, .cards, .columns, .content-cards, .accordion, .cta, .fragment, .spotlight, .statistics-list, .teaser-v1, .table, .quote')
+      ? nestedBlock
+      : nestedBlock.querySelector('.block, [data-aue-resource], [data-block-name], [data-aue-prop], .hero-banner, .cards, .columns, .content-cards, .accordion, .cta, .fragment, .spotlight, .statistics-list, .teaser-v1, .table, .quote');
+
     if (contentNode) {
       contentNode.classList.add('carousel-slide-item');
       slide.append(contentNode);

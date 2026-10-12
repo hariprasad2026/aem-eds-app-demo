@@ -117,13 +117,15 @@
           "component": "richtext",
           "name": "description",
           "label": "Description / Summary",
-          "valueType": "string"
+          "valueType": "string",
+          "filter": "richtext"
         },
         {
           "component": "richtext",
           "name": "stats",
           "label": "Stats List / Author Info",
-          "valueType": "string"
+          "valueType": "string",
+          "filter": "richtext"
         },
         {
           "component": "aem-content",

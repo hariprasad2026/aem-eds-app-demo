@@ -27,10 +27,22 @@
           "rows": 1,
           "columns": 2,
           "fields": [
-            { "name": "image", "selector": "div:nth-child(1)>picture>img[src]" },
-            { "name": "imageAlt", "selector": "div:nth-child(1)>picture>img[alt]" },
-            { "name": "theme", "selector": "div:nth-child(2) [data-theme]" },
-            { "name": "text", "selector": "div:nth-child(2)" }
+            {
+              "name": "image",
+              "selector": "div:nth-child(1)>picture>img[src]"
+            },
+            {
+              "name": "imageAlt",
+              "selector": "div:nth-child(1)>picture>img[alt]"
+            },
+            {
+              "name": "theme",
+              "selector": "div:nth-child(2) [data-theme]"
+            },
+            {
+              "name": "text",
+              "selector": "div:nth-child(2)"
+            }
           ]
         },
         "xwalk": {
@@ -88,7 +100,8 @@
           "name": "text",
           "value": "",
           "label": "Text",
-          "valueType": "string"
+          "valueType": "string",
+          "filter": "richtext"
         }
       ]
     }

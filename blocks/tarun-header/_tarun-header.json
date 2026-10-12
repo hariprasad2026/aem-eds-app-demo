@@ -27,10 +27,22 @@
           "label": "Header Variant",
           "value": "standard",
           "options": [
-            { "name": "Standard", "value": "standard" },
-            { "name": "Compact", "value": "compact" },
-            { "name": "Dark", "value": "dark" },
-            { "name": "Centered", "value": "centered" }
+            {
+              "name": "Standard",
+              "value": "standard"
+            },
+            {
+              "name": "Compact",
+              "value": "compact"
+            },
+            {
+              "name": "Dark",
+              "value": "dark"
+            },
+            {
+              "name": "Centered",
+              "value": "centered"
+            }
           ]
         },
         {
@@ -64,7 +76,8 @@
           "valueType": "string",
           "name": "menu",
           "label": "Navigation Links",
-          "description": "Add top-level links or a bulleted list for submenus."
+          "description": "Add top-level links or a bulleted list for submenus.",
+          "filter": "richtext"
         }
       ]
     }

@@ -41,11 +41,6 @@ export default function decorate(block) {
 
     if (layoutField) {
       layout = normalizeLayout(layoutField.textContent);
-
-      if (layout === 'highlighted') {
-        details.classList.add('highlighted');
-      }
-
       if (layout === 'search') {
         hasSearch = true;
       }

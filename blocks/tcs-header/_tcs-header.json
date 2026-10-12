@@ -1,0 +1,80 @@
+{
+  "definitions": [
+    {
+      "title": "TCS Header",
+      "id": "tcs-header",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "TCS Header",
+              "model": "tcs-header"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "tcs-header",
+      "fields": [
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "headerVariant",
+          "label": "Header Variant",
+          "value": "standard",
+          "options": [
+            { "name": "Standard", "value": "standard" },
+            { "name": "Compact", "value": "compact" },
+            { "name": "Dark", "value": "dark" },
+            { "name": "Centered", "value": "centered" }
+          ]
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "tcsLogo",
+          "label": "TCS Logo Image"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "tcsLogoLink",
+          "label": "TCS Logo Target URL",
+          "value": "/"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "tataLogo",
+          "label": "Tata Logo Image"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "tataLogoLink",
+          "label": "Tata Logo Target URL",
+          "value": "https://www.tata.com"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "tcsLogoAlt",
+          "label": "TCS Logo Alt Text",
+          "value": "Tata Consultancy Services"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "tataLogoAlt",
+          "label": "Tata Logo Alt Text",
+          "value": "TATA Group"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

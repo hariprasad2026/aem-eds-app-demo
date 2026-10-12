@@ -32,15 +32,15 @@
       }
     },
     {
-      "title": "Hero 2",
+      "title": "Hero Banner",
       "id": "hero-banner-item",
       "plugins": {
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
-              "name": "Hero 2",
-              "model": "hero2"
+              "name": "Hero Banner",
+              "model": "hero-banner"
             }
           }
         }

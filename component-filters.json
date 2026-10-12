@@ -68,8 +68,7 @@
   {
     "id": "carousel",
     "components": [
-      "carousel-item",
-      "hero-banner-item"
+      "carousel-item"
     ]
   },
   {

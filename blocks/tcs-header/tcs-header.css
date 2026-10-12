@@ -182,10 +182,22 @@
 .tcs-header .dock-hamburger-btn span::before,
 .tcs-header .dock-hamburger-btn span::after {
   position: absolute;
-  width: 18px;
+  width: 16px;
   height: 2px;
   background: #4a4a4a;
   content: '';
+}
+
+.tcs-header .dock-hamburger-btn span {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.tcs-header .dock-hamburger-btn span::before,
+.tcs-header .dock-hamburger-btn span::after {
+  top: 0;
+  left: 0;
 }
 
 .tcs-header .dock-hamburger-btn span::before {
@@ -245,11 +257,16 @@
 
 .tcs-header .dock-mic-btn svg {
   width: 20px;
-  height: 20px;
-  fill: currentcolor;
+  height: 24px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .tcs-header .dock-submit-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -268,21 +285,46 @@
 }
 
 .tcs-header .dock-submit-btn svg {
-  width: 18px;
-  height: 18px;
-  stroke: currentcolor;
-  stroke-width: 2.5;
-  fill: none;
+  display: none;
+}
+
+.tcs-header .dock-submit-btn::before,
+.tcs-header .dock-submit-btn::after {
+  position: absolute;
+  top: 50%;
+  content: '';
+}
+
+.tcs-header .dock-submit-btn::before {
+  left: calc(50% - 9px);
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+  background: #fff;
+  transform: translateY(-50%);
+}
+
+.tcs-header .dock-submit-btn::after {
+  left: calc(50% + 1px);
+  width: 7px;
+  height: 7px;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #fff;
+  transform: translateY(-50%) rotate(45deg);
 }
 
 /* Navigation List */
 .tcs-header .dock-navigation {
-  display: flex;
+  display: none;
   justify-content: center;
   max-width: min(1200px, calc(100vw - 120px));
   overflow-x: auto;
   scrollbar-width: none;
   pointer-events: auto;
+}
+
+.tcs-header .floating-bottom-dock.is-menu-open .dock-navigation {
+  display: flex;
 }
 
 .tcs-header .dock-navigation::-webkit-scrollbar {
@@ -302,6 +344,64 @@
 .tcs-header .dock-item {
   position: relative;
   flex: 0 0 auto;
+}
+
+.tcs-header .dock-level-two-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tcs-header .dock-nav-back-btn {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 44px;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 96%);
+  cursor: pointer;
+}
+
+.tcs-header .dock-nav-back-btn span,
+.tcs-header .dock-nav-back-btn span::before,
+.tcs-header .dock-nav-back-btn span::after {
+  position: absolute;
+  width: 15px;
+  height: 2px;
+  background: #4a4a4a;
+  content: '';
+}
+
+.tcs-header .dock-nav-back-btn span::before,
+.tcs-header .dock-nav-back-btn span::after {
+  top: 0;
+  left: 0;
+}
+
+.tcs-header .dock-nav-back-btn span::before {
+  transform: translateY(-5px);
+}
+
+.tcs-header .dock-nav-back-btn span::after {
+  transform: translateY(5px);
+}
+
+.tcs-header .dock-hamburger-btn.is-open span {
+  background: transparent;
+}
+
+.tcs-header .dock-hamburger-btn.is-open span::before {
+  transform: rotate(45deg);
+}
+
+.tcs-header .dock-hamburger-btn.is-open span::after {
+  transform: rotate(-45deg);
 }
 
 .tcs-header .dock-pill-btn {

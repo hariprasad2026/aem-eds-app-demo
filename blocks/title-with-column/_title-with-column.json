@@ -49,7 +49,8 @@
       "components": [
         "title",
         "text",
-        "cta"
+        "cta",
+        "topic-list"
       ]
     }
   ]

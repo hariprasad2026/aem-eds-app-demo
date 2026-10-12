@@ -33,7 +33,7 @@
     },
     {
       "title": "Hero 2",
-      "id": "hero2-item",
+      "id": "hero-banner-item",
       "plugins": {
         "xwalk": {
           "page": {
@@ -267,7 +267,7 @@
   "filters": [
     {
       "id": "carousel",
-      "components": ["carousel-item", "hero2-item"]
+      "components": ["carousel-item", "hero-banner-item"]
     }
   ]
 }

@@ -50,7 +50,9 @@
       "teaser-v2",
       "text-with-link",
       "video",
-      "tcs-footer"
+      "tcs-footer",
+      "topic-list",
+      "title-with-column"
     ]
   },
   {
@@ -81,7 +83,7 @@
     "id": "carousel",
     "components": [
       "carousel-item",
-      "hero2-item"
+      "hero-banner-item"
     ]
   },
   {
@@ -242,7 +244,14 @@
     "components": [
       "title",
       "text",
-      "cta"
+      "cta",
+      "topic-list"
+    ]
+  },
+  {
+    "id": "topic-list",
+    "components": [
+      "topic-list-cta"
     ]
   },
   {

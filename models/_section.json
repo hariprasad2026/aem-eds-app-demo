@@ -85,7 +85,9 @@
         "teaser-v2",
         "text-with-link",
         "video",
-        "tcs-footer"
+        "tcs-footer",
+        "topic-list",
+        "title-with-column"
       ]
     }
   ]

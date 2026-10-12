@@ -21,10 +21,43 @@
       "id": "tcs-header",
       "fields": [
         {
+          "component": "select",
+          "valueType": "string",
+          "name": "headerVariant",
+          "label": "Header Variant",
+          "value": "standard",
+          "options": [
+            { "name": "Standard", "value": "standard" },
+            { "name": "Compact", "value": "compact" },
+            { "name": "Dark", "value": "dark" },
+            { "name": "Centered", "value": "centered" }
+          ]
+        },
+        {
           "component": "reference",
           "valueType": "string",
           "name": "tcsLogo",
-          "label": "TCS Logo"
+          "label": "TCS Logo Image"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "tcsLogoLink",
+          "label": "TCS Logo Target URL",
+          "value": "/"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "tataLogo",
+          "label": "Tata Logo Image"
+        },
+        {
+          "component": "text-input",
+          "valueType": "string",
+          "name": "tataLogoLink",
+          "label": "Tata Logo Target URL",
+          "value": "https://www.tata.com"
         },
         {
           "component": "text-input",
@@ -34,43 +67,11 @@
           "value": "Tata Consultancy Services"
         },
         {
-          "component": "pathfield",
-          "valueType": "string",
-          "name": "tcsLogoLink",
-          "label": "TCS Logo Link",
-          "value": "/"
-        },
-        {
-          "component": "reference",
-          "valueType": "string",
-          "name": "tataLogo",
-          "label": "Tata Logo"
-        },
-        {
           "component": "text-input",
           "valueType": "string",
           "name": "tataLogoAlt",
           "label": "Tata Logo Alt Text",
           "value": "TATA Group"
-        },
-        {
-          "component": "pathfield",
-          "valueType": "string",
-          "name": "tataLogoLink",
-          "label": "Tata Logo Link",
-          "value": "https://www.tata.com"
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "motionType",
-          "label": "Motion Type",
-          "value": "slide",
-          "options": [
-            { "name": "Slide", "value": "slide" },
-            { "name": "Fade", "value": "fade" },
-            { "name": "None", "value": "none" }
-          ]
         }
       ]
     }

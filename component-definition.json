@@ -273,30 +273,15 @@
           }
         },
         {
-          "title": "Carousel Slide",
+          "title": "Carousel Item",
           "id": "carousel-item",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "Carousel Slide",
+                  "name": "Carousel Item",
                   "model": "carousel-item"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Hero 2",
-          "id": "hero2-item",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "Hero 2",
-                  "model": "hero2"
                 }
               }
             }

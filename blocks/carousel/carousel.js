@@ -174,7 +174,28 @@ function createHeroBlockFromRow(row) {
   heroBlock.classList.add('block', 'hero-banner');
   heroBlock.dataset.blockName = 'hero-banner';
 
-  Array.from(row.querySelectorAll(':scope > div')).forEach((cell) => {
+  const hasFieldMarkers = Boolean(row.querySelector('[data-aue-prop]'));
+  const fallbackFieldOrder = [
+    'heroIcon',
+    'heroIconAlt',
+    'heroImage',
+    'heroImageAlt',
+    'heroImageType',
+    'heroView',
+    'eyebrowText',
+    'title',
+    'description',
+    'ctaTitle',
+    'ctaLink',
+    'alignment',
+    'bgColor',
+  ];
+
+  Array.from(row.querySelectorAll(':scope > div')).forEach((cell, index) => {
+    if (!hasFieldMarkers && fallbackFieldOrder[index] && !cell.hasAttribute('data-aue-prop')) {
+      cell.setAttribute('data-aue-prop', fallbackFieldOrder[index]);
+    }
+
     const fieldRow = document.createElement('div');
     fieldRow.append(cell);
     heroBlock.append(fieldRow);

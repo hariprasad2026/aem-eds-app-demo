@@ -38,11 +38,17 @@
 .carousel .carousel-slide {
   flex: 0 0 calc((100% - ((var(--carousel-mobile-items) - 1) * var(--carousel-gap))) / var(--carousel-mobile-items));
   min-width: 0;
+  display: block;
 }
 
 .carousel .carousel-slide-item-host,
 .carousel .carousel-item-renderer {
+  width: 100%;
   height: 100%;
+}
+
+.carousel .carousel-slide-item-host > .hero-banner {
+  min-height: min(60vw, calc(100dvh - var(--nav-height, 64px)));
 }
 
 .carousel .carousel-item-renderer-image-text {

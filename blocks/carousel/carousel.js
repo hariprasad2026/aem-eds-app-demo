@@ -1,6 +1,7 @@
 import { moveInstrumentation } from '../../scripts/scripts.js';
-import fetchPlaceholders from '../../scripts/placeholders.js';
+import { fetchPlaceholders } from '../../scripts/placeholders.js';
 import showSlide from '../../scripts/carousel-support.js';
+import { extractZipImages, getExtension } from '../hero-banner/hero-banner.js';
 
 function updateActiveSlide(slide) {
   const block = slide.closest('.carousel');
@@ -115,13 +116,182 @@ function extractConfig(block, rows) {
 function startAutoplay(block) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   let paused = false;
+  let visible = true;
   ['mouseenter', 'focusin'].forEach((evt) => block.addEventListener(evt, () => { paused = true; }));
   ['mouseleave', 'focusout'].forEach((evt) => block.addEventListener(evt, () => { paused = false; }));
-  setInterval(() => {
-    if (paused || document.hidden) return;
+
+  // Pause while the carousel is scrolled off-screen.
+  const visibilityObserver = new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+  }, { threshold: 0.25 });
+  visibilityObserver.observe(block);
+
+  const timer = setInterval(() => {
+    // Stop for good once the block has been removed from the page.
+    if (!block.isConnected) {
+      clearInterval(timer);
+      visibilityObserver.disconnect();
+      return;
+    }
+    if (paused || !visible || document.hidden) return;
     const active = Number.parseInt(block.dataset.activeSlide, 10) || 0;
     showSlide(block, active + 1);
   }, AUTOPLAY_INTERVAL);
+}
+
+const HORIZONTAL_ALIGNMENTS = ['left', 'center', 'right'];
+const VERTICAL_ALIGNMENTS = ['top', 'middle', 'bottom'];
+
+/**
+ * Alignment values are authored as the trailing plain paragraphs of the content cell.
+ * Only those are consumed, so real content that happens to read "left", "top", etc.
+ * elsewhere in the cell (or in a heading) is left untouched.
+ */
+function extractAlignment(column, slide) {
+  [...column.children].slice(-2).reverse().forEach((el) => {
+    if (!['P', 'DIV'].includes(el.tagName) || el.children.length) return;
+    const text = el.textContent.trim().toLowerCase();
+
+    if (!column.dataset.align && HORIZONTAL_ALIGNMENTS.includes(text)) {
+      column.dataset.align = text;
+      slide.dataset.align = text;
+      el.remove();
+    } else if (!column.dataset.valign && VERTICAL_ALIGNMENTS.includes(text)) {
+      column.dataset.valign = text;
+      el.remove();
+    }
+  });
+}
+
+// Hero banner slide cells, in model order (the icon alt text is collapsed into the icon image).
+const HERO_FIELDS = [
+  'icon',
+  'heroImageType',
+  'heroLottoImagePath',
+  'heroImageAlt',
+  'heroView',
+  'eyebrow',
+  'title',
+  'description',
+  'ctaTitle',
+  'ctaLink',
+  'ctaLinkType',
+  'ctaView',
+  'alignment',
+  'bgColor',
+  'motionType',
+];
+
+function isHeroRow(row, columns) {
+  return row.dataset.aueModel === 'hero-banner-item' || columns.length > 2;
+}
+
+function getHeroFields(columns) {
+  const fields = {};
+  columns.forEach((column, idx) => {
+    const name = column.dataset.aueProp
+      || column.querySelector('[data-aue-prop]')?.dataset.aueProp
+      || HERO_FIELDS[idx];
+    if (name) fields[name] = column;
+  });
+  return fields;
+}
+
+function getAssetUrl(cell) {
+  if (!cell) return '';
+  const node = cell.querySelector('img[src], a[href]');
+  if (node) return node.getAttribute(node.tagName === 'A' ? 'href' : 'src') || '';
+  return cell.textContent.trim();
+}
+
+function isSafeUrl(url) {
+  try {
+    return ['http:', 'https:', 'mailto:', 'tel:'].includes(new URL(url, window.location.href).protocol);
+  } catch (e) {
+    return false;
+  }
+}
+
+async function renderHeroBackground(container, url, alt) {
+  try {
+    const urls = getExtension(url) === 'zip' ? await extractZipImages(url) : [url];
+    urls.forEach((src) => {
+      const img = document.createElement('img');
+      img.className = 'hero-bg-layer';
+      img.src = src;
+      img.alt = urls.length === 1 ? alt : '';
+      if (urls.length > 1) img.setAttribute('aria-hidden', 'true');
+      container.append(img);
+    });
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error('carousel: failed to render hero slide background', e);
+  }
+}
+
+function createHeroSlideContent(slide, columns) {
+  const fields = getHeroFields(columns);
+  const text = (name) => fields[name]?.textContent.trim() || '';
+
+  const image = document.createElement('div');
+  image.className = 'carousel-slide-image';
+  const backgroundUrl = getAssetUrl(fields.heroLottoImagePath);
+  if (backgroundUrl) renderHeroBackground(image, backgroundUrl, text('heroImageAlt'));
+
+  const content = document.createElement('div');
+  content.className = 'carousel-slide-content hero-slide-content';
+
+  const iconImg = fields.icon?.querySelector('img');
+  if (iconImg) {
+    const icon = document.createElement('img');
+    icon.className = 'hero-icon';
+    icon.src = iconImg.getAttribute('src');
+    icon.alt = iconImg.getAttribute('alt') || '';
+    content.append(icon);
+  }
+
+  if (text('eyebrow')) {
+    const eyebrow = document.createElement('p');
+    eyebrow.className = 'hero-eyebrow';
+    eyebrow.textContent = text('eyebrow');
+    content.append(eyebrow);
+  }
+
+  if (text('title')) {
+    const title = document.createElement('h2');
+    title.className = 'hero-title';
+    title.textContent = text('title');
+    content.append(title);
+  }
+
+  if (fields.description && text('description')) {
+    const description = document.createElement('div');
+    description.className = 'hero-description';
+    description.append(...fields.description.childNodes);
+    content.append(description);
+  }
+
+  const ctaUrl = getAssetUrl(fields.ctaLink);
+  if (text('ctaTitle') && ctaUrl && isSafeUrl(ctaUrl)) {
+    const cta = document.createElement('a');
+    cta.className = 'hero-cta';
+    cta.href = ctaUrl;
+    cta.textContent = text('ctaTitle');
+    cta.classList.add(`button-${text('ctaLinkType') === 'secondary' ? 'secondary' : 'primary'}`);
+    if (text('ctaView') === 'link') cta.classList.add('hero-cta-link');
+    content.append(cta);
+  }
+
+  const alignment = text('alignment').toLowerCase();
+  if (HORIZONTAL_ALIGNMENTS.includes(alignment)) {
+    content.dataset.align = alignment;
+    slide.dataset.align = alignment;
+  }
+  if (text('bgColor')) slide.dataset.bg = text('bgColor').toLowerCase();
+  if (text('motionType')) slide.dataset.motion = text('motionType');
+
+  slide.classList.add('carousel-slide-hero');
+  slide.append(image, content);
 }
 
 function createSlide(row, slideIndex, carouselId) {
@@ -132,38 +302,22 @@ function createSlide(row, slideIndex, carouselId) {
 
   const columns = Array.from(row.querySelectorAll(':scope > div'));
 
-  if (columns.length > 0) {
+  if (isHeroRow(row, columns)) {
+    createHeroSlideContent(slide, columns);
+  } else {
     columns.forEach((column, colIdx) => {
       const isImage = colIdx === 0;
       column.classList.add(`carousel-slide-${isImage ? 'image' : 'content'}`);
-
-      if (!isImage) {
-        const allElements = column.querySelectorAll('*');
-        allElements.forEach((el) => {
-          const text = el.textContent.trim().toLowerCase();
-
-          // Standard Horizontal Alignment
-          if (text === 'left' || text === 'center' || text === 'right') {
-            column.setAttribute('data-align', text);
-            slide.setAttribute('data-align', text);
-            el.remove();
-          }
-
-          // Standard Vertical Alignment
-          if (text === 'top' || text === 'middle' || text === 'bottom') {
-            column.setAttribute('data-valign', text);
-            el.remove();
-          }
-        });
-      }
-
+      if (!isImage) extractAlignment(column, slide);
       slide.append(column);
     });
   }
 
+  // Headings are not guaranteed to have an id, so assign one before referencing it.
   const labeledBy = slide.querySelector('h1, h2, h3, h4, h5, h6');
   if (labeledBy) {
-    slide.setAttribute('aria-labelledby', labeledBy.getAttribute('id'));
+    if (!labeledBy.id) labeledBy.id = `${slide.id}-heading`;
+    slide.setAttribute('aria-labelledby', labeledBy.id);
   }
 
   return slide;
@@ -249,7 +403,8 @@ export default async function decorate(block) {
   if (!isSingleSlide) {
     updateActiveSlide(slidesWrapper.querySelector('.carousel-slide'));
     bindEvents(block);
-    if (typeConfig.autoplay && !document.documentElement.classList.contains('adobe-ue-edit')) {
+    const autoplay = typeConfig.autoplay || /autoplay/i.test(motionType || '');
+    if (autoplay && !document.documentElement.classList.contains('adobe-ue-edit')) {
       startAutoplay(block);
     }
   }

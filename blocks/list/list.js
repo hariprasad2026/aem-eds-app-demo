@@ -1,5 +1,5 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
-import { getAEMPublish } from '../../scripts/endpointconfig.js';
+import { getAEMPublish, isAuthoringMode } from '../../scripts/endpointconfig.js';
 
 /**
 * Normalizes tag strings by stripping namespaces, human-readable labels,
@@ -187,20 +187,45 @@ function normalizePath(path) {
 
 async function fetchQueryIndex() {
   const configuredOrigin = getAEMPublish();
+  const currentOrigin = window.location.origin;
   const codeOrigin = new URL(import.meta.url).origin;
-  const host = configuredOrigin.includes('.adobeaemcloud.com')
-    ? codeOrigin
-    : configuredOrigin;
 
-  try {
-    const resp = await fetch(new URL('/query-index.json', host));
-    const contentType = resp.headers.get('content-type') || '';
-    if (!resp.ok || !contentType.includes('application/json')) return [];
-    const data = await resp.json();
-    return Array.isArray(data) ? data : (data.data || []);
-  } catch (err) {
-    return [];
+  const candidateOrigins = [currentOrigin, codeOrigin, configuredOrigin]
+    .filter(Boolean)
+    .map((origin) => String(origin).replace(/\/+$/, ''));
+
+  const expandedOrigins = [...candidateOrigins];
+  candidateOrigins.forEach((origin) => {
+    if (origin.includes('.aem.page')) {
+      expandedOrigins.push(origin.replace('.aem.page', '.aem.live'));
+    }
+  });
+
+  const tried = new Set();
+  for (const origin of expandedOrigins) {
+    if (!origin || tried.has(origin)) continue;
+    tried.add(origin);
+
+    try {
+      const resp = await fetch(new URL('/query-index.json', origin));
+      const contentType = resp.headers.get('content-type') || '';
+      if (!resp.ok || !contentType.includes('application/json')) {
+        // continue to next candidate origin
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      const data = await resp.json();
+      const list = Array.isArray(data) ? data : (data.data || []);
+      if (list.length || !isAuthoringMode()) {
+        return list;
+      }
+    } catch (err) {
+      // try next candidate
+    }
   }
+
+  return [];
 }
 
 function parseManualItems(block) {

@@ -1134,33 +1134,6 @@
       },
       {
         "component": "container",
-        "name": "searchCanvasSettings",
-        "label": "Search Canvas Settings",
-        "collapsible": false,
-        "condition": {
-          "==": [
-            {
-              "var": "canvasType"
-            },
-            "search"
-          ]
-        },
-        "fields": [
-          {
-            "component": "aem-content",
-            "name": "canvasNavRootPath",
-            "label": "Canvas Nav Root Path"
-          },
-          {
-            "component": "number",
-            "name": "canvasNavDepth",
-            "label": "Canvas Nav Depth",
-            "value": 3
-          }
-        ]
-      },
-      {
-        "component": "container",
         "name": "intentCanvasSettings",
         "label": "Intent Canvas Settings",
         "collapsible": false,
@@ -1208,6 +1181,23 @@
             ]
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "canvas-option",
+    "fields": [
+      {
+        "component": "text",
+        "name": "optionLabel",
+        "label": "Option Label",
+        "valueType": "string"
+      },
+      {
+        "component": "aem-content",
+        "name": "optionLink",
+        "label": "Option Link",
+        "valueType": "string"
       }
     ]
   },

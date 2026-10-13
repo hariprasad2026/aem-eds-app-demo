@@ -70,6 +70,39 @@ function extractCellValue(cell) {
   return cell.textContent.trim();
 }
 
+function extractOptionValue(cell) {
+  const link = cell?.querySelector('a');
+  return link ? { label: link.textContent.trim(), url: link.href } : null;
+}
+
+function extractAuthoredOptions(optionRows) {
+  return optionRows.map((option) => {
+    const fields = {};
+    [...option.children].forEach((row) => {
+      const cells = [...row.children];
+      if (cells.length < 2) return;
+      const key = normalizeFieldKey(cells[0].textContent);
+      if (['optionlabel', 'label', 'title'].includes(key)) {
+        fields.label = extractOptionValue(cells[1])?.label || cells[1].textContent.trim();
+      } else if (['optionlink', 'link', 'url', 'href'].includes(key)) {
+        fields.url = extractCellValue(cells[1]);
+      }
+    });
+
+    if (!fields.label || !fields.url) {
+      const cells = [...option.children];
+      if (!fields.label && cells[0]) {
+        fields.label = extractOptionValue(cells[0])?.label || cells[0].textContent.trim();
+      }
+      if (!fields.url && cells[1]) {
+        fields.url = extractOptionValue(cells[1])?.url || extractCellValue(cells[1]);
+      }
+    }
+
+    return fields;
+  }).filter((item) => item.label);
+}
+
 function extractData(block) {
   const data = {};
   let fieldIndex = 0;
@@ -468,13 +501,27 @@ async function renderNavigationMenu(menuButton, data) {
     return link;
   };
 
-  const makeLevelButton = (item, className, onActivate) => {
+  const makeLevelButton = (item, className, onActivate, {
+    expanded = false,
+    activateOnHover = false,
+  } = {}) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = className;
-    button.textContent = item.title;
-    button.setAttribute('aria-expanded', 'false');
-    button.addEventListener('mouseenter', onActivate);
+    button.classList.add('has-children');
+    const label = document.createElement('span');
+    label.className = 'canvas-nav-label';
+    label.textContent = item.title;
+    const chevron = document.createElement('span');
+    chevron.className = 'canvas-nav-chevron';
+    chevron.setAttribute('aria-hidden', 'true');
+    button.append(label, chevron);
+    button.dataset.navHref = item.href;
+    button.setAttribute('aria-expanded', String(expanded));
+    if (activateOnHover) {
+      button.addEventListener('mouseenter', onActivate);
+      button.addEventListener('focus', onActivate);
+    }
     button.addEventListener('click', (event) => {
       event.stopPropagation();
       onActivate();
@@ -482,9 +529,30 @@ async function renderNavigationMenu(menuButton, data) {
     return button;
   };
 
+  const renderSubmenu = () => {
+    submenu.replaceChildren();
+    submenu.classList.remove('is-open');
+    if (!state.activeL2) return;
+
+    const list = document.createElement('ul');
+    list.className = 'canvas-nav-list';
+    state.activeL2.children.forEach((item) => {
+      const entry = document.createElement('li');
+      const link = makeLink(item, 'canvas-nav-l3');
+      const arrow = document.createElement('span');
+      arrow.className = 'canvas-nav-link-arrow';
+      arrow.setAttribute('aria-hidden', 'true');
+      arrow.textContent = '\u2192';
+      link.appendChild(arrow);
+      entry.appendChild(link);
+      list.appendChild(entry);
+    });
+    submenu.appendChild(list);
+    submenu.classList.add('is-open');
+  };
+
   const render = () => {
     navRow.replaceChildren();
-    submenu.replaceChildren();
     setToggle();
 
     if (state.level === 'l1') {
@@ -501,6 +569,7 @@ async function renderNavigationMenu(menuButton, data) {
           navRow.appendChild(makeLink(item, 'canvas-nav-item canvas-nav-l1'));
         }
       });
+      renderSubmenu();
       return;
     }
 
@@ -520,34 +589,30 @@ async function renderNavigationMenu(menuButton, data) {
 
     state.activeL1.children.forEach((item) => {
       const activateL2 = () => {
-        if (state.activeL2 === item) return;
         state.activeL2 = item.children.length ? item : null;
-        render();
+        navRow.querySelectorAll('.canvas-nav-l2.has-children').forEach((button) => {
+          const isActive = state.activeL2?.href === button.dataset.navHref;
+          button.classList.toggle('is-active', isActive);
+          button.setAttribute('aria-expanded', String(isActive));
+        });
+        renderSubmenu();
       };
       if (item.children.length) {
-        const button = makeLevelButton(item, 'canvas-nav-item canvas-nav-l2', activateL2);
+        const button = makeLevelButton(
+          item,
+          'canvas-nav-item canvas-nav-l2',
+          activateL2,
+          { expanded: state.activeL2 === item, activateOnHover: true },
+        );
         if (state.activeL2 === item) {
           button.classList.add('is-active');
-          button.setAttribute('aria-expanded', 'true');
         }
         navRow.appendChild(button);
       } else {
         navRow.appendChild(makeLink(item, 'canvas-nav-item canvas-nav-l2'));
       }
     });
-
-    if (state.activeL2) {
-      const list = document.createElement('ul');
-      list.className = 'canvas-nav-list';
-      state.activeL2.children.forEach((item) => {
-        const entry = document.createElement('li');
-        entry.className = 'canvas-nav-item';
-        entry.appendChild(makeLink(item, 'canvas-nav-l3'));
-        list.appendChild(entry);
-      });
-      submenu.appendChild(list);
-      submenu.classList.add('is-open');
-    }
+    renderSubmenu();
   };
 
   menuButton.onclick = (event) => {
@@ -567,6 +632,16 @@ async function renderNavigationMenu(menuButton, data) {
     if (event.key === 'Escape') {
       closeNavigation();
     }
+  });
+
+  panel.addEventListener('mouseleave', () => {
+    if (!state.activeL2) return;
+    state.activeL2 = null;
+    navRow.querySelectorAll('.canvas-nav-l2.has-children').forEach((button) => {
+      button.classList.remove('is-active');
+      button.setAttribute('aria-expanded', 'false');
+    });
+    renderSubmenu();
   });
 
   wrapper.appendChild(panel);
@@ -633,6 +708,7 @@ function setupVoiceSearch(button, input) {
 function createSearchBar({
   watermark,
   showMicrophone,
+  showNavigation,
   menuIcon,
   microphoneIcon,
   data,
@@ -643,20 +719,22 @@ function createSearchBar({
   const toolbar = document.createElement('div');
   toolbar.className = 'canvas-search-toolbar';
 
-  const menuButton = createIconButton({
-    className: 'canvas-menu-btn',
-    label: 'Open navigation',
-    iconSource: menuIcon,
-    fallbackText: 'Menu',
-  });
+  if (showNavigation) {
+    const menuButton = createIconButton({
+      className: 'canvas-menu-btn',
+      label: 'Open navigation',
+      iconSource: menuIcon,
+      fallbackText: 'Menu',
+    });
 
-  menuButton.onclick = async (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    await renderNavigationMenu(menuButton, data);
-  };
+    menuButton.onclick = async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      await renderNavigationMenu(menuButton, data);
+    };
 
-  toolbar.append(menuButton);
+    toolbar.append(menuButton);
+  }
 
   const container = document.createElement('div');
   container.className = 'canvas-search-container';
@@ -730,6 +808,7 @@ function renderSearchCanvas(block, data) {
 
   const search = createSearchBar({
     watermark: data.canvasSearchWatermark || data.searchWatermark || '',
+    showNavigation: asBoolean(data.showNavigation, true),
     showMicrophone: asBoolean(data.showMicrophone, true),
     menuIcon: data.canvasMenuIcon || data.menuIcon,
     microphoneIcon: data.canvasMicrophoneIcon || data.microphoneIcon || data.searchIcon,
@@ -757,7 +836,7 @@ async function fetchIntentOptions(maxOptions = 5) {
   }
 }
 
-async function renderIntentCanvas(block, data) {
+async function renderIntentCanvas(block, data, authoredOptions) {
   const section = document.createElement('section');
   section.className = 'canvas-intent';
 
@@ -795,6 +874,7 @@ async function renderIntentCanvas(block, data) {
     searchSlot.append(
       createSearchBar({
         watermark: data.canvasSearchWatermark || data.searchWatermark || '',
+        showNavigation: asBoolean(data.showNavigation, true),
         showMicrophone: asBoolean(data.showMicrophone, true),
         menuIcon: data.canvasMenuIcon || data.menuIcon,
         microphoneIcon: data.canvasMicrophoneIcon || data.microphoneIcon || data.searchIcon,
@@ -813,7 +893,15 @@ async function renderIntentCanvas(block, data) {
     toPositiveInt(data.maximumOptions || data.maximumoptions, 5),
   );
 
-  const options = await fetchIntentOptions(maxOptions);
+  const configuredOptions = extractAuthoredOptions(authoredOptions);
+  const optionsType = String(data.optionsType || data.optionstype || 'default')
+    .trim()
+    .toLowerCase();
+  const fallbackOptions = optionsType === 'default'
+    ? await fetchIntentOptions(maxOptions)
+    : [];
+  const options = (configuredOptions.length ? configuredOptions : fallbackOptions)
+    .slice(0, maxOptions);
 
   options.forEach((item, index) => {
     const option = document.createElement('a');
@@ -846,12 +934,6 @@ export default function decorate(block) {
   const data = extractData(block);
   const optionList = [...block.querySelectorAll('.canvas-option')];
 
-  console.group('Canvas Debug');
-  console.log('Raw Block HTML', block.innerHTML);
-  console.log('Block Children', [...block.children]);
-  console.log('Extracted Data', data);
-  console.groupEnd();
-
   block.innerHTML = '';
 
   const canvasType = String(data.canvasType || data.canvastype || 'search').trim().toLowerCase();
@@ -864,7 +946,8 @@ export default function decorate(block) {
   block.dataset.motionType = motionType;
 
   block.dataset.canvasStyle = canvasStyle;
-  block.classList.add('canvas-default');
+  block.classList.remove('canvas-default', 'canvas-floating-sticky');
+  block.classList.add(`canvas-${canvasStyle}`);
 
   if (normalizedType === 'intent') {
     renderIntentCanvas(block, data, optionList);

@@ -174,7 +174,7 @@ function isHeroBannerRow(row) {
 }
 
 function copyHeroStyleClasses(from, to) {
-  const allowedClass = /^(hero-banner-slide|icon-color-(black|white|blue)|title-color-(black|white|grey)|description-color-(black|white|grey)|hero-banner-align-(top|middle|bottom)|hero-banner-bg-(white|black))$/;
+  const allowedClass = /^(hero-banner-slide|icon-color-(black|white|blue)|title-color-(black|white|grey)|description-color-(black|white|grey)|hero-banner-align-(top|middle|bottom)|hero-banner-bg-(white|black)|hero-banner-bg-opacity-(80|60))$/;
   from.classList.forEach((className) => {
     if (allowedClass.test(className)) to.classList.add(className);
   });
@@ -201,6 +201,7 @@ function applyHeroStyleFields(columns, heroBanner) {
     'classes_titleColor',
     'classes_descriptionColor',
     'bgColor',
+    'bgOpacity',
   ]);
   const classProperties = {
     classes_iconColor: /^(icon-color-(black|white|blue))$/,
@@ -220,6 +221,9 @@ function applyHeroStyleFields(columns, heroBanner) {
     }
     if (property === 'bgColor' && ['white', 'black'].includes(value)) {
       heroBanner.classList.add(`hero-banner-bg-${value}`);
+    }
+    if (property === 'bgOpacity' && ['80%', '60%', '80', '60'].includes(value)) {
+      heroBanner.classList.add(`hero-banner-bg-opacity-${value.replace('%', '')}`);
     }
     return false;
   });

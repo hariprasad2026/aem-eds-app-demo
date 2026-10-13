@@ -254,6 +254,10 @@ function getTextCandidates(block) {
     'pill',
     'black',
     'white',
+    '80%',
+    '60%',
+    '80',
+    '60',
     'new-window',
     'none',
     'select',
@@ -297,6 +301,19 @@ function getBgColor(block) {
     .filter((el) => !el.children.length)
     .map((el) => el.textContent.trim().toLowerCase())
     .filter((text) => allowed.includes(text));
+  return matches.pop() || 'none';
+}
+
+function getBgOpacity(block) {
+  const fromField = getTextValue(block, 'bgOpacity').trim().toLowerCase();
+  const normalize = (value) => value.replace('%', '');
+  const allowed = ['none', '80', '60'];
+  if (allowed.includes(normalize(fromField))) return normalize(fromField);
+
+  const matches = [...block.querySelectorAll('div, p')]
+    .filter((el) => !el.children.length)
+    .map((el) => normalize(el.textContent.trim().toLowerCase()))
+    .filter((value) => ['80', '60'].includes(value));
   return matches.pop() || 'none';
 }
 
@@ -369,6 +386,7 @@ function getContent(block) {
 
     alignment: getAlignment(block),
     bgColor: getBgColor(block),
+    bgOpacity: getBgOpacity(block),
   };
 }
 
@@ -397,6 +415,9 @@ export default function decorate(block) {
   }
   if (content.bgColor !== 'none') {
     block.classList.add(`hero-banner-bg-${content.bgColor}`);
+  }
+  if (content.bgOpacity !== 'none') {
+    block.classList.add(`hero-banner-bg-opacity-${content.bgOpacity}`);
   }
 
   if (content.heroImageType === 'lotto') {

@@ -236,6 +236,18 @@
               "value": "black"
             }
           ]
+        },
+        {
+          "component": "select",
+          "name": "bgOpacity",
+          "label": "Background Color Opacity",
+          "valueType": "string",
+          "value": "none",
+          "options": [
+            { "name": "None", "value": "none" },
+            { "name": "80%", "value": "80%" },
+            { "name": "60%", "value": "60%" }
+          ]
         }
       ]
     }

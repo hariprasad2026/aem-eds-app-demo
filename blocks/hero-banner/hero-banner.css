@@ -37,11 +37,19 @@
 }
 
 .hero-banner.hero-banner-bg-white::before {
-  background: rgb(255 255 255 / 80%);
+  background: rgb(255 255 255 / var(--hero-banner-bg-opacity, 1));
 }
 
 .hero-banner.hero-banner-bg-black::before {
-  background: rgb(1 18 31 / 80%);
+  background: rgb(0 0 0 / var(--hero-banner-bg-opacity, 1));
+}
+
+.hero-banner-bg-opacity-80 {
+  --hero-banner-bg-opacity: 0.8;
+}
+
+.hero-banner-bg-opacity-60 {
+  --hero-banner-bg-opacity: 0.6;
 }
 
 .hero-banner-content {
@@ -184,7 +192,7 @@
   align-items: center;
   gap: 16px;
   width: 100%;
-  margin-top: 120px;
+  margin-top: 120px !important;
 }
 
 .hero-banner-sticky:empty {
@@ -302,7 +310,7 @@
   }
 
   .hero-banner-sticky {
-    margin-top: 48px;
+    margin-top: 48px !important;
   }
 
   .hero-banner-align-top .hero-banner-content {

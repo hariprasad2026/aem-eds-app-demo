@@ -196,9 +196,10 @@
           "component": "select",
           "name": "cardColor",
           "label": "Card Color",
-          "value": "grey",
+          "value": "figma",
           "valueType": "string",
           "options": [
+            { "name": "Figma Palette (Navy / Blue)", "value": "figma" },
             { "name": "Grey", "value": "grey" },
             { "name": "Blue", "value": "blue" },
             { "name": "Black", "value": "black" }

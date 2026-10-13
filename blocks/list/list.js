@@ -216,6 +216,20 @@ function parseManualItems(block) {
   }));
 }
 
+function compareItems(a, b, config) {
+  const keyA = config.orderBy === 'modified' ? (a.lastModified || 0) : (a.title || '');
+  const keyB = config.orderBy === 'modified' ? (b.lastModified || 0) : (b.title || '');
+  const cmp = String(keyA).localeCompare(String(keyB), undefined, { numeric: true });
+  return config.sortOrder === 'descending' ? -cmp : cmp;
+}
+
+function hasCardImage(item, config) {
+  return Boolean(item.image)
+    && config.showImage
+    && item.image !== 'about:error'
+    && !item.image.includes('default-meta-image.png');
+}
+
 function filterAndSortItems(items, config) {
   let result = items.filter((item) => item.path);
 
@@ -266,9 +280,10 @@ function filterAndSortItems(items, config) {
     if (config.tagResultType === '1-each' && authoredTagList.length > 0) {
       const uniqueByTag = [];
       const usedPaths = new Set();
+      const orderedCandidates = [...candidateItems].sort((a, b) => compareItems(a, b, config));
 
       authoredTagList.forEach((tagKey) => {
-        const matchingItem = candidateItems.find((item) => {
+        const matchingItem = orderedCandidates.find((item) => {
           if (usedPaths.has(item.path)) return false;
           const itemTags = String(item.tags || '').split(',').map((t) => t.trim()).filter(Boolean);
           return itemTags.some((it) => isTagMatching(it, tagKey));
@@ -290,18 +305,15 @@ function filterAndSortItems(items, config) {
   }
 
   // Common Sort
-  result.sort((a, b) => {
-    const keyA = config.orderBy === 'modified' ? (a.lastModified || 0) : (a.title || '');
-    const keyB = config.orderBy === 'modified' ? (b.lastModified || 0) : (b.title || '');
-    const cmp = String(keyA).localeCompare(String(keyB), undefined, { numeric: true });
-    return config.sortOrder === 'descending' ? -cmp : cmp;
-  });
+  if (!(config.listType === 'tags' && config.tagResultType === '1-each')) {
+    result.sort((a, b) => compareItems(a, b, config));
+  }
 
   // Cap
   return config.maxItems > 0 ? result.slice(0, config.maxItems) : result;
 }
 
-function renderItem(item, config, index = 0) {
+function renderItem(item, config, index = 0, solidIndex = 0) {
   const li = document.createElement('li');
   li.className = 'list-item';
 
@@ -312,19 +324,25 @@ function renderItem(item, config, index = 0) {
   card.className = 'list-card';
 
   // Apply Card Theme Color or Fallback Blue if Image is Missing/Hidden
-  const hasImage = Boolean(item.image)
-&& config.showImage
-&& item.image !== 'about:error'
-&& !item.image.includes('default-meta-image.png');
+  const hasImage = hasCardImage(item, config);
 
   let effectiveColor = config.cardColor;
-  if (!hasImage && config.cardColor === 'grey') {
+  if (config.listStyle === 'card-m-scroll'
+      && (config.cardColor === 'figma' || config.cardColor === 'grey')) {
+    if (hasImage) {
+      effectiveColor = 'grey';
+    } else {
+      effectiveColor = solidIndex % 2 === 0 ? 'black' : 'blue';
+    }
+  } else if (config.cardColor === 'figma') {
+    effectiveColor = 'grey';
+  } else if (!hasImage && config.cardColor === 'grey') {
     effectiveColor = 'blue';
   }
   card.classList.add(`card-color-${effectiveColor}`);
 
   // Media Area
-  if (config.showImage && item.image && item.image !== 'about:error') {
+  if (hasImage) {
     const picContainer = document.createElement('div');
     picContainer.className = 'list-media';
     picContainer.append(
@@ -519,7 +537,12 @@ export default async function decorate(block) {
     emptyLi.textContent = 'No matching pages found.';
     ul.append(emptyLi);
   } else {
-    items.forEach((item, index) => ul.append(renderItem(item, config, index)));
+    let solidIndex = 0;
+    items.forEach((item, index) => {
+      const itemSolidIndex = solidIndex;
+      if (!hasCardImage(item, config)) solidIndex += 1;
+      ul.append(renderItem(item, config, index, itemSolidIndex));
+    });
   }
 
   block.append(ueStore, ul);

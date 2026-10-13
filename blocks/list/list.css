@@ -210,6 +210,15 @@
    CARDS (M SCROLL) LAYOUT (.list-style-card-m-scroll)
 
    ========================================================================== */
+
+.list.list-style-card-m-scroll {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 120px 80px;
+
+}
  
 .list.list-style-card-m-scroll .list-header {
   display: flex;
@@ -217,7 +226,7 @@
   align-items: flex-start;
   padding: 0;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 80px;
 
 }
  
@@ -329,7 +338,7 @@
   color: #0C0C0D;
 
 }
- 
+
 /* Hide image element if card has a solid theme override */
 
 .list.list-style-card-m-scroll .list-card.card-color-black .list-media,
@@ -348,7 +357,7 @@
   flex-direction: column;
   align-items: flex-start;
   padding: 0;
-  gap: 8px;
+  gap: 12px;
   width: 100%;
   height: 100%;
   background: transparent;
@@ -407,7 +416,7 @@
   font-size: 16px;
   line-height: 160%;
   letter-spacing: 0.01em;
-  opacity: 0.85;
+  opacity: 0.7;
   margin: 0;
   display: -webkit-box;
   line-clamp: 3;
@@ -422,9 +431,10 @@
 .list.list-style-card-m-scroll .list-cta {
   font-family: Inter, sans-serif;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 16px;
-  line-height: 140%;
+  line-height: 100%;
+  letter-spacing: 0.01em;
   color: inherit;
   text-decoration: none;
   margin-top: auto;
@@ -921,6 +931,16 @@
    ========================================================================== */
  
 @media (width <= 1024px) {
+  .list.list-style-card-m-scroll {
+    padding: 80px 40px;
+
+  }
+
+  .list.list-style-card-m-scroll .list-header {
+    margin-bottom: 48px;
+
+  }
+
   .list.list-style-hero-card .list-main-title,
 
   .list.list-style-card-m-scroll .list-main-title,
@@ -975,6 +995,11 @@
 }
  
 @media (width <= 640px) {
+  .list.list-style-card-m-scroll {
+    padding: 64px 24px;
+
+  }
+
   .list.list-style-hero-card .list-container {
     grid-template-columns: 1fr;
 

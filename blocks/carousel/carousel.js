@@ -167,7 +167,10 @@ function extractAlignment(column, slide) {
 }
 
 function isHeroBannerRow(row) {
-  if (['hero-banner-item', 'hero-banner'].includes(row.dataset.aueModel)) return true;
+  if (
+    ['hero-banner-item', 'hero-banner'].includes(row.dataset.aueModel)
+    || row.querySelector('[data-aue-model="hero-banner-item"], [data-aue-model="hero-banner"]')
+  ) return true;
 
   if (row.querySelector(
     '[data-aue-prop="heroIcon"], [data-aue-prop="heroImageType"], '
@@ -219,12 +222,22 @@ function applyHeroStyleFields(columns, heroBanner) {
     classes_titleColor: /^(title-color-(black|white|grey))$/,
     classes_descriptionColor: /^(description-color-(black|white|grey))$/,
   };
+  const allowedStyleClasses = /^(hero-banner-slide|icon-color-(black|white|blue)|title-color-(black|white|grey)|description-color-(black|white|grey)|hero-banner-align-(top|middle|bottom)|hero-banner-bg-(white|black)|hero-banner-bg-opacity-(80|60))$/;
 
   return columns.filter((column) => {
     const property = getHeroProperty(column);
+    const value = getHeroPropertyValue(column).toLowerCase();
+
+    if (!property) {
+      const styleClasses = value.split(/[\s,]+/).filter((name) => allowedStyleClasses.test(name));
+      if (styleClasses.length) {
+        heroBanner.classList.add(...styleClasses);
+        return false;
+      }
+    }
+
     if (!styleProperties.has(property)) return true;
 
-    const value = getHeroPropertyValue(column).toLowerCase();
     const valuePattern = classProperties[property];
     if (valuePattern?.test(value)) heroBanner.classList.add(value);
     if (property === 'alignment' && ['top', 'middle', 'bottom'].includes(value)) {

@@ -1013,6 +1013,84 @@
     ]
   },
   {
+    "id": "canvas-block",
+    "fields": [
+      {
+        "component": "container",
+        "name": "canvasBlockSettings",
+        "label": "Canvas Block Settings",
+        "collapsible": false,
+        "fields": [
+          {
+            "component": "text",
+            "name": "canvasTitle",
+            "label": "Canvas Title"
+          },
+          {
+            "component": "richtext",
+            "name": "canvasDescription",
+            "label": "Canvas Description"
+          },
+          {
+            "component": "select",
+            "name": "motionType",
+            "label": "Motion Type",
+            "value": "none",
+            "options": [
+              {
+                "name": "None",
+                "value": "none"
+              },
+              {
+                "name": "Fade",
+                "value": "fade"
+              },
+              {
+                "name": "Slide Up",
+                "value": "slide-up"
+              }
+            ]
+          },
+          {
+            "component": "number",
+            "name": "maximumOptions",
+            "label": "Maximum Options",
+            "value": 5
+          },
+          {
+            "component": "select",
+            "name": "optionsType",
+            "label": "Options Type",
+            "value": "default",
+            "options": [
+              {
+                "name": "Default",
+                "value": "default"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "canvas-block-option",
+    "fields": [
+      {
+        "component": "text",
+        "name": "optionLabel",
+        "label": "Option Label",
+        "valueType": "string"
+      },
+      {
+        "component": "aem-content",
+        "name": "optionLink",
+        "label": "Option Link",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "canvas",
     "fields": [
       {
@@ -4303,6 +4381,12 @@
   {
     "id": "tcs-footer-hamburger",
     "fields": [
+      {
+        "component": "aem-content",
+        "name": "icon",
+        "label": "Hamburger Icon (Image / SVG)",
+        "valueType": "string"
+      },
       {
         "component": "text",
         "name": "ariaLabel",

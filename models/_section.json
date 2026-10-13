@@ -97,7 +97,8 @@
         "text-with-link",
         "title-with-column",
         "topic-list",
-        "video"
+        "video",
+        "canvas-block"
       ]
     }
   ]

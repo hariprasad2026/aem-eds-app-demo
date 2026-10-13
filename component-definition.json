@@ -157,6 +157,46 @@
           }
         },
         {
+          "title": "Canvas Block",
+          "id": "canvas-block",
+          "plugins": {
+            "da": {
+              "fields": [
+                {
+                  "name": "classes"
+                }
+              ]
+            },
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Canvas Block",
+                  "model": "canvas-block",
+                  "filter": "canvas-block"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Canvas Block Option",
+          "id": "canvas-block-option",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Canvas Block Option",
+                  "model": "canvas-block-option",
+                  "optionLabel": "Option Label",
+                  "optionLink": "/"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Canvas",
           "id": "canvas",
           "plugins": {

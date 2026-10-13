@@ -1,0 +1,252 @@
+.canvas-block {
+  position: relative;
+  width: 100%;
+}
+
+.canvas-block-stage {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 900px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: clip;
+  padding: 160px 80px;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.canvas-block-content {
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  display: flex;
+  width: 1280px;
+  max-width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 0 80px;
+}
+
+.canvas-block-title {
+  width: 100%;
+  max-width: 1120px;
+  min-width: 0;
+  margin: 0;
+  color: #0c0c0d;
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.canvas-block-description {
+  width: 100%;
+  max-width: 812px;
+  min-width: 0;
+  color: #0c0c0d;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.6;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.canvas-block-search-slot {
+  position: sticky;
+  z-index: 3;
+  top: 16px;
+  display: flex;
+  width: 100%;
+  max-width: 812px;
+  justify-content: center;
+}
+
+.canvas-block-options {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  min-height: 118px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.canvas-block-options-row {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.canvas-block-option-pill:any-link {
+  box-sizing: border-box;
+  display: flex;
+  max-width: 100%;
+  min-height: 53px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 32px;
+  border: 1px solid #d8d8d8;
+  border-radius: 999px;
+  background: #fff;
+  color: #0c0c0d;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.6;
+  text-decoration: none;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.canvas-block-option-pill:any-link:hover {
+  border-color: #4673db;
+  background: #f4f7ff;
+  color: #0c0c0d;
+  text-decoration: none;
+}
+
+.canvas-block-glow {
+  position: absolute;
+  pointer-events: none;
+}
+
+.canvas-block-glow-yellow {
+  top: 679px;
+  left: 6.46%;
+  width: 451px;
+  height: 322px;
+  background: #e8b931;
+  opacity: 0.4;
+  filter: blur(222px);
+}
+
+.canvas-block-glow-blue {
+  top: 679px;
+  right: 6.94%;
+  width: 538px;
+  height: 384px;
+  background: #4673db;
+  opacity: 0.4;
+  filter: blur(222px);
+}
+
+.canvas-block[data-motion-type='fade'].is-motion-visible .canvas-block-stage {
+  animation: canvas-block-fade-in 0.45s ease both;
+}
+
+.canvas-block[data-motion-type='slide-up'].is-motion-visible .canvas-block-stage {
+  animation: canvas-block-slide-up 0.45s ease both;
+}
+
+@keyframes canvas-block-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes canvas-block-slide-up {
+  from {
+    opacity: 0;
+    translate: 0 18px;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@media (width <=1024px) {
+  .canvas-block-stage {
+    min-height: 760px;
+    padding: 100px 32px;
+  }
+
+  .canvas-block-content {
+    padding: 0 24px;
+  }
+
+  .canvas-block-title {
+    font-size: 32px;
+  }
+
+  .canvas-block-description {
+    font-size: 16px;
+  }
+}
+
+@media (width <=768px) {
+  .canvas-block {
+    width: calc(100% + 48px);
+    margin-inline: -24px;
+  }
+
+  .canvas-block-stage {
+    min-height: 764px;
+    padding: 80px 16px;
+  }
+
+  .canvas-block-content {
+    gap: 24px;
+    padding: 0;
+  }
+
+  .canvas-block-options {
+    min-height: 0;
+  }
+
+  .canvas-block-options-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .canvas-block-title {
+    font-size: 28px;
+    font-family: Inter, sans-serif;
+  }
+
+  .canvas-block-option-pill:any-link {
+    min-height: 48px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+  .canvas-block-glow-yellow,
+  .canvas-block-glow-blue {
+    top: auto;
+    bottom: -80px;
+    width: 70vw;
+    height: 220px;
+    filter: blur(100px);
+    opacity: 0.28;
+  }
+
+  .canvas-block-glow-yellow {
+    left: -20%;
+  }
+
+  .canvas-block-glow-blue {
+    right: -20%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas-block[data-motion-type='fade'] .canvas-block-stage,
+  .canvas-block[data-motion-type='slide-up'] .canvas-block-stage {
+    animation: none;
+  }
+}

@@ -109,6 +109,12 @@
       "id": "tcs-footer-hamburger",
       "fields": [
         {
+          "component": "aem-content",
+          "name": "icon",
+          "label": "Hamburger Icon (Image / SVG)",
+          "valueType": "string"
+        },
+        {
           "component": "text",
           "name": "ariaLabel",
           "label": "Aria Label",

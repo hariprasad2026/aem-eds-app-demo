@@ -136,7 +136,7 @@ export default function decorate(block) {
   const footerContainer = document.createElement('div');
   footerContainer.className = 'tcs-footer-container';
 
-  const heading = document.createElement('h2');
+  const heading = document.createElement('h3');
   heading.className = 'tcs-footer-heading';
   heading.innerHTML = titleText;
   footerContainer.append(heading);
@@ -203,16 +203,25 @@ export default function decorate(block) {
     const cells = [...row.children];
 
     if (model === 'tcs-footer-hamburger' && !hamburgerWrapperNode) {
-      const ariaLabel = cells[0]?.textContent.trim() || 'Open navigation menu';
+      const authoredImg = cells[0]?.querySelector('img');
+      const authoredIconSrc = authoredImg ? authoredImg.src : cells[0]?.textContent.trim();
+      const ariaLabel = cells[1]?.textContent.trim() || cells[0]?.textContent.trim() || 'Open navigation menu';
+
+      const hamburgerIconContent = authoredIconSrc && (authoredImg || authoredIconSrc.startsWith('/') || authoredIconSrc.startsWith('http'))
+        ? `<img src="${authoredIconSrc}" alt="${ariaLabel}" class="custom-hamburger-icon" />`
+        : `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        `;
+
       row.className = 'tcs-footer-hamburger-wrapper';
       row.innerHTML = `
         <button class="tcs-footer-hamburger" aria-label="${ariaLabel}" aria-expanded="false">
           <span class="icon-hamburger">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
+            ${hamburgerIconContent}
           </span>
           <span class="icon-close hidden">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -402,13 +411,13 @@ export default function decorate(block) {
     if (level === 'L1') {
       searchRow.prepend(hamburgerWrapperNode);
       if (searchBoxWrapperNode) searchBoxWrapperNode.classList.remove('hidden');
-      hamburgerIcon.classList.add('hidden');
-      closeIcon.classList.remove('hidden');
+      if (hamburgerIcon) hamburgerIcon.classList.add('hidden');
+      if (closeIcon) closeIcon.classList.remove('hidden');
     } else {
       navPillsRow.prepend(hamburgerWrapperNode);
       if (searchBoxWrapperNode) searchBoxWrapperNode.classList.add('hidden');
-      hamburgerIcon.classList.remove('hidden');
-      closeIcon.classList.add('hidden');
+      if (hamburgerIcon) hamburgerIcon.classList.remove('hidden');
+      if (closeIcon) closeIcon.classList.add('hidden');
     }
   };
 
@@ -506,8 +515,8 @@ export default function decorate(block) {
 
     if (hamburgerBtnNode) {
       hamburgerBtnNode.setAttribute('aria-expanded', 'false');
-      hamburgerBtnNode.querySelector('.icon-hamburger').classList.remove('hidden');
-      hamburgerBtnNode.querySelector('.icon-close').classList.add('hidden');
+      hamburgerBtnNode.querySelector('.icon-hamburger')?.classList.remove('hidden');
+      hamburgerBtnNode.querySelector('.icon-close')?.classList.add('hidden');
     }
 
     navPillsRow.classList.add('hidden');
@@ -536,36 +545,67 @@ export default function decorate(block) {
     navPillsRow.querySelectorAll('.tcs-nav-pill').forEach((p) => p.classList.remove('active'));
   });
 
-  // Smooth Scroll Fixed Position Monitor
+  // Smooth Scroll & Dual Target Docking Monitor (Hero Banner & Canvas Block)
   let ticking = false;
 
   const handleScroll = () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
         const windowHeight = window.innerHeight;
+        const scrollY = window.scrollY || window.pageYOffset;
 
-        // Select Canvas block & Footer block
-        const canvasEl = document.querySelector('.canvas') || document.querySelector('.canvas-wrapper');
+        const heroSlotEl = document.querySelector('.hero-banner-sticky');
+        const canvasSlotEl = document.querySelector('.canvas-block-search-slot');
         const footerEl = block;
 
-        let isCanvasInView = false;
-        if (canvasEl) {
-          const canvasRect = canvasEl.getBoundingClientRect();
-          // Canvas is active when top is within viewport and bottom hasn't scrolled fully past
-          isCanvasInView = canvasRect.top < windowHeight && canvasRect.bottom > 100;
+        // Check if Hero Slot is in view OR if user is at the top of page
+        let isHeroInView = false;
+        if (heroSlotEl) {
+          const heroRect = heroSlotEl.getBoundingClientRect();
+          isHeroInView = scrollY < 150 || (heroRect.top < windowHeight && heroRect.bottom > 0);
         }
 
-        // Check if user reached Footer
+        // Check Canvas slot
+        let isCanvasInView = false;
+        if (canvasSlotEl) {
+          const canvasRect = canvasSlotEl.getBoundingClientRect();
+          isCanvasInView = canvasRect.top < windowHeight && canvasRect.bottom > 0;
+        }
+
+        // Check Footer reach
         const footerRect = footerEl.getBoundingClientRect();
         const isAtFooter = footerRect.top < windowHeight - 140;
 
-        // Un-fix bar while inside Canvas OR reached Footer
-        if (isCanvasInView || isAtFooter) {
+        if (isHeroInView && heroSlotEl) {
+          // 1. DOCK inside Hero Banner Sticky Slot
+          if (floatingNav.parentElement !== heroSlotEl) {
+            heroSlotEl.append(floatingNav);
+          }
           floatingNav.classList.remove('is-fixed');
+          floatingNav.classList.add('is-docked-slot');
+          subMenuPanel.classList.remove('is-fixed');
+        } else if (isCanvasInView && canvasSlotEl) {
+          // 2. DOCK inside Canvas Search Slot
+          if (floatingNav.parentElement !== canvasSlotEl) {
+            canvasSlotEl.append(floatingNav);
+          }
+          floatingNav.classList.remove('is-fixed');
+          floatingNav.classList.add('is-docked-slot');
+          subMenuPanel.classList.remove('is-fixed');
+        } else if (isAtFooter) {
+          // 3. UN-FIXED inside Footer
+          if (floatingNav.parentElement !== footerContainer) {
+            footerContainer.insertBefore(floatingNav, ctaRow);
+          }
+          floatingNav.classList.remove('is-fixed', 'is-docked-slot');
           subMenuPanel.classList.remove('is-fixed');
         } else {
-          // Fix bar to bottom while scrolling between Canvas and Footer
+          // 4. FLOATING FIXED state while scrolling between sections
+          if (floatingNav.parentElement !== footerContainer) {
+            footerContainer.insertBefore(floatingNav, ctaRow);
+          }
           floatingNav.classList.add('is-fixed');
+          floatingNav.classList.remove('is-docked-slot');
           subMenuPanel.classList.add('is-fixed');
         }
 

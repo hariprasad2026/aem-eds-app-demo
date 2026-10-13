@@ -1698,41 +1698,9 @@
       {
         "component": "select",
         "valueType": "string",
-        "name": "ctaView",
-        "label": "CTA View",
-        "value": "default",
-        "options": [
-          {
-            "name": "Default",
-            "value": "default"
-          },
-          {
-            "name": "Primary",
-            "value": "primary"
-          },
-          {
-            "name": "Secondary",
-            "value": "secondary"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "valueType": "string",
         "name": "shape",
         "label": "Shape",
-        "value": "rectangle",
-        "condition": {
-          "in": [
-            {
-              "var": "ctaView"
-            },
-            [
-              "primary",
-              "secondary"
-            ]
-          ]
-        },
+        "value": "pill",
         "options": [
           {
             "name": "Rectangle",
@@ -1753,19 +1721,23 @@
         "valueType": "string",
         "name": "backgroundColor",
         "label": "Background Color",
-        "value": "transparent",
+        "value": "",
         "options": [
+          {
+            "name": "Variant Default",
+            "value": ""
+          },
           {
             "name": "Transparent",
             "value": "transparent"
           },
           {
             "name": "Black",
-            "value": "#000000"
+            "value": "#0C0C0D"
           },
           {
             "name": "White",
-            "value": "#ffffff"
+            "value": "#FFFFFF"
           }
         ]
       },
@@ -1774,19 +1746,35 @@
         "valueType": "string",
         "name": "hoverBackgroundColor",
         "label": "Hover Background Color",
-        "value": "transparent",
+        "value": "",
         "options": [
+          {
+            "name": "Variant Default",
+            "value": ""
+          },
           {
             "name": "Transparent",
             "value": "transparent"
           },
           {
             "name": "Black",
-            "value": "#000000"
+            "value": "#0C0C0D"
+          },
+          {
+            "name": "Dark Gray",
+            "value": "#303030"
+          },
+          {
+            "name": "Light Gray",
+            "value": "#D9D9D9"
+          },
+          {
+            "name": "Off White",
+            "value": "#F3F3F3"
           },
           {
             "name": "White",
-            "value": "#ffffff"
+            "value": "#FFFFFF"
           }
         ]
       },
@@ -1795,19 +1783,23 @@
         "valueType": "string",
         "name": "textColor",
         "label": "Text Color",
-        "value": "#000000",
+        "value": "",
         "options": [
           {
-            "name": "Transparent",
-            "value": "transparent"
+            "name": "Variant Default",
+            "value": ""
           },
           {
-            "name": "Black",
-            "value": "#000000"
+            "name": "Dark Gray",
+            "value": "#303030"
+          },
+          {
+            "name": "Off White",
+            "value": "#F3F3F3"
           },
           {
             "name": "White",
-            "value": "#ffffff"
+            "value": "#FFFFFF"
           }
         ]
       },
@@ -1816,11 +1808,11 @@
         "valueType": "string",
         "name": "borderColor",
         "label": "Border Color",
-        "value": "transparent",
+        "value": "",
         "options": [
           {
-            "name": "Transparent",
-            "value": "transparent"
+            "name": "Variant Default",
+            "value": ""
           },
           {
             "name": "Black",
@@ -1828,7 +1820,91 @@
           },
           {
             "name": "White",
-            "value": "#ffffff"
+            "value": "#FFFFFF"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "borderWidth",
+        "label": "Border Width",
+        "value": "1",
+        "options": [
+          {
+            "name": "1px",
+            "value": "1"
+          },
+          {
+            "name": "2px",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "borderRadius",
+        "label": "Border Radius",
+        "value": "9999",
+        "options": [
+          {
+            "name": "0px",
+            "value": "0"
+          },
+          {
+            "name": "6px",
+            "value": "6"
+          },
+          {
+            "name": "9999px (Pill)",
+            "value": "9999"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "backdropBlur",
+        "label": "Backdrop Blur",
+        "value": "8",
+        "options": [
+          {
+            "name": "None",
+            "value": "0"
+          },
+          {
+            "name": "8px",
+            "value": "8"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "hoverTextColor",
+        "label": "Hover Text Color",
+        "value": "",
+        "options": [
+          {
+            "name": "Variant Default",
+            "value": ""
+          },
+          {
+            "name": "Black",
+            "value": "#000000"
+          },
+          {
+            "name": "Dark Gray",
+            "value": "#303030"
+          },
+          {
+            "name": "Off White",
+            "value": "#F3F3F3"
+          },
+          {
+            "name": "White",
+            "value": "#FFFFFF"
           }
         ]
       },
@@ -1877,13 +1953,42 @@
       {
         "component": "select",
         "valueType": "string",
-        "name": "arrowColor",
-        "label": "Arrow Color",
+        "name": "iconColor",
+        "label": "Icon Color",
         "value": "black",
         "options": [
           {
             "name": "Black",
             "value": "black"
+          },
+          {
+            "name": "Gray",
+            "value": "gray"
+          },
+          {
+            "name": "White",
+            "value": "white"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "hoverIconColor",
+        "label": "Hover Icon Color",
+        "value": "",
+        "options": [
+          {
+            "name": "Same as Icon Color",
+            "value": ""
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          },
+          {
+            "name": "Gray",
+            "value": "gray"
           },
           {
             "name": "White",
@@ -1907,6 +2012,64 @@
             "value": "space-between"
           }
         ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "buttonSize",
+        "label": "Button Size",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default (50px)",
+            "value": "default"
+          },
+          {
+            "name": "Small (46px)",
+            "value": "small"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "fontWeight",
+        "label": "Font Weight",
+        "value": "500",
+        "options": [
+          {
+            "name": "Regular (400)",
+            "value": "400"
+          },
+          {
+            "name": "Medium (500)",
+            "value": "500"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "typographyStyle",
+        "label": "Text Size",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default (16px)",
+            "value": "default"
+          },
+          {
+            "name": "Compact (14px)",
+            "value": "compact"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "bold",
+        "label": "Bold",
+        "value": false
       }
     ]
   },

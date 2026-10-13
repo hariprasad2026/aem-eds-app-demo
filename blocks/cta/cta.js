@@ -5,16 +5,24 @@ const DEFAULTS = {
   iconPosition: 'before',
   iconSize: '24',
   linkTarget: 'default',
-  ctaView: 'default',
   shape: 'rectangle',
   backgroundColor: '',
   hoverBackgroundColor: '',
   textColor: '',
   borderColor: '',
+  borderWidth: '1',
+  borderRadius: '9999',
+  backdropBlur: '8',
+  hoverTextColor: '',
   ctaWidth: 'auto',
   alignment: 'left',
-  arrowColor: 'black',
+  iconColor: 'black',
+  hoverIconColor: '',
   contentLayout: 'normal',
+  buttonSize: 'default',
+  fontWeight: '500',
+  typographyStyle: 'default',
+  bold: false,
 };
 
 const ALLOWED_SHAPES = [
@@ -41,7 +49,15 @@ function normalizeShape(value) {
   return DEFAULTS.shape;
 }
 
-function createIcon(icon, size, arrowColor) {
+function normalizeTypographyStyle(value) {
+  if (value === 'default' || value === 'compact') {
+    return value;
+  }
+
+  return DEFAULTS.typographyStyle;
+}
+
+function createIcon(icon, size, iconColor, hoverIconColor) {
   if (!icon) {
     return null;
   }
@@ -50,8 +66,14 @@ function createIcon(icon, size, arrowColor) {
 
   image.classList.add(
     'cta-icon',
-    `cta-icon-${arrowColor}`,
+    `cta-icon-${iconColor}`,
   );
+
+  if (hoverIconColor) {
+    image.classList.add(
+      `cta-icon-hover-${hoverIconColor}`,
+    );
+  }
 
   image.style.width = `${size}px`;
   image.style.height = `${size}px`;
@@ -60,6 +82,20 @@ function createIcon(icon, size, arrowColor) {
 }
 
 function readBlockContent(block) {
+  const legacyView = [
+    'default',
+    'primary',
+    'secondary',
+    'tertiary',
+    'white-filled',
+  ].includes(getFieldValue(block, 6, ''));
+  const legacyState = [
+    'default',
+    'disabled',
+    'loading',
+  ].includes(getFieldValue(block, 23, '')) && legacyView;
+  const legacyOffset = legacyView ? 1 : 0;
+
   return {
     textcta: getFieldValue(block, 0, ''),
     ctaLink: getFieldValue(block, 1, ''),
@@ -67,18 +103,34 @@ function readBlockContent(block) {
     iconPosition: getFieldValue(block, 3, 'before'),
     iconSize: getFieldValue(block, 4, '24'),
     linkTarget: getFieldValue(block, 5, 'default'),
-    ctaView: getFieldValue(block, 6, 'default'),
     shape: normalizeShape(
-      getFieldValue(block, 7, 'rectangle'),
+      getFieldValue(block, 6 + legacyOffset, 'rectangle'),
     ),
-    backgroundColor: getFieldValue(block, 8, ''),
-    hoverBackgroundColor: getFieldValue(block, 9, ''),
-    textColor: getFieldValue(block, 10, ''),
-    borderColor: getFieldValue(block, 11, ''),
-    ctaWidth: getFieldValue(block, 12, 'auto'),
-    alignment: getFieldValue(block, 13, 'left'),
-    arrowColor: getFieldValue(block, 14, 'black'),
-    contentLayout: getFieldValue(block, 15, 'normal'),
+    backgroundColor: getFieldValue(block, 7 + legacyOffset, ''),
+    hoverBackgroundColor: getFieldValue(block, 8 + legacyOffset, ''),
+    textColor: getFieldValue(block, 9 + legacyOffset, ''),
+    borderColor: getFieldValue(block, 10 + legacyOffset, ''),
+    borderWidth: getFieldValue(block, 11 + legacyOffset, '1'),
+    borderRadius: getFieldValue(block, 12 + legacyOffset, '9999'),
+    backdropBlur: getFieldValue(block, 13 + legacyOffset, '8'),
+    hoverTextColor: getFieldValue(block, 14 + legacyOffset, ''),
+    ctaWidth: getFieldValue(block, 15 + legacyOffset, 'auto'),
+    alignment: getFieldValue(block, 16 + legacyOffset, 'left'),
+    iconColor: getFieldValue(block, 17 + legacyOffset, 'black'),
+    hoverIconColor: legacyView
+      ? ''
+      : getFieldValue(block, 18, ''),
+    contentLayout: getFieldValue(block, 19, 'normal'),
+    buttonSize: getFieldValue(block, 20, 'default'),
+    fontWeight: getFieldValue(block, 21, '500'),
+    typographyStyle: normalizeTypographyStyle(
+      getFieldValue(block, 22, 'default'),
+    ),
+    bold: getFieldValue(
+      block,
+      legacyState ? 24 : 23,
+      'false',
+    ) === 'true',
   };
 }
 
@@ -92,8 +144,9 @@ function createCta(data) {
   link.className = [
     'cta-link',
     `cta-link-${data.shape}`,
-    `cta-view-${data.ctaView}`,
     `cta-layout-${data.contentLayout}`,
+    `cta-size-${data.buttonSize}`,
+    `cta-typography-${data.typographyStyle}`,
   ].join(' ');
 
   link.href = data.ctaLink;
@@ -120,6 +173,17 @@ function createCta(data) {
     link.style.borderColor = data.borderColor;
   }
 
+  link.style.borderWidth = `${data.borderWidth}px`;
+
+  link.style.borderRadius = `${data.borderRadius}px`;
+
+  link.style.backdropFilter = `blur(${data.backdropBlur}px)`;
+
+  link.style.setProperty(
+    '--cta-font-weight',
+    data.bold ? '700' : data.fontWeight,
+  );
+
   if (data.hoverBackgroundColor) {
     link.style.setProperty(
       '--cta-hover-bg',
@@ -127,17 +191,27 @@ function createCta(data) {
     );
   }
 
+  if (data.hoverTextColor) {
+    link.style.setProperty(
+      '--cta-hover-text',
+      data.hoverTextColor,
+    );
+  }
+
   if (
     data.icon
     && data.iconPosition === 'before'
   ) {
-    link.append(
-      createIcon(
-        data.icon,
-        data.iconSize,
-        data.arrowColor,
-      ),
+    const icon = createIcon(
+      data.icon,
+      data.iconSize,
+      data.iconColor,
+      data.hoverIconColor,
     );
+
+    if (icon) {
+      link.append(icon);
+    }
   }
 
   const text = document.createElement('span');
@@ -151,13 +225,16 @@ function createCta(data) {
     data.icon
     && data.iconPosition === 'after'
   ) {
-    link.append(
-      createIcon(
-        data.icon,
-        data.iconSize,
-        data.arrowColor,
-      ),
+    const icon = createIcon(
+      data.icon,
+      data.iconSize,
+      data.iconColor,
+      data.hoverIconColor,
     );
+
+    if (icon) {
+      link.append(icon);
+    }
   }
 
   return link;
@@ -174,24 +251,26 @@ export default function decorate(block) {
     `cta-align-${data.alignment}`,
   );
 
-  if (cta) {
-    switch (data.ctaWidth) {
-      case 'half':
-        cta.classList.add(
-          'cta-width-half-link',
-        );
-        break;
-
-      case 'full':
-        cta.classList.add(
-          'cta-width-full-link',
-        );
-        break;
-
-      default:
-        break;
-    }
-
-    block.append(cta);
+  if (!cta) {
+    return;
   }
+
+  switch (data.ctaWidth) {
+    case 'half':
+      cta.classList.add(
+        'cta-width-half-link',
+      );
+      break;
+
+    case 'full':
+      cta.classList.add(
+        'cta-width-full-link',
+      );
+      break;
+
+    default:
+      break;
+  }
+
+  block.append(cta);
 }

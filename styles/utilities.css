@@ -1,0 +1,25 @@
+.card,
+.surface-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--surface-color);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-xl);
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: var(--spacing-s);
+  color: var(--text-color-muted);
+  font-family: var(--font-family-eyebrow);
+  font-size: var(--body-font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.display-1-semi {
+  font-size: var(--display-1-semi-size);
+  font-weight: var(--display-1-semi-weight);
+  line-height: var(--display-1-semi-line-height);
+}

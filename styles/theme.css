@@ -1,0 +1,20 @@
+[data-theme='dark'],
+.theme-dark {
+  --background-color: var(--color-black);
+  --background-color-alt: var(--color-black-85);
+  --surface-color: var(--color-black);
+  --surface-subtle: var(--color-black-85);
+  --surface-strong: var(--color-black-80);
+  --text-color: var(--color-white);
+  --text-color-muted: var(--color-neutral-300);
+  --heading-color: var(--color-white);
+  --border-color: var(--color-black-40);
+  --button-primary-bg: var(--color-brand-500);
+  --button-primary-bg-hover: var(--color-brand-900);
+  --button-secondary-bg: var(--color-brand-200);
+  --button-secondary-bg-hover: var(--color-brand-100);
+  --button-tertiary-bg: var(--color-brand-600);
+  --button-tertiary-bg-hover: var(--color-brand-900);
+  --button-disabled-bg: var(--color-black-70);
+  --button-disabled-text: var(--color-neutral-300);
+}

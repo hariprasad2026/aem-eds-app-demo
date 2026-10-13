@@ -124,12 +124,26 @@ export function decorateMain(main) {
 }
 
 /**
+ * Adds stable page/path classes on body for page-scoped theming.
+ */
+function decoratePageContext() {
+  const { pathname } = window.location;
+  const slug = pathname.replace(/^\/+|\/+$/g, '').replace(/[^a-z0-9-]+/gi, '-').toLowerCase() || 'index';
+  document.body.classList.add('page', `page-${slug}`);
+
+  if (pathname === '/' || slug === 'index') {
+    document.body.classList.add('page-home');
+  }
+}
+
+/**
  * Loads everything needed to get to LCP.
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
+  decoratePageContext();
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);

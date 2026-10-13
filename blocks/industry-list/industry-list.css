@@ -394,3 +394,82 @@ main > .section > div.industry-list-wrapper {
     font-size: 28px;
   }
 }
+
+
+/* stylelint-disable no-descending-specificity -- Home page token adoption overrides */
+body.page-home .industry-list-container,
+body.page-home .industry-list {
+  background-color: var(--surface-color);
+}
+
+body.page-home .industry-list {
+  padding: var(--spacing-6xl) 0;
+  color: var(--text-color);
+}
+
+body.page-home .industry-list .industry-list-header {
+  margin-bottom: var(--spacing-4xl);
+}
+
+body.page-home .industry-list .industry-list-heading {
+  color: var(--heading-color);
+  font-size: clamp(32px, 3.4vw, var(--home-heading-2-size));
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+body.page-home .industry-list .industry-list-explore a:any-link {
+  color: var(--text-color);
+}
+
+body.page-home .industry-list .industry-list-card {
+  border-bottom-color: var(--border-color);
+  min-height: clamp(92px, 8.8vw, 108px);
+}
+
+body.page-home .industry-list .industry-list-number {
+  color: var(--text-color-muted);
+}
+
+body.page-home .industry-list .industry-list-title {
+  color: var(--heading-color);
+  font-size: clamp(24px, 2.6vw, var(--home-heading-3-size));
+  line-height: 1.2;
+  text-wrap: balance;
+  max-width: 18ch;
+}
+
+body.page-home .industry-list .industry-list-description {
+  color: var(--text-color-muted);
+  font-size: clamp(16px, 1.5vw, 22px);
+}
+
+body.page-home .industry-list.featured-industry .industry-list-card-featured {
+  background-color: var(--surface-subtle);
+}
+
+body.page-home .industry-list.featured-industry .industry-list-card-featured::before {
+  background-color: var(--border-neutral-default);
+}
+
+@media (width < 900px) {
+  body.page-home .industry-list {
+    padding: var(--spacing-5xl) 0;
+  }
+}
+
+@media (width < 600px) {
+  body.page-home .industry-list {
+    padding: var(--spacing-4xl) 0;
+  }
+
+  body.page-home .industry-list .industry-list-header {
+    margin-bottom: var(--spacing-l);
+  }
+
+  body.page-home .industry-list .industry-list-card {
+    min-height: 0;
+  }
+}
+
+/* stylelint-enable no-descending-specificity */

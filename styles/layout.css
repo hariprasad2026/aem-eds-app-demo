@@ -1,0 +1,69 @@
+.container,
+main > .section > div {
+  width: min(var(--container-width), calc(100% - (var(--container-gutter) * 2)));
+  max-width: var(--container-width-max);
+  margin-inline: auto;
+}
+
+.section,
+main > .section {
+  position: relative;
+  padding: var(--section-padding-block) 0;
+}
+
+.section-light,
+main .section.light,
+main .section.highlight,
+.section[data-background='light'] {
+  background: var(--surface-subtle);
+}
+
+.section-dark,
+.section[data-background='dark'] {
+  background: var(--color-black-90);
+  color: var(--color-white);
+}
+
+.section-dark h1,
+.section-dark h2,
+.section-dark h3,
+.section-dark h4,
+.section-dark h5,
+.section-dark h6,
+.section-dark p,
+.section[data-background='dark'] h1,
+.section[data-background='dark'] h2,
+.section[data-background='dark'] h3,
+.section[data-background='dark'] h4,
+.section[data-background='dark'] h5,
+.section[data-background='dark'] h6,
+.section[data-background='dark'] p {
+  color: var(--color-white);
+}
+
+.section-accent,
+.section[data-background='accent'] {
+  background: var(--surface-strong);
+}
+
+.grid {
+  display: grid;
+  gap: var(--spacing-l);
+}
+
+@media (width >= 700px) {
+  .grid.grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 1200px) {
+  .grid.grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid.grid-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+

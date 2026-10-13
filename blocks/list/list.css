@@ -825,3 +825,140 @@
 }
 
 /* stylelint-enable no-descending-specificity */
+
+
+/* stylelint-disable no-descending-specificity -- Home page token adoption overrides */
+body.page-home .list-wrapper {
+  max-width: var(--container-width);
+  padding: 0 var(--container-gutter);
+}
+
+body.page-home .list .list-main-title,
+body.page-home .list.list-style-card-m-scroll .list-main-title,
+body.page-home .list.list-style-card-2col-tm-scroll .list-main-title,
+body.page-home .list.list-style-hero-card .list-main-title {
+  color: var(--heading-color);
+  font-size: var(--home-heading-2-size);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.15;
+}
+
+body.page-home .list .list-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+body.page-home .list .list-view-all,
+body.page-home .list.list-style-hero-card .list-view-all {
+  background-color: var(--background-neutral-default);
+  color: var(--text-neutral-on-neutral);
+  border-color: var(--border-neutral-default);
+}
+
+body.page-home .list .list-card {
+  border-radius: var(--radius-md);
+}
+
+body.page-home .list .list-container {
+  gap: var(--spacing-l);
+}
+
+body.page-home .list.list-style-card-m-scroll .list-card {
+  height: clamp(360px, 32vw, 453px);
+}
+
+body.page-home .list.list-style-hero-card .hero-item .list-card {
+  height: clamp(460px, 46vw, 650px);
+}
+
+body.page-home .list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image {
+  height: clamp(320px, 32vw, 453px);
+}
+
+body.page-home .list .list-card.card-color-grey,
+body.page-home .list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image {
+  background-color: var(--surface-subtle);
+  color: var(--text-color);
+}
+
+body.page-home .list .list-card.card-color-black,
+body.page-home .list.list-style-card-m-scroll .list-card.card-color-black,
+body.page-home .list.list-style-hero-card .hero-item .list-card,
+body.page-home .list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image.card-color-black {
+  background-color: var(--background-neutral-default);
+  color: var(--text-neutral-on-neutral);
+}
+
+body.page-home .list .list-card.card-color-blue,
+body.page-home .list.list-style-card-m-scroll .list-card.card-color-blue,
+body.page-home .list.list-style-card-m-scroll .list-card.no-image.card-color-grey,
+body.page-home .list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image.card-color-blue {
+  background-color: var(--background-brand-default);
+  color: var(--text-brand-on-brand);
+}
+
+body.page-home .list .list-eyebrow {
+  color: var(--text-color-muted);
+}
+
+body.page-home .list .list-card.card-color-black .list-eyebrow,
+body.page-home .list .list-card.card-color-blue .list-eyebrow,
+body.page-home .list.list-style-hero-card .hero-item .list-eyebrow {
+  color: var(--text-neutral-on-neutral-secondary);
+}
+
+body.page-home .list .list-title,
+body.page-home .list .list-title a {
+  color: inherit;
+}
+
+body.page-home .list .list-title {
+  text-wrap: balance;
+}
+
+body.page-home .list.list-style-card-m-scroll .list-title,
+body.page-home .list.list-style-hero-card .hero-item .list-title {
+  max-width: 20ch;
+}
+
+body.page-home .list .list-description {
+  color: inherit;
+  opacity: 0.8;
+}
+
+@media (width <= 1024px) {
+  body.page-home .list .list-main-title {
+    line-height: 1.2;
+  }
+
+  body.page-home .list.list-style-card-m-scroll .list-title,
+  body.page-home .list.list-style-hero-card .hero-item .list-title {
+    max-width: 18ch;
+  }
+
+  body.page-home .list.list-style-card-m-scroll .list-card {
+    height: clamp(340px, 52vw, 420px);
+  }
+
+  body.page-home .list.list-style-hero-card .hero-item .list-card {
+    height: clamp(400px, 56vw, 560px);
+  }
+}
+
+@media (width <= 700px) {
+  body.page-home .list .list-header {
+    margin-bottom: var(--spacing-l);
+  }
+
+  body.page-home .list .list-container {
+    gap: var(--spacing-m);
+  }
+
+  body.page-home .list.list-style-card-m-scroll .list-card,
+  body.page-home .list.list-style-hero-card .hero-item .list-card,
+  body.page-home .list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image {
+    height: auto;
+    min-height: 320px;
+  }
+}
+
+/* stylelint-enable no-descending-specificity */

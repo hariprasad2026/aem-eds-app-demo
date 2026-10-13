@@ -1,0 +1,92 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  display: none;
+  margin: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-family-base);
+  font-size: var(--body-font-size-m);
+  line-height: var(--body-line-height);
+  text-rendering: optimizelegibility;
+}
+
+body.appear {
+  display: block;
+}
+
+::selection {
+  background: var(--surface-strong);
+  color: var(--heading-color);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+header {
+  height: var(--nav-height);
+}
+
+header .header,
+footer .footer {
+  visibility: hidden;
+}
+
+header .header[data-block-status='loaded'],
+footer .footer[data-block-status='loaded'] {
+  visibility: visible;
+}
+
+main img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: var(--spacing-xs);
+  color: var(--heading-color);
+  font-size: var(--body-font-size-s);
+  font-weight: var(--font-weight-medium);
+}
+
+input:not([type='checkbox'], [type='radio']),
+textarea,
+select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  background-color: var(--surface-color);
+  color: var(--text-color);
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-black-80);
+}
+

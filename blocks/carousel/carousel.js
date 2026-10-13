@@ -12,9 +12,10 @@ function updateActiveSlide(slide) {
   const slides = block.querySelectorAll('.carousel-slide');
 
   slides.forEach((aSlide, idx) => {
-    aSlide.setAttribute('aria-hidden', idx !== slideIndex);
-    aSlide.querySelectorAll('a').forEach((link) => {
-      if (idx !== slideIndex) {
+    const isActive = idx === slideIndex;
+    aSlide.setAttribute('aria-hidden', String(!isActive));
+    aSlide.querySelectorAll('a, button, input, select, textarea, [tabindex]').forEach((link) => {
+      if (!isActive) {
         link.setAttribute('tabindex', '-1');
       } else {
         link.removeAttribute('tabindex');
@@ -24,11 +25,10 @@ function updateActiveSlide(slide) {
 
   const indicators = block.querySelectorAll('.carousel-slide-indicator');
   indicators.forEach((indicator, idx) => {
-    if (idx !== slideIndex) {
-      indicator.querySelector('button').removeAttribute('disabled');
-    } else {
-      indicator.querySelector('button').setAttribute('disabled', 'true');
-    }
+    const button = indicator.querySelector('button');
+    const isActive = idx === slideIndex;
+    button.disabled = isActive;
+    button.setAttribute('aria-current', String(isActive));
   });
 }
 
@@ -136,12 +136,14 @@ function startAutoplay(block) {
     }
     if (paused || !visible || document.hidden) return;
     const active = Number.parseInt(block.dataset.activeSlide, 10) || 0;
-    showSlide(block, active + 1);
+    const slideCount = block.querySelectorAll('.carousel-slide').length;
+    if (slideCount) showSlide(block, (active + 1) % slideCount);
   }, AUTOPLAY_INTERVAL);
 }
 
 const HORIZONTAL_ALIGNMENTS = ['left', 'center', 'right'];
 const VERTICAL_ALIGNMENTS = ['top', 'middle', 'bottom'];
+const HERO_IMAGE_TYPES = ['default', 'lotto'];
 
 /**
  * Alignment values are authored as the trailing plain paragraphs of the content cell.
@@ -167,10 +169,19 @@ function extractAlignment(column, slide) {
 function isHeroBannerRow(row) {
   if (['hero-banner-item', 'hero-banner'].includes(row.dataset.aueModel)) return true;
 
-  return Boolean(row.querySelector(
+  if (row.querySelector(
     '[data-aue-prop="heroIcon"], [data-aue-prop="heroImageType"], '
     + '[data-aue-prop="heroImage"], [data-aue-prop="heroLottoImagePath"]',
+  )) return true;
+
+  const columns = [...row.querySelectorAll(':scope > div')];
+  const hasHeroImageType = columns.some((column) => (
+    !column.querySelector('img, picture, a[href]')
+    && HERO_IMAGE_TYPES.includes(column.textContent.trim().toLowerCase())
   ));
+  const hasHeroImage = columns.some((column) => column.querySelector('img, picture, a[href]'));
+
+  return columns.length >= 8 && hasHeroImageType && hasHeroImage;
 }
 
 function copyHeroStyleClasses(from, to) {

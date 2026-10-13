@@ -214,6 +214,7 @@ function applyDefaults(data) {
 function isTeaserLinkItem(element) {
   return Boolean(element) && (
     element.dataset?.aueComponent === 'teaser-v1-cta'
+    || element.dataset?.aueModel === 'teaser-v1-cta'
     || element.dataset?.aueModel === 'cta'
     || element.dataset?.blockName === 'teaser-v1-cta'
     || element.classList?.contains('teaser-v1-cta')
@@ -253,6 +254,7 @@ function getTeaserLinkItems(block) {
       '[data-aue-component="teaser-v1-cta"], '
       + '[data-block-name="teaser-v1-cta"], '
       + '[data-aue-model="teaser-v1-cta"], '
+      + '[data-aue-model="cta"], '
       + '.teaser-v1-cta',
     ),
   ];

@@ -180,7 +180,10 @@ function createCta(data) {
   }
 
   if (data.backgroundColor) {
-    link.style.backgroundColor = data.backgroundColor;
+    link.style.setProperty(
+      '--cta-background-color',
+      data.backgroundColor,
+    );
   }
 
   if (data.textColor) {

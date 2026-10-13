@@ -35,6 +35,23 @@
               "value": "highlight"
             }
           ]
+        },
+        {
+          "component": "select",
+          "name": "sectionWidth",
+          "label": "Select Width",
+          "valueType": "string",
+          "value": "default",
+          "options": [
+            {
+              "name": "Default",
+              "value": "default"
+            },
+            {
+              "name": "Full Width",
+              "value": "full-width"
+            }
+          ]
         }
       ]
     }

@@ -41,7 +41,7 @@
 }
 
 .hero-banner.hero-banner-bg-black::before {
-  background: rgb(0 0 0 / 80%);
+  background: rgb(1 18 31 / 80%);
 }
 
 .hero-banner-content {
@@ -56,13 +56,12 @@
   width: 100%;
   max-width: 1200px;
   min-height: 1000px;
-  padding: 0 24px;
 }
 
 .hero-banner-icon {
   display: block;
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 39.99px;
   margin-bottom: 8px;
   background-color: #4673DB;
   mask-image: var(--hero-banner-icon-src);
@@ -75,7 +74,7 @@
   font-family: Inter, sans-serif;
   color: #4673DB;
   margin: 0;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 160%;
 }
@@ -84,7 +83,8 @@
   font-family: Inter, sans-serif;
   width: 100%;
   max-width: 1352px;
-  margin:0;
+  min-height: 154px;
+  margin: 0;
   margin-top: 24px;
   margin-bottom: 40px;
   color: #000;
@@ -93,7 +93,9 @@
   line-height: 120%;
   letter-spacing: -0.025em;
   text-align: center;
+  vertical-align: middle;
   text-wrap: balance;
+  opacity: 1;
 }
 
 .hero-banner-description {
@@ -116,19 +118,62 @@
   color: #fff;
 }
 
+.hero-banner.icon-color-black .hero-banner-icon {
+  background-color: #000;
+}
+
+.hero-banner.icon-color-white .hero-banner-icon {
+  background-color: #fff;
+}
+
+.hero-banner.icon-color-blue .hero-banner-icon {
+  background-color: #4673DB;
+}
+
+.hero-banner.title-color-black .hero-banner-title {
+  color: #000;
+}
+
+.hero-banner.title-color-white .hero-banner-title {
+  color: #fff;
+}
+
+.hero-banner.title-color-grey .hero-banner-title {
+  color: rgb(255 255 255 / 100%);
+}
+
+.hero-banner.description-color-black .hero-banner-description,
+.hero-banner.description-color-black .hero-banner-description p {
+  color: #000;
+}
+
+.hero-banner.description-color-white .hero-banner-description,
+.hero-banner.description-color-white .hero-banner-description p {
+  color: #fff;
+}
+
+.hero-banner.description-color-grey .hero-banner-description,
+.hero-banner.description-color-grey .hero-banner-description p {
+  color: rgb(255 255 255 / 100%);
+}
+
 
 .hero-banner-cta-items {
   display: flex;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   justify-content: center;
   align-items: center;
   gap: 16px;
+  width: 100%;
   margin-top: 40px;
 }
 
 .hero-banner-cta-items > div {
-  display: block;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
   justify-content: center;
+  width: auto;
 }
 
 .hero-banner-align-top .hero-banner-content {
@@ -158,7 +203,14 @@
   }
 
   .hero-banner-title {
+    max-width: 936px;
+    min-height: 120px;
+    font-weight: 500;
     font-size: 48px;
+    line-height: 120%;
+    letter-spacing: -0.025em;
+    text-align: center;
+    vertical-align: middle;
     margin-top: 20px;
     margin-bottom: 32px;
   }
@@ -205,7 +257,13 @@
   }
 
   .hero-banner-title {
+    min-height: 0;
+    font-weight: 500;
     font-size: 32px;
+    line-height: 120%;
+    letter-spacing: -0.025em;
+    text-align: center;
+    vertical-align: middle;
     margin-top: 16px;
     margin-bottom: 24px;
   }
@@ -219,7 +277,7 @@
   }
 
   .hero-banner-cta-items {
-    flex-direction: column;
+    flex-direction: row;
     gap: 12px;
     margin-top: 24px;
   }

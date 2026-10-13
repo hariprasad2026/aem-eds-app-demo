@@ -76,25 +76,6 @@
         {
           "component": "select",
           "valueType": "string",
-          "name": "searchVariation",
-          "label": "Search Variation",
-          "value": "both",
-          "options": [
-            { "name": "Text & Voice", "value": "both" },
-            { "name": "Text Only", "value": "text-only" },
-            { "name": "Voice Only", "value": "voice-only" }
-          ]
-        },
-        {
-          "component": "text-input",
-          "valueType": "string",
-          "name": "searchPlaceholder",
-          "label": "Search Placeholder Text",
-          "value": "Ask Canvas Search"
-        },
-        {
-          "component": "select",
-          "valueType": "string",
           "name": "motionType",
           "label": "Motion Type",
           "value": "slide",

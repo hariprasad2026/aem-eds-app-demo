@@ -19,7 +19,6 @@ const DEFAULTS = {
   hoverIconColor: '',
   contentLayout: 'normal',
   buttonSize: 'default',
-  fontWeight: '500',
   typographyStyle: 'default',
   bold: false,
 };
@@ -56,6 +55,12 @@ function normalizeTypographyStyle(value) {
   return DEFAULTS.typographyStyle;
 }
 
+function normalizeIconSize(value) {
+  const allowedSizes = ['14', '16', '18', '20', '24', '32', '40', '48'];
+
+  return allowedSizes.includes(value) ? value : DEFAULTS.iconSize;
+}
+
 function createIcon(icon, size, iconColor, hoverIconColor) {
   if (!icon) {
     return null;
@@ -90,45 +95,51 @@ function readBlockContent(block) {
   ].includes(getFieldValue(block, 6, ''));
   const legacyOffset = legacyView ? 1 : 0;
   const hasBorderRadiusField = block.children.length >= 24 + (legacyView ? 1 : 0);
-  const fieldOffset = legacyOffset - (hasBorderRadiusField ? 0 : 1);
+  const hasFontWeightField = block.children.length >= 23 + legacyOffset;
+  const radiusOffset = hasBorderRadiusField ? 1 : 0;
+  const fontWeightOffset = hasFontWeightField ? 1 : 0;
+  const fieldOffset = legacyOffset + radiusOffset;
   const legacyState = [
     'default',
     'disabled',
     'loading',
-  ].includes(getFieldValue(block, 23 + (hasBorderRadiusField ? 0 : -1), '')) && legacyView;
+  ].includes(getFieldValue(
+    block,
+    23 - (hasBorderRadiusField ? 0 : 1) - (hasFontWeightField ? 0 : 1),
+    '',
+  )) && legacyView;
 
   return {
     textcta: getFieldValue(block, 0, ''),
     ctaLink: getFieldValue(block, 1, ''),
     icon: block.children[2]?.querySelector('img'),
     iconPosition: getFieldValue(block, 3, 'before'),
-    iconSize: getFieldValue(block, 4, '24'),
-    linkTarget: getFieldValue(block, 5, 'default'),
+    iconSize: normalizeIconSize(getFieldValue(block, 5, '24')),
+    linkTarget: getFieldValue(block, 4, 'default'),
     shape: normalizeShape(
       getFieldValue(block, 6 + legacyOffset, 'rectangle'),
     ),
     backgroundColor: getFieldValue(block, 7 + legacyOffset, ''),
-    hoverBackgroundColor: getFieldValue(block, 8 + legacyOffset, ''),
-    textColor: getFieldValue(block, 9 + legacyOffset, ''),
-    borderColor: getFieldValue(block, 10 + legacyOffset, ''),
+    textColor: getFieldValue(block, 8 + legacyOffset, ''),
+    borderColor: getFieldValue(block, 9 + legacyOffset, ''),
+    hoverBackgroundColor: getFieldValue(block, 10 + legacyOffset, ''),
     borderWidth: getFieldValue(block, 11 + legacyOffset, '1'),
-    backdropBlur: getFieldValue(block, 13 + fieldOffset, '8'),
-    hoverTextColor: getFieldValue(block, 14 + fieldOffset, ''),
-    ctaWidth: getFieldValue(block, 15 + fieldOffset, 'auto'),
-    alignment: getFieldValue(block, 16 + fieldOffset, 'left'),
-    iconColor: getFieldValue(block, 17 + fieldOffset, 'black'),
+    backdropBlur: getFieldValue(block, 12 + fieldOffset, '8'),
+    hoverTextColor: getFieldValue(block, 13 + fieldOffset, ''),
+    ctaWidth: getFieldValue(block, 14 + fieldOffset, 'auto'),
+    alignment: getFieldValue(block, 15 + fieldOffset, 'left'),
+    iconColor: getFieldValue(block, 16 + fieldOffset, 'black'),
     hoverIconColor: legacyView
       ? ''
-      : getFieldValue(block, 18 + fieldOffset, ''),
-    contentLayout: getFieldValue(block, 19 + fieldOffset, 'normal'),
-    buttonSize: getFieldValue(block, 20 + fieldOffset, 'default'),
-    fontWeight: getFieldValue(block, 21 + fieldOffset, '500'),
+      : getFieldValue(block, 17 + fieldOffset, ''),
+    contentLayout: getFieldValue(block, 18 + fieldOffset, 'normal'),
+    buttonSize: getFieldValue(block, 19 + fieldOffset, 'default'),
     typographyStyle: normalizeTypographyStyle(
-      getFieldValue(block, 22 + fieldOffset, 'default'),
+      getFieldValue(block, 20 + fieldOffset + fontWeightOffset, 'default'),
     ),
     bold: getFieldValue(
       block,
-      (legacyState ? 24 : 23) + (hasBorderRadiusField ? 0 : -1),
+      (legacyState ? 24 : 21) + fieldOffset + fontWeightOffset,
       'false',
     ) === 'true',
   };
@@ -179,7 +190,7 @@ function createCta(data) {
 
   link.style.setProperty(
     '--cta-font-weight',
-    data.bold ? '700' : data.fontWeight,
+    data.bold ? '700' : '500',
   );
 
   if (data.hoverBackgroundColor) {

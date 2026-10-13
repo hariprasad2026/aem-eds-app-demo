@@ -62,22 +62,22 @@
   justify-content: flex-end;
 }
 
+.cta-layout-normal {
+  display: inline-flex;
+}
+
+.cta-link.cta-layout-space-between {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
 .cta-link.cta-width-half-link {
   width: 50%;
 }
 
 .cta-link.cta-width-full-link {
   width: 100%;
-}
-
-.cta-layout-normal {
-  display: inline-flex;
-}
-
-.cta-layout-space-between {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
 }
 
 /* FIGMA TYPOGRAPHY */

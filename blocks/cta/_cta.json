@@ -439,23 +439,6 @@
     {
       "component": "select",
       "valueType": "string",
-      "name": "fontWeight",
-      "label": "Font Weight",
-      "value": "500",
-      "options": [
-        {
-          "name": "Regular (400)",
-          "value": "400"
-        },
-        {
-          "name": "Medium (500)",
-          "value": "500"
-        }
-      ]
-    },
-    {
-      "component": "select",
-      "valueType": "string",
       "name": "typographyStyle",
       "label": "Text Size",
       "value": "default",

@@ -180,15 +180,15 @@ function createCta(data) {
   }
 
   if (data.backgroundColor) {
-    link.style.backgroundColor = data.backgroundColor;
+    link.style.setProperty('--cta-background-color', data.backgroundColor);
   }
 
   if (data.textColor) {
-    link.style.color = data.textColor;
+    link.style.setProperty('--cta-text-color', data.textColor);
   }
 
   if (data.borderColor) {
-    link.style.borderColor = data.borderColor;
+    link.style.setProperty('--cta-border-color', data.borderColor);
   }
 
   link.style.borderWidth = `${data.borderWidth}px`;
@@ -201,17 +201,11 @@ function createCta(data) {
   );
 
   if (data.hoverBackgroundColor) {
-    link.style.setProperty(
-      '--cta-hover-bg',
-      data.hoverBackgroundColor,
-    );
+    link.style.setProperty('--cta-hover-bg', data.hoverBackgroundColor);
   }
 
   if (data.hoverTextColor) {
-    link.style.setProperty(
-      '--cta-hover-text',
-      data.hoverTextColor,
-    );
+    link.style.setProperty('--cta-hover-text', data.hoverTextColor);
   }
 
   if (

@@ -1848,6 +1848,10 @@
           {
             "name": "2px",
             "value": "2"
+          },
+          {
+            "name": "No Border",
+            "value": "0"
           }
         ]
       },

@@ -12,22 +12,93 @@ function formatHtmlPath(path) {
 }
 
 /**
- * Sanitizes image src paths fetched from plain.html fragments.
- * Strips improperly appended `.html` extensions from DAM/DynamicMedia image URLs.
- */
-function sanitizeImgUrl(url) {
-  if (!url || typeof url !== 'string') return '';
-  let cleanUrl = url.trim();
-
-  // Strip .html or /.html inserted by Franklin rewriter prior to query parameters
-  cleanUrl = cleanUrl.replace(/\/\.html(?=\?|$)/i, '').replace(/\.html(?=\?|$)/i, '');
-
-  // Reject non-image values or variation strings accidentally picked up
-  if (['both', 'text-only', 'voice-only', 'standard', 'compact', 'dark'].includes(cleanUrl.toLowerCase())) {
-    return '';
+* Helper to safely extract image elements or URLs identically for both logos
+*/
+function getLogoElement(block, propName, fallbackAlt) {
+  const elem = block.querySelector(`[data-aue-prop="${propName}"]`);
+  // 1. If an actual <picture> or <img> tag exists inside the block row (identical to tcsLogo)
+  if (elem) {
+    const pic = elem.querySelector('picture');
+    if (pic) return pic.cloneNode(true);
+    const img = elem.querySelector('img') || (elem.matches('img') ? elem : null);
+    if (img && img.src && !img.src.includes('.html')) {
+      return createOptimizedPicture(img.src, img.alt || fallbackAlt, false, [{ width: '160' }]);
+    }
   }
 
-  return cleanUrl;
+  // 2. Scan block children rows directly
+  const rows = [...block.children];
+  for (let i = 0; i < rows.length; i += 1) {
+    const row = rows[i];
+    const text = row.textContent.toLowerCase();
+    if (text.includes(propName.toLowerCase())) {
+      const pic = row.querySelector('picture');
+      if (pic) return pic.cloneNode(true);
+      const img = row.querySelector('img');
+      if (img && img.src) {
+        return createOptimizedPicture(img.src, img.alt || fallbackAlt, false, [{ width: '160' }]);
+      }
+    }
+  }
+
+  return null;
+}
+
+function getProp(block, name, fallback = '') {
+  const lower = name.toLowerCase();
+  const fieldOrder = [
+    'headerVariant',
+    'tcsLogo',
+    'tcsLogoAlt',
+    'tcsLogoLink',
+    'tataLogo',
+    'tataLogoAlt',
+    'tataLogoLink',
+    'searchVariation',
+    'searchPlaceholder',
+    'motionType',
+  ];
+
+  const getValue = (element) => {
+    if (!element) return '';
+    const anchor = element.matches('a') ? element : element.querySelector('a');
+    if (anchor && !anchor.querySelector('img')) return anchor.getAttribute('href') || anchor.textContent.trim();
+    const input = element.matches('input, textarea, select')
+      ? element
+      : element.querySelector('input, textarea, select');
+    return input?.value || element.dataset.value || element.getAttribute('value') || element.textContent.trim();
+  };
+
+  if (block.dataset[name] !== undefined && block.dataset[name] !== '') return block.dataset[name];
+  if (block.dataset[lower] !== undefined && block.dataset[lower] !== '') return block.dataset[lower];
+
+  const attrElem = block.querySelector(`[data-aue-prop="${name}"], [data-aue-prop="${lower}"]`);
+  if (attrElem) {
+    const val = getValue(attrElem);
+    if (val) return val;
+  }
+
+  const rows = [...block.children];
+  for (let index = 0; index < rows.length; index += 1) {
+    const row = rows[index];
+    const cols = [...row.children];
+    if (cols.length >= 2) {
+      const key = cols[0].textContent.trim().toLowerCase().replace(/[-_]/g, '');
+      if (key === lower.replace(/[-_]/g, '')) {
+        const val = getValue(cols[1]);
+        if (val) return val;
+      }
+    }
+  }
+
+  const fieldIndex = fieldOrder.indexOf(name);
+  if (fieldIndex >= 0 && rows[fieldIndex]) {
+    const cols = [...rows[fieldIndex].children];
+    const val = getValue(cols.length > 1 ? cols[1] : rows[fieldIndex]);
+    if (val) return val;
+  }
+
+  return fallback;
 }
 
 async function fetchHierarchicalNavData() {
@@ -111,76 +182,15 @@ async function fetchHierarchicalNavData() {
   }
 }
 
-function getProp(block, name, fallback = '') {
-  const lower = name.toLowerCase();
-  const fieldOrder = [
-    'headerVariant',
-    'tcsLogo',
-    'tcsLogoAlt',
-    'tcsLogoLink',
-    'tataLogo',
-    'tataLogoAlt',
-    'tataLogoLink',
-    'searchVariation',
-    'searchPlaceholder',
-    'motionType',
-  ];
-
-  const getValue = (element) => {
-    if (!element) return '';
-    const image = element.matches('img') ? element : element.querySelector('picture img, img');
-    if (image) return image.getAttribute('src') || image.src;
-    const anchor = element.matches('a') ? element : element.querySelector('a');
-    if (anchor) return anchor.getAttribute('href') || anchor.textContent.trim();
-    const input = element.matches('input, textarea, select')
-      ? element
-      : element.querySelector('input, textarea, select');
-    return input?.value || element.dataset.value || element.getAttribute('value') || element.textContent.trim();
-  };
-
-  // 1. Direct Dataset Lookup
-  if (block.dataset[name] !== undefined && block.dataset[name] !== '') return block.dataset[name];
-  if (block.dataset[lower] !== undefined && block.dataset[lower] !== '') return block.dataset[lower];
-
-  // 2. Query selector lookup by attribute
-  const attrElem = block.querySelector(`[data-aue-prop="${name}"], [data-aue-prop="${lower}"]`);
-  if (attrElem) {
-    const val = getValue(attrElem);
-    if (val) return val;
-  }
-
-  // 3. Scan rows for matching column keys
-  const rows = [...block.children];
-  for (let index = 0; index < rows.length; index += 1) {
-    const row = rows[index];
-    const cols = [...row.children];
-    if (cols.length >= 2) {
-      const key = cols[0].textContent.trim().toLowerCase().replace(/[-_]/g, '');
-      if (key === lower.replace(/[-_]/g, '')) {
-        const val = getValue(cols[1]);
-        if (val) return val;
-      }
-    }
-  }
-
-  // 4. Index-based fallback based on model ordering
-  const fieldIndex = fieldOrder.indexOf(name);
-  if (fieldIndex >= 0 && rows[fieldIndex]) {
-    const cols = [...rows[fieldIndex].children];
-    const val = getValue(cols.length > 1 ? cols[1] : rows[fieldIndex]);
-    if (val) return val;
-  }
-
-  return fallback;
-}
-
 export default function decorate(block) {
+  // Extract Logo Elements Directly from DOM before clearing block content
+  const tcsPicture = getLogoElement(block, 'tcsLogo', 'Tata Consultancy Services');
+  const tataPicture = getLogoElement(block, 'tataLogo', 'TATA Group');
+
   const config = {
     headerVariant: getProp(block, 'headerVariant', 'standard'),
-    tcsLogo: sanitizeImgUrl(getProp(block, 'tcsLogo')),
     tcsLogoAlt: getProp(block, 'tcsLogoAlt', 'Tata Consultancy Services'),
     tcsLogoLink: getProp(block, 'tcsLogoLink', '/'),
-    tataLogo: sanitizeImgUrl(getProp(block, 'tataLogo')),
     tataLogoAlt: getProp(block, 'tataLogoAlt', 'TATA Group'),
     tataLogoLink: getProp(block, 'tataLogoLink', 'https://www.tata.com'),
   };
@@ -194,19 +204,19 @@ export default function decorate(block) {
   const nav = document.createElement('nav');
   nav.id = 'tcs-nav';
 
-  // 1. TCS Primary Logo
+  // 1. TCS Logo (Rendered using direct picture clone or text fallback)
   const brandPrimary = document.createElement('div');
   brandPrimary.className = 'nav-brand-primary';
   const primaryAnchor = document.createElement('a');
   primaryAnchor.href = config.tcsLogoLink;
-  if (config.tcsLogo) {
-    primaryAnchor.append(createOptimizedPicture(config.tcsLogo, config.tcsLogoAlt, false, [{ width: '300' }]));
+  if (tcsPicture) {
+    primaryAnchor.append(tcsPicture);
   } else {
     primaryAnchor.textContent = 'TCS';
   }
   brandPrimary.append(primaryAnchor);
 
-  // 2. Tata Secondary Logo (Cleaned URL Fix)
+  // 2. TATA Logo (Rendered using identical picture clone logic as TCS logo)
   const brandSecondary = document.createElement('div');
   brandSecondary.className = 'nav-brand-secondary';
   const secondaryAnchor = document.createElement('a');
@@ -214,13 +224,10 @@ export default function decorate(block) {
   secondaryAnchor.target = '_blank';
   secondaryAnchor.rel = 'noopener noreferrer';
 
-  if (config.tataLogo) {
-    secondaryAnchor.append(createOptimizedPicture(config.tataLogo, config.tataLogoAlt, false, [{ width: '300' }]));
+  if (tataPicture) {
+    secondaryAnchor.append(tataPicture);
   } else {
-    const fallbackImg = document.createElement('img');
-    fallbackImg.src = 'https://www.tata.com/content/dam/tata/images/home-page/desktop/logo_tata_desktop.png';
-    fallbackImg.alt = config.tataLogoAlt || 'TATA Group';
-    secondaryAnchor.append(fallbackImg);
+    secondaryAnchor.textContent = 'TATA';
   }
   brandSecondary.append(secondaryAnchor);
 
@@ -231,11 +238,11 @@ export default function decorate(block) {
   headerHamburgerBtn.className = 'tcs-header-hamburger';
   headerHamburgerBtn.setAttribute('aria-label', 'Open navigation menu');
   headerHamburgerBtn.innerHTML = `
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+<line x1="3" y1="6" x2="21" y2="6"></line>
+<line x1="3" y1="12" x2="21" y2="12"></line>
+<line x1="3" y1="18" x2="21" y2="18"></line>
+</svg>
   `;
   headerHamburgerWrapper.append(headerHamburgerBtn);
 
@@ -248,29 +255,29 @@ export default function decorate(block) {
   overlay.className = 'tcs-mobile-nav-overlay hidden';
 
   overlay.innerHTML = `
-    <div class="tcs-mobile-nav-header">
-      <div class="tcs-mobile-logos"></div>
-      <button class="tcs-mobile-close-btn" aria-label="Close menu">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
-    <div class="tcs-mobile-nav-body">
-      <div class="tcs-mobile-title-row">
-        <button class="tcs-mobile-back-btn hidden" aria-label="Go back">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
-        </button>
-        <h2 class="tcs-mobile-title">Menu</h2>
-      </div>
-      <div class="tcs-mobile-list-container">
-        <ul class="tcs-mobile-list"></ul>
-      </div>
-    </div>
+<div class="tcs-mobile-nav-header">
+<div class="tcs-mobile-logos"></div>
+<button class="tcs-mobile-close-btn" aria-label="Close menu">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+<line x1="18" y1="6" x2="6" y2="18"></line>
+<line x1="6" y1="6" x2="18" y2="18"></line>
+</svg>
+</button>
+</div>
+<div class="tcs-mobile-nav-body">
+<div class="tcs-mobile-title-row">
+<button class="tcs-mobile-back-btn hidden" aria-label="Go back">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+<line x1="19" y1="12" x2="5" y2="12"></line>
+<polyline points="12 19 5 12 12 5"></polyline>
+</svg>
+</button>
+<h2 class="tcs-mobile-title">Menu</h2>
+</div>
+<div class="tcs-mobile-list-container">
+<ul class="tcs-mobile-list"></ul>
+</div>
+</div>
   `;
 
   document.body.append(overlay);
@@ -306,8 +313,8 @@ export default function decorate(block) {
         const btn = document.createElement('button');
         btn.className = 'tcs-mobile-item-btn';
         btn.innerHTML = `
-          <span>${item.title}</span>
-          <span class="arrow">→</span>
+<span>${item.title}</span>
+<span class="arrow">→</span>
         `;
         btn.addEventListener('click', () => {
           navHistory.push({ items, title });

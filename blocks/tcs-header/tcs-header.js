@@ -119,15 +119,27 @@ function getProp(block, name, fallback = '') {
     return input?.value || element.dataset.value || element.getAttribute('value') || element.textContent.trim();
   };
 
-  if (block.dataset[name] !== undefined && block.dataset[name] !== '') return block.dataset[name];
-  if (block.dataset[lower] !== undefined && block.dataset[lower] !== '') return block.dataset[lower];
+  const isLogo = name === 'tcsLogo' || name === 'tataLogo';
+  const isValidUrl = (val) => typeof val === 'string' && (val.includes('/') || val.startsWith('http') || val.startsWith('./'));
 
+  // 1. Direct dataset lookup
+  if (block.dataset[name] !== undefined && block.dataset[name] !== '') {
+    const val = block.dataset[name];
+    if (!isLogo || isValidUrl(val)) return val;
+  }
+  if (block.dataset[lower] !== undefined && block.dataset[lower] !== '') {
+    const val = block.dataset[lower];
+    if (!isLogo || isValidUrl(val)) return val;
+  }
+
+  // 2. Universal Editor data-aue-prop attribute lookup
   const attrElem = block.querySelector(`[data-aue-prop="${name}"], [data-aue-prop="${lower}"]`);
   if (attrElem) {
     const val = getValue(attrElem);
-    if (val) return val;
+    if (val && (!isLogo || isValidUrl(val))) return val;
   }
 
+  // 3. Table row key matching lookup
   const rows = [...block.children];
   for (let index = 0; index < rows.length; index += 1) {
     const row = rows[index];
@@ -136,16 +148,17 @@ function getProp(block, name, fallback = '') {
       const key = cols[0].textContent.trim().toLowerCase().replace(/[-_]/g, '');
       if (key === lower.replace(/[-_]/g, '')) {
         const val = getValue(cols[1]);
-        if (val) return val;
+        if (val && (!isLogo || isValidUrl(val))) return val;
       }
     }
   }
 
+  // 4. Positional fallback with URL strictness check
   const fieldIndex = fieldOrder.indexOf(name);
   if (fieldIndex >= 0 && rows[fieldIndex]) {
     const cols = [...rows[fieldIndex].children];
     const val = getValue(cols.length > 1 ? cols[1] : rows[fieldIndex]);
-    if (val) return val;
+    if (val && (!isLogo || isValidUrl(val))) return val;
   }
 
   return fallback;

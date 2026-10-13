@@ -306,8 +306,20 @@ function getContent(block) {
   const description = hasDescription ? richCandidates[richCandidates.length - 1] : null;
   const plain = textCandidates.filter((candidate) => candidate !== description);
 
+  // The eyebrow is already known from its field, so its row must not be reused as the title.
+  const eyebrowIndex = eyebrowFromField
+    ? plain.findIndex((candidate) => candidate.text === eyebrowFromField)
+    : -1;
+  if (eyebrowIndex >= 0) plain.splice(eyebrowIndex, 1);
+
   let fallback;
-  if (plain.length >= 3 && !description) {
+  if (eyebrowIndex >= 0) {
+    fallback = {
+      eyebrow: '',
+      title: plain[0]?.text || '',
+      description: plain[1]?.element || description?.element || '',
+    };
+  } else if (plain.length >= 3 && !description) {
     fallback = {
       eyebrow: plain[0].text,
       title: plain[1].text,

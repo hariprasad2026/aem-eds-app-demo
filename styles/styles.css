@@ -420,6 +420,14 @@ main > .section > div {
   max-width: var(--container-width-max);
   margin-inline: auto;
 }
+main > .section[data-sectionwidth='full-width'] {
+  --container-width: 100%;
+  --container-gutter: 0;
+}
+ 
+main > .section[data-sectionwidth='full-width'] > div {
+  max-width: none;
+}
 
 .section,
 main > .section {

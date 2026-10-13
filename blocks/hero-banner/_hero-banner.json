@@ -37,7 +37,7 @@
       "id": "hero-banner",
       "fields": [
         {
-          "component": "fieldset",
+          "component": "tab",
           "name": "imageSection",
           "label": "Image Section"
         },
@@ -104,7 +104,7 @@
         },
 
         {
-          "component": "fieldset",
+          "component": "tab",
           "name": "contentSection",
           "label": "Content Section"
         },
@@ -137,7 +137,7 @@
         },
 
         {
-          "component": "fieldset",
+          "component": "tab",
           "name": "styleSection",
           "label": "Style"
         },
@@ -157,6 +157,66 @@
             {
               "name": "Bottom",
               "value": "bottom"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "classes_iconColor",
+          "label": "Icon Color",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Black",
+              "value": "icon-color-black"
+            },
+            {
+              "name": "White",
+              "value": "icon-color-white"
+            },
+            {
+              "name": "Blue",
+              "value": "icon-color-blue"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "classes_titleColor",
+          "label": "Title Color",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Black",
+              "value": "title-color-black"
+            },
+            {
+              "name": "White",
+              "value": "title-color-white"
+            },
+            {
+              "name": "Grey",
+              "value": "title-color-grey"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "classes_descriptionColor",
+          "label": "Description Color",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Black",
+              "value": "description-color-black"
+            },
+            {
+              "name": "White",
+              "value": "description-color-white"
+            },
+            {
+              "name": "Grey",
+              "value": "description-color-grey"
             }
           ]
         },

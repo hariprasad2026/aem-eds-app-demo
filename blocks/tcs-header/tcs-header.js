@@ -20,7 +20,7 @@ function sanitizeImgUrl(url) {
   let cleanUrl = url.trim();
 
   // Strip .html or /.html inserted by Franklin rewriter prior to query parameters
-  cleanUrl = cleanUrl.replace(/\/\.html(\?|$)/i, '$1').replace(/\.html(\?\vert{}$)/i, '$1');
+  cleanUrl = cleanUrl.replace(/\/\.html(?=\?|$)/i, '').replace(/\.html(?=\?|$)/i, '');
 
   // Reject non-image values or variation strings accidentally picked up
   if (['both', 'text-only', 'voice-only', 'standard', 'compact', 'dark'].includes(cleanUrl.toLowerCase())) {
@@ -215,7 +215,7 @@ export default function decorate(block) {
   secondaryAnchor.rel = 'noopener noreferrer';
 
   if (config.tataLogo) {
-    secondaryAnchor.append(createOptimizedPicture(config.tataLogo, config.tataLogoAlt, false, [{ width: '160' }]));
+    secondaryAnchor.append(createOptimizedPicture(config.tataLogo, config.tataLogoAlt, false, [{ width: '300' }]));
   } else {
     const fallbackImg = document.createElement('img');
     fallbackImg.src = 'https://www.tata.com/content/dam/tata/images/home-page/desktop/logo_tata_desktop.png';

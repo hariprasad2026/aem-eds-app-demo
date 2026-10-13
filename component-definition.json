@@ -1270,9 +1270,7 @@
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
                   "name": "CTA",
-                  "model": "cta",
-                  "text_cta": "CTA",
-                  "ctaLink": "/"
+                  "model": "cta"
                 }
               }
             }

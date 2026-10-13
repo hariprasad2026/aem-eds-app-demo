@@ -252,6 +252,7 @@ function getTeaserLinkItems(block) {
     ...block.querySelectorAll(
       '[data-aue-component="teaser-v1-cta"], '
       + '[data-block-name="teaser-v1-cta"], '
+      + '[data-aue-model="teaser-v1-cta"], '
       + '.teaser-v1-cta',
     ),
   ];
@@ -543,6 +544,14 @@ function normalizeLinks(
           item.borderColor
           || authoredLink?.borderColor
           || '',
+        hoverBackgroundColor:
+          item.hoverBackgroundColor
+          || authoredLink?.hoverBackgroundColor
+          || '',
+        arrowIconSize:
+          item.arrowIconSize
+          || authoredLink?.arrowIconSize
+          || '24',
         arrowIcon:
           item.arrowIcon
           || authoredLink?.arrowIcon
@@ -588,6 +597,9 @@ function readTeaserLinkItem(item, fallbackStyle = 'default') {
       ctaLink: 'link',
       ctaView: 'linkType',
       linkTarget: 'target',
+      icon: 'arrowIcon',
+      iconPosition: 'arrowDirection',
+      iconSize: 'arrowIconSize',
     }[propertyKey] || propertyKey;
     if (key === 'title' || key === 'link') {
       instrumentation[key] = element;
@@ -602,15 +614,20 @@ function readTeaserLinkItem(item, fallbackStyle = 'default') {
   const rowFields = [
     'textCta',
     'ctaLink',
-    'arrowIcon',
+    'icon',
+    'iconPosition',
+    'iconSize',
     'linkTarget',
     'ctaView',
     'shape',
     'backgroundColor',
+    'hoverBackgroundColor',
     'textColor',
     'borderColor',
-    'arrowDirection',
+    'ctaWidth',
+    'alignment',
     'arrowColor',
+    'contentLayout',
   ];
 
   rows.forEach((row, index) => {
@@ -620,6 +637,9 @@ function readTeaserLinkItem(item, fallbackStyle = 'default') {
       ctaLink: 'link',
       ctaView: 'linkType',
       linkTarget: 'target',
+      icon: 'arrowIcon',
+      iconPosition: 'arrowDirection',
+      iconSize: 'arrowIconSize',
     }[propertyKey] || propertyKey;
 
     if (key === 'title' || key === 'link') {
@@ -653,23 +673,7 @@ function readTeaserLinkItem(item, fallbackStyle = 'default') {
     link = item.querySelector('a')?.getAttribute('href') || '';
   }
 
-  if (!title || !link) {
-    return {
-      title: title || 'CTA',
-      link: link || '#',
-      style: 'default',
-      target: 'default',
-      shape: 'rectangle',
-      backgroundColor: '',
-      textColor: '',
-      borderColor: '',
-      arrowIcon: '',
-      arrowDirection: 'none',
-      arrowColor: 'white',
-      instrumentation,
-      incomplete: true,
-    };
-  }
+  if (!title || !link || link === '#') return null;
 
   const renderedStyle = [...item.classList]
     .find((className) => (
@@ -677,6 +681,9 @@ function readTeaserLinkItem(item, fallbackStyle = 'default') {
       || className.startsWith('cta-view-')
     ))
     ?.replace(/^(teaser-cta-|cta-view-)/, '');
+  let arrowDirection = data.arrowDirection || 'none';
+  if (arrowDirection === 'before') arrowDirection = 'left';
+  if (arrowDirection === 'after') arrowDirection = 'right';
 
   return {
     title,
@@ -688,10 +695,12 @@ function readTeaserLinkItem(item, fallbackStyle = 'default') {
     target: data.target,
     shape: data.shape || 'rectangle',
     backgroundColor: data.backgroundColor || '',
+    hoverBackgroundColor: data.hoverBackgroundColor || '',
     textColor: data.textColor || '',
     borderColor: data.borderColor || '',
     arrowIcon: data.arrowIcon?.src || data.arrowIcon || '',
-    arrowDirection: data.arrowDirection || 'none',
+    arrowIconSize: data.arrowIconSize || '24',
+    arrowDirection,
     arrowColor: data.arrowColor || 'white',
     instrumentation,
   };
@@ -1119,7 +1128,7 @@ function applyClasses(block, data) {
   block.classList.add(...classes);
 }
 
-function createCTAArrow(arrowIcon, direction, color) {
+function createCTAArrow(arrowIcon, direction, color, size = '24') {
   const source = typeof arrowIcon === 'string'
     ? arrowIcon
     : arrowIcon?.src;
@@ -1135,6 +1144,11 @@ function createCTAArrow(arrowIcon, direction, color) {
   arrow.className = `teaser-cta-arrow teaser-cta-arrow-${direction} teaser-cta-arrow-${color}`;
   arrow.setAttribute('aria-hidden', 'true');
   arrow.decoding = 'async';
+  const iconSize = Number.parseInt(size, 10);
+  if (iconSize > 0) {
+    arrow.style.width = `${iconSize}px`;
+    arrow.style.height = `${iconSize}px`;
+  }
 
   arrow.addEventListener('error', () => {
     arrow.remove();
@@ -1177,6 +1191,13 @@ function createCTA(link) {
     anchor.style.borderColor = link.borderColor;
   }
 
+  if (link.hoverBackgroundColor) {
+    anchor.style.setProperty(
+      '--teaser-cta-hover-background',
+      link.hoverBackgroundColor,
+    );
+  }
+
   if (link.incomplete) {
     childWrapper?.classList.add('is-incomplete');
   }
@@ -1202,6 +1223,7 @@ function createCTA(link) {
     link.arrowIcon,
     link.arrowDirection,
     link.arrowColor,
+    link.arrowIconSize,
   );
 
   if (arrow && link.arrowDirection === 'left') {

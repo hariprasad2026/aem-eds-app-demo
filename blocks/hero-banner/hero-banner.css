@@ -185,12 +185,15 @@
 }
 
 /* Sits right after the CTAs; hamburger and search bar are placed inside it */
-.hero-banner-sticky {
-  position: absolute;
-  left: 50%;
-  bottom: 80px;
-  transform: translateX(-50%);
-  z-index: 20;
+.hero-banner-sticky{
+display: flex !important;
+justify-content: center;
+align-items: center;
+width: 100%;
+min-height: 60px;
+margin-top: 24px;
+position: absolute !important;
+z-index: 10;
 }
 
 .hero-banner-sticky:empty {

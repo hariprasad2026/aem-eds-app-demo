@@ -184,7 +184,7 @@
   align-items: center;
   gap: 16px;
   width: 100%;
-  margin-top: var(--spacing-5xl);
+  margin-top: 120px;
 }
 
 .hero-banner-sticky:empty {
@@ -242,6 +242,10 @@
     margin-top: 32px;
   }
 
+  .hero-banner-sticky {
+    margin-top: 80px;
+  }
+
   .hero-banner-align-top .hero-banner-content {
     padding-top: 64px;
   }
@@ -295,6 +299,10 @@
     flex-direction: row;
     gap: 12px;
     margin-top: 24px;
+  }
+
+  .hero-banner-sticky {
+    margin-top: 48px;
   }
 
   .hero-banner-align-top .hero-banner-content {

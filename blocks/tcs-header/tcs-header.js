@@ -188,9 +188,6 @@ export default function decorate(block) {
   brandSecondary.className = 'nav-brand-secondary';
   const secondaryAnchor = document.createElement('a');
   secondaryAnchor.href = config.tataLogoLink;
-  secondaryAnchor.target = '_blank';
-  secondaryAnchor.rel = 'noopener noreferrer';
-
   if (config.tataLogo) {
     secondaryAnchor.append(createOptimizedPicture(config.tataLogo, config.tataLogoAlt, false, [{ width: '300' }]));
   } else {

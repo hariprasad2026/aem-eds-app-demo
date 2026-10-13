@@ -111,11 +111,11 @@
     --cta-hover-bg,
     var(--cta-hover-bg-default, inherit)
   );
-  color: var(
-    --cta-hover-text,
-    inherit
-  );
   text-decoration: none;
+}
+
+.cta-link:hover .cta-text {
+  color: var(--cta-hover-text, inherit);
 }
 
 /* ACTIVE */

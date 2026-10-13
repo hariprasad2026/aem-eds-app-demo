@@ -25,16 +25,14 @@
       "valueType": "string",
       "name": "text_cta",
       "label": "CTA Title",
-      "value": "",
-      "required": true
+      "value": ""
     },
     {
       "component": "aem-content",
       "valueType": "string",
       "name": "ctaLink",
       "label": "CTA Link",
-      "value": "",
-      "required": true
+      "value": ""
     },
     {
       "component": "reference",

@@ -1761,6 +1761,10 @@
             "value": ""
           },
           {
+            "name": "Black",
+            "value": "#0C0C0D"
+          },
+          {
             "name": "Dark Gray",
             "value": "#303030"
           },
@@ -1787,7 +1791,7 @@
           },
           {
             "name": "Black",
-            "value": "#000000"
+            "value": "#0C0C0D"
           },
           {
             "name": "White",
@@ -1879,7 +1883,7 @@
           },
           {
             "name": "Black",
-            "value": "#000000"
+            "value": "#0C0C0D"
           },
           {
             "name": "Dark Gray",

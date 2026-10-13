@@ -1,4 +1,5 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
+import { moveInstrumentation } from '../../scripts/scripts.js';
 import {
   getDecision,
   getTargetConfig,
@@ -10,12 +11,9 @@ const FIELD_ORDER = [
   'eyebrow',
   'title',
   'titleType',
-  'image',
-  'imageAlt',
-  'backgroundImage',
-  'arrowIcon',
   'description',
   'shortDescription',
+  'backgroundImage',
   'viewAllText',
   'viewAllLink',
   'style',
@@ -27,22 +25,11 @@ const FIELD_ORDER = [
   'showDescription',
   'hideImage',
   'showDate',
+  'textAlignment',
+  'date',
   'dateFormat',
   'displayTags',
-  'multiLinksEnabled',
-  'primaryCtaTitle',
-  'primaryCtaLink',
-  'primaryCtaLinkType',
-  'secondaryCtaTitle',
-  'secondaryCtaLink',
-  'secondaryCtaLinkType',
-  'linkStyle',
-];
-
-const LINK_ITEM_FIELD_ORDER = [
-  'title',
-  'link',
-  'linkType',
+  'tags',
 ];
 
 const VALID_HEADING_TAGS = [
@@ -61,18 +48,43 @@ const VALID_LINK_STYLES = [
   'secondary',
 ];
 
-const CONTROL_TEXT_VALUES = new Set([
-  'default',
+const CONFIGURATION_CLASSES = [
+  'split-image-content',
+  'split-feature',
+  'background-hero',
+  'image-collage',
+  'no-image-right-desc-links',
   'grey',
-  'left',
-  'right',
-  'true',
-  'false',
-  'dd-mm-yyyy',
-  'mm-dd-yyyy',
-  'mmm-d-yyyy',
-  ...VALID_LINK_STYLES,
-]);
+  'image-left',
+  'image-right',
+  'text-left',
+  'text-center',
+  'text-right',
+  'text-justify',
+  'hide-image',
+  'hide-title',
+  'hide-description',
+  'hide-eyebrow',
+  'personalized',
+];
+
+const IMAGE_ITEM_FIELD_ORDER = [
+  'image',
+  'imageAlt',
+  'imageMode',
+];
+
+const IMAGE_COLLAGE_SLOTS = [
+  'slot-1',
+  'slot-2',
+  'slot-3',
+  'slot-4',
+  'slot-5',
+  'slot-6',
+  'slot-7',
+  'slot-8',
+  'slot-9',
+];
 
 function normalizeKey(value = '') {
   return value
@@ -152,9 +164,8 @@ function extractValue(key, element) {
 
   if (
     key === 'viewAllLink'
-    || key === 'primaryCtaLink'
-    || key === 'secondaryCtaLink'
     || key === 'link'
+    || key === 'ctaLink'
   ) {
     return getAnchorHref(element)
       || element.textContent.trim();
@@ -184,10 +195,11 @@ function extractValue(key, element) {
 function applyDefaults(data) {
   return {
     titleType: 'h2',
-    style: 'default',
+    style: 'split-image-content',
     personalizationEnabled: false,
     backgroundColor: 'default',
     imagePosition: 'right',
+    textAlignment: 'left',
     showEyebrow: true,
     hideTitle: false,
     showDescription: true,
@@ -195,28 +207,37 @@ function applyDefaults(data) {
     showDate: false,
     dateFormat: 'mmm-d-yyyy',
     displayTags: false,
-    multiLinksEnabled: false,
-    primaryCtaLinkType: 'list',
-    secondaryCtaLinkType: 'list',
-    linkStyle: 'list',
     ...data,
   };
 }
 
 function isTeaserLinkItem(element) {
   return Boolean(element) && (
-    element.dataset?.aueComponent === 'teaser-v1-link'
-    || element.dataset?.aueModel === 'teaser-v1-link'
-    || element.dataset?.blockName === 'teaser-v1-link'
-    || element.classList?.contains('teaser-v1-link')
+    element.dataset?.aueComponent === 'teaser-v1-cta'
+    || element.dataset?.aueModel === 'cta'
+    || element.dataset?.blockName === 'teaser-v1-cta'
+    || element.classList?.contains('teaser-v1-cta')
   );
 }
 
-function getClosestTeaserLinkItem(element, block) {
+function isTeaserImageItem(element) {
+  return Boolean(element) && (
+    element.dataset?.aueComponent === 'teaser-v1-image'
+    || element.dataset?.aueModel === 'teaser-v1-image'
+    || element.dataset?.blockName === 'teaser-v1-image'
+    || element.classList?.contains('teaser-v1-image')
+  );
+}
+
+function isTeaserChildItem(element) {
+  return isTeaserLinkItem(element) || isTeaserImageItem(element);
+}
+
+function getClosestTeaserChildItem(element, block) {
   let current = element;
 
   while (current && current !== block) {
-    if (isTeaserLinkItem(current)) {
+    if (isTeaserChildItem(current)) {
       return current;
     }
 
@@ -227,27 +248,50 @@ function getClosestTeaserLinkItem(element, block) {
 }
 
 function getTeaserLinkItems(block) {
-  const directItems = [...block.children].filter(isTeaserLinkItem);
+  const componentItems = [
+    ...block.querySelectorAll(
+      '[data-aue-component="teaser-v1-cta"], '
+      + '[data-block-name="teaser-v1-cta"], '
+      + '.teaser-v1-cta',
+    ),
+  ];
 
-  if (directItems.length) {
-    return directItems;
+  if (componentItems.length) {
+    return [...new Set(componentItems)];
   }
 
   return [
+    ...block.querySelectorAll('[data-aue-model="cta"]'),
+  ];
+}
+
+function getTeaserImageItems(block) {
+  return [
     ...block.querySelectorAll(
-      '[data-aue-component="teaser-v1-link"], '
-      + '[data-aue-model="teaser-v1-link"], '
-      + '[data-block-name="teaser-v1-link"], '
-      + '.teaser-v1-link',
+      '[data-aue-component="teaser-v1-image"], '
+      + '[data-aue-model="teaser-v1-image"], '
+      + '[data-block-name="teaser-v1-image"], '
+      + '.teaser-v1-image',
     ),
-  ].filter((item, index, items) => items.indexOf(item) === index);
+  ].filter((item, index, items) => (
+    items.indexOf(item) === index
+  ));
+}
+
+function getTeaserChildItems(block) {
+  return [
+    ...new Set([
+      ...getTeaserLinkItems(block),
+      ...getTeaserImageItems(block),
+    ]),
+  ];
 }
 
 function getParentPropertyRows(block) {
-  const childItems = new Set(getTeaserLinkItems(block));
+  const childItems = new Set(getTeaserChildItems(block));
 
   return [...block.children].filter((child) => {
-    if (isTeaserLinkItem(child) || childItems.has(child)) {
+    if (isTeaserChildItem(child) || childItems.has(child)) {
       return false;
     }
 
@@ -259,7 +303,7 @@ function parseNamedProperties(block) {
   const data = {};
 
   block.querySelectorAll('[data-aue-prop]').forEach((element) => {
-    if (getClosestTeaserLinkItem(element, block)) {
+    if (getClosestTeaserChildItem(element, block)) {
       return;
     }
 
@@ -277,13 +321,9 @@ function parseNamedProperties(block) {
 
     const value = extractValue(key, element);
 
-    if (key === 'image') {
-      data.imagePicture = value.picture;
-      data.image = value.src;
-    } else if (key === 'backgroundImage') {
+    if (key === 'backgroundImage') {
       data.backgroundImage = value.src;
-    } else if (key === 'arrowIcon') {
-      data.arrowIcon = value.src;
+      data.backgroundImagePicture = value.picture;
     } else {
       data[key] = value;
     }
@@ -292,36 +332,82 @@ function parseNamedProperties(block) {
   return data;
 }
 
+function getSemanticPropertyRows(block) {
+  const rows = getParentPropertyRows(block);
+  const headingRow = rows.find((row) => row.querySelector(
+    'h1, h2, h3, h4, h5, h6',
+  ));
+  const headingIndex = rows.indexOf(headingRow);
+  const descriptionRow = rows.find((row, index) => (
+    index > headingIndex && row.querySelector('p')
+  ));
+
+  return {
+    headingRow,
+    heading: headingRow?.querySelector('h1, h2, h3, h4, h5, h6'),
+    descriptionRow,
+  };
+}
+
+function parseSemanticProperties(block, existingData) {
+  const data = { ...existingData };
+  const {
+    heading,
+    descriptionRow,
+  } = getSemanticPropertyRows(block);
+
+  if (heading) {
+    if (!data.title) {
+      data.title = heading.textContent.trim();
+    }
+
+    if (!data.titleType) {
+      data.titleType = heading.tagName.toLowerCase();
+    }
+  }
+
+  if (descriptionRow && !data.description) {
+    data.description = descriptionRow.innerHTML.trim();
+  }
+
+  return data;
+}
+
 function parsePositionalProperties(block, existingData) {
   const data = { ...existingData };
-  const rows = getParentPropertyRows(block);
+  const semanticRows = getSemanticPropertyRows(block);
+  const rows = getParentPropertyRows(block).filter((row) => (
+    !Object.values(semanticRows).includes(row)
+    && !row.querySelector('[data-aue-prop]')
+  ));
+  const semanticFields = new Set([
+    'title',
+    'titleType',
+    'description',
+  ]);
+  const fields = FIELD_ORDER.filter((key) => (
+    !semanticFields.has(key) && data[key] === undefined
+  ));
+  let rowIndex = 0;
 
-  rows.forEach((row, index) => {
-    const key = FIELD_ORDER[index];
+  fields.forEach((key) => {
+    const row = rows[rowIndex];
 
-    if (!key || data[key] !== undefined) {
+    if (!row) {
       return;
     }
 
     const valueElement = row.children[0] || row;
     const value = extractValue(key, valueElement);
 
-    if (key === 'image') {
-      data.imagePicture = value.picture;
-      data.image = value.src;
-      return;
-    }
+    rowIndex += 1;
+
     if (key === 'backgroundImage') {
-      data.backgroundImage = value.src;
-      return;
-    }
-
-    if (key === 'arrowIcon') {
-      data.arrowIcon = value.src;
-      return;
-    }
-
-    if (
+      if (value?.src) {
+        data.backgroundImage = value.src;
+        data.backgroundImagePicture = value.picture;
+      }
+    } else if (
       value !== ''
       && value !== null
       && value !== undefined
@@ -329,103 +415,6 @@ function parsePositionalProperties(block, existingData) {
       data[key] = value;
     }
   });
-
-  return data;
-}
-
-function getRowValueElement(row) {
-  return row?.children?.[0] || row;
-}
-
-function getImageArea(image) {
-  const width = Number(image?.getAttribute('width')) || 0;
-  const height = Number(image?.getAttribute('height')) || 0;
-  return width * height;
-}
-
-function parseLiveFallbackProperties(block, existingData) {
-  const data = { ...existingData };
-  const rows = getParentPropertyRows(block).map((row) => getRowValueElement(row));
-
-  const headingRow = rows.find((row) => row.querySelector('h1, h2, h3, h4, h5, h6'));
-  if (!data.title && headingRow) {
-    data.title = headingRow.textContent.trim();
-  }
-
-  const imageRows = rows.filter((row) => row.querySelector('picture, img'));
-  if (!data.image && imageRows.length) {
-    const largestRow = [...imageRows].sort((left, right) => {
-      const leftArea = getImageArea(left.querySelector('img'));
-      const rightArea = getImageArea(right.querySelector('img'));
-      return rightArea - leftArea;
-    })[0];
-
-    const imageValue = extractValue('image', largestRow);
-    data.imagePicture = imageValue.picture;
-    data.image = imageValue.src;
-  }
-
-  if (!data.arrowIcon && imageRows.length) {
-    const smallestRow = [...imageRows].sort((left, right) => {
-      const leftArea = getImageArea(left.querySelector('img'));
-      const rightArea = getImageArea(right.querySelector('img'));
-      return leftArea - rightArea;
-    })[0];
-
-    const arrowValue = extractValue('arrowIcon', smallestRow);
-    data.arrowIcon = arrowValue.src;
-  }
-
-  const descriptionRow = rows.find((row) => {
-    if (row === headingRow) return false;
-    if (row.querySelector('picture, img, a[href]')) return false;
-
-    const text = row.textContent.trim().toLowerCase();
-    if (!text || CONTROL_TEXT_VALUES.has(text)) return false;
-
-    return row.querySelectorAll('p').length > 0 || text.length > 40;
-  });
-  if (!data.description && descriptionRow) {
-    data.description = descriptionRow.innerHTML.trim();
-  }
-
-  const ctaCandidates = rows.reduce((accumulator, row, index) => {
-    const anchor = row.querySelector('a[href]');
-    if (!anchor) return accumulator;
-
-    let label = '';
-    for (let cursor = index - 1; cursor >= 0; cursor -= 1) {
-      const previousRow = rows[cursor];
-      const hasMediaOrLink = previousRow.querySelector('a[href], picture, img');
-      if (!hasMediaOrLink) {
-        const candidate = stripHtml(previousRow.textContent || '').trim();
-        const isValidCandidate = candidate
-          && !CONTROL_TEXT_VALUES.has(candidate.toLowerCase());
-
-        if (isValidCandidate) {
-          label = candidate;
-          break;
-        }
-      }
-    }
-
-    if (label) {
-      accumulator.push({
-        title: label,
-        link: anchor.getAttribute('href') || '',
-      });
-    }
-    return accumulator;
-  }, []);
-
-  if (!data.primaryCtaTitle && ctaCandidates[0]) {
-    data.primaryCtaTitle = ctaCandidates[0].title;
-    data.primaryCtaLink = ctaCandidates[0].link;
-  }
-  if (!data.secondaryCtaTitle && ctaCandidates[1]) {
-    data.secondaryCtaTitle = ctaCandidates[1].title;
-    data.secondaryCtaLink = ctaCandidates[1].link;
-  }
 
   return data;
 }
@@ -443,7 +432,7 @@ function getTopLevelRow(element, block) {
 function findNextParentLink(block, propertyName) {
   const propertyElement = [...block.querySelectorAll(
     `[data-aue-prop="${propertyName}"]`,
-  )].find((element) => !getClosestTeaserLinkItem(element, block));
+  )].find((element) => !getClosestTeaserChildItem(element, block));
 
   if (!propertyElement) {
     return '';
@@ -458,9 +447,9 @@ function findNextParentLink(block, propertyName) {
   let nextRow = propertyRow.nextElementSibling;
 
   while (nextRow) {
-    if (!isTeaserLinkItem(nextRow)) {
+    if (!isTeaserChildItem(nextRow)) {
       const anchor = [...nextRow.querySelectorAll('a')]
-        .find((item) => !getClosestTeaserLinkItem(item, block));
+        .find((item) => !getClosestTeaserChildItem(item, block));
 
       if (anchor) {
         return anchor.getAttribute('href') || '';
@@ -469,11 +458,7 @@ function findNextParentLink(block, propertyName) {
       const namedProperty = nextRow.querySelector('[data-aue-prop]');
       const name = namedProperty?.getAttribute('data-aue-prop');
 
-      if (
-        name === 'viewAllText'
-        || name === 'primaryCtaTitle'
-        || name === 'secondaryCtaTitle'
-      ) {
+      if (name === 'viewAllText') {
         break;
       }
     }
@@ -483,7 +468,7 @@ function findNextParentLink(block, propertyName) {
   return '';
 }
 
-function assignFixedLinksFromDom(data, block) {
+function assignViewAllLinkFromDom(data, block) {
   const nextData = { ...data };
 
   if (nextData.viewAllText) {
@@ -494,26 +479,10 @@ function assignFixedLinksFromDom(data, block) {
     }
   }
 
-  if (nextData.primaryCtaTitle) {
-    const primaryLink = findNextParentLink(block, 'primaryCtaTitle');
-
-    if (primaryLink) {
-      nextData.primaryCtaLink = primaryLink;
-    }
-  }
-
-  if (nextData.secondaryCtaTitle) {
-    const secondaryLink = findNextParentLink(block, 'secondaryCtaTitle');
-
-    if (secondaryLink) {
-      nextData.secondaryCtaLink = secondaryLink;
-    }
-  }
-
   return nextData;
 }
 
-function resolveLinkStyle(linkType, linkStyle) {
+function resolveLinkStyle(linkType, fallbackStyle) {
   if (
     typeof linkType === 'string'
     && VALID_LINK_STYLES.includes(linkType)
@@ -523,30 +492,73 @@ function resolveLinkStyle(linkType, linkStyle) {
   }
 
   if (
-    typeof linkStyle === 'string'
-    && VALID_LINK_STYLES.includes(linkStyle)
+    typeof fallbackStyle === 'string'
+    && VALID_LINK_STYLES.includes(fallbackStyle)
   ) {
-    return linkStyle;
+    return fallbackStyle;
   }
 
   return 'default';
 }
 
-function normalizeLinks(links, linkStyle) {
+function normalizeLinks(
+  links,
+  fallbackStyle = 'default',
+  authoredLinks = [],
+) {
   if (!Array.isArray(links)) {
     return [];
   }
 
   return links
     .filter((item) => item?.title && item?.link)
-    .map((item) => ({
-      title: stripHtml(item.title),
-      link: String(item.link).trim(),
-      style: resolveLinkStyle(
-        item.linkType || item.style,
-        linkStyle,
-      ),
-    }));
+    .map((item, index) => {
+      const authoredLink = authoredLinks[index];
+
+      return {
+        title: stripHtml(item.title),
+        link: String(item.link).trim(),
+        style: resolveLinkStyle(
+          item.linkType || item.style,
+          authoredLink?.style || fallbackStyle,
+        ),
+        target:
+          item.target
+          || item.linkTarget
+          || authoredLink?.target
+          || 'default',
+        shape:
+          item.shape
+          || authoredLink?.shape
+          || 'rectangle',
+        backgroundColor:
+          item.backgroundColor
+          || authoredLink?.backgroundColor
+          || '',
+        textColor:
+          item.textColor
+          || authoredLink?.textColor
+          || '',
+        borderColor:
+          item.borderColor
+          || authoredLink?.borderColor
+          || '',
+        arrowIcon:
+          item.arrowIcon
+          || authoredLink?.arrowIcon
+          || '',
+        arrowDirection:
+          item.arrowDirection
+          || authoredLink?.arrowDirection
+          || 'none',
+        arrowColor:
+          item.arrowColor
+          || authoredLink?.arrowColor
+          || 'white',
+        instrumentation:
+          authoredLink?.instrumentation || null,
+      };
+    });
 }
 
 function readChildItemRows(item) {
@@ -557,6 +569,11 @@ function readChildItemRows(item) {
 
 function readTeaserLinkItem(item, fallbackStyle = 'default') {
   const data = {};
+  const instrumentation = {
+    item,
+    title: null,
+    link: null,
+  };
 
   item.querySelectorAll('[data-aue-prop]').forEach((element) => {
     const property = element.getAttribute('data-aue-prop');
@@ -565,7 +582,16 @@ function readTeaserLinkItem(item, fallbackStyle = 'default') {
       return;
     }
 
-    const key = normalizeKey(property);
+    const propertyKey = normalizeKey(property);
+    const key = {
+      textCta: 'title',
+      ctaLink: 'link',
+      ctaView: 'linkType',
+      linkTarget: 'target',
+    }[propertyKey] || propertyKey;
+    if (key === 'title' || key === 'link') {
+      instrumentation[key] = element;
+    }
 
     if (data[key] === undefined) {
       data[key] = extractValue(key, element);
@@ -573,9 +599,32 @@ function readTeaserLinkItem(item, fallbackStyle = 'default') {
   });
 
   const rows = readChildItemRows(item);
+  const rowFields = [
+    'textCta',
+    'ctaLink',
+    'arrowIcon',
+    'linkTarget',
+    'ctaView',
+    'shape',
+    'backgroundColor',
+    'textColor',
+    'borderColor',
+    'arrowDirection',
+    'arrowColor',
+  ];
 
   rows.forEach((row, index) => {
-    const key = LINK_ITEM_FIELD_ORDER[index];
+    const propertyKey = rowFields[index];
+    const key = {
+      textCta: 'title',
+      ctaLink: 'link',
+      ctaView: 'linkType',
+      linkTarget: 'target',
+    }[propertyKey] || propertyKey;
+
+    if (key === 'title' || key === 'link') {
+      instrumentation[key] ||= row;
+    }
 
     if (!key || data[key] !== undefined) {
       return;
@@ -605,16 +654,46 @@ function readTeaserLinkItem(item, fallbackStyle = 'default') {
   }
 
   if (!title || !link) {
-    return null;
+    return {
+      title: title || 'CTA',
+      link: link || '#',
+      style: 'default',
+      target: 'default',
+      shape: 'rectangle',
+      backgroundColor: '',
+      textColor: '',
+      borderColor: '',
+      arrowIcon: '',
+      arrowDirection: 'none',
+      arrowColor: 'white',
+      instrumentation,
+      incomplete: true,
+    };
   }
+
+  const renderedStyle = [...item.classList]
+    .find((className) => (
+      className.startsWith('teaser-cta-')
+      || className.startsWith('cta-view-')
+    ))
+    ?.replace(/^(teaser-cta-|cta-view-)/, '');
 
   return {
     title,
     link,
     style: resolveLinkStyle(
-      data.linkType,
+      data.linkType || renderedStyle,
       fallbackStyle,
     ),
+    target: data.target,
+    shape: data.shape || 'rectangle',
+    backgroundColor: data.backgroundColor || '',
+    textColor: data.textColor || '',
+    borderColor: data.borderColor || '',
+    arrowIcon: data.arrowIcon?.src || data.arrowIcon || '',
+    arrowDirection: data.arrowDirection || 'none',
+    arrowColor: data.arrowColor || 'white',
+    instrumentation,
   };
 }
 
@@ -624,54 +703,132 @@ function readTeaserLinkItems(block, fallbackStyle = 'default') {
     .filter(Boolean);
 }
 
-function isValidText(value) {
-  return (
-    typeof value === 'string'
-    && value.trim() !== ''
-    && value.trim() !== 'true'
-    && value.trim() !== 'false'
-  );
-}
+function readTeaserImageItem(item) {
+  const data = {
+    image: '',
+    imageAlt: '',
+    imagePicture: null,
+    imageMode: 'normal',
+    imageInstrumentation: {
+      item,
+      image: null,
+      imageAlt: null,
+    },
+  };
 
-function createFixedLinks(data) {
-  const links = [];
+  const namedProperties = new Set();
 
-  if (
-    isValidText(data.primaryCtaTitle)
-    && isValidText(data.primaryCtaLink)
-  ) {
-    links.push({
-      title: stripHtml(data.primaryCtaTitle),
-      link: data.primaryCtaLink.trim(),
-      style: resolveLinkStyle(
-        data.primaryCtaLinkType,
-        data.linkStyle,
-      ),
-    });
+  item.querySelectorAll('[data-aue-prop]').forEach((element) => {
+    const property = normalizeKey(
+      element.getAttribute('data-aue-prop') || '',
+    );
+
+    if (!property) {
+      return;
+    }
+
+    namedProperties.add(property);
+
+    if (property === 'image') {
+      const value = extractValue('image', element);
+
+      data.image = value.src;
+      data.imagePicture = value.picture;
+      data.imageInstrumentation.image = element;
+      return;
+    }
+
+    if (property === 'imageAlt') {
+      data.imageAlt = extractValue(
+        'imageAlt',
+        element,
+      );
+      data.imageInstrumentation.imageAlt = element;
+      return;
+    }
+
+    if (property === 'imageMode') {
+      data.imageMode = extractValue(
+        'imageMode',
+        element,
+      );
+    }
+  });
+
+  const rows = readChildItemRows(item);
+
+  IMAGE_ITEM_FIELD_ORDER.forEach((key, index) => {
+    if (namedProperties.has(key)) {
+      return;
+    }
+
+    const row = rows[index];
+
+    if (!row) {
+      return;
+    }
+
+    if (key === 'image') {
+      const value = extractValue(key, row);
+
+      if (value.src) {
+        data.image = value.src;
+        data.imagePicture = value.picture;
+        data.imageInstrumentation.image = row;
+      }
+
+      return;
+    }
+
+    if (key === 'imageAlt') {
+      const value = extractValue(key, row);
+
+      if (value) {
+        data.imageAlt = value;
+        data.imageInstrumentation.imageAlt = row;
+      }
+
+      return;
+    }
+
+    const value = extractValue(key, row);
+
+    if (
+      value !== ''
+      && value !== undefined
+      && value !== null
+    ) {
+      data[key] = value;
+    }
+  });
+
+  const image = item.querySelector('picture img, img');
+
+  if (!data.image && image) {
+    data.image = image.getAttribute('src') || '';
+    data.imagePicture = image.closest('picture');
+    data.imageInstrumentation.image = image;
   }
 
-  if (
-    isValidText(data.secondaryCtaTitle)
-    && isValidText(data.secondaryCtaLink)
-  ) {
-    links.push({
-      title: stripHtml(data.secondaryCtaTitle),
-      link: data.secondaryCtaLink.trim(),
-      style: resolveLinkStyle(
-        data.secondaryCtaLinkType,
-        data.linkStyle,
-      ),
-    });
+  if (!data.imageAlt && image) {
+    data.imageAlt = image.getAttribute('alt') || '';
   }
 
-  return links;
+  data.imageMode = data.imageMode === 'black-white'
+    ? 'black-white'
+    : 'normal';
+
+  return data;
 }
 
 function normalizeConfiguration(data) {
   const normalizedData = { ...data };
 
   const validStyles = [
-    'default',
+    'split-image-content',
+    'split-feature',
+    'background-hero',
+    'image-collage',
     'no-image-right-desc-links',
   ];
 
@@ -685,25 +842,55 @@ function normalizeConfiguration(data) {
     'right',
   ];
 
+  const validTextAlignments = [
+    'left',
+    'center',
+    'right',
+    'justify',
+  ];
+
   const validDateFormats = [
     'dd-mm-yyyy',
     'mm-dd-yyyy',
     'mmm-d-yyyy',
   ];
 
-  if (!validStyles.includes(normalizedData.style)) {
-    normalizedData.style = 'default';
+  if (
+    normalizedData.style === 'default'
+    || !validStyles.includes(normalizedData.style)
+  ) {
+    normalizedData.style = 'split-image-content';
   }
 
-  if (!validBackgroundColors.includes(normalizedData.backgroundColor)) {
+  if (
+    !validBackgroundColors.includes(
+      normalizedData.backgroundColor,
+    )
+  ) {
     normalizedData.backgroundColor = 'default';
   }
 
-  if (!validImagePositions.includes(normalizedData.imagePosition)) {
-    normalizedData.imagePosition = 'left';
+  if (
+    !validImagePositions.includes(
+      normalizedData.imagePosition,
+    )
+  ) {
+    normalizedData.imagePosition = 'right';
   }
 
-  if (!validDateFormats.includes(normalizedData.dateFormat)) {
+  if (
+    !validTextAlignments.includes(
+      normalizedData.textAlignment,
+    )
+  ) {
+    normalizedData.textAlignment = 'left';
+  }
+
+  if (
+    !validDateFormats.includes(
+      normalizedData.dateFormat,
+    )
+  ) {
     normalizedData.dateFormat = 'mmm-d-yyyy';
   }
 
@@ -742,50 +929,60 @@ function normalizeConfiguration(data) {
     false,
   );
 
-  normalizedData.multiLinksEnabled = parseBoolean(
-    normalizedData.multiLinksEnabled,
-    false,
-  );
-
-  if (!VALID_LINK_STYLES.includes(normalizedData.linkStyle)) {
-    normalizedData.linkStyle = 'list';
-  }
-
-  if (!VALID_LINK_STYLES.includes(normalizedData.primaryCtaLinkType)) {
-    normalizedData.primaryCtaLinkType = 'list';
-  }
-
-  if (!VALID_LINK_STYLES.includes(normalizedData.secondaryCtaLinkType)) {
-    normalizedData.secondaryCtaLinkType = 'list';
-  }
-
   return normalizedData;
 }
 
 function readBlockData(block) {
-  let data = parseNamedProperties(block);
+  let data = parseSemanticProperties(
+    block,
+    parseNamedProperties(block),
+  );
 
-  const parentRows = getParentPropertyRows(block);
-
-  if (parentRows.length === FIELD_ORDER.length) {
-    data = parsePositionalProperties(block, data);
-  }
-
-  data = parseLiveFallbackProperties(block, data);
-  data = assignFixedLinksFromDom(data, block);
+  data = parsePositionalProperties(block, data);
+  data.images = getTeaserImageItems(block)
+    .map(readTeaserImageItem)
+    .filter(Boolean);
+  data = assignViewAllLinkFromDom(data, block);
   data = applyDefaults(data);
   data = normalizeConfiguration(data);
 
-  const childLinks = readTeaserLinkItems(
-    block,
-    data.linkStyle,
-  );
-
-  data.links = parseBoolean(data.multiLinksEnabled)
-    ? childLinks
-    : createFixedLinks(data);
+  data.links = readTeaserLinkItems(block, 'default');
 
   return data;
+}
+
+function parseDateValue(dateValue) {
+  if (!dateValue) {
+    return null;
+  }
+
+  const normalizedDateValue = String(dateValue).trim();
+  const dateOnlyPattern = /^(\d{4})-(\d{2})-(\d{2})$/;
+  const dateOnlyMatch = dateOnlyPattern.exec(
+    normalizedDateValue,
+  );
+
+  let date = new Date(normalizedDateValue);
+
+  if (dateOnlyMatch) {
+    date = new Date(
+      Number(dateOnlyMatch[1]),
+      Number(dateOnlyMatch[2]) - 1,
+      Number(dateOnlyMatch[3]),
+    );
+
+    if (
+      date.getFullYear() !== Number(dateOnlyMatch[1])
+      || date.getMonth() !== Number(dateOnlyMatch[2]) - 1
+      || date.getDate() !== Number(dateOnlyMatch[3])
+    ) {
+      return null;
+    }
+  }
+
+  return Number.isNaN(date.valueOf())
+    ? null
+    : date;
 }
 
 function formatDate(dateValue, format = 'mmm-d-yyyy') {
@@ -793,10 +990,11 @@ function formatDate(dateValue, format = 'mmm-d-yyyy') {
     return '';
   }
 
-  const date = new Date(dateValue);
+  const normalizedDateValue = String(dateValue).trim();
+  const date = parseDateValue(normalizedDateValue);
 
-  if (Number.isNaN(date.valueOf())) {
-    return dateValue;
+  if (!date) {
+    return normalizedDateValue;
   }
 
   const day = String(date.getDate()).padStart(2, '0');
@@ -821,8 +1019,10 @@ function formatDate(dateValue, format = 'mmm-d-yyyy') {
   switch (String(format).toLowerCase()) {
     case 'dd-mm-yyyy':
       return `${day}-${month}-${year}`;
+
     case 'mm-dd-yyyy':
       return `${month}-${day}-${year}`;
+
     case 'mmm-d-yyyy':
     default:
       return `${monthName} ${date.getDate()}, ${year}`;
@@ -832,26 +1032,65 @@ function formatDate(dateValue, format = 'mmm-d-yyyy') {
 function applyClasses(block, data) {
   const classes = [];
 
+  block.classList.remove(...CONFIGURATION_CLASSES);
+
+  const validVariantClasses = [
+    'split-image-content',
+    'split-feature',
+    'background-hero',
+    'image-collage',
+    'no-image-right-desc-links',
+  ];
+
+  const splitVariants = [
+    'split-image-content',
+    'split-feature',
+  ];
+
   if (
     typeof data.style === 'string'
-    && data.style === 'no-image-right-desc-links'
+    && validVariantClasses.includes(data.style)
   ) {
     classes.push(data.style);
   }
 
+  /*
+   * Grey applies only to layouts that support a selectable
+   * background color. Hero and collage own their theme.
+   */
   if (
-    typeof data.backgroundColor === 'string'
-    && data.backgroundColor === 'grey'
+    data.backgroundColor === 'grey'
+    && ![
+      'background-hero',
+      'image-collage',
+    ].includes(data.style)
   ) {
-    classes.push(data.backgroundColor);
+    classes.push('grey');
   }
 
   if (
-    typeof data.imagePosition === 'string'
+    splitVariants.includes(data.style)
     && ['left', 'right'].includes(data.imagePosition)
-    && data.style !== 'no-image-right-desc-links'
   ) {
     classes.push(`image-${data.imagePosition}`);
+  }
+
+  const flexibleAlignmentVariants = [
+    'split-image-content',
+    'split-feature',
+    'no-image-right-desc-links',
+  ];
+
+  if (
+    flexibleAlignmentVariants.includes(data.style)
+    && [
+      'left',
+      'center',
+      'right',
+      'justify',
+    ].includes(data.textAlignment)
+  ) {
+    classes.push(`text-${data.textAlignment}`);
   }
 
   if (
@@ -880,15 +1119,20 @@ function applyClasses(block, data) {
   block.classList.add(...classes);
 }
 
-function createCTAArrow(arrowIcon) {
-  if (!arrowIcon) {
+function createCTAArrow(arrowIcon, direction, color) {
+  const source = typeof arrowIcon === 'string'
+    ? arrowIcon
+    : arrowIcon?.src;
+
+  if (!source || !['left', 'right'].includes(direction)) {
     return null;
   }
 
   const arrow = document.createElement('img');
-  arrow.src = arrowIcon;
+
+  arrow.src = source;
   arrow.alt = '';
-  arrow.className = 'teaser-cta-arrow';
+  arrow.className = `teaser-cta-arrow teaser-cta-arrow-${direction} teaser-cta-arrow-${color}`;
   arrow.setAttribute('aria-hidden', 'true');
   arrow.decoding = 'async';
 
@@ -899,36 +1143,86 @@ function createCTAArrow(arrowIcon) {
   return arrow;
 }
 
-function createCTA(link, arrowIcon) {
+function createCTA(link) {
   if (!link?.title || !link?.link) {
     return null;
   }
 
   const anchor = document.createElement('a');
+  let childWrapper = null;
   const style = resolveLinkStyle(link.style, 'default');
 
   anchor.href = link.link;
   anchor.classList.add(
     'teaser-cta',
     `teaser-cta-${style}`,
+    `teaser-cta-shape-${link.shape}`,
   );
+
+  if (link.instrumentation?.item) {
+    childWrapper = document.createElement('div');
+    childWrapper.className = 'teaser-v1-cta teaser-cta-item';
+    moveInstrumentation(link.instrumentation.item, childWrapper);
+  }
+
+  if (link.backgroundColor) {
+    anchor.style.backgroundColor = link.backgroundColor;
+  }
+
+  if (link.textColor) {
+    anchor.style.color = link.textColor;
+  }
+
+  if (link.borderColor) {
+    anchor.style.borderColor = link.borderColor;
+  }
+
+  if (link.incomplete) {
+    childWrapper?.classList.add('is-incomplete');
+  }
 
   const label = document.createElement('span');
   label.className = 'teaser-cta-label';
   label.textContent = link.title;
+
+  if (link.instrumentation?.title) {
+    moveInstrumentation(link.instrumentation.title, label);
+  }
+
+  if (link.instrumentation?.link) {
+    moveInstrumentation(link.instrumentation.link, anchor);
+  }
+
+  if (link.target === 'new-window') {
+    anchor.target = '_blank';
+    anchor.rel = 'noopener noreferrer';
+  }
+
+  const arrow = createCTAArrow(
+    link.arrowIcon,
+    link.arrowDirection,
+    link.arrowColor,
+  );
+
+  if (arrow && link.arrowDirection === 'left') {
+    anchor.append(arrow);
+  }
+
   anchor.append(label);
 
-  if (style === 'list') {
-    const arrow = createCTAArrow(arrowIcon);
-    if (arrow) {
-      anchor.append(arrow);
-    }
+  if (arrow && link.arrowDirection === 'right') {
+    anchor.append(arrow);
+  }
+
+  if (childWrapper) {
+    childWrapper.append(anchor);
+    return childWrapper;
   }
 
   return anchor;
 }
 
-function createCTAs(links = [], arrowIcon = '') {
+function createCTAs(links = []) {
   if (!links.length) {
     return null;
   }
@@ -937,7 +1231,8 @@ function createCTAs(links = [], arrowIcon = '') {
   wrapper.className = 'teaser-ctas';
 
   links.forEach((link) => {
-    const anchor = createCTA(link, arrowIcon);
+    const anchor = createCTA(link);
+
     if (anchor) {
       wrapper.append(anchor);
     }
@@ -950,6 +1245,7 @@ function createViewAll(data) {
   const text = typeof data.viewAllText === 'string'
     ? data.viewAllText.trim()
     : '';
+
   const href = typeof data.viewAllLink === 'string'
     ? data.viewAllLink.trim()
     : '';
@@ -967,56 +1263,149 @@ function createViewAll(data) {
   }
 
   const anchor = document.createElement('a');
+
   anchor.className = 'teaser-view-all';
   anchor.href = href;
   anchor.textContent = stripHtml(text);
+
   return anchor;
 }
 
-function renderImage(data) {
-  const shouldHideImage = parseBoolean(data.hideImage)
-    || data.style === 'no-image-right-desc-links';
-
-  if (shouldHideImage) {
+function createTags(data) {
+  if (!parseBoolean(data.displayTags)) {
     return null;
   }
 
-  const imageContainer = document.createElement('div');
-  imageContainer.className = 'teaser-image';
+  const values = Array.isArray(data.tags)
+    ? data.tags
+    : String(data.tags || '').split(',');
+  const tags = values
+    .map((tag) => stripHtml(tag).trim())
+    .filter(Boolean);
 
-  const altText = stripHtml(
-    data.imageAlt || data.title || 'Teaser image',
+  if (!tags.length) {
+    return null;
+  }
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'teaser-tags';
+
+  tags.forEach((tag) => {
+    const element = document.createElement('span');
+    element.className = 'teaser-tag';
+    element.textContent = tag;
+    wrapper.append(element);
+  });
+
+  return wrapper;
+}
+
+function renderImageItem(
+  imageData,
+  slot = '',
+  fallbackAlt = '',
+) {
+  const imageContainer = document.createElement('div');
+  imageContainer.className = 'teaser-image teaser-v1-image';
+
+  imageContainer.classList.add(
+    `teaser-image-mode-${imageData.imageMode}`,
   );
 
-  if (data.imagePicture) {
-    const picture = data.imagePicture.cloneNode(true);
+  if (slot) {
+    imageContainer.classList.add(
+      `teaser-image-${slot}`,
+    );
+  }
+
+  if (imageData.imageInstrumentation?.item) {
+    moveInstrumentation(
+      imageData.imageInstrumentation.item,
+      imageContainer,
+    );
+  }
+
+  const altText = stripHtml(
+    imageData.imageAlt || fallbackAlt,
+  );
+
+  if (imageData.imagePicture) {
+    const picture = imageData.imagePicture.cloneNode(true);
     const image = picture.querySelector('img');
+
     if (image) {
       image.alt = altText;
+
+      if (imageData.imageInstrumentation?.image) {
+        moveInstrumentation(
+          imageData.imageInstrumentation.image,
+          image,
+        );
+      }
     }
 
     imageContainer.append(picture);
     return imageContainer;
   }
 
-  if (!data.image) {
-    return null;
-  }
+  if (!imageData.image) {
+    imageContainer.classList.add('is-empty');
 
-  const imageSrc = stripHtml(data.image).trim();
-  if (!imageSrc) {
-    return null;
+    const placeholder = document.createElement('span');
+    placeholder.className = 'teaser-image-placeholder';
+    placeholder.textContent = 'Select an image';
+
+    imageContainer.append(placeholder);
+    return imageContainer;
   }
 
   const picture = createOptimizedPicture(
-    imageSrc,
+    stripHtml(imageData.image).trim(),
     altText,
     false,
     [{ width: '800' }],
   );
 
+  const image = picture.querySelector('img');
+
+  if (image && imageData.imageInstrumentation?.image) {
+    moveInstrumentation(
+      imageData.imageInstrumentation.image,
+      image,
+    );
+  }
+
   imageContainer.append(picture);
   return imageContainer;
+}
+
+function renderImages(data) {
+  if (!Array.isArray(data.images) || !data.images.length) {
+    return null;
+  }
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'teaser-images';
+
+  data.images.forEach((imageData, index) => {
+    const isCollage = data.style === 'image-collage';
+    const slot = isCollage
+      ? IMAGE_COLLAGE_SLOTS[index] || ''
+      : '';
+    const fallbackAlt = isCollage
+      ? ''
+      : data.title || '';
+
+    wrapper.append(
+      renderImageItem(
+        imageData,
+        slot,
+        fallbackAlt,
+      ),
+    );
+  });
+
+  return wrapper;
 }
 
 function renderContent(data) {
@@ -1028,20 +1417,29 @@ function renderContent(data) {
     && data.eyebrow
   ) {
     const eyebrow = document.createElement('p');
+
     eyebrow.className = 'teaser-eyebrow';
     eyebrow.textContent = stripHtml(data.eyebrow);
+
     wrapper.append(eyebrow);
   }
 
   if (!parseBoolean(data.hideTitle) && data.title) {
-    const requestedTag = String(data.titleType).toLowerCase();
-    const headingTag = VALID_HEADING_TAGS.includes(requestedTag)
+    const requestedTag = String(
+      data.titleType || '',
+    ).toLowerCase();
+
+    const headingTag = VALID_HEADING_TAGS.includes(
+      requestedTag,
+    )
       ? requestedTag
       : 'h2';
 
     const heading = document.createElement(headingTag);
+
     heading.className = 'teaser-title';
     heading.textContent = stripHtml(data.title);
+
     wrapper.append(heading);
   }
 
@@ -1049,12 +1447,27 @@ function renderContent(data) {
     parseBoolean(data.showDate)
     && (data.date || data.lastModified)
   ) {
-    const date = document.createElement('div');
+    const rawDate = data.date || data.lastModified;
+    const parsedDate = parseDateValue(rawDate);
+    const date = document.createElement('time');
+
     date.className = 'teaser-date';
     date.textContent = formatDate(
-      data.date || data.lastModified,
+      rawDate,
       data.dateFormat,
     );
+
+    if (parsedDate) {
+      const normalizedRawDate = String(rawDate).trim();
+      const isDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(
+        normalizedRawDate,
+      );
+
+      date.dateTime = isDateOnly
+        ? normalizedRawDate
+        : parsedDate.toISOString();
+    }
+
     wrapper.append(date);
   }
 
@@ -1062,19 +1475,40 @@ function renderContent(data) {
     parseBoolean(data.showDescription, true)
     && (data.description || data.shortDescription)
   ) {
-    const description = document.createElement('div');
-    description.className = 'teaser-description';
-    description.innerHTML = data.description
-      || data.shortDescription;
-    wrapper.append(description);
+    if (data.description) {
+      const description = document.createElement('div');
+
+      description.className = 'teaser-description';
+      description.innerHTML = data.description;
+
+      wrapper.append(description);
+    }
+
+    if (data.shortDescription) {
+      const shortDescription = document.createElement('div');
+
+      shortDescription.className = 'teaser-short-description';
+
+      shortDescription.innerHTML = data.shortDescription;
+
+      wrapper.append(shortDescription);
+    }
   }
 
-  const ctas = createCTAs(data.links, data.arrowIcon);
+  const tags = createTags(data);
+
+  if (tags) {
+    wrapper.append(tags);
+  }
+
+  const ctas = createCTAs(data.links);
+
   if (ctas) {
     wrapper.append(ctas);
   }
 
   const viewAll = createViewAll(data);
+
   if (viewAll) {
     wrapper.append(viewAll);
   }
@@ -1086,9 +1520,10 @@ function renderTeaser(data) {
   const wrapper = document.createElement('div');
   wrapper.className = 'teaser-wrapper';
 
-  const image = renderImage(data);
-  if (image) {
-    wrapper.append(image);
+  const images = renderImages(data);
+
+  if (images) {
+    wrapper.append(images);
   }
 
   const body = document.createElement('div');
@@ -1110,6 +1545,7 @@ async function renderPersonalized(block, data) {
         true,
         'fallback',
       );
+
       return renderTeaser(data);
     }
 
@@ -1117,22 +1553,39 @@ async function renderPersonalized(block, data) {
 
     const personalizedData = {
       ...data,
-      eyebrow: decision.data.eyebrow || data.eyebrow,
-      title: decision.data.title || data.title,
+      eyebrow:
+        decision.data.eyebrow || data.eyebrow,
+      title:
+        decision.data.title || data.title,
       description:
         decision.data.description || data.description,
       shortDescription:
         decision.data.shortDescription
         || data.shortDescription,
-      image: personalizedImage || data.image,
-      imagePicture: personalizedImage
-        ? null
-        : data.imagePicture,
-      imageAlt: decision.data.imageAlt || data.imageAlt,
+      images: personalizedImage
+        ? [
+          {
+            image: personalizedImage,
+            imageAlt:
+              decision.data.imageAlt
+              || data.images?.[0]?.imageAlt
+              || '',
+            imagePicture: null,
+            imageMode:
+              data.images?.[0]?.imageMode
+              || 'normal',
+            imageInstrumentation:
+              data.images?.[0]?.imageInstrumentation
+              || null,
+          },
+          ...((data.images || []).slice(1)),
+        ]
+        : data.images,
       links: Array.isArray(decision.data.links)
         ? normalizeLinks(
           decision.data.links,
-          data.linkStyle,
+          'default',
+          data.links,
         )
         : data.links,
     };
@@ -1145,6 +1598,7 @@ async function renderPersonalized(block, data) {
     );
 
     await sendPropositionDisplay(decision);
+
     return renderTeaser(personalizedData);
   } catch (error) {
     setPersonalizationAttributes(
@@ -1152,12 +1606,16 @@ async function renderPersonalized(block, data) {
       true,
       'fallback',
     );
+
     return renderTeaser(data);
   }
 }
 
-function createBackground(backgroundImage) {
-  if (!backgroundImage) {
+function createBackground(data) {
+  if (
+    !data.backgroundImage
+    && !data.backgroundImagePicture
+  ) {
     return null;
   }
 
@@ -1165,8 +1623,21 @@ function createBackground(backgroundImage) {
   background.className = 'teaser-background';
   background.setAttribute('aria-hidden', 'true');
 
+  if (data.backgroundImagePicture) {
+    const picture = data.backgroundImagePicture.cloneNode(true);
+    const image = picture.querySelector('img');
+
+    if (image) {
+      image.alt = '';
+    }
+
+    background.append(picture);
+    return background;
+  }
+
   const image = document.createElement('img');
-  image.src = backgroundImage;
+
+  image.src = data.backgroundImage;
   image.alt = '';
   image.decoding = 'async';
 
@@ -1175,6 +1646,7 @@ function createBackground(backgroundImage) {
   });
 
   background.append(image);
+
   return background;
 }
 
@@ -1187,7 +1659,14 @@ export default async function decorate(block) {
     ? await renderPersonalized(block, data)
     : renderTeaser(data);
 
-  const background = createBackground(data.backgroundImage);
+  const supportsBackgroundImage = [
+    'background-hero',
+    'image-collage',
+  ].includes(data.style);
+
+  const background = supportsBackgroundImage
+    ? createBackground(data)
+    : null;
 
   if (background) {
     block.replaceChildren(background, content);

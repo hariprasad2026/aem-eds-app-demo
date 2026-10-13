@@ -4589,33 +4589,6 @@
         ]
       },
       {
-        "component": "reference",
-        "name": "image",
-        "label": "Image Path",
-        "valueType": "string",
-        "multi": false
-      },
-      {
-        "component": "text",
-        "name": "imageAlt",
-        "label": "Image Alt Text",
-        "valueType": "string"
-      },
-      {
-        "component": "reference",
-        "name": "backgroundImage",
-        "label": "Background Image",
-        "valueType": "string",
-        "multi": false
-      },
-      {
-        "component": "reference",
-        "name": "arrowIcon",
-        "label": "CTA Arrow Icon",
-        "valueType": "string",
-        "multi": false
-      },
-      {
         "component": "richtext",
         "name": "description",
         "label": "Description"
@@ -4624,6 +4597,13 @@
         "component": "richtext",
         "name": "shortDescription",
         "label": "Short Description"
+      },
+      {
+        "component": "reference",
+        "name": "backgroundImage",
+        "label": "Background Image",
+        "valueType": "string",
+        "multi": false
       },
       {
         "component": "text",
@@ -4638,15 +4618,28 @@
       {
         "component": "select",
         "name": "style",
-        "label": "Style",
-        "value": "default",
+        "label": "Layout Variant",
+        "description": "Select the predefined teaser layout.",
+        "value": "split-image-content",
         "options": [
           {
-            "name": "Default",
-            "value": "default"
+            "name": "Split Image and Content",
+            "value": "split-image-content"
           },
           {
-            "name": "No Image, Right Desc & Links",
+            "name": "Split Feature",
+            "value": "split-feature"
+          },
+          {
+            "name": "Background Hero",
+            "value": "background-hero"
+          },
+          {
+            "name": "Image Collage",
+            "value": "image-collage"
+          },
+          {
+            "name": "No Image, Right Content",
             "value": "no-image-right-desc-links"
           }
         ]
@@ -4727,6 +4720,36 @@
       },
       {
         "component": "select",
+        "name": "textAlignment",
+        "label": "Text Alignment",
+        "description": "Controls the alignment of the teaser text content.",
+        "value": "left",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          },
+          {
+            "name": "Justify",
+            "value": "justify"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "date",
+        "label": "Date"
+      },
+      {
+        "component": "select",
         "name": "dateFormat",
         "label": "Date Format",
         "value": "mmm-d-yyyy",
@@ -4753,140 +4776,43 @@
         "valueType": "boolean"
       },
       {
-        "component": "boolean",
-        "name": "multiLinksEnabled",
-        "label": "Multi Links",
-        "value": false,
-        "valueType": "boolean"
-      },
-      {
         "component": "text",
-        "name": "primaryCtaTitle",
-        "label": "Primary CTA Title"
-      },
-      {
-        "component": "aem-content",
-        "name": "primaryCtaLink",
-        "label": "Primary CTA Link"
-      },
-      {
-        "component": "select",
-        "name": "primaryCtaLinkType",
-        "label": "Primary CTA Link Type",
-        "value": "default",
-        "options": [
-          {
-            "name": "Default",
-            "value": "default"
-          },
-          {
-            "name": "List",
-            "value": "list"
-          },
-          {
-            "name": "Primary Button",
-            "value": "primary"
-          },
-          {
-            "name": "Secondary Button",
-            "value": "secondary"
-          }
-        ]
-      },
-      {
-        "component": "text",
-        "name": "secondaryCtaTitle",
-        "label": "Secondary CTA Title"
-      },
-      {
-        "component": "aem-content",
-        "name": "secondaryCtaLink",
-        "label": "Secondary CTA Link"
-      },
-      {
-        "component": "select",
-        "name": "secondaryCtaLinkType",
-        "label": "Secondary CTA Link Type",
-        "value": "default",
-        "options": [
-          {
-            "name": "Default",
-            "value": "default"
-          },
-          {
-            "name": "List",
-            "value": "list"
-          },
-          {
-            "name": "Primary Button",
-            "value": "primary"
-          },
-          {
-            "name": "Secondary Button",
-            "value": "secondary"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "linkStyle",
-        "label": "Link Style",
-        "value": "default",
-        "options": [
-          {
-            "name": "Default",
-            "value": "default"
-          },
-          {
-            "name": "List",
-            "value": "list"
-          },
-          {
-            "name": "Primary Button",
-            "value": "primary"
-          },
-          {
-            "name": "Secondary Button",
-            "value": "secondary"
-          }
-        ]
+        "name": "tags",
+        "label": "Tags",
+        "description": "Enter comma-separated tags."
       }
     ]
   },
   {
-    "id": "teaser-v1-link",
+    "id": "teaser-v1-image",
     "fields": [
       {
-        "component": "text",
-        "name": "title",
-        "label": "CTA Title"
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string",
+        "multi": false
       },
       {
-        "component": "aem-content",
-        "name": "link",
-        "label": "CTA Link"
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "description": "Describe meaningful image content for accessibility.",
+        "valueType": "string"
       },
       {
         "component": "select",
-        "name": "linkType",
-        "label": "CTA Link Type",
-        "value": "default",
+        "name": "imageMode",
+        "label": "Image Mode",
+        "value": "normal",
         "options": [
           {
-            "name": "Default",
-            "value": "default"
+            "name": "Normal",
+            "value": "normal"
           },
           {
-            "name": "List",
-            "value": "list"
-          },
-          {
-            "name": "Primary Button",
-            "value": "primary"
-          },
-          {
-            "name": "Secondary Button",
-            "value": "secondary"
+            "name": "Black and White",
+            "value": "black-white"
           }
         ]
       }

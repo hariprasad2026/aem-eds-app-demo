@@ -1,7 +1,6 @@
 import { moveInstrumentation } from '../../scripts/scripts.js';
 import fetchPlaceholders from '../../scripts/placeholders.js';
 import showSlide from '../../scripts/carousel-support.js';
-import { extractZipImages, getExtension } from '../hero-banner/hero-banner.js';
 
 function updateActiveSlide(slide) {
   const block = slide.closest('.carousel');
@@ -163,204 +162,6 @@ function extractAlignment(column, slide) {
   });
 }
 
-// Positional fallback follows the current hero-banner model; data-aue-prop wins when present.
-const HERO_FIELDS = [
-  'heroIcon',
-  'heroIconAlt',
-  'heroImageType',
-  'heroImage',
-  'heroLottoImagePath',
-  'heroImageAlt',
-  'heroView',
-  'eyebrowText',
-  'title',
-  'description',
-  'motionType',
-  'alignment',
-  'classes_iconColor',
-  'classes_titleColor',
-  'classes_descriptionColor',
-  'bgColor',
-];
-
-const HERO_FIELD_ALIASES = {
-  icon: 'heroIcon',
-  iconalt: 'heroIconAlt',
-  eyebrow: 'eyebrowText',
-};
-
-function isHeroRow(row, columns) {
-  if (['hero-banner-item', 'hero-banner'].includes(row.dataset.aueModel)) return true;
-
-  const heroProps = new Set([
-    'heroIcon',
-    'heroImageType',
-    'heroImage',
-    'heroLottoImagePath',
-    'eyebrowText',
-  ]);
-  const hasHeroProp = columns.some((column) => {
-    const property = column.dataset.aueProp
-      || column.querySelector('[data-aue-prop]')?.dataset.aueProp;
-    return heroProps.has(property);
-  });
-
-  return hasHeroProp || columns.length >= HERO_FIELDS.length - 2;
-}
-
-function getHeroFields(columns) {
-  const fields = {};
-  columns.forEach((column, idx) => {
-    const rawName = column.dataset.aueProp
-      || column.querySelector('[data-aue-prop]')?.dataset.aueProp
-      || HERO_FIELDS[idx];
-    const name = HERO_FIELD_ALIASES[rawName?.toLowerCase()] || rawName;
-    if (name) fields[name] = column;
-  });
-  return fields;
-}
-
-function getAssetUrl(cell) {
-  if (!cell) return '';
-  const node = cell.querySelector('img[src], a[href]');
-  if (node) return node.getAttribute(node.tagName === 'A' ? 'href' : 'src') || '';
-  return cell.textContent.trim();
-}
-
-function isSafeUrl(url) {
-  try {
-    return ['http:', 'https:', 'mailto:', 'tel:'].includes(new URL(url, window.location.href).protocol);
-  } catch (e) {
-    return false;
-  }
-}
-
-function getCtaValue(block, property) {
-  const fields = [...block.querySelectorAll('[data-aue-prop]')];
-  if (block.matches('[data-aue-prop]')) fields.unshift(block);
-  const field = fields
-    .find((element) => element.dataset.aueProp.toLowerCase() === property.toLowerCase());
-  if (field) return field;
-  return null;
-}
-
-function getNestedCtaItems(columns) {
-  return columns.flatMap((column) => [
-    ...(column.matches('[data-aue-model="cta-item"], [data-aue-model="cta"]') ? [column] : []),
-    ...column.querySelectorAll('[data-aue-model="cta-item"], [data-aue-model="cta"]'),
-  ]);
-}
-
-async function renderHeroBackground(container, url, alt) {
-  try {
-    const urls = getExtension(url) === 'zip' ? await extractZipImages(url) : [url];
-    urls.forEach((src) => {
-      const img = document.createElement('img');
-      img.className = 'hero-bg-layer';
-      img.src = src;
-      img.alt = urls.length === 1 ? alt : '';
-      if (urls.length > 1) img.setAttribute('aria-hidden', 'true');
-      container.append(img);
-    });
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error('carousel: failed to render hero slide background', e);
-  }
-}
-
-function createHeroSlideContent(slide, columns) {
-  const fields = getHeroFields(columns);
-  const text = (name) => fields[name]?.textContent.trim() || '';
-
-  const image = document.createElement('div');
-  image.className = 'carousel-slide-image';
-  const backgroundUrl = getAssetUrl(fields.heroImage) || getAssetUrl(fields.heroLottoImagePath);
-  if (backgroundUrl) renderHeroBackground(image, backgroundUrl, text('heroImageAlt'));
-
-  const content = document.createElement('div');
-  content.className = 'carousel-slide-content hero-slide-content';
-
-  const iconImg = fields.heroIcon?.querySelector('img');
-  if (iconImg) {
-    const icon = document.createElement('span');
-    icon.className = 'hero-icon';
-    const iconSrc = iconImg.getAttribute('src');
-    const iconAlt = text('heroIconAlt') || iconImg.getAttribute('alt') || '';
-    icon.style.setProperty('--hero-icon-src', `url("${iconSrc.replace(/"/g, '%22')}")`);
-    if (iconAlt) {
-      icon.setAttribute('role', 'img');
-      icon.setAttribute('aria-label', iconAlt);
-    } else {
-      icon.setAttribute('aria-hidden', 'true');
-    }
-    content.append(icon);
-  }
-
-  if (text('eyebrowText')) {
-    const eyebrow = document.createElement('p');
-    eyebrow.className = 'hero-eyebrow';
-    eyebrow.textContent = text('eyebrowText');
-    content.append(eyebrow);
-  }
-
-  if (text('title')) {
-    const title = document.createElement('h2');
-    title.className = 'hero-title';
-    title.textContent = text('title');
-    content.append(title);
-  }
-
-  if (fields.description && text('description')) {
-    const description = document.createElement('div');
-    description.className = 'hero-description';
-    description.append(...fields.description.childNodes);
-    content.append(description);
-  }
-
-  const appendCta = (label, href) => {
-    if (!label || !href || !isSafeUrl(href)) return;
-    const cta = document.createElement('a');
-    cta.className = 'hero-cta';
-    cta.href = href;
-    cta.textContent = label;
-    cta.classList.add(`button-${text('ctaLinkType') === 'secondary' ? 'secondary' : 'primary'}`);
-    if (text('ctaView') === 'link') cta.classList.add('hero-cta-link');
-    content.append(cta);
-  };
-
-  appendCta(text('ctaTitle'), getAssetUrl(fields.ctaLink));
-  getNestedCtaItems(columns).forEach((ctaItem) => {
-    const labelField = getCtaValue(ctaItem, 'text_cta') || getCtaValue(ctaItem, 'textcta');
-    const linkField = getCtaValue(ctaItem, 'ctaLink');
-    const cells = [...ctaItem.children];
-    const label = labelField?.textContent.trim() || cells[0]?.textContent.trim();
-    const linkNode = linkField?.querySelector('a[href]') || ctaItem.querySelector('a[href]');
-    const href = linkNode?.getAttribute('href')
-      || (linkField ? getAssetUrl(linkField) : cells[1]?.textContent.trim());
-    appendCta(label, href);
-  });
-
-  const alignment = text('alignment').toLowerCase();
-  if (HORIZONTAL_ALIGNMENTS.includes(alignment)) {
-    content.dataset.align = alignment;
-    slide.dataset.align = alignment;
-  } else if (VERTICAL_ALIGNMENTS.includes(alignment)) {
-    content.dataset.valign = alignment;
-  }
-  const bgColor = text('bgColor').toLowerCase();
-  if (bgColor && bgColor !== 'none') slide.dataset.bg = bgColor;
-  ['classes_iconColor', 'classes_titleColor', 'classes_descriptionColor'].forEach((field) => {
-    const className = text(field).trim();
-    if (/^(icon|title|description)-color-(black|white|blue|grey)$/.test(className)) {
-      slide.classList.add(className);
-    }
-  });
-  if (text('motionType')) slide.dataset.motion = text('motionType');
-
-  slide.classList.add('carousel-slide-hero');
-  slide.append(image, content);
-}
-
 function createSlide(row, slideIndex, carouselId) {
   const slide = document.createElement('li');
   slide.dataset.slideIndex = slideIndex;
@@ -369,16 +170,12 @@ function createSlide(row, slideIndex, carouselId) {
 
   const columns = Array.from(row.querySelectorAll(':scope > div'));
 
-  if (isHeroRow(row, columns)) {
-    createHeroSlideContent(slide, columns);
-  } else {
-    columns.forEach((column, colIdx) => {
-      const isImage = colIdx === 0;
-      column.classList.add(`carousel-slide-${isImage ? 'image' : 'content'}`);
-      if (!isImage) extractAlignment(column, slide);
-      slide.append(column);
-    });
-  }
+  columns.forEach((column, colIdx) => {
+    const isImage = colIdx === 0;
+    column.classList.add(`carousel-slide-${isImage ? 'image' : 'content'}`);
+    if (!isImage) extractAlignment(column, slide);
+    slide.append(column);
+  });
 
   // Headings are not guaranteed to have an id, so assign one before referencing it.
   const labeledBy = slide.querySelector('h1, h2, h3, h4, h5, h6');

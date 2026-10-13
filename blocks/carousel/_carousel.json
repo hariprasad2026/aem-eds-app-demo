@@ -141,7 +141,7 @@
   "filters": [
     {
       "id": "carousel",
-      "components": ["carousel-item", "hero-banner-item"]
+      "components": ["carousel-item","hero-banner-item"]
     }
   ]
 }

@@ -157,9 +157,9 @@ export default function decorate(block) {
     tcsLogo: getProp(block, 'tcsLogo'),
     tcsLogoAlt: getProp(block, 'tcsLogoAlt', 'Tata Consultancy Services'),
     tcsLogoLink: getProp(block, 'tcsLogoLink', '/'),
-    tataLogo: getProp(block, 'tataLogo', 'https://www.tata.com'),
+    tataLogo: getProp(block, 'tataLogo'),
     tataLogoAlt: getProp(block, 'tataLogoAlt', 'TATA Group'),
-    tataLogoLink: getProp(block, 'tataLogoLink', 'https://www.tata.com'),
+    tataLogoLink: getProp(block, 'tataLogoLink', '/'),
   };
 
   block.textContent = '';

@@ -1,6 +1,8 @@
 import { moveInstrumentation } from '../../scripts/scripts.js';
+import { loadCSS } from '../../scripts/aem.js';
 import fetchPlaceholders from '../../scripts/placeholders.js';
 import showSlide from '../../scripts/carousel-support.js';
+import decorateHeroBanner from '../hero-banner/hero-banner.js';
 
 function updateActiveSlide(slide) {
   const block = slide.closest('.carousel');
@@ -162,6 +164,15 @@ function extractAlignment(column, slide) {
   });
 }
 
+function isHeroBannerRow(row) {
+  if (['hero-banner-item', 'hero-banner'].includes(row.dataset.aueModel)) return true;
+
+  return Boolean(row.querySelector(
+    '[data-aue-prop="heroIcon"], [data-aue-prop="heroImageType"], '
+    + '[data-aue-prop="heroImage"], [data-aue-prop="heroLottoImagePath"]',
+  ));
+}
+
 function createSlide(row, slideIndex, carouselId) {
   const slide = document.createElement('li');
   slide.dataset.slideIndex = slideIndex;
@@ -169,13 +180,24 @@ function createSlide(row, slideIndex, carouselId) {
   slide.classList.add('carousel-slide');
 
   const columns = Array.from(row.querySelectorAll(':scope > div'));
+  const isHeroBanner = isHeroBannerRow(row);
+  moveInstrumentation(row, slide);
 
-  columns.forEach((column, colIdx) => {
-    const isImage = colIdx === 0;
-    column.classList.add(`carousel-slide-${isImage ? 'image' : 'content'}`);
-    if (!isImage) extractAlignment(column, slide);
-    slide.append(column);
-  });
+  if (isHeroBanner) {
+    const heroBanner = document.createElement('div');
+    heroBanner.className = 'hero-banner';
+    heroBanner.style.alignSelf = 'stretch';
+    columns.forEach((column) => heroBanner.append(column));
+    decorateHeroBanner(heroBanner);
+    slide.append(heroBanner);
+  } else {
+    columns.forEach((column, colIdx) => {
+      const isImage = colIdx === 0;
+      column.classList.add(`carousel-slide-${isImage ? 'image' : 'content'}`);
+      if (!isImage) extractAlignment(column, slide);
+      slide.append(column);
+    });
+  }
 
   // Headings are not guaranteed to have an id, so assign one before referencing it.
   const labeledBy = slide.querySelector('h1, h2, h3, h4, h5, h6');
@@ -193,6 +215,10 @@ export default async function decorate(block) {
   block.setAttribute('id', `carousel-${carouselId}`);
 
   const rows = Array.from(block.querySelectorAll(':scope > div'));
+
+  if (rows.some(isHeroBannerRow)) {
+    await loadCSS(`${window.hlx.codeBasePath}/blocks/hero-banner/hero-banner.css`);
+  }
 
   // Extract Carousel parent properties if present
   const config = extractConfig(block, rows);
@@ -248,7 +274,6 @@ export default async function decorate(block) {
 
   rows.forEach((row, idx) => {
     const slide = createSlide(row, idx, carouselId);
-    moveInstrumentation(row, slide);
     slidesWrapper.append(slide);
 
     if (slideIndicators) {

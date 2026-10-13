@@ -93,10 +93,6 @@
   font-weight: var(--cta-font-weight, 500);
 }
 
-.cta-layout-space-between .cta-text {
-  flex: 1;
-}
-
 .cta-typography-compact .cta-text {
   font-size: 14px;
   line-height: 120%;

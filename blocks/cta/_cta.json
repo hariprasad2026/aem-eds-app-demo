@@ -66,13 +66,38 @@
     {
       "component": "select",
       "valueType": "string",
+      "name": "linkTarget",
+      "label": "CTA Link Type",
+      "value": "default",
+      "options": [
+        {
+          "name": "Default",
+          "value": "default"
+        },
+        {
+          "name": "Open In New Window",
+          "value": "new-window"
+        }
+      ]
+    },
+    {
+      "component": "select",
+      "valueType": "string",
       "name": "iconSize",
       "label": "Icon Size",
       "value": "24",
       "options": [
         {
+          "name": "14 x 14",
+          "value": "14"
+        },
+        {
           "name": "16 x 16",
           "value": "16"
+        },
+        {
+          "name": "18 x 18",
+          "value": "18"
         },
         {
           "name": "20 x 20",
@@ -93,23 +118,6 @@
         {
           "name": "48 x 48",
           "value": "48"
-        }
-      ]
-    },
-    {
-      "component": "select",
-      "valueType": "string",
-      "name": "linkTarget",
-      "label": "CTA Link Type",
-      "value": "default",
-      "options": [
-        {
-          "name": "Default",
-          "value": "default"
-        },
-        {
-          "name": "Open In New Window",
-          "value": "new-window"
         }
       ]
     },
@@ -152,43 +160,6 @@
         {
           "name": "Black",
           "value": "#0C0C0D"
-        },
-        {
-          "name": "White",
-          "value": "#FFFFFF"
-        }
-      ]
-    },
-    {
-      "component": "select",
-      "valueType": "string",
-      "name": "hoverBackgroundColor",
-      "label": "Hover Background Color",
-      "value": "",
-      "options": [
-        {
-          "name": "Variant Default",
-          "value": ""
-        },
-        {
-          "name": "Transparent",
-          "value": "transparent"
-        },
-        {
-          "name": "Black",
-          "value": "#0C0C0D"
-        },
-        {
-          "name": "Dark Gray",
-          "value": "#303030"
-        },
-        {
-          "name": "Light Gray",
-          "value": "#D9D9D9"
-        },
-        {
-          "name": "Off White",
-          "value": "#F3F3F3"
         },
         {
           "name": "White",
@@ -245,6 +216,44 @@
     {
       "component": "select",
       "valueType": "string",
+      "name": "hoverBackgroundColor",
+      "label": "Hover Background Color",
+      "value": "",
+      "options": [
+        {
+          "name": "Variant Default",
+          "value": ""
+        },
+        {
+          "name": "Transparent",
+          "value": "transparent"
+        },
+        {
+          "name": "Black",
+          "value": "#0C0C0D"
+        },
+        {
+          "name": "Dark Gray",
+          "value": "#303030"
+        },
+        {
+          "name": "Light Gray",
+          "value": "#D9D9D9"
+        },
+        {
+          "name": "Off White",
+          "value": "#F3F3F3"
+        },
+        {
+          "name": "White",
+          "value": "#FFFFFF"
+        }
+      ]
+    },
+    
+    {
+      "component": "select",
+      "valueType": "string",
       "name": "borderWidth",
       "label": "Border Width",
       "value": "1",
@@ -256,27 +265,6 @@
         {
           "name": "2px",
           "value": "2"
-        }
-      ]
-    },
-    {
-      "component": "select",
-      "valueType": "string",
-      "name": "borderRadius",
-      "label": "Border Radius",
-      "value": "9999",
-      "options": [
-        {
-          "name": "0px",
-          "value": "0"
-        },
-        {
-          "name": "6px",
-          "value": "6"
-        },
-        {
-          "name": "9999px (Pill)",
-          "value": "9999"
         }
       ]
     },

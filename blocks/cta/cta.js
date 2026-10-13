@@ -11,7 +11,6 @@ const DEFAULTS = {
   textColor: '',
   borderColor: '',
   borderWidth: '1',
-  borderRadius: '9999',
   backdropBlur: '8',
   hoverTextColor: '',
   ctaWidth: 'auto',
@@ -89,12 +88,14 @@ function readBlockContent(block) {
     'tertiary',
     'white-filled',
   ].includes(getFieldValue(block, 6, ''));
+  const legacyOffset = legacyView ? 1 : 0;
+  const hasBorderRadiusField = block.children.length >= 24 + (legacyView ? 1 : 0);
+  const fieldOffset = legacyOffset - (hasBorderRadiusField ? 0 : 1);
   const legacyState = [
     'default',
     'disabled',
     'loading',
-  ].includes(getFieldValue(block, 23, '')) && legacyView;
-  const legacyOffset = legacyView ? 1 : 0;
+  ].includes(getFieldValue(block, 23 + (hasBorderRadiusField ? 0 : -1), '')) && legacyView;
 
   return {
     textcta: getFieldValue(block, 0, ''),
@@ -111,24 +112,23 @@ function readBlockContent(block) {
     textColor: getFieldValue(block, 9 + legacyOffset, ''),
     borderColor: getFieldValue(block, 10 + legacyOffset, ''),
     borderWidth: getFieldValue(block, 11 + legacyOffset, '1'),
-    borderRadius: getFieldValue(block, 12 + legacyOffset, '9999'),
-    backdropBlur: getFieldValue(block, 13 + legacyOffset, '8'),
-    hoverTextColor: getFieldValue(block, 14 + legacyOffset, ''),
-    ctaWidth: getFieldValue(block, 15 + legacyOffset, 'auto'),
-    alignment: getFieldValue(block, 16 + legacyOffset, 'left'),
-    iconColor: getFieldValue(block, 17 + legacyOffset, 'black'),
+    backdropBlur: getFieldValue(block, 13 + fieldOffset, '8'),
+    hoverTextColor: getFieldValue(block, 14 + fieldOffset, ''),
+    ctaWidth: getFieldValue(block, 15 + fieldOffset, 'auto'),
+    alignment: getFieldValue(block, 16 + fieldOffset, 'left'),
+    iconColor: getFieldValue(block, 17 + fieldOffset, 'black'),
     hoverIconColor: legacyView
       ? ''
-      : getFieldValue(block, 18, ''),
-    contentLayout: getFieldValue(block, 19, 'normal'),
-    buttonSize: getFieldValue(block, 20, 'default'),
-    fontWeight: getFieldValue(block, 21, '500'),
+      : getFieldValue(block, 18 + fieldOffset, ''),
+    contentLayout: getFieldValue(block, 19 + fieldOffset, 'normal'),
+    buttonSize: getFieldValue(block, 20 + fieldOffset, 'default'),
+    fontWeight: getFieldValue(block, 21 + fieldOffset, '500'),
     typographyStyle: normalizeTypographyStyle(
-      getFieldValue(block, 22, 'default'),
+      getFieldValue(block, 22 + fieldOffset, 'default'),
     ),
     bold: getFieldValue(
       block,
-      legacyState ? 24 : 23,
+      (legacyState ? 24 : 23) + (hasBorderRadiusField ? 0 : -1),
       'false',
     ) === 'true',
   };
@@ -174,8 +174,6 @@ function createCta(data) {
   }
 
   link.style.borderWidth = `${data.borderWidth}px`;
-
-  link.style.borderRadius = `${data.borderRadius}px`;
 
   link.style.backdropFilter = `blur(${data.backdropBlur}px)`;
 

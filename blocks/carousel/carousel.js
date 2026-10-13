@@ -163,35 +163,58 @@ function extractAlignment(column, slide) {
   });
 }
 
-// Hero banner slide cells, in model order (the icon alt text is collapsed into the icon image).
+// Positional fallback follows the current hero-banner model; data-aue-prop wins when present.
 const HERO_FIELDS = [
-  'icon',
+  'heroIcon',
+  'heroIconAlt',
   'heroImageType',
+  'heroImage',
   'heroLottoImagePath',
   'heroImageAlt',
   'heroView',
-  'eyebrow',
+  'eyebrowText',
   'title',
   'description',
-  'ctaTitle',
-  'ctaLink',
-  'ctaLinkType',
-  'ctaView',
-  'alignment',
-  'bgColor',
   'motionType',
+  'alignment',
+  'classes_iconColor',
+  'classes_titleColor',
+  'classes_descriptionColor',
+  'bgColor',
 ];
 
+const HERO_FIELD_ALIASES = {
+  icon: 'heroIcon',
+  iconalt: 'heroIconAlt',
+  eyebrow: 'eyebrowText',
+};
+
 function isHeroRow(row, columns) {
-  return row.dataset.aueModel === 'hero-banner-item' || columns.length > 2;
+  if (['hero-banner-item', 'hero-banner'].includes(row.dataset.aueModel)) return true;
+
+  const heroProps = new Set([
+    'heroIcon',
+    'heroImageType',
+    'heroImage',
+    'heroLottoImagePath',
+    'eyebrowText',
+  ]);
+  const hasHeroProp = columns.some((column) => {
+    const property = column.dataset.aueProp
+      || column.querySelector('[data-aue-prop]')?.dataset.aueProp;
+    return heroProps.has(property);
+  });
+
+  return hasHeroProp || columns.length >= HERO_FIELDS.length - 2;
 }
 
 function getHeroFields(columns) {
   const fields = {};
   columns.forEach((column, idx) => {
-    const name = column.dataset.aueProp
+    const rawName = column.dataset.aueProp
       || column.querySelector('[data-aue-prop]')?.dataset.aueProp
       || HERO_FIELDS[idx];
+    const name = HERO_FIELD_ALIASES[rawName?.toLowerCase()] || rawName;
     if (name) fields[name] = column;
   });
   return fields;
@@ -210,6 +233,22 @@ function isSafeUrl(url) {
   } catch (e) {
     return false;
   }
+}
+
+function getCtaValue(block, property) {
+  const fields = [...block.querySelectorAll('[data-aue-prop]')];
+  if (block.matches('[data-aue-prop]')) fields.unshift(block);
+  const field = fields
+    .find((element) => element.dataset.aueProp.toLowerCase() === property.toLowerCase());
+  if (field) return field;
+  return null;
+}
+
+function getNestedCtaItems(columns) {
+  return columns.flatMap((column) => [
+    ...(column.matches('[data-aue-model="cta-item"], [data-aue-model="cta"]') ? [column] : []),
+    ...column.querySelectorAll('[data-aue-model="cta-item"], [data-aue-model="cta"]'),
+  ]);
 }
 
 async function renderHeroBackground(container, url, alt) {
@@ -235,25 +274,32 @@ function createHeroSlideContent(slide, columns) {
 
   const image = document.createElement('div');
   image.className = 'carousel-slide-image';
-  const backgroundUrl = getAssetUrl(fields.heroLottoImagePath);
+  const backgroundUrl = getAssetUrl(fields.heroImage) || getAssetUrl(fields.heroLottoImagePath);
   if (backgroundUrl) renderHeroBackground(image, backgroundUrl, text('heroImageAlt'));
 
   const content = document.createElement('div');
   content.className = 'carousel-slide-content hero-slide-content';
 
-  const iconImg = fields.icon?.querySelector('img');
+  const iconImg = fields.heroIcon?.querySelector('img');
   if (iconImg) {
-    const icon = document.createElement('img');
+    const icon = document.createElement('span');
     icon.className = 'hero-icon';
-    icon.src = iconImg.getAttribute('src');
-    icon.alt = iconImg.getAttribute('alt') || '';
+    const iconSrc = iconImg.getAttribute('src');
+    const iconAlt = text('heroIconAlt') || iconImg.getAttribute('alt') || '';
+    icon.style.setProperty('--hero-icon-src', `url("${iconSrc.replace(/"/g, '%22')}")`);
+    if (iconAlt) {
+      icon.setAttribute('role', 'img');
+      icon.setAttribute('aria-label', iconAlt);
+    } else {
+      icon.setAttribute('aria-hidden', 'true');
+    }
     content.append(icon);
   }
 
-  if (text('eyebrow')) {
+  if (text('eyebrowText')) {
     const eyebrow = document.createElement('p');
     eyebrow.className = 'hero-eyebrow';
-    eyebrow.textContent = text('eyebrow');
+    eyebrow.textContent = text('eyebrowText');
     content.append(eyebrow);
   }
 
@@ -271,23 +317,44 @@ function createHeroSlideContent(slide, columns) {
     content.append(description);
   }
 
-  const ctaUrl = getAssetUrl(fields.ctaLink);
-  if (text('ctaTitle') && ctaUrl && isSafeUrl(ctaUrl)) {
+  const appendCta = (label, href) => {
+    if (!label || !href || !isSafeUrl(href)) return;
     const cta = document.createElement('a');
     cta.className = 'hero-cta';
-    cta.href = ctaUrl;
-    cta.textContent = text('ctaTitle');
+    cta.href = href;
+    cta.textContent = label;
     cta.classList.add(`button-${text('ctaLinkType') === 'secondary' ? 'secondary' : 'primary'}`);
     if (text('ctaView') === 'link') cta.classList.add('hero-cta-link');
     content.append(cta);
-  }
+  };
+
+  appendCta(text('ctaTitle'), getAssetUrl(fields.ctaLink));
+  getNestedCtaItems(columns).forEach((ctaItem) => {
+    const labelField = getCtaValue(ctaItem, 'text_cta') || getCtaValue(ctaItem, 'textcta');
+    const linkField = getCtaValue(ctaItem, 'ctaLink');
+    const cells = [...ctaItem.children];
+    const label = labelField?.textContent.trim() || cells[0]?.textContent.trim();
+    const linkNode = linkField?.querySelector('a[href]') || ctaItem.querySelector('a[href]');
+    const href = linkNode?.getAttribute('href')
+      || (linkField ? getAssetUrl(linkField) : cells[1]?.textContent.trim());
+    appendCta(label, href);
+  });
 
   const alignment = text('alignment').toLowerCase();
   if (HORIZONTAL_ALIGNMENTS.includes(alignment)) {
     content.dataset.align = alignment;
     slide.dataset.align = alignment;
+  } else if (VERTICAL_ALIGNMENTS.includes(alignment)) {
+    content.dataset.valign = alignment;
   }
-  if (text('bgColor')) slide.dataset.bg = text('bgColor').toLowerCase();
+  const bgColor = text('bgColor').toLowerCase();
+  if (bgColor && bgColor !== 'none') slide.dataset.bg = bgColor;
+  ['classes_iconColor', 'classes_titleColor', 'classes_descriptionColor'].forEach((field) => {
+    const className = text(field).trim();
+    if (/^(icon|title|description)-color-(black|white|blue|grey)$/.test(className)) {
+      slide.classList.add(className);
+    }
+  });
   if (text('motionType')) slide.dataset.motion = text('motionType');
 
   slide.classList.add('carousel-slide-hero');

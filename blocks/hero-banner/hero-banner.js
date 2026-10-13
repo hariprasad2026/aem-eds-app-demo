@@ -15,7 +15,7 @@ const ZIP_IMAGE_MIME_TYPES = {
   svg: 'image/svg+xml',
 };
 
-function getExtension(path) {
+export function getExtension(path) {
   try {
     const { pathname } = new URL(path, window.location.href);
     return pathname.split('.').pop().toLowerCase();
@@ -74,7 +74,7 @@ async function loadJSZip() {
  * Downloads a zip and returns object URLs of the images it contains,
  * in natural file name order.
  */
-async function extractZipImages(zipUrl) {
+export async function extractZipImages(zipUrl) {
   const [JSZip, response] = await Promise.all([loadJSZip(), fetch(zipUrl)]);
   if (!response.ok) throw new Error(`Unable to load ${zipUrl} (${response.status})`);
 
@@ -161,6 +161,17 @@ function getTextValue(block, name, defaultValue = '') {
 
 function getRows(block) {
   return [...block.querySelectorAll(':scope > div')];
+}
+
+function isImagePath(value) {
+  return !!value && !/\s/.test(value) && !!ZIP_IMAGE_MIME_TYPES[getExtension(value)];
+}
+
+// Background authored as a link or plain path (instead of an <img>) to an image file.
+function getLinkedImageUrl(block) {
+  return getRows(block)
+    .map((row) => row.querySelector('a[href]')?.getAttribute('href') || row.textContent.trim())
+    .find(isImagePath) || '';
 }
 
 const IMAGE_TYPES = ['default', 'lotto'];
@@ -254,7 +265,7 @@ function getTextCandidates(block) {
       text: row.textContent.trim(),
       element: row.children.length === 1 ? row.firstElementChild : row,
     }))
-    .filter(({ text }) => text && !controlValues.has(text.toLowerCase()));
+    .filter(({ text }) => text && !controlValues.has(text.toLowerCase()) && !isImagePath(text));
 }
 
 function getAlignment(block) {
@@ -346,7 +357,7 @@ function getContent(block) {
     heroImageType: getImageType(block),
     heroImage: getFieldElement(block, 'heroImage'),
     heroLottoImagePath: getFieldElement(block, 'heroLottoImagePath'),
-    heroImageSrc: backgroundImage?.getAttribute('src') || '',
+    heroImageSrc: backgroundImage?.getAttribute('src') || getLinkedImageUrl(block),
     heroImageAlt: getTextValue(block, 'heroImageAlt') || backgroundImage?.getAttribute('alt') || '',
     heroView: getTextValue(block, 'heroView'),
 
@@ -394,19 +405,17 @@ export default function decorate(block) {
       applyLottoBackground(block, lottoUrl, content.heroImageAlt);
     }
   } else {
-    // Default: any image format is allowed.
-    const imageField = content.heroImage || content.heroLottoImagePath;
-    const fallbackSrc = content.heroImageSrc;
-    if (imageField || fallbackSrc) {
-      const bgImg = imageField?.querySelector('img') || imageField;
-      const bgSrc = bgImg?.getAttribute('src') || fallbackSrc;
-
-      if (bgSrc) {
-        // Render a real <img> layer (instead of a CSS background) so it is visible in the DOM.
-        // Authored URLs use width=750; request a larger rendition for a full-width hero.
-        const largeSrc = bgSrc.replace(/([?&]width=)\d+/, (match, prefix) => `${prefix}2000`);
-        renderBackgroundLayers(block, [largeSrc], content.heroImageAlt);
-      }
+    // Default: any image format is allowed. The authored reference may be rendered as an
+    // <img>, a link or a plain path depending on the delivery, so accept all of them.
+    const fieldUrl = [content.heroImage, content.heroLottoImagePath]
+      .map(getAssetUrl)
+      .find(isImagePath);
+    const bgSrc = fieldUrl || content.heroImageSrc;
+    if (bgSrc) {
+      // Render a real <img> layer (instead of a CSS background) so it is visible in the DOM.
+      // Authored URLs use width=750; request a larger rendition for a full-width hero.
+      const largeSrc = bgSrc.replace(/([?&]width=)\d+/, (match, prefix) => `${prefix}2000`);
+      renderBackgroundLayers(block, [largeSrc], content.heroImageAlt);
     }
   }
 

@@ -73,8 +73,6 @@
           "name": "heroImage",
           "label": "Hero Image",
           "description": "Default: any image format is allowed.",
-          "valueType": "string",
-          "multi": false,
           "condition": { "===": [{ "var": "heroImageType" }, "default"] }
         },
         {
@@ -82,8 +80,6 @@
           "name": "heroLottoImagePath",
           "label": "Hero Lotto Image Path",
           "description": "Lotto: only .zip or .svg files are allowed.",
-          "valueType": "string",
-          "multi": false,
           "condition": { "===": [{ "var": "heroImageType" }, "lotto"] }
         },
         {

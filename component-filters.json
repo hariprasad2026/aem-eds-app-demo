@@ -237,6 +237,14 @@
     ]
   },
   {
+    "id": "two-column-layout",
+    "components": [
+      "title",
+      "two-column-layout-text",
+      "two-column-layout-cta"
+    ]
+  },
+  {
     "id": "video",
     "components": []
   },

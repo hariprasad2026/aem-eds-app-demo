@@ -173,6 +173,13 @@ function isHeroBannerRow(row) {
   ));
 }
 
+function copyHeroStyleClasses(from, to) {
+  const allowedClass = /^(hero-banner-slide|icon-color-(black|white|blue)|title-color-(black|white|grey)|description-color-(black|white|grey)|hero-banner-align-(top|middle|bottom)|hero-banner-bg-(white|black))$/;
+  from.classList.forEach((className) => {
+    if (allowedClass.test(className)) to.classList.add(className);
+  });
+}
+
 function createSlide(row, slideIndex, carouselId) {
   const slide = document.createElement('li');
   slide.dataset.slideIndex = slideIndex;
@@ -187,6 +194,7 @@ function createSlide(row, slideIndex, carouselId) {
     const heroBanner = document.createElement('div');
     heroBanner.className = 'hero-banner';
     heroBanner.style.alignSelf = 'stretch';
+    copyHeroStyleClasses(row, heroBanner);
     columns.forEach((column) => heroBanner.append(column));
     decorateHeroBanner(heroBanner);
     slide.append(heroBanner);

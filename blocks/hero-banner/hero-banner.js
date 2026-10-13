@@ -472,19 +472,6 @@ export default function decorate(block) {
   }
 
   // Container below the CTAs that the hamburger and search bar are attached to.
-  const dummyBar1 = document.createElement('div');
-  dummyBar1.className = 'dummy1';
-  contentWrapper.append(dummyBar1);
-
-  const dummyBar2 = document.createElement('div');
-  dummyBar2.className = 'dummy2';
-  contentWrapper.append(dummyBar2);
-
-  const dummyBar3 = document.createElement('div');
-  dummyBar3.className = 'dummy3';
-  contentWrapper.append(dummyBar3);
-
-  // Container below the CTAs that the hamburger and search bar are attached to.
   const stickyBar = document.createElement('div');
   stickyBar.className = 'hero-banner-sticky';
   contentWrapper.append(stickyBar);

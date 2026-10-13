@@ -4574,7 +4574,7 @@
         "valueType": "string",
         "name": "tataLogoLink",
         "label": "Tata Logo Link",
-        "value": "https://www.tata.com"
+        "value": "/"
       },
       {
         "component": "select",
@@ -5075,6 +5075,40 @@
   {
     "id": "topic-list",
     "fields": []
+  },
+  {
+    "id": "two-column-layout",
+    "fields": [
+      {
+        "component": "select",
+        "name": "variant",
+        "label": "CTA Variant",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Centered",
+            "value": "centered"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "two-column-layout-text",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "text",
+        "label": "Content",
+        "value": "",
+        "filter": "richtext"
+      }
+    ]
   },
   {
     "id": "video",

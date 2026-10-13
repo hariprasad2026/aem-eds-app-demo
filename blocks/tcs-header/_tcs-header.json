@@ -71,7 +71,7 @@
           "valueType": "string",
           "name": "tataLogoLink",
           "label": "Tata Logo Link",
-          "value": "https://www.tata.com"
+          "value": "/"
         },
         {
           "component": "select",

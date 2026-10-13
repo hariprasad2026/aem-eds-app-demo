@@ -401,11 +401,11 @@ export default function decorate(block) {
       const bgImg = imageField?.querySelector('img') || imageField;
       const bgSrc = bgImg?.getAttribute('src') || fallbackSrc;
 
-      if (bgImg && content.heroImageAlt) {
-        bgImg.alt = content.heroImageAlt;
-      }
       if (bgSrc) {
-        block.style.backgroundImage = `url(${bgSrc})`;
+        // Render a real <img> layer (instead of a CSS background) so it is visible in the DOM.
+        // Authored URLs use width=750; request a larger rendition for a full-width hero.
+        const largeSrc = bgSrc.replace(/([?&]width=)\d+/, (match, prefix) => `${prefix}2000`);
+        renderBackgroundLayers(block, [largeSrc], content.heroImageAlt);
       }
     }
   }

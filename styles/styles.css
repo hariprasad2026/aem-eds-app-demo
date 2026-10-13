@@ -110,7 +110,6 @@
   --shadow-md: 0 0.625rem 1.875rem rgb(12 12 13 / 10%);
 
   /* layout */
-  --container-width: 90rem;
   --container-width-max: var(--breakpoint-max);
   --container-gutter: var(--spacing-m);
   --section-padding-block: var(--spacing-2xl);

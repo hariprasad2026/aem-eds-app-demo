@@ -157,7 +157,7 @@ export default function decorate(block) {
     tcsLogo: getProp(block, 'tcsLogo'),
     tcsLogoAlt: getProp(block, 'tcsLogoAlt', 'Tata Consultancy Services'),
     tcsLogoLink: getProp(block, 'tcsLogoLink', '/'),
-    tataLogo: getProp(block, 'tataLogo', 'https://www.tata.com'),
+    tataLogo: getProp(block, 'tataLogo'),
     tataLogoAlt: getProp(block, 'tataLogoAlt', 'TATA Group'),
     tataLogoLink: getProp(block, 'tataLogoLink', 'https://www.tata.com'),
   };
@@ -191,13 +191,10 @@ export default function decorate(block) {
   secondaryAnchor.target = '_blank';
   secondaryAnchor.rel = 'noopener noreferrer';
 
-  if (config.tataLogo && (config.tataLogo.startsWith('/') || config.tataLogo.startsWith('http') || config.tataLogo.includes('.'))) {
-    secondaryAnchor.append(createOptimizedPicture(config.tataLogo, config.tataLogoAlt, false, [{ width: '160' }]));
+  if (config.tataLogo) {
+    secondaryAnchor.append(createOptimizedPicture(config.tataLogo, config.tataLogoAlt, false, [{ width: '300' }]));
   } else {
-    const tataImg = document.createElement('img');
-    tataImg.src = 'https://www.tata.com/content/dam/tata/images/home-page/desktop/logo_tata_desktop.png';
-    tataImg.alt = config.tataLogoAlt || 'TATA Group';
-    secondaryAnchor.append(tataImg);
+    secondaryAnchor.textContent = 'TATA';
   }
   brandSecondary.append(secondaryAnchor);
 

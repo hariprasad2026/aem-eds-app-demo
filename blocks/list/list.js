@@ -1,5 +1,5 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
-import { getAEMPublish, isAuthoringMode } from '../../scripts/endpointconfig.js';
+import { getAEMPublish } from '../../scripts/endpointconfig.js';
 
 /**
 * Normalizes tag strings by stripping namespaces, human-readable labels,
@@ -187,72 +187,20 @@ function normalizePath(path) {
 
 async function fetchQueryIndex() {
   const configuredOrigin = getAEMPublish();
-  const currentOrigin = window.location.origin;
   const codeOrigin = new URL(import.meta.url).origin;
-  const authoringMode = isAuthoringMode();
-  const debugEnabled = authoringMode
-    || new URLSearchParams(window.location.search).has('debug-list');
+  const host = configuredOrigin.includes('.adobeaemcloud.com')
+    ? codeOrigin
+    : configuredOrigin;
 
-  const candidateOrigins = [currentOrigin, codeOrigin, configuredOrigin]
-    .filter(Boolean)
-    .map((origin) => String(origin).replace(/\/+$/, ''));
-
-  const expandedOrigins = [...candidateOrigins];
-  candidateOrigins.forEach((origin) => {
-    if (origin.includes('.aem.page')) {
-      expandedOrigins.push(origin.replace('.aem.page', '.aem.live'));
-    }
-  });
-
-  const tried = new Set();
-  let bestResult = [];
-
-  for (const origin of expandedOrigins) {
-    if (!origin || tried.has(origin)) continue;
-    tried.add(origin);
-
-    try {
-      const resp = await fetch(new URL('/query-index.json', origin));
-      const contentType = resp.headers.get('content-type') || '';
-      if (!resp.ok || !contentType.includes('application/json')) {
-        // continue to next candidate origin
-        // eslint-disable-next-line no-continue
-        continue;
-      }
-
-      const data = await resp.json();
-      const list = Array.isArray(data) ? data : (data.data || []);
-
-      if (debugEnabled) {
-        // eslint-disable-next-line no-console
-        console.info('[list] query-index candidate', {
-          origin,
-          size: list.length,
-          items: list,
-        });
-      }
-
-      if (!authoringMode) {
-        return list;
-      }
-
-      if (list.length > bestResult.length) {
-        bestResult = list;
-      }
-    } catch (err) {
-      // try next candidate
-    }
+  try {
+    const resp = await fetch(new URL('/query-index.json', host));
+    const contentType = resp.headers.get('content-type') || '';
+    if (!resp.ok || !contentType.includes('application/json')) return [];
+    const data = await resp.json();
+    return Array.isArray(data) ? data : (data.data || []);
+  } catch (err) {
+    return [];
   }
-
-  if (debugEnabled) {
-    // eslint-disable-next-line no-console
-    console.info('[list] query-index selected result', {
-      size: bestResult.length,
-      items: bestResult,
-    });
-  }
-
-  return bestResult;
 }
 
 function parseManualItems(block) {
@@ -561,15 +509,6 @@ export default async function decorate(block) {
     items = filterAndSortItems(rawIndex, config);
   }
 
-  if (isAuthoringMode() || new URLSearchParams(window.location.search).has('debug-list')) {
-    // eslint-disable-next-line no-console
-    console.info('[list] rendered items', {
-      listType: config.listType,
-      size: items.length,
-      items,
-    });
-  }
-
   // 3. Render Card Grid
   const ul = document.createElement('ul');
   ul.className = 'list-container';
@@ -585,3 +524,4 @@ export default async function decorate(block) {
 
   block.append(ueStore, ul);
 }
+

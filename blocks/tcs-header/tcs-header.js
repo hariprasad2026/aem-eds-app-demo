@@ -11,6 +11,25 @@ function formatHtmlPath(path) {
   return resolvedPath.endsWith('.html') ? resolvedPath : `${resolvedPath}.html`;
 }
 
+/**
+ * Sanitizes image src paths fetched from plain.html fragments.
+ * Strips improperly appended `.html` extensions from DAM/DynamicMedia image URLs.
+ */
+function sanitizeImgUrl(url) {
+  if (!url || typeof url !== 'string') return '';
+  let cleanUrl = url.trim();
+
+  // Strip .html or /.html inserted by Franklin rewriter prior to query parameters
+  cleanUrl = cleanUrl.replace(/\/\.html(\?|$)/i, '$1').replace(/\.html(\?\vert{}$)/i, '$1');
+
+  // Reject non-image values or variation strings accidentally picked up
+  if (['both', 'text-only', 'voice-only', 'standard', 'compact', 'dark'].includes(cleanUrl.toLowerCase())) {
+    return '';
+  }
+
+  return cleanUrl;
+}
+
 async function fetchHierarchicalNavData() {
   try {
     const response = await fetch('/query-index.json');
@@ -119,15 +138,18 @@ function getProp(block, name, fallback = '') {
     return input?.value || element.dataset.value || element.getAttribute('value') || element.textContent.trim();
   };
 
+  // 1. Direct Dataset Lookup
   if (block.dataset[name] !== undefined && block.dataset[name] !== '') return block.dataset[name];
   if (block.dataset[lower] !== undefined && block.dataset[lower] !== '') return block.dataset[lower];
 
+  // 2. Query selector lookup by attribute
   const attrElem = block.querySelector(`[data-aue-prop="${name}"], [data-aue-prop="${lower}"]`);
   if (attrElem) {
     const val = getValue(attrElem);
     if (val) return val;
   }
 
+  // 3. Scan rows for matching column keys
   const rows = [...block.children];
   for (let index = 0; index < rows.length; index += 1) {
     const row = rows[index];
@@ -141,6 +163,7 @@ function getProp(block, name, fallback = '') {
     }
   }
 
+  // 4. Index-based fallback based on model ordering
   const fieldIndex = fieldOrder.indexOf(name);
   if (fieldIndex >= 0 && rows[fieldIndex]) {
     const cols = [...rows[fieldIndex].children];
@@ -154,12 +177,12 @@ function getProp(block, name, fallback = '') {
 export default function decorate(block) {
   const config = {
     headerVariant: getProp(block, 'headerVariant', 'standard'),
-    tcsLogo: getProp(block, 'tcsLogo'),
+    tcsLogo: sanitizeImgUrl(getProp(block, 'tcsLogo')),
     tcsLogoAlt: getProp(block, 'tcsLogoAlt', 'Tata Consultancy Services'),
     tcsLogoLink: getProp(block, 'tcsLogoLink', '/'),
-    tataLogo: getProp(block, 'tataLogo'),
+    tataLogo: sanitizeImgUrl(getProp(block, 'tataLogo')),
     tataLogoAlt: getProp(block, 'tataLogoAlt', 'TATA Group'),
-    tataLogoLink: getProp(block, 'tataLogoLink', '/'),
+    tataLogoLink: getProp(block, 'tataLogoLink', 'https://www.tata.com'),
   };
 
   block.textContent = '';
@@ -171,7 +194,7 @@ export default function decorate(block) {
   const nav = document.createElement('nav');
   nav.id = 'tcs-nav';
 
-  // TCS Primary Logo
+  // 1. TCS Primary Logo
   const brandPrimary = document.createElement('div');
   brandPrimary.className = 'nav-brand-primary';
   const primaryAnchor = document.createElement('a');
@@ -183,7 +206,7 @@ export default function decorate(block) {
   }
   brandPrimary.append(primaryAnchor);
 
-  // Tata Secondary Logo
+  // 2. Tata Secondary Logo (Cleaned URL Fix)
   const brandSecondary = document.createElement('div');
   brandSecondary.className = 'nav-brand-secondary';
   const secondaryAnchor = document.createElement('a');
@@ -191,13 +214,13 @@ export default function decorate(block) {
   secondaryAnchor.target = '_blank';
   secondaryAnchor.rel = 'noopener noreferrer';
 
-  if (config.tataLogo && (config.tataLogo.startsWith('/') || config.tataLogo.startsWith('http') || config.tataLogo.includes('.'))) {
+  if (config.tataLogo) {
     secondaryAnchor.append(createOptimizedPicture(config.tataLogo, config.tataLogoAlt, false, [{ width: '160' }]));
   } else {
-    const tataImg = document.createElement('img');
-    tataImg.src = 'https://www.tata.com/content/dam/tata/images/home-page/desktop/logo_tata_desktop.png';
-    tataImg.alt = config.tataLogoAlt || 'TATA Group';
-    secondaryAnchor.append(tataImg);
+    const fallbackImg = document.createElement('img');
+    fallbackImg.src = 'https://www.tata.com/content/dam/tata/images/home-page/desktop/logo_tata_desktop.png';
+    fallbackImg.alt = config.tataLogoAlt || 'TATA Group';
+    secondaryAnchor.append(fallbackImg);
   }
   brandSecondary.append(secondaryAnchor);
 

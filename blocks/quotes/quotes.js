@@ -71,7 +71,7 @@ export default async function decorate(block) {
     media.className = 'quote-media';
     media.innerHTML = profileImageField.innerHTML;
   } else {
-    media.className = 'quote-media-alt';
+    media.className = 'quote-media quote-media-alt';
 
     const altText = imageAltTextField?.textContent?.trim();
 

@@ -31,7 +31,7 @@
     line-height: 1.4;
 }
 
-.quotes blockquote .quote-quotation > :first-child {
+.quotes blockquote .quote-quotation> :first-child {
     text-indent: -0.5ch;
 }
 
@@ -188,24 +188,32 @@
 
 @media (width >=900px) {
     .quotes blockquote.image {
-        grid-template-columns: 240px 480px;
+        grid-template-columns: 420px 220px;
         justify-content: center;
+        gap: 0;
         padding: 60px var(--container-gutter);
     }
 
     .quotes blockquote.image .quote-content {
+        grid-column: 1;
         margin-top: 132px;
-        margin-right: -360px;
+        margin-right: 0;
     }
 
-    .quotes blockquote.image .quote-media {
-        justify-self: start;
+    @media (width >=900px) {
+        .quotes .quote-media.quote-media-alt {
+            grid-column: 2;
+            grid-row: 1;
+            margin-top: 132px;
+            margin-left: -120px;
+            place-self: start start;
+        }
     }
 }
 
 @media (width <=1024px) and (width >=768px) {
     .quotes blockquote.image {
-        grid-template-columns: 260px 420px;
+        grid-template-columns: 420px 160px;
         justify-content: center;
     }
 
@@ -290,8 +298,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: var(--spacing-5xl);
-    margin-left: var(--spacing-6xl);
+    margin-top: 132px;
+    margin-left: 24px;
     padding: var(--spacing-m);
     background: var(--surface-subtle);
     border: 1px solid var(--border-color);
@@ -301,4 +309,14 @@
     color: var(--text-color-muted);
     text-align: center;
     overflow: hidden;
+}
+
+@media (width >=900px) {
+    .quotes .quote-media.quote-media-alt {
+        grid-column: 2;
+        grid-row: 1;
+        margin-top: 132px;
+        margin-left: -120px;
+        place-self: start start;
+    }
 }

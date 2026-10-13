@@ -180,6 +180,51 @@ function copyHeroStyleClasses(from, to) {
   });
 }
 
+function getHeroProperty(column) {
+  if (column.dataset.aueProp) return column.dataset.aueProp;
+  return column.querySelector('[data-aue-prop]')?.dataset.aueProp || '';
+}
+
+function getHeroPropertyValue(column) {
+  const field = column.matches('[data-aue-prop]')
+    ? column
+    : column.querySelector('[data-aue-prop]');
+  return field?.dataset.value || field?.getAttribute('value') || field?.textContent.trim()
+    || column.textContent.trim();
+}
+
+function applyHeroStyleFields(columns, heroBanner) {
+  const styleProperties = new Set([
+    'styleSection',
+    'alignment',
+    'classes_iconColor',
+    'classes_titleColor',
+    'classes_descriptionColor',
+    'bgColor',
+  ]);
+  const classProperties = {
+    classes_iconColor: /^(icon-color-(black|white|blue))$/,
+    classes_titleColor: /^(title-color-(black|white|grey))$/,
+    classes_descriptionColor: /^(description-color-(black|white|grey))$/,
+  };
+
+  return columns.filter((column) => {
+    const property = getHeroProperty(column);
+    if (!styleProperties.has(property)) return true;
+
+    const value = getHeroPropertyValue(column).toLowerCase();
+    const valuePattern = classProperties[property];
+    if (valuePattern?.test(value)) heroBanner.classList.add(value);
+    if (property === 'alignment' && ['top', 'middle', 'bottom'].includes(value)) {
+      heroBanner.classList.add(`hero-banner-align-${value}`);
+    }
+    if (property === 'bgColor' && ['white', 'black'].includes(value)) {
+      heroBanner.classList.add(`hero-banner-bg-${value}`);
+    }
+    return false;
+  });
+}
+
 function createSlide(row, slideIndex, carouselId) {
   const slide = document.createElement('li');
   slide.dataset.slideIndex = slideIndex;
@@ -195,7 +240,7 @@ function createSlide(row, slideIndex, carouselId) {
     heroBanner.className = 'hero-banner';
     heroBanner.style.alignSelf = 'stretch';
     copyHeroStyleClasses(row, heroBanner);
-    columns.forEach((column) => heroBanner.append(column));
+    applyHeroStyleFields(columns, heroBanner).forEach((column) => heroBanner.append(column));
     decorateHeroBanner(heroBanner);
     slide.append(heroBanner);
   } else {

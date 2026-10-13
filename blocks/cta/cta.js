@@ -39,13 +39,6 @@ function getFieldValue(block, index, fallback = '') {
   return field.textContent.trim() || fallback;
 }
 
-function getLinkFieldValue(block, index, fallback = '') {
-  const field = block.children[index];
-  const link = field?.querySelector('a[href]');
-
-  return link?.getAttribute('href') || link?.textContent.trim() || fallback;
-}
-
 function normalizeShape(value) {
   if (ALLOWED_SHAPES.includes(value)) {
     return value;
@@ -118,7 +111,7 @@ function readBlockContent(block) {
 
   return {
     textcta: getFieldValue(block, 0, ''),
-    ctaLink: getLinkFieldValue(block, 1, ''),
+    ctaLink: getFieldValue(block, 1, ''),
     icon: block.children[2]?.querySelector('img'),
     iconPosition: getFieldValue(block, 3, 'before'),
     iconSize: normalizeIconSize(getFieldValue(block, 5, '24')),
@@ -180,10 +173,7 @@ function createCta(data) {
   }
 
   if (data.backgroundColor) {
-    link.style.setProperty(
-      '--cta-background-color',
-      data.backgroundColor,
-    );
+    link.style.backgroundColor = data.backgroundColor;
   }
 
   if (data.textColor) {

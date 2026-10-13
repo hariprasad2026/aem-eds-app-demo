@@ -16,7 +16,7 @@
   padding: 12px 16px 12px 24px;
   border: 1px solid transparent;
   color: #000;
-  background-color: var(--cta-background-color, transparent);
+  background-color: transparent;
   text-decoration: none;
   cursor: pointer;
   transition:
@@ -68,6 +68,7 @@
 
 .cta-link.cta-layout-space-between {
   display: flex;
+  width: 100%;
   justify-content: space-between;
 }
 
@@ -108,13 +109,13 @@
 .cta-link:hover {
   background-color: var(
     --cta-hover-bg,
-    var(--cta-background-color, transparent)
+    var(--cta-hover-bg-default, inherit)
+  );
+  color: var(
+    --cta-hover-text,
+    inherit
   );
   text-decoration: none;
-}
-
-.cta-link:hover .cta-text {
-  color: var(--cta-hover-text, inherit);
 }
 
 /* ACTIVE */

@@ -1,12 +1,14 @@
 /* ==========================================================================
    BASIC TCS HEADER SHELL
    ========================================================================== */
-.tcs-header-wrapper {
+.tcs-header {
   height: 124px;
 }
 
 .tcs-header .tcs-nav-wrapper {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   z-index: 100;
   width: 100%;
   background-color: #fff;
@@ -27,7 +29,7 @@
   padding: 40px 80px;
 }
 
-/* ISSUE 1 FIX: TCS & TATA LOGO IMAGE CONTAINER STYLING */
+/* TCS & TATA LOGO IMAGE CONTAINER STYLING */
 .tcs-header .nav-brand-primary,
 .tcs-header .nav-brand-secondary {
   display: flex;
@@ -84,269 +86,10 @@
 }
 
 /* ==========================================================================
-   CIRCULAR FLOATING DESKTOP HAMBURGER
-   ========================================================================== */
-.tcs-floating-hamburger {
-  box-sizing: border-box;
-  width: 48px;
-  height: 48px;
-  background: rgb(255 255 255 / 80%);
-  border: 1px solid rgb(0 0 0 / 10%);
-  backdrop-filter: blur(14px);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 10px;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgb(0 0 0 / 5%);
-}
-
-.tcs-floating-hamburger svg {
-  width: 18px;
-  height: 18px;
-  stroke: #2b2b2b;
-}
-
-.tcs-floating-hamburger:hover {
-  background: #fff;
-  border-color: rgb(0 0 0 / 20%);
-}
-
-/* ==========================================================================
-   ISSUE 2 FIX: DESKTOP FLOATING LAYOUT (SUBMENU -> CANVAS -> PILLS)
-   Matching Target Output: Screenshot 2026-10-13 092410.png
+   FLOATING CONTROL BAR (HIDDEN AS REQUESTED)
    ========================================================================== */
 .tcs-floating-control-bar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  width: fit-content;
-  max-width: calc(100vw - 32px);
-  z-index: 1000;
-  margin: 0 auto;
-  transition: transform 0.2s ease;
-}
-
-.tcs-floating-control-bar.is-fixed {
-  position: fixed;
-  bottom: 30px;
-  left: 0;
-  right: 0;
-}
-
-/* Middle Row: Hamburger + Search Canvas */
-.tcs-search-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  width: 100%;
-}
-
-.tcs-search-box {
-  position: relative;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  width: 530px;
-  max-width: calc(100vw - 110px);
-  height: 60px;
-  background: rgb(255 255 255 / 80%);
-  border: 1px solid rgb(0 0 0 / 12%);
-  backdrop-filter: blur(30px);
-  border-radius: 50px;
-  padding: 8px 16px;
-  box-shadow: 0 4px 16px rgb(0 0 0 / 4%);
-}
-
-.tcs-search-form {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.tcs-search-box input {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: transparent;
-  padding: 0 90px 0 16px;
-  font-family: Inter, sans-serif;
-  font-size: 16px;
-  color: #1e2222;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.tcs-search-actions {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.tcs-search-actions .mic-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #333;
-  padding: 0;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.tcs-search-actions .submit-btn {
-  width: 36px;
-  height: 36px;
-  background: #4e82f7;
-  border-radius: 50%;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-}
-
-.tcs-search-actions .submit-btn svg {
-  width: 18px;
-  height: 18px;
-  stroke: #fff;
-}
-
-/* Top Item: Submenu Card Panel (Floats ABOVE Search Canvas) */
-.tcs-submenu-panel {
-  width: 100%;
-  max-width: 760px;
-  background: rgb(255 255 255 / 75%);
-  border: 1px solid rgb(255 255 255 / 60%);
-  backdrop-filter: blur(24px);
-  border-radius: 24px;
-  padding: 28px 36px;
-  box-sizing: border-box;
-  box-shadow: 0 12px 32px rgb(0 0 0 / 6%), 0 2px 6px rgb(0 0 0 / 3%);
-  margin-bottom: 8px;
-}
-
-.tcs-submenu-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px 40px;
-}
-
-.tcs-submenu-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid rgb(0 0 0 / 10%);
-  color: #2b2c2e;
-  font-family: Inter, sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none !important;
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-
-.tcs-submenu-item:hover {
-  color: #000;
-  border-bottom-color: rgb(0 0 0 / 30%);
-}
-
-.tcs-submenu-item .arrow {
-  color: #2b2c2e;
-  font-size: 15px;
-  opacity: 0.7;
-}
-
-/* Bottom Item: Category Pills Row (Positions BELOW Search Canvas) */
-.tcs-desktop-pills-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 780px;
-  margin-top: 8px;
-}
-
-.tcs-nav-pills-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  width: 100%;
-  padding: 6px 0;
-}
-
-.tcs-nav-pill {
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 14px;
-  background-color: #f3f3f3;
-  border: 1px solid #e5e5e5;
-  border-radius: 999px;
-  font-family: Inter, sans-serif;
-  font-size: 13px;
-  font-weight: 400;
-  color: #4a4a4a;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.tcs-nav-pill .tcs-pill-link {
-  color: inherit;
-  text-decoration: none !important;
-}
-
-.tcs-nav-pill .chevron-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: inherit;
-  padding: 0;
-  margin-left: 2px;
-}
-
-.tcs-nav-pill .chevron-icon {
-  width: 12px;
-  height: 12px;
-  transition: transform 0.25s ease;
-}
-
-.tcs-nav-pill.active {
-  background: #4e82f7;
-  color: #fff;
-  border-color: #4e82f7;
-}
-
-.tcs-nav-pill.active .chevron-icon {
-  transform: rotate(180deg);
-  stroke: #fff;
-}
-
-.tcs-nav-pill:not(.active):hover {
-  color: #000;
-  background: rgb(0 0 0 / 4%);
+  display: none !important;
 }
 
 /* ==========================================================================
@@ -506,7 +249,7 @@
 }
 
 @media (width <= 1024px) {
-  .tcs-header-wrapper {
+  .tcs-header {
     height: 64px;
   }
 
@@ -529,26 +272,5 @@
     display: flex;
     order: 3;
     margin-left: auto;
-  }
-
-  .tcs-floating-control-bar .tcs-hamburger-wrapper {
-    display: none !important;
-  }
-
-  .tcs-desktop-pills-container {
-    display: none !important;
-  }
-}
-
-@media (width <= 767px) {
-  .tcs-search-box {
-    width: calc(100vw - 32px);
-    height: 54px;
-    padding: 6px 12px;
-  }
-
-  .tcs-search-box input {
-    font-size: 14px;
-    padding-right: 75px;
   }
 }

@@ -90,7 +90,7 @@
           "valueType": "string",
           "name": "searchPlaceholder",
           "label": "Search Placeholder Text",
-          "value": "Ask TCS..."
+          "value": "Ask Canvas Search"
         },
         {
           "component": "select",

@@ -98,9 +98,23 @@ async function fetchHierarchicalNavData() {
   }
 }
 
+/**
+ * ISSUE 1 FIX: Robust Property Lookup to prevent Tata Logo extraction issues
+ */
 function getProp(block, name, fallback = '') {
   const lower = name.toLowerCase();
-  const fieldOrder = ['headerVariant', 'tcsLogo', 'tcsLogoAlt', 'tcsLogoLink', 'tataLogo', 'tataLogoAlt', 'tataLogoLink', 'searchVariation', 'searchPlaceholder', 'motionType'];
+  const fieldOrder = [
+    'headerVariant',
+    'tcsLogo',
+    'tcsLogoAlt',
+    'tcsLogoLink',
+    'tataLogo',
+    'tataLogoAlt',
+    'tataLogoLink',
+    'searchVariation',
+    'searchPlaceholder',
+    'motionType',
+  ];
 
   const getValue = (element) => {
     if (!element) return '';
@@ -114,11 +128,18 @@ function getProp(block, name, fallback = '') {
     return input?.value || element.dataset.value || element.getAttribute('value') || element.textContent.trim();
   };
 
-  if (block.dataset[name] !== undefined) return block.dataset[name];
-  if (block.dataset[lower] !== undefined) return block.dataset[lower];
-  const attrElem = block.querySelector(`[data-aue-prop="${name}"], [data-aue-prop="${lower}"]`);
-  if (attrElem) return getValue(attrElem);
+  // 1. Direct Dataset Lookup
+  if (block.dataset[name] !== undefined && block.dataset[name] !== '') return block.dataset[name];
+  if (block.dataset[lower] !== undefined && block.dataset[lower] !== '') return block.dataset[lower];
 
+  // 2. Query selector lookup by attribute
+  const attrElem = block.querySelector(`[data-aue-prop="${name}"], [data-aue-prop="${lower}"]`);
+  if (attrElem) {
+    const val = getValue(attrElem);
+    if (val) return val;
+  }
+
+  // 3. Scan rows for matching column keys
   const rows = [...block.children];
   for (let index = 0; index < rows.length; index += 1) {
     const row = rows[index];
@@ -126,15 +147,18 @@ function getProp(block, name, fallback = '') {
     if (cols.length >= 2) {
       const key = cols[0].textContent.trim().toLowerCase().replace(/[-_]/g, '');
       if (key === lower.replace(/[-_]/g, '')) {
-        return getValue(cols[1]);
+        const val = getValue(cols[1]);
+        if (val) return val;
       }
     }
   }
 
+  // 4. Index-based fallback based on model ordering
   const fieldIndex = fieldOrder.indexOf(name);
   if (fieldIndex >= 0 && rows[fieldIndex]) {
     const cols = [...rows[fieldIndex].children];
-    return getValue(cols.length > 1 ? cols[1] : rows[fieldIndex]) || fallback;
+    const val = getValue(cols.length > 1 ? cols[1] : rows[fieldIndex]);
+    if (val) return val;
   }
 
   return fallback;
@@ -146,11 +170,11 @@ export default function decorate(block) {
     tcsLogo: getProp(block, 'tcsLogo'),
     tcsLogoAlt: getProp(block, 'tcsLogoAlt', 'Tata Consultancy Services'),
     tcsLogoLink: getProp(block, 'tcsLogoLink', '/'),
-    tataLogo: getProp(block, 'tataLogo'),
+    tataLogo: getProp(block, 'tataLogo', 'https://www.tata.com'),
     tataLogoAlt: getProp(block, 'tataLogoAlt', 'TATA Group'),
     tataLogoLink: getProp(block, 'tataLogoLink', 'https://www.tata.com'),
     searchVariation: getProp(block, 'searchVariation', 'both'),
-    searchPlaceholder: getProp(block, 'searchPlaceholder', 'Ask TCS...'),
+    searchPlaceholder: getProp(block, 'searchPlaceholder', 'Ask Canvas Search'),
   };
 
   block.textContent = '';
@@ -162,7 +186,7 @@ export default function decorate(block) {
   const nav = document.createElement('nav');
   nav.id = 'tcs-nav';
 
-  // Logos
+  // TCS Primary Logo
   const brandPrimary = document.createElement('div');
   brandPrimary.className = 'nav-brand-primary';
   const primaryAnchor = document.createElement('a');
@@ -174,14 +198,21 @@ export default function decorate(block) {
   }
   brandPrimary.append(primaryAnchor);
 
+  // ISSUE 1 FIX: Tata Secondary Logo Rendering & Fallback Handling
   const brandSecondary = document.createElement('div');
   brandSecondary.className = 'nav-brand-secondary';
   const secondaryAnchor = document.createElement('a');
   secondaryAnchor.href = config.tataLogoLink;
-  if (config.tataLogo) {
+  secondaryAnchor.target = '_blank';
+  secondaryAnchor.rel = 'noopener noreferrer';
+
+  if (config.tataLogo && (config.tataLogo.startsWith('/') || config.tataLogo.startsWith('http') || config.tataLogo.includes('.'))) {
     secondaryAnchor.append(createOptimizedPicture(config.tataLogo, config.tataLogoAlt, false, [{ width: '160' }]));
   } else {
-    secondaryAnchor.textContent = 'TATA';
+    const tataImg = document.createElement('img');
+    tataImg.src = 'https://www.tata.com/content/dam/tata/images/home-page/desktop/logo_tata_desktop.png';
+    tataImg.alt = config.tataLogoAlt || 'TATA Group';
+    secondaryAnchor.append(tataImg);
   }
   brandSecondary.append(secondaryAnchor);
 
@@ -315,15 +346,21 @@ export default function decorate(block) {
   });
 
   // ==========================================================================
-  // FLOATING CONTROL BAR
+  // ISSUE 2 FIX: FLOATING CONTROL BAR DOM ASSEMBLY
+  // Order: 1. Submenu Panel (Top) -> 2. Search Row (Middle) -> 3. Pills Container (Bottom)
+  // Matching Target Output: Screenshot 2026-10-13 092410.png
   // ==========================================================================
   const floatingControlBar = document.createElement('div');
   floatingControlBar.className = 'tcs-floating-control-bar is-fixed';
 
+  // 1. Top Submenu Panel (Floats ABOVE Search Canvas)
+  const subMenuPanel = document.createElement('div');
+  subMenuPanel.className = 'tcs-submenu-panel hidden';
+
+  // 2. Middle Search Row (Hamburger + Search Canvas Box)
   const searchRow = document.createElement('div');
   searchRow.className = 'tcs-search-row';
 
-  // Circular Frosted Floating Hamburger
   const desktopHamburgerWrapper = document.createElement('div');
   desktopHamburgerWrapper.className = 'tcs-hamburger-wrapper';
   const desktopFloatingHamburgerBtn = document.createElement('button');
@@ -346,7 +383,6 @@ export default function decorate(block) {
   `;
   desktopHamburgerWrapper.append(desktopFloatingHamburgerBtn);
 
-  // Floating Search Box
   const searchVariation = config.searchVariation.toLowerCase();
   const searchBox = document.createElement('div');
   searchBox.className = `tcs-search-box mode-${searchVariation}`;
@@ -380,24 +416,21 @@ export default function decorate(block) {
     </form>`;
 
   searchBox.innerHTML = searchHtml;
+  searchRow.append(desktopHamburgerWrapper, searchBox);
 
-  // Floating Desktop Dropdown Container
-  const desktopNavContainer = document.createElement('div');
-  desktopNavContainer.className = 'tcs-desktop-nav-container hidden';
+  // 3. Bottom Pills Container (Positions BELOW Search Canvas)
+  const desktopPillsContainer = document.createElement('div');
+  desktopPillsContainer.className = 'tcs-desktop-pills-container hidden';
 
   const navPillsRow = document.createElement('div');
   navPillsRow.className = 'tcs-nav-pills-row';
+  desktopPillsContainer.append(navPillsRow);
 
-  const subMenuPanel = document.createElement('div');
-  subMenuPanel.className = 'tcs-submenu-panel hidden';
-
-  desktopNavContainer.append(navPillsRow, subMenuPanel);
-
-  searchRow.append(desktopHamburgerWrapper, searchBox);
-  floatingControlBar.append(desktopNavContainer, searchRow);
+  // Assemble Floating Bar: Submenu (Top) -> Search (Middle) -> Pills (Bottom)
+  floatingControlBar.append(subMenuPanel, searchRow, desktopPillsContainer);
   document.body.append(floatingControlBar);
 
-  // Desktop Navigation Toggle & Pill Rendering
+  // Desktop Navigation Toggle Logic
   let isDesktopNavOpen = false;
 
   const renderDesktopSubmenuCard = (items) => {
@@ -465,13 +498,13 @@ export default function decorate(block) {
       isDesktopNavOpen = true;
       iconHamburger.classList.add('hidden');
       iconClose.classList.remove('hidden');
-      desktopNavContainer.classList.remove('hidden');
+      desktopPillsContainer.classList.remove('hidden');
       await renderDesktopL1Navigation();
     } else {
       isDesktopNavOpen = false;
       iconHamburger.classList.remove('hidden');
       iconClose.classList.add('hidden');
-      desktopNavContainer.classList.add('hidden');
+      desktopPillsContainer.classList.add('hidden');
       subMenuPanel.classList.add('hidden');
     }
   });

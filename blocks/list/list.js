@@ -189,6 +189,9 @@ async function fetchQueryIndex() {
   const configuredOrigin = getAEMPublish();
   const currentOrigin = window.location.origin;
   const codeOrigin = new URL(import.meta.url).origin;
+  const authoringMode = isAuthoringMode();
+  const debugEnabled = authoringMode
+    || new URLSearchParams(window.location.search).has('debug-list');
 
   const candidateOrigins = [currentOrigin, codeOrigin, configuredOrigin]
     .filter(Boolean)
@@ -202,6 +205,8 @@ async function fetchQueryIndex() {
   });
 
   const tried = new Set();
+  let bestResult = [];
+
   for (const origin of expandedOrigins) {
     if (!origin || tried.has(origin)) continue;
     tried.add(origin);
@@ -217,15 +222,37 @@ async function fetchQueryIndex() {
 
       const data = await resp.json();
       const list = Array.isArray(data) ? data : (data.data || []);
-      if (list.length || !isAuthoringMode()) {
+
+      if (debugEnabled) {
+        // eslint-disable-next-line no-console
+        console.info('[list] query-index candidate', {
+          origin,
+          size: list.length,
+          items: list,
+        });
+      }
+
+      if (!authoringMode) {
         return list;
+      }
+
+      if (list.length > bestResult.length) {
+        bestResult = list;
       }
     } catch (err) {
       // try next candidate
     }
   }
 
-  return [];
+  if (debugEnabled) {
+    // eslint-disable-next-line no-console
+    console.info('[list] query-index selected result', {
+      size: bestResult.length,
+      items: bestResult,
+    });
+  }
+
+  return bestResult;
 }
 
 function parseManualItems(block) {
@@ -532,6 +559,15 @@ export default async function decorate(block) {
   } else {
     const rawIndex = await fetchQueryIndex();
     items = filterAndSortItems(rawIndex, config);
+  }
+
+  if (isAuthoringMode() || new URLSearchParams(window.location.search).has('debug-list')) {
+    // eslint-disable-next-line no-console
+    console.info('[list] rendered items', {
+      listType: config.listType,
+      size: items.length,
+      items,
+    });
   }
 
   // 3. Render Card Grid

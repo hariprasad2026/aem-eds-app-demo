@@ -42,14 +42,45 @@ function renderPanelVideo(panel, tabTitle) {
     media.appendChild(source);
   }
 
-  media.controls = true;
+  media.controls = false;
   media.preload = 'metadata';
   media.setAttribute('playsinline', '');
   media.setAttribute('aria-label', `${tabTitle} video`);
 
   const wrapper = document.createElement('div');
   wrapper.className = 'tabs-media tabs-video-wrapper';
-  wrapper.appendChild(media);
+
+  const playButton = document.createElement('button');
+  playButton.className = 'tabs-video-play-button';
+  playButton.type = 'button';
+  playButton.setAttribute('aria-label', `Play ${tabTitle} video`);
+  const playIcon = document.createElement('span');
+  playIcon.className = 'tabs-video-play-icon';
+  playIcon.setAttribute('aria-hidden', 'true');
+  playButton.appendChild(playIcon);
+
+  const updatePlaybackState = () => {
+    const isPlaying = !media.paused && !media.ended;
+    playButton.classList.toggle('is-playing', isPlaying);
+    playButton.setAttribute(
+      'aria-label',
+      `${isPlaying ? 'Pause' : 'Play'} ${tabTitle} video`,
+    );
+  };
+
+  playButton.addEventListener('click', () => {
+    if (media.paused || media.ended) {
+      const playback = media.play();
+      if (playback?.catch) playback.catch(() => {});
+    } else {
+      media.pause();
+    }
+  });
+  media.addEventListener('play', updatePlaybackState);
+  media.addEventListener('pause', updatePlaybackState);
+  media.addEventListener('ended', updatePlaybackState);
+
+  wrapper.append(media, playButton);
 
   if (videoLink) {
     videoLink.replaceWith(wrapper);

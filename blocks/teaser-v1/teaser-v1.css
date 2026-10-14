@@ -262,18 +262,15 @@
 
 /* CTA shapes */
 
-.teaser-v1 .teaser-cta-primary.teaser-cta-shape-rectangle,
-.teaser-v1 .teaser-cta-secondary.teaser-cta-shape-rectangle {
+.teaser-v1 .teaser-cta-shape-rectangle:not(.teaser-cta-list) {
   border-radius: 0;
 }
 
-.teaser-v1 .teaser-cta-primary.teaser-cta-shape-rounded,
-.teaser-v1 .teaser-cta-secondary.teaser-cta-shape-rounded {
+.teaser-v1 .teaser-cta-shape-rounded:not(.teaser-cta-list) {
   border-radius: 8px;
 }
 
-.teaser-v1 .teaser-cta-primary.teaser-cta-shape-pill,
-.teaser-v1 .teaser-cta-secondary.teaser-cta-shape-pill {
+.teaser-v1 .teaser-cta-shape-pill:not(.teaser-cta-list) {
   border-radius: 999px;
 }
 
@@ -287,11 +284,11 @@
   width: 100%;
   min-height: 46px;
   padding: 0 0 12px;
-  color: var(--teaser-foreground);
+  color: var(--cta-text-color, var(--teaser-foreground));
   border: 0;
-  border-bottom: 1px solid #767676;
+  border-bottom: 1px solid var(--cta-border-color, #767676);
   border-radius: 0;
-  background-color: transparent;
+  background-color: var(--cta-background-color, transparent);
   font-size: 24px;
   line-height: 1.4;
   letter-spacing: -0.015em;
@@ -300,7 +297,9 @@
 
 .teaser-v1 .teaser-cta-list:hover,
 .teaser-v1 .teaser-cta-list:focus-visible {
+  color: var(--cta-hover-text, var(--cta-text-color, var(--teaser-foreground)));
   border-bottom-color: currentcolor;
+  background-color: var(--cta-hover-bg, var(--cta-background-color, transparent));
   text-decoration: none;
 }
 
@@ -317,16 +316,18 @@
   width: fit-content;
   min-height: 44px;
   padding: 0;
-  color: var(--teaser-foreground);
-  border: 0;
+  color: var(--cta-text-color, var(--teaser-foreground));
+  border-color: var(--cta-border-color, transparent);
   border-radius: 0;
-  background-color: transparent;
+  background-color: var(--cta-background-color, transparent);
   font-size: 18px;
   line-height: 1.4;
 }
 
 .teaser-v1 .teaser-cta-default:hover,
 .teaser-v1 .teaser-cta-default:focus-visible {
+  color: var(--cta-hover-text, var(--cta-text-color, var(--teaser-foreground)));
+  background-color: var(--cta-hover-bg, var(--cta-background-color, transparent));
   text-decoration: underline;
 }
 
@@ -339,17 +340,18 @@
   width: fit-content;
   min-height: 44px;
   padding: 12px 24px;
-  color: var(--text-color, #111);
-  border: 1px solid var(--background-color, #fff);
-  background-color: var(--background-color, #fff);
+  color: var(--cta-text-color, #111);
+  border: 1px solid var(--cta-border-color, #fff);
+  background-color: var(--cta-background-color, #fff);
   font-size: 18px;
   line-height: 1.4;
 }
 
 .teaser-v1 .teaser-cta-primary:hover,
 .teaser-v1 .teaser-cta-primary:focus-visible {
-  border-color: #e3e3e5;
-  background-color: var(--teaser-cta-hover-background, #e3e3e5);
+  color: var(--cta-hover-text, var(--cta-text-color, #111));
+  border-color: var(--cta-border-color, #e3e3e5);
+  background-color: var(--cta-hover-bg, var(--teaser-cta-hover-background, #e3e3e5));
   text-decoration: none;
 }
 
@@ -362,16 +364,17 @@
   width: fit-content;
   min-height: 44px;
   padding: 12px 24px;
-  color: var(--teaser-foreground);
-  border: 1px solid currentcolor;
-  background-color: transparent;
+  color: var(--cta-text-color, var(--teaser-foreground));
+  border: 1px solid var(--cta-border-color, currentcolor);
+  background-color: var(--cta-background-color, transparent);
   font-size: 18px;
   line-height: 1.4;
 }
 
 .teaser-v1 .teaser-cta-secondary:hover,
 .teaser-v1 .teaser-cta-secondary:focus-visible {
-  background-color: var(--teaser-cta-hover-background, rgb(255 255 255 / 10%));
+  color: var(--cta-hover-text, var(--cta-text-color, var(--teaser-foreground)));
+  background-color: var(--cta-hover-bg, var(--teaser-cta-hover-background, rgb(255 255 255 / 10%)));
   text-decoration: none;
 }
 
@@ -666,7 +669,6 @@
   min-width: 0;
   min-height: 46px;
   padding: 12px 16px 12px 24px;
-  border-radius: 9999px;
   font-size: 16px;
   font-weight: 500;
   line-height: 1;
@@ -675,34 +677,34 @@
 
 .teaser-v1.split-feature .teaser-cta-primary:any-link,
 .teaser-v1.split-image-content .teaser-cta-primary:any-link {
-  color: #d9d9d9;
-  border-color: #303030;
-  background-color: #0c0c0d;
+  color: var(--cta-text-color, #d9d9d9);
+  border-color: var(--cta-border-color, #303030);
+  background-color: var(--cta-background-color, #0c0c0d);
 }
 
 .teaser-v1.split-feature .teaser-cta-primary:hover,
 .teaser-v1.split-feature .teaser-cta-primary:focus-visible,
 .teaser-v1.split-image-content .teaser-cta-primary:hover,
 .teaser-v1.split-image-content .teaser-cta-primary:focus-visible {
-  color: #fff;
-  border-color: #303030;
-  background-color: #303030;
+  color: var(--cta-hover-text, #fff);
+  border-color: var(--cta-border-color, #303030);
+  background-color: var(--cta-hover-bg, #303030);
 }
 
 .teaser-v1.split-feature .teaser-cta-secondary:any-link,
 .teaser-v1.split-image-content .teaser-cta-secondary:any-link {
-  color: #303030;
-  border-color: #303030;
-  background-color: transparent;
+  color: var(--cta-text-color, #303030);
+  border-color: var(--cta-border-color, #303030);
+  background-color: var(--cta-background-color, transparent);
 }
 
 .teaser-v1.split-feature .teaser-cta-secondary:hover,
 .teaser-v1.split-feature .teaser-cta-secondary:focus-visible,
 .teaser-v1.split-image-content .teaser-cta-secondary:hover,
 .teaser-v1.split-image-content .teaser-cta-secondary:focus-visible {
-  color: #fff;
-  border-color: #303030;
-  background-color: #303030;
+  color: var(--cta-hover-text, #fff);
+  border-color: var(--cta-border-color, #303030);
+  background-color: var(--cta-hover-bg, #303030);
 }
 
 .teaser-v1.split-feature .teaser-cta-arrow,
@@ -852,10 +854,9 @@
   min-width: 0;
   min-height: 50px;
   padding: 12px 16px 12px 24px;
-  color: #f3f3f3;
-  border: 1px solid #f3f3f3;
-  border-radius: 9999px;
-  background-color: transparent;
+  color: var(--cta-text-color, #f3f3f3);
+  border: 1px solid var(--cta-border-color, #f3f3f3);
+  background-color: var(--cta-background-color, transparent);
   font-size: 16px;
   font-weight: 500;
   line-height: 1;
@@ -864,9 +865,9 @@
 
 .teaser-v1.background-hero .teaser-cta:hover,
 .teaser-v1.background-hero .teaser-cta:focus-visible {
-  color: #000;
-  border-color: #f3f3f3;
-  background-color: #f3f3f3;
+  color: var(--cta-hover-text, #000);
+  border-color: var(--cta-border-color, #f3f3f3);
+  background-color: var(--cta-hover-bg, #f3f3f3);
   text-decoration: none;
 }
 
@@ -1086,10 +1087,9 @@
   min-width: 0;
   min-height: 50px;
   padding: 12px 16px 12px 24px;
-  color: #f3f3f3;
-  border: 1px solid #f3f3f3;
-  border-radius: 9999px;
-  background-color: transparent;
+  color: var(--cta-text-color, #f3f3f3);
+  border: 1px solid var(--cta-border-color, #f3f3f3);
+  background-color: var(--cta-background-color, transparent);
   font-size: 16px;
   font-weight: 500;
   line-height: 1;

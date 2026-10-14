@@ -1,0 +1,301 @@
+/* ==========================================================================
+   BASIC HEADER DEMO SHELL
+   ========================================================================== */
+.header-demo-wrapper {
+  height: 124px;
+}
+
+.header-demo .header-demo-nav-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.header-demo nav#header-demo-nav {
+  box-sizing: border-box;
+  position: relative;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 auto;
+  max-width: 1440px;
+  height: 124px;
+  padding: 40px 80px;
+}
+
+/* Logos */
+.header-demo .nav-brand-primary,
+.header-demo .nav-brand-secondary {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.header-demo .nav-brand-primary img {
+  width: 146px;
+  height: 34.8px;
+  object-fit: contain;
+}
+
+.header-demo .nav-brand-secondary img {
+  width: 50px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.header-demo .nav-brand-primary picture,
+.header-demo .nav-brand-secondary picture {
+  display: flex;
+  align-items: center;
+}
+
+.header-demo .nav-brand-primary a,
+.header-demo .nav-brand-secondary a {
+  text-decoration: none;
+  font-weight: 700;
+  color: #1e1e1e;
+}
+
+.header-demo .nav-hamburger {
+  display: flex;
+  align-items: center;
+}
+
+/* Hamburger Icon */
+.header-demo-hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-demo-hamburger svg {
+  width: 28px;
+  height: 20px;
+  stroke: #121213;
+}
+
+/* Variants */
+.header-demo.variant-compact nav#header-demo-nav {
+  height: 80px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.header-demo.variant-compact .nav-brand-primary img {
+  width: 112px;
+  height: 28px;
+}
+
+.header-demo.variant-centered nav#header-demo-nav {
+  position: relative;
+}
+
+.header-demo.variant-centered .nav-brand-primary {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.header-demo.variant-dark .header-demo-nav-wrapper,
+.header-demo[data-variant="dark"] .header-demo-nav-wrapper {
+  background-color: #1e1e1e;
+  border-bottom-color: #333;
+}
+
+.header-demo.variant-dark .header-demo-hamburger svg,
+.header-demo[data-variant="dark"] .header-demo-hamburger svg {
+  stroke: #fff;
+}
+
+/* ==========================================================================
+   MOBILE & TABLET FULLSCREEN OVERLAY NAVIGATION
+   ========================================================================== */
+.header-demo-mobile-nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.header-demo-mobile-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+}
+
+.header-demo-mobile-logos {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-demo-mobile-nav-overlay .header-demo-mobile-nav-header .header-demo-mobile-logos img {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+}
+
+.header-demo-mobile-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-demo-mobile-nav-overlay .header-demo-mobile-nav-header .header-demo-mobile-close-btn svg {
+  width: 24px;
+  height: 24px;
+  stroke: #1e2222;
+}
+
+.header-demo-mobile-nav-body {
+  padding: 10px 24px 120px;
+  flex: 1;
+}
+
+.header-demo-mobile-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  margin-top: 8px;
+}
+
+.header-demo-mobile-back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-demo-mobile-nav-overlay .header-demo-mobile-nav-body .header-demo-mobile-back-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: #1e2222;
+}
+
+.header-demo-mobile-title-row h2.header-demo-mobile-title {
+  width: 370px;
+  height: 39px;
+  opacity: 1;
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 32px;
+  line-height: 140%;
+  letter-spacing: -0.025em;
+  color: rgb(12 12 13 / 100%);
+}
+
+.header-demo-mobile-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-demo-mobile-item {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.header-demo-mobile-item-btn,
+.header-demo-mobile-item-link {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  background: transparent !important;
+  border: none;
+  font-family: Inter, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #1e2222;
+  text-align: left;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+.header-demo-mobile-item-btn .arrow {
+  color: #c2c2c2;
+  font-size: 18px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (width >= 1025px) {
+  .header-demo nav#header-demo-nav {
+    justify-content: space-between;
+  }
+
+  .header-demo .nav-brand-primary {
+    margin-right: auto;
+  }
+
+  .header-demo .nav-brand-secondary {
+    margin-left: auto;
+  }
+
+  .header-demo .nav-hamburger {
+    display: none;
+  }
+}
+
+@media (width <= 1024px) {
+  .header-demo-wrapper {
+    height: 64px;
+  }
+
+  .header-demo nav#header-demo-nav {
+    height: 64px;
+    padding: 12px 20px;
+  }
+
+  .header-demo .nav-brand-primary img {
+    width: 100px;
+    height: 24px;
+  }
+
+  .header-demo .nav-brand-secondary img {
+    width: 42px;
+    height: 36px;
+  }
+
+  .header-demo .nav-hamburger {
+    display: flex;
+    order: 3;
+    margin-left: auto;
+  }
+}

@@ -206,6 +206,10 @@
           "value": ""
         },
         {
+          "name": "Light Gray",
+          "value": "#E6E6E6"
+        },
+        {
           "name": "Black",
           "value": "#0C0C0D"
         },

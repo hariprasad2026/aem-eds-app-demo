@@ -1788,6 +1788,10 @@
             "value": ""
           },
           {
+            "name": "Light Gray",
+            "value": "#E6E6E6"
+          },
+          {
             "name": "Black",
             "value": "#0C0C0D"
           },
@@ -2609,6 +2613,76 @@
             "value": "right"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "header-demo",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "headerVariant",
+        "label": "Header Variant",
+        "value": "standard",
+        "options": [
+          {
+            "name": "Standard",
+            "value": "standard"
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Centered",
+            "value": "centered"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "tcsLogo",
+        "label": "TCS Logo Image"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tcsLogoAlt",
+        "label": "TCS Logo Alt Text",
+        "value": "Tata Consultancy Services"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tcsLogoLink",
+        "label": "TCS Logo Link",
+        "value": "/"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "tataLogo",
+        "label": "Tata Logo Image"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tataLogoAlt",
+        "label": "Tata Logo Alt Text",
+        "value": "TATA Group"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "tataLogoLink",
+        "label": "Tata Logo Link",
+        "value": "https://www.tata.com"
       }
     ]
   },

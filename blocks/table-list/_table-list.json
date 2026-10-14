@@ -340,10 +340,6 @@
             {
               "name": "Secondary",
               "value": "secondary"
-            },
-            {
-              "name": "Text",
-              "value": "text"
             }
           ]
         },

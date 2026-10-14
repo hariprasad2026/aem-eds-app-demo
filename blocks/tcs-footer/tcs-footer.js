@@ -358,7 +358,7 @@ export default function decorate(block) {
     }
   });
 
-  // Nest SubMenu Panel INSIDE floatingNav at top so it docks alongside search controls
+  // Nest SubMenu Panel INSIDE floatingNav
   if (subMenuPanel) floatingNav.append(subMenuPanel);
   if (hamburgerWrapperNode) searchRow.append(hamburgerWrapperNode);
   if (searchBoxWrapperNode) searchRow.append(searchBoxWrapperNode);
@@ -423,6 +423,7 @@ export default function decorate(block) {
 
   const renderL2SubNavigation = (l1Data) => {
     navPillsRow.innerHTML = '';
+    subMenuPanel.classList.add('hidden');
     updateButtonStateAndPosition('L2');
 
     const l2Group = document.createElement('div');
@@ -438,8 +439,7 @@ export default function decorate(block) {
         ${hasL3 ? `<button class="chevron-btn" aria-label="Expand subpages">${getChevronSvg()}</button>` : ''}
       `;
 
-      const triggerL3View = (e) => {
-        if (e) e.stopPropagation();
+      l2Pill.addEventListener('mouseenter', () => {
         l2Group.querySelectorAll('.tcs-nav-pill').forEach((p) => p.classList.remove('active'));
         l2Pill.classList.add('active');
 
@@ -448,11 +448,15 @@ export default function decorate(block) {
         } else {
           subMenuPanel.classList.add('hidden');
         }
-      };
+      });
 
-      l2Pill.addEventListener('mouseenter', triggerL3View);
       const chevronBtn = l2Pill.querySelector('.chevron-btn');
-      if (chevronBtn) chevronBtn.addEventListener('click', triggerL3View);
+      if (chevronBtn) {
+        chevronBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (hasL3) renderSubmenuCard(l2.children);
+        });
+      }
 
       l2Group.append(l2Pill);
     });
@@ -470,9 +474,9 @@ export default function decorate(block) {
       navTreeData = await fetchHierarchicalNavData();
     }
 
-    navTreeData.forEach((l1, idx) => {
+    navTreeData.forEach((l1) => {
       const l1Pill = document.createElement('div');
-      l1Pill.className = `tcs-nav-pill ${idx === 0 ? 'active' : ''}`;
+      l1Pill.className = 'tcs-nav-pill';
       const hasL2 = l1.children && l1.children.length > 0;
 
       l1Pill.innerHTML = `
@@ -480,26 +484,26 @@ export default function decorate(block) {
         ${hasL2 ? `<button class="chevron-btn" aria-label="Expand subpages">${getChevronSvg()}</button>` : ''}
       `;
 
-      const enterSubPageNavigation = (e) => {
-        if (e) e.stopPropagation();
-        if (hasL2) renderL2SubNavigation(l1);
-      };
-
       l1Pill.addEventListener('mouseenter', () => {
         navPillsRow.querySelectorAll('.tcs-nav-pill').forEach((p) => p.classList.remove('active'));
         l1Pill.classList.add('active');
-        if (hasL2) renderSubmenuCard(l1.children);
+        if (hasL2) {
+          renderSubmenuCard(l1.children);
+        } else {
+          subMenuPanel.classList.add('hidden');
+        }
       });
 
       const chevronBtn = l1Pill.querySelector('.chevron-btn');
-      if (chevronBtn) chevronBtn.addEventListener('click', enterSubPageNavigation);
+      if (chevronBtn) {
+        chevronBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (hasL2) renderL2SubNavigation(l1);
+        });
+      }
 
       navPillsRow.append(l1Pill);
     });
-
-    if (navTreeData[0] && navTreeData[0].children && navTreeData[0].children.length > 0) {
-      renderSubmenuCard(navTreeData[0].children);
-    }
 
     navPillsRow.classList.remove('hidden');
   };
@@ -540,44 +544,44 @@ export default function decorate(block) {
     });
   }
 
-  footerContainer.addEventListener('mouseleave', () => {
+  floatingNav.addEventListener('mouseleave', () => {
     subMenuPanel.classList.add('hidden');
     navPillsRow.querySelectorAll('.tcs-nav-pill').forEach((p) => p.classList.remove('active'));
   });
 
-  // Smooth Scroll & Dual Target Docking Monitor
+  // Smooth Scroll & Instant Dock/Float State Monitor
   let ticking = false;
 
   const handleScroll = () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
         const windowHeight = window.innerHeight;
-        const scrollY = window.scrollY || window.pageYOffset;
 
         const heroSlotEl = document.querySelector('.hero-banner-sticky');
         const canvasSlotEl = document.querySelector('.canvas-block-search-slot');
         const footerEl = block;
 
-        const checkInView = (el) => {
+        // Precise boundary check: determines if slot container is actively visible in viewport
+        const isSlotVisible = (el) => {
           if (!el) return false;
           const rect = el.getBoundingClientRect();
-          return rect.top < windowHeight && rect.bottom > 0;
+          return rect.top < windowHeight && rect.bottom > 80;
         };
 
-        const isHeroInView = heroSlotEl && (scrollY < 150 || checkInView(heroSlotEl));
-        const isCanvasInView = checkInView(canvasSlotEl);
+        const isHeroDocked = isSlotVisible(heroSlotEl);
+        const isCanvasDocked = !isHeroDocked && isSlotVisible(canvasSlotEl);
 
         const footerRect = footerEl.getBoundingClientRect();
         const isAtFooter = footerRect.top < windowHeight - 140;
 
-        if (isHeroInView && heroSlotEl) {
+        if (isHeroDocked && heroSlotEl) {
           // 1. DOCK inside Hero Banner Slot
           if (floatingNav.parentElement !== heroSlotEl) {
             heroSlotEl.append(floatingNav);
           }
           floatingNav.classList.remove('is-fixed');
           floatingNav.classList.add('is-docked-slot');
-        } else if (isCanvasInView && canvasSlotEl) {
+        } else if (isCanvasDocked && canvasSlotEl) {
           // 2. DOCK inside Canvas Block Search Slot
           if (floatingNav.parentElement !== canvasSlotEl) {
             canvasSlotEl.append(floatingNav);
@@ -591,7 +595,7 @@ export default function decorate(block) {
           }
           floatingNav.classList.remove('is-fixed', 'is-docked-slot');
         } else {
-          // 4. FLOATING FIXED state while scrolling between sections
+          // 4. FLOATING FIXED state (Instant switch as soon as user scrolls past slot)
           if (floatingNav.parentElement !== footerContainer) {
             footerContainer.insertBefore(floatingNav, ctaRow);
           }

@@ -17,6 +17,36 @@
       }
     },
     {
+      "title": "Title",
+      "id": "two-column-layout-title",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "title",
+              "model": "two-column-layout-title"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Image",
+      "id": "two-column-layout-image",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "image",
+              "model": "two-column-layout-image"
+            }
+          }
+        }
+      }
+    },
+    {
       "title": "Content",
       "id": "two-column-layout-text",
       "plugins": {
@@ -47,28 +77,72 @@
       }
     }
   ],
+
   "models": [
     {
-  "id": "two-column-layout",
-  "fields": [
-    {
-      "component": "select",
-      "name": "variant",
-      "label": "CTA Variant",
-      "value": "default",
-      "options": [
+      "id": "two-column-layout",
+      "fields": [
         {
-          "name": "Default",
-          "value": "default"
-        },
-        {
-          "name": "Centered",
-          "value": "centered"
+          "component": "select",
+          "name": "variant",
+          "label": "CTA Variant",
+          "value": "default",
+          "options": [
+            {
+              "name": "Default",
+              "value": "default"
+            },
+            {
+              "name": "Centered",
+              "value": "centered"
+            }
+          ]
         }
       ]
-    }
-  ]
-},
+    },
+
+    {
+      "id": "two-column-layout-title",
+      "fields": [
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Title"
+        },
+        {
+          "component": "select",
+          "name": "titleType",
+          "label": "Heading Level",
+          "value": "h1",
+          "options": [
+            { "name": "H1", "value": "h1" },
+            { "name": "H2", "value": "h2" },
+            { "name": "H3", "value": "h3" },
+            { "name": "H4", "value": "h4" },
+            { "name": "H5", "value": "h5" },
+            { "name": "H6", "value": "h6" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "two-column-layout-image",
+      "fields": [
+        {
+          "component": "reference",
+          "name": "image",
+          "label": "Image",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "name": "imageAlt",
+          "label": "Alt Text"
+        }
+      ]
+    },
+
     {
       "id": "two-column-layout-text",
       "fields": [
@@ -83,13 +157,16 @@
       ]
     }
   ],
+
   "filters": [
     {
       "id": "two-column-layout",
       "components": [
-        "title",
+        "two-column-layout-title",
+        "two-column-layout-image",
         "two-column-layout-text",
-        "two-column-layout-cta"
+        "two-column-layout-cta",
+        "statistics-list-item"
       ]
     }
   ]

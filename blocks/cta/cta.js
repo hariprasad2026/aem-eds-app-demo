@@ -1,5 +1,3 @@
-import { isAuthoringMode } from '../../scripts/endpointconfig.js';
-
 const DEFAULTS = {
   textcta: '',
   ctaLink: '',
@@ -155,11 +153,14 @@ function readBlockContent(block) {
 }
 
 function createCta(data) {
-  if (!data.textcta || !data.ctaLink) {
+  const href = data.ctaLink.trim();
+  const label = data.textcta.trim() || href;
+
+  if (!label) {
     return null;
   }
 
-  const link = document.createElement('a');
+  const link = document.createElement(href ? 'a' : 'span');
 
   link.className = [
     'cta-link',
@@ -169,14 +170,13 @@ function createCta(data) {
     `cta-typography-${data.typographyStyle}`,
   ].join(' ');
 
-  link.href = data.ctaLink;
+  if (href) {
+    link.href = href;
+  }
 
-  link.setAttribute(
-    'aria-label',
-    data.textcta,
-  );
+  link.setAttribute('aria-label', label);
 
-  if (data.linkTarget === 'new-window') {
+  if (href && data.linkTarget === 'new-window') {
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
   }
@@ -229,7 +229,7 @@ function createCta(data) {
   const text = document.createElement('span');
 
   text.className = 'cta-text';
-  text.textContent = data.textcta;
+  text.textContent = label;
 
   link.append(text);
 
@@ -257,18 +257,15 @@ export default function decorate(block) {
 
   const cta = createCta(data);
 
+  block.replaceChildren();
+
   block.classList.add(
     `cta-align-${data.alignment}`,
   );
 
   if (!cta) {
-    if (!isAuthoringMode()) {
-      block.replaceChildren();
-    }
     return;
   }
-
-  block.replaceChildren();
 
   switch (data.ctaWidth) {
     case 'half':

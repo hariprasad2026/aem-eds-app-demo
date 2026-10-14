@@ -1,11 +1,9 @@
 /* ==========================================================================
- 
    LIST BLOCK STYLING
- 
    ========================================================================== */
  
 .list {
-  /* palette values that have no global equivalent */
+  /* Palette values that have no global equivalent */
   --list-surface-dark: #20293c;
   --list-surface-grey: #e3e3e3;
   --list-text-strong: #303030;
@@ -16,18 +14,15 @@
   max-width: var(--container-width);
   margin: 0 auto;
   box-sizing: border-box;
- 
 }
  
 /* Universal Header Lockup */
- 
 .list .list-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: var(--spacing-xl);
   gap: var(--spacing-l);
- 
 }
  
 .list .list-main-title {
@@ -37,14 +32,12 @@
   font-weight: var(--font-weight-bold);
   color: var(--heading-color);
   line-height: 1.2;
- 
 }
  
 .list .list-header-description {
   margin-top: var(--spacing-xs);
   font-size: var(--body-font-size-m);
   color: var(--text-color-muted);
- 
 }
  
 .list .list-view-all {
@@ -60,16 +53,13 @@
   text-decoration: none;
   white-space: nowrap;
   transition: opacity 0.2s ease;
- 
 }
  
 .list .list-view-all:hover {
   opacity: 0.85;
- 
 }
  
 /* Base Card Grid */
- 
 .list .list-container {
   list-style: none;
   margin: 0;
@@ -77,12 +67,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--spacing-l);
- 
 }
  
 .list .list-item {
   display: flex;
- 
 }
  
 .list .list-card {
@@ -93,63 +81,51 @@
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-sizing: border-box;
- 
 }
  
 .list .list-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
- 
 }
  
 /* Color Schemes */
- 
 .list .list-card.card-color-grey {
   background-color: var(--color-neutral-100);
   color: var(--text-color);
- 
 }
  
 .list .list-card.card-color-black {
   background-color: var(--list-surface-dark);
   color: var(--color-white);
- 
 }
  
 .list .list-card.card-color-blue {
   background-color: var(--color-brand-500);
   color: var(--color-white);
- 
 }
  
 /* Media Area */
- 
 .list .list-media {
   width: 100%;
   height: 200px;
   overflow: hidden;
- 
 }
  
 .list .list-media picture,
- 
 .list .list-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
- 
 }
  
 /* Body Content */
- 
 .list .list-body {
   padding: var(--spacing-l);
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
   flex-grow: 1;
- 
 }
  
 .list .list-eyebrow {
@@ -157,7 +133,6 @@
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.06em;
   opacity: 0.85;
- 
 }
  
 .list .list-title {
@@ -165,18 +140,15 @@
   font-size: 1.25rem;
   font-weight: var(--font-weight-semibold);
   line-height: 1.35;
- 
 }
  
 .list .list-title a {
   color: inherit;
   text-decoration: none;
- 
 }
  
 .list .list-title a:hover {
   text-decoration: underline;
- 
 }
  
 .list .list-description {
@@ -189,7 +161,6 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
- 
 }
  
 .list .list-date {
@@ -197,7 +168,6 @@
   opacity: 0.75;
   margin-top: auto;
   padding-top: var(--spacing-xs);
- 
 }
  
 .list .list-empty {
@@ -208,13 +178,10 @@
   background-color: var(--surface-subtle);
   border-radius: var(--radius-md);
   border: 1px dashed var(--border-color);
- 
 }
  
 /* ==========================================================================
- 
    CARDS (M SCROLL) LAYOUT (.list-style-card-m-scroll)
- 
    ========================================================================== */
  
 .list.list-style-card-m-scroll {
@@ -223,7 +190,6 @@
   max-width: var(--container-width);
   margin: 0 auto;
   padding: var(--spacing-4xl);
- 
 }
  
 .list.list-style-card-m-scroll .list-header {
@@ -233,7 +199,6 @@
   padding: 0;
   gap: var(--spacing-s);
   margin-bottom: var(--spacing-5xl);
- 
 }
  
 .list.list-style-card-m-scroll .list-main-title {
@@ -245,10 +210,7 @@
   letter-spacing: -0.03em;
   color: var(--heading-color);
   margin: 0;
- 
 }
- 
-/* 4-Column Grid Slot */
  
 .list.list-style-card-m-scroll .list-container {
   display: grid;
@@ -257,22 +219,18 @@
   margin: 0;
   padding: 0;
   list-style: none;
- 
 }
  
 .list.list-style-card-m-scroll .list-item {
   display: flex;
   width: 100%;
- 
 }
- 
-/* Card Base Container */
  
 .list.list-style-card-m-scroll .list-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Pushes text lockup to top, CTA to bottom */
+  justify-content: space-between;
   align-items: flex-start;
   padding: var(--spacing-l);
   box-sizing: border-box;
@@ -284,16 +242,12 @@
   overflow: hidden;
   isolation: isolate;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
- 
 }
  
 .list.list-style-card-m-scroll .list-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
- 
 }
- 
-/* Media Area for Image Cards */
  
 .list.list-style-card-m-scroll .list-media {
   position: absolute;
@@ -303,58 +257,41 @@
   z-index: 0;
   margin: 0;
   border-radius: var(--radius-md);
- 
 }
  
 .list.list-style-card-m-scroll .list-media picture,
- 
 .list.list-style-card-m-scroll .list-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
- 
 }
  
 .list.list-style-card-m-scroll .list-media::after {
   display: none;
- 
 }
  
-/* Solid Theme Overrides */
- 
 .list.list-style-card-m-scroll .list-card.card-color-black,
- 
 .list.list-style-card-m-scroll .list-card.no-image.card-color-black {
   background: var(--list-surface-dark) !important;
   color: var(--color-white);
- 
 }
  
 .list.list-style-card-m-scroll .list-card.card-color-blue,
- 
 .list.list-style-card-m-scroll .list-card.no-image.card-color-blue {
   background: var(--color-brand-500) !important;
   color: var(--color-white);
- 
 }
  
 .list.list-style-card-m-scroll .list-card.no-image.card-color-grey {
   background: var(--list-surface-grey) !important;
   color: var(--text-color);
- 
 }
- 
-/* Hide image element if card has a solid theme override */
  
 .list.list-style-card-m-scroll .list-card.card-color-black .list-media,
- 
 .list.list-style-card-m-scroll .list-card.card-color-blue .list-media {
   display: none;
- 
 }
- 
-/* Text and Metadata Body */
  
 .list.list-style-card-m-scroll .list-body {
   position: relative;
@@ -367,10 +304,7 @@
   width: 100%;
   height: 100%;
   background: transparent;
- 
 }
- 
-/* Eyebrow Tag Header */
  
 .list.list-style-card-m-scroll .list-eyebrow {
   font-family: var(--font-family-base);
@@ -381,15 +315,11 @@
   letter-spacing: 0.01em;
   text-transform: uppercase;
   color: rgb(255 255 255 / 70%);
- 
 }
  
 .list.list-style-card-m-scroll .list-card:not(.card-color-black, .card-color-blue) .list-eyebrow {
   color: var(--text-color-muted);
- 
 }
- 
-/* Title Header */
  
 .list.list-style-card-m-scroll .list-title {
   font-family: var(--font-family-heading);
@@ -399,21 +329,16 @@
   line-height: 120%;
   margin: 0;
   color: inherit;
- 
 }
  
 .list.list-style-card-m-scroll .list-title a {
   color: inherit;
   text-decoration: none;
- 
 }
  
 .list.list-style-card-m-scroll .list-title a:hover {
   text-decoration: underline;
- 
 }
- 
-/* Description Copy */
  
 .list.list-style-card-m-scroll .list-description {
   font-family: var(--font-family-base);
@@ -429,10 +354,7 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
- 
 }
- 
-/* Explore Link Pushed to Bottom */
  
 .list.list-style-card-m-scroll .list-cta {
   font-family: var(--font-family-base);
@@ -447,18 +369,14 @@
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
- 
 }
  
 .list.list-style-card-m-scroll .list-cta:hover {
   text-decoration: underline;
- 
 }
  
 /* ==========================================================================
- 
    CARD - 2COL / 3COL (TM SCROLL) LAYOUT (.list-style-card-2col-tm-scroll)
- 
    ========================================================================== */
  
 .list.list-style-card-2col-tm-scroll .list-header {
@@ -468,7 +386,6 @@
   padding: var(--spacing-4xl);
   gap: var(--spacing-s);
   margin-bottom: var(--spacing-l);
- 
 }
  
 .list.list-style-card-2col-tm-scroll .list-main-title {
@@ -480,7 +397,6 @@
   letter-spacing: -0.03em;
   color: var(--heading-color);
   margin: 0;
- 
 }
  
 .list.list-style-card-2col-tm-scroll .list-container {
@@ -490,7 +406,6 @@
   margin: 0;
   padding: 0;
   list-style: none;
- 
 }
  
 .list.list-style-card-2col-tm-scroll .list-item {
@@ -499,7 +414,6 @@
   align-items: flex-start;
   padding: 0;
   width: 100%;
- 
 }
  
 /* stylelint-disable-next-line no-descending-specificity */
@@ -515,13 +429,11 @@
   box-shadow: none;
   transform: none;
   transition: none;
- 
 }
  
 .list.list-style-card-2col-tm-scroll .list-card:hover {
   transform: none;
   box-shadow: none;
- 
 }
  
 /* stylelint-disable-next-line no-descending-specificity */
@@ -534,17 +446,14 @@
   background-color: var(--color-neutral-100);
   margin-bottom: var(--spacing-s);
   position: relative;
- 
 }
  
 .list.list-style-card-2col-tm-scroll .list-media picture,
- 
 .list.list-style-card-2col-tm-scroll .list-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
- 
 }
  
 .list.list-style-card-2col-tm-scroll .list-card.no-image .list-media {
@@ -552,7 +461,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
- 
 }
  
 .list.list-style-card-2col-tm-scroll .list-body {
@@ -563,7 +471,6 @@
   gap: var(--spacing-xs);
   width: 100%;
   background: var(--surface-color);
- 
 }
  
 /* stylelint-disable-next-line no-descending-specificity */
@@ -580,7 +487,6 @@
   letter-spacing: 0.01em;
   text-transform: uppercase;
   color: var(--color-neutral-400);
- 
 }
  
 .list.list-style-card-2col-tm-scroll .list-title {
@@ -592,20 +498,17 @@
   letter-spacing: -0.025em;
   color: var(--list-text-strong);
   margin: 0;
- 
 }
  
 /* stylelint-disable-next-line no-descending-specificity */
 .list.list-style-card-2col-tm-scroll .list-title a {
   color: var(--list-text-strong);
   text-decoration: none;
- 
 }
  
 .list.list-style-card-2col-tm-scroll .list-title a:hover {
   color: var(--heading-color);
   text-decoration: underline;
- 
 }
  
 .list.list-style-card-2col-tm-scroll .list-description {
@@ -618,14 +521,12 @@
   color: var(--text-color);
   opacity: 0.7;
   margin: 0;
- 
 }
  
 /* ==========================================================================
- 
    HERO CARD LAYOUT (.list-style-hero-card)
- 
    ========================================================================== */
+ 
 .list.list-style-hero-card {
   padding: 0 var(--spacing-4xl);
 }
@@ -636,19 +537,17 @@
   align-items: center;
   padding: 0;
   margin-bottom: var(--spacing-l);
- 
 }
  
 .list.list-style-hero-card .list-main-title {
   font-family: var(--font-family-heading);
   font-style: normal;
   font-weight: var(--font-weight-semibold);
-  font-size: 48px;
-  line-height: 120%;
-  letter-spacing: -0.03em;
+  font-size: 40px;
+  line-height: 140%;
+  letter-spacing: -0.025em;
   color: var(--heading-color);
   margin: 0;
- 
 }
  
 .list.list-style-hero-card .list-view-all {
@@ -660,7 +559,7 @@
   gap: var(--spacing-xs);
   height: 50px;
   background: var(--color-black);
-  border: 2px solid var(--list-text-strong);
+  border: 1px solid var(--list-text-strong);
   border-radius: var(--radius-pill);
   font-family: var(--font-family-base);
   font-style: normal;
@@ -670,12 +569,10 @@
   text-decoration: none;
   box-sizing: border-box;
   transition: opacity 0.2s ease;
- 
 }
  
 .list.list-style-hero-card .list-view-all:hover {
   opacity: 0.85;
- 
 }
  
 .list.list-style-hero-card .list-container {
@@ -685,32 +582,29 @@
   margin: 0;
   padding: 0;
   list-style: none;
- 
 }
  
 .list.list-style-hero-card .list-item.hero-item {
   grid-column: 1 / -1;
   width: 100%;
- 
 }
  
 .list.list-style-hero-card .hero-item .list-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: flex-start;
   padding: var(--spacing-2xl);
   box-sizing: border-box;
   width: 100%;
-  height: 650px;
+  height: 569.86px;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background-color: var(--list-surface-dark);
+  background-color: var(--color-neutral-100);
   isolation: isolate;
   border: none;
   box-shadow: none;
- 
 }
  
 /* stylelint-disable-next-line no-descending-specificity */
@@ -721,26 +615,18 @@
   height: 100%;
   z-index: 0;
   margin: 0;
- 
 }
  
 .list.list-style-hero-card .hero-item .list-media picture,
- 
 .list.list-style-hero-card .hero-item .list-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
- 
 }
  
 .list.list-style-hero-card .hero-item .list-media::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgb(0 0 0 / 10%) 0%, rgb(0 0 0 / 75%) 100%);
-  z-index: 1;
- 
+  display: none;
 }
  
 .list.list-style-hero-card .hero-item .list-body {
@@ -752,9 +638,8 @@
   padding: 0;
   gap: var(--spacing-s);
   width: 100%;
-  max-width: 1200px;
-  color: var(--color-white);
- 
+  max-width: 800px;
+  color: var(--heading-color);
 }
  
 /* stylelint-disable-next-line no-descending-specificity */
@@ -767,19 +652,22 @@
   letter-spacing: 0.01em;
   text-transform: uppercase;
   color: var(--color-neutral-400);
- 
 }
  
 .list.list-style-hero-card .hero-item .list-title {
   font-family: var(--font-family-heading);
   font-style: normal;
   font-weight: var(--font-weight-semibold);
-  font-size: 48px;
+  font-size: 40px;
   line-height: 120%;
   letter-spacing: -0.03em;
-  color: inherit;
+  color: var(--heading-color);
   margin: 0;
+}
  
+.list.list-style-hero-card .hero-item .list-title a {
+  color: inherit;
+  text-decoration: none;
 }
  
 .list.list-style-hero-card .hero-item .list-description {
@@ -789,68 +677,46 @@
   font-size: var(--body-font-size-m);
   line-height: 160%;
   letter-spacing: 0.01em;
-  color: rgb(255 255 255 / 85%);
+  color: var(--text-color);
   margin: 0;
- 
-}
- 
-.list.list-style-hero-card .hero-item .list-cta {
-  font-family: var(--font-family-base);
-  font-style: normal;
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--body-font-size-m);
-  color: var(--color-white);
-  text-decoration: none;
-  margin-top: var(--spacing-s);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
- 
+  max-width: 600px;
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) {
   display: flex;
   flex-direction: column;
   width: 100%;
- 
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) .list-card {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: flex-start;
   width: 100%;
+  height: 453px;
   background: var(--surface-color);
   border-radius: var(--radius-md);
   border: none;
   box-shadow: none;
   overflow: hidden;
-  transition: transform 0.2s ease;
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-card:hover {
-  transform: translateY(-4px);
- 
+  box-sizing: border-box;
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) .list-media {
   width: 100%;
-  height: 169.88px;
+  height: 302px;
   border-radius: var(--radius-md);
   overflow: hidden;
   margin-bottom: var(--spacing-s);
- 
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) .list-media picture,
- 
 .list.list-style-hero-card .list-item:not(.hero-item) .list-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
- 
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) .list-body {
@@ -860,7 +726,7 @@
   padding: 0;
   gap: var(--spacing-xs);
   width: 100%;
- 
+  height: 100%;
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) .list-eyebrow {
@@ -872,7 +738,6 @@
   letter-spacing: 0.01em;
   text-transform: uppercase;
   color: var(--color-neutral-400);
- 
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) .list-title {
@@ -884,19 +749,16 @@
   letter-spacing: -0.025em;
   color: var(--list-text-strong);
   margin: 0;
- 
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) .list-title a {
   color: var(--list-text-strong);
   text-decoration: none;
- 
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) .list-title a:hover {
   color: var(--heading-color);
   text-decoration: underline;
- 
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) .list-description {
@@ -909,7 +771,11 @@
   color: var(--text-color);
   opacity: 0.7;
   margin: 0;
- 
+  display: -webkit-box;
+  line-clamp: 4;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image {
@@ -918,61 +784,91 @@
   box-sizing: border-box;
   height: 453px;
   justify-content: space-between;
- 
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image.card-color-black {
   background: var(--list-surface-dark);
   color: var(--color-white);
- 
 }
  
 .list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image.card-color-blue {
   background: var(--color-brand-500);
   color: var(--color-white);
+}
  
+.list.list-style-hero-card .list-btn-download {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-s) var(--spacing-l);
+  gap: var(--spacing-xs);
+  height: 50px;
+  border: 1px solid var(--list-text-strong);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-family-base);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--body-font-size-m);
+  color: var(--list-text-strong);
+  text-decoration: none;
+  margin-top: auto;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+ 
+.list.list-style-hero-card .list-btn-download:hover {
+  background-color: var(--list-text-strong);
+  color: var(--color-white);
 }
  
 /* ==========================================================================
- 
    MOBILE & TABLET RESPONSIVE TOUCH SCROLL RULES
- 
    ========================================================================== */
  
 @media (width <= 1024px) {
+  .list.list-style-card-m-scroll {
+    padding: var(--spacing-3xl);
+  }
+ 
   .list.list-style-hero-card {
     padding: 0 var(--spacing-3xl);
   }
  
+  .list.list-style-card-m-scroll .list-header {
+    margin-bottom: var(--spacing-3xl);
+  }
+ 
   .list.list-style-hero-card .list-main-title,
- 
   .list.list-style-card-m-scroll .list-main-title,
- 
   .list.list-style-card-2col-tm-scroll .list-main-title {
     font-size: 32px;
- 
   }
  
   .list.list-style-hero-card .hero-item .list-card {
     height: auto;
     min-height: 420px;
     padding: var(--spacing-l);
- 
   }
  
   .list.list-style-hero-card .hero-item .list-title {
     font-size: 32px;
- 
   }
  
   .list.list-style-hero-card .list-container {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: var(--spacing-m);
     gap: var(--spacing-m);
+    -webkit-overflow-scrolling: touch;
+  }
  
+  .list.list-style-hero-card .list-item.hero-item {
+    flex: 0 0 100%;
   }
  
   .list.list-style-card-m-scroll .list-container,
- 
   .list.list-style-card-2col-tm-scroll .list-container {
     display: flex;
     overflow-x: auto;
@@ -980,31 +876,34 @@
     padding-bottom: var(--spacing-m);
     gap: var(--spacing-m);
     -webkit-overflow-scrolling: touch;
- 
   }
  
   .list.list-style-card-m-scroll .list-item {
     flex: 0 0 280px;
     scroll-snap-align: start;
- 
   }
  
   .list.list-style-card-2col-tm-scroll .list-item {
     flex: 0 0 300px;
     scroll-snap-align: start;
- 
   }
- 
+
+  .list.list-style-hero-card .list-item:not(.hero-item) {
+    flex: 0 0 302px;
+    scroll-snap-align: start;
+  }
 }
  
 @media (width <= 640px) {
+  .list.list-style-card-m-scroll {
+    padding: var(--spacing-2xl) var(--spacing-l);
+  }
+ 
   .list.list-style-hero-card {
     padding: 0 var(--spacing-xl);
   }
  
   .list.list-style-hero-card .list-container {
     grid-template-columns: 1fr;
- 
   }
- 
 }

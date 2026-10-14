@@ -2,18 +2,15 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
 import { getAEMPublish } from '../../scripts/endpointconfig.js';
 
 /**
-* Normalizes tag strings by stripping namespaces, human-readable labels,
-* and slashes into comparison tokens.
-* e.g., "AEM EDS Xwalk : Industries / Banking" -> ["industries/banking", "banking"]
-* e.g., "aem-eds-xwalk:operations" -> ["operations"]
+* Normalizes tag strings into comparison tokens
 */
 function getTagTokens(tagStr) {
   if (!tagStr) return [];
   const clean = String(tagStr)
     .trim()
     .toLowerCase()
-    .replace(/^.*:/, '') // Strip namespace prefix
-    .replace(/[^a-z0-9/_-]/g, '') // Strip spaces and special chars around separators
+    .replace(/^.*:/, '')
+    .replace(/[^a-z0-9/_-]/g, '')
     .replace(/^\/+|\/+$/g, '');
 
   const segments = clean.split('/').filter(Boolean);
@@ -225,9 +222,18 @@ function compareItems(a, b, config) {
 
 function hasCardImage(item, config) {
   return Boolean(item.image)
-    && config.showImage
-    && item.image !== 'about:error'
-    && !item.image.includes('default-meta-image.png');
+&& config.showImage
+&& item.image !== 'about:error'
+&& !item.image.includes('default-meta-image.png');
+}
+
+function isDownloadableCard(item) {
+  const path = String(item.path || '').toLowerCase();
+  const tags = String(item.tags || '').toLowerCase();
+  return path.endsWith('.pdf')
+    || tags.includes('report')
+    || tags.includes('case-study')
+    || tags.includes('pdf');
 }
 
 function filterAndSortItems(items, config) {
@@ -304,12 +310,10 @@ function filterAndSortItems(items, config) {
     }
   }
 
-  // Common Sort
   if (!(config.listType === 'tags' && config.tagResultType === '1-each')) {
     result.sort((a, b) => compareItems(a, b, config));
   }
 
-  // Cap
   return config.maxItems > 0 ? result.slice(0, config.maxItems) : result;
 }
 
@@ -323,12 +327,11 @@ function renderItem(item, config, index = 0, solidIndex = 0) {
   const card = document.createElement('div');
   card.className = 'list-card';
 
-  // Apply Card Theme Color or Fallback Blue if Image is Missing/Hidden
   const hasImage = hasCardImage(item, config);
 
   let effectiveColor = config.cardColor;
   if (config.listStyle === 'card-m-scroll'
-      && (config.cardColor === 'figma' || config.cardColor === 'grey')) {
+&& (config.cardColor === 'figma' || config.cardColor === 'grey')) {
     if (hasImage) {
       effectiveColor = 'grey';
     } else {
@@ -416,13 +419,25 @@ function renderItem(item, config, index = 0, solidIndex = 0) {
     body.append(date);
   }
 
-  // 6. CTA / Arrow Icon
-  if (config.linkItems && (config.listStyle === 'card-m-scroll' || isHero || config.showIcon)) {
-    const cta = document.createElement('a');
-    cta.className = 'list-cta';
-    cta.href = normalizePath(item.path);
-    cta.innerHTML = 'Explore &rarr;';
-    body.append(cta);
+  // 6. Action Rendering Logic (Hero Card vs Other Layouts)
+  if (config.linkItems) {
+    if (config.listStyle === 'hero-card') {
+      if (!isHero) {
+        const isDownload = isDownloadableCard(item) || !hasImage;
+        const cta = document.createElement('a');
+        cta.className = isDownload ? 'list-btn-download' : 'list-cta';
+        cta.href = normalizePath(item.path);
+        cta.innerHTML = isDownload ? 'Download &rarr;' : 'Explore &rarr;';
+        body.append(cta);
+      }
+      // Note: isHero (index === 0) omits action button entirely per design specs
+    } else if (config.listStyle === 'card-m-scroll' || config.showIcon) {
+      const cta = document.createElement('a');
+      cta.className = 'list-cta';
+      cta.href = normalizePath(item.path);
+      cta.innerHTML = 'Explore &rarr;';
+      body.append(cta);
+    }
   }
 
   card.append(body);
@@ -452,7 +467,7 @@ export default async function decorate(block) {
     linkItems: getBoolean(block, 'linkItems', true),
     orderBy: getProp(block, 'orderBy', 'title'),
     sortOrder: getProp(block, 'sortOrder', 'ascending'),
-    cardColor: getProp(block, 'cardColor', 'grey').toLowerCase(),
+    cardColor: getProp(block, 'cardColor', 'figma').toLowerCase(),
     listStyle: getProp(block, 'listStyle', 'default').toLowerCase(),
     maxItems: Number(rawMax) || 5,
     showEyebrow: getBoolean(block, 'showEyebrow', true),

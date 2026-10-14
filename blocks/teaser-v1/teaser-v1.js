@@ -1,4 +1,9 @@
-import { createOptimizedPicture } from '../../scripts/aem.js';
+import {
+  createOptimizedPicture,
+  loadCSS,
+} from '../../scripts/aem.js';
+
+import decorateCta from '../cta/cta.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 import {
   getDecision,
@@ -74,6 +79,11 @@ const IMAGE_ITEM_FIELD_ORDER = [
   'imageMode',
 ];
 
+const IMAGE_MODES = new Set([
+  'normal',
+  'black-white',
+]);
+
 const IMAGE_COLLAGE_SLOTS = [
   'slot-1',
   'slot-2',
@@ -85,6 +95,145 @@ const IMAGE_COLLAGE_SLOTS = [
   'slot-8',
   'slot-9',
 ];
+
+const VALID_TEASER_STYLES = new Set([
+  'split-image-content',
+  'split-feature',
+  'background-hero',
+  'image-collage',
+  'no-image-right-desc-links',
+]);
+
+const VALID_DATE_FORMATS = new Set([
+  'dd-mm-yyyy',
+  'mm-dd-yyyy',
+  'mmm-d-yyyy',
+]);
+
+function getParentPropertyRows(block) {
+  return [...block.children];
+}
+
+function parseDateValue(dateValue) {
+  if (!dateValue) {
+    return null;
+  }
+
+  const normalizedDateValue = String(dateValue).trim();
+  const dateOnlyPattern = /^(\d{4})-(\d{2})-(\d{2})$/;
+  const dateOnlyMatch = dateOnlyPattern.exec(
+    normalizedDateValue,
+  );
+
+  let date = new Date(normalizedDateValue);
+
+  if (dateOnlyMatch) {
+    date = new Date(
+      Number(dateOnlyMatch[1]),
+      Number(dateOnlyMatch[2]) - 1,
+      Number(dateOnlyMatch[3]),
+    );
+
+    if (
+      date.getFullYear() !== Number(dateOnlyMatch[1])
+      || date.getMonth() !== Number(dateOnlyMatch[2]) - 1
+      || date.getDate() !== Number(dateOnlyMatch[3])
+    ) {
+      return null;
+    }
+  }
+
+  return Number.isNaN(date.valueOf())
+    ? null
+    : date;
+}
+
+function parsePublishedConfiguration(
+  block,
+  existingData,
+) {
+  const data = { ...existingData };
+
+  const rows = getParentPropertyRows(block);
+
+  const values = rows.map((row) => ({
+    row,
+    text: (
+      row.children[0] || row
+    ).textContent.trim(),
+  }));
+
+  const styleIndex = values.findIndex(
+    ({ text }) => (
+      VALID_TEASER_STYLES.has(
+        text.toLowerCase(),
+      )
+    ),
+  );
+
+  if (styleIndex < 0) {
+    return data;
+  }
+
+  const readAt = (offset) => (
+    values[styleIndex + offset]?.text || ''
+  );
+
+  data.style = readAt(0);
+  data.personalizationEnabled = readAt(1);
+  data.backgroundColor = readAt(2);
+  data.imagePosition = readAt(3);
+  data.showEyebrow = readAt(4);
+  data.hideTitle = readAt(5);
+  data.showDescription = readAt(6);
+  data.hideImage = readAt(7);
+  data.showDate = readAt(8);
+  data.textAlignment = readAt(9);
+
+  const trailing = values
+    .slice(styleIndex + 10)
+    .map(({ text }) => text);
+
+  const dateFormatIndex = trailing.findIndex(
+    (value) => (
+      VALID_DATE_FORMATS.has(
+        value.toLowerCase(),
+      )
+    ),
+  );
+
+  if (dateFormatIndex >= 0) {
+    data.dateFormat = trailing[dateFormatIndex];
+
+    const possibleDate = trailing
+      .slice(0, dateFormatIndex)
+      .find((value) => (
+        parseDateValue(value)
+      ));
+
+    if (possibleDate) {
+      data.date = possibleDate;
+    }
+
+    const displayTags = trailing[dateFormatIndex + 1];
+
+    if (
+      displayTags === 'true'
+      || displayTags === 'false'
+    ) {
+      data.displayTags = displayTags;
+    }
+
+    if (
+      displayTags === 'true'
+      && trailing[dateFormatIndex + 2]
+    ) {
+      data.tags = trailing[dateFormatIndex + 2];
+    }
+  }
+
+  return data;
+}
 
 function normalizeKey(value = '') {
   return value
@@ -214,7 +363,6 @@ function applyDefaults(data) {
 function isTeaserLinkItem(element) {
   return Boolean(element) && (
     element.dataset?.aueComponent === 'teaser-v1-cta'
-    || element.dataset?.aueModel === 'teaser-v1-cta'
     || element.dataset?.aueModel === 'cta'
     || element.dataset?.blockName === 'teaser-v1-cta'
     || element.classList?.contains('teaser-v1-cta')
@@ -253,8 +401,6 @@ function getTeaserLinkItems(block) {
     ...block.querySelectorAll(
       '[data-aue-component="teaser-v1-cta"], '
       + '[data-block-name="teaser-v1-cta"], '
-      + '[data-aue-model="teaser-v1-cta"], '
-      + '[data-aue-model="cta"], '
       + '.teaser-v1-cta',
     ),
   ];
@@ -281,25 +427,479 @@ function getTeaserImageItems(block) {
   ));
 }
 
-function getTeaserChildItems(block) {
-  return [
-    ...new Set([
-      ...getTeaserLinkItems(block),
-      ...getTeaserImageItems(block),
-    ]),
-  ];
+function getDirectRows(block) {
+  return [...block.querySelectorAll(':scope > div')];
 }
 
-function getParentPropertyRows(block) {
-  const childItems = new Set(getTeaserChildItems(block));
+function getTopLevelChild(element, block) {
+  let current = element;
 
-  return [...block.children].filter((child) => {
-    if (isTeaserChildItem(child) || childItems.has(child)) {
-      return false;
+  while (
+    current?.parentElement
+    && current.parentElement !== block
+  ) {
+    current = current.parentElement;
+  }
+
+  return current?.parentElement === block
+    ? current
+    : null;
+}
+
+function isMultiCellRow(row) {
+  return Boolean(row)
+    && row.parentElement
+    && row.children.length > 1;
+}
+
+function isImageChildRow(row) {
+  if (isTeaserImageItem(row)) {
+    return true;
+  }
+
+  const image = row.querySelector(
+    'picture img, img',
+  );
+
+  if (!image) {
+    return false;
+  }
+
+  const values = [...row.children].map((cell) => (
+    cell.textContent.trim().toLowerCase()
+  ));
+
+  if (values.some((value) => (
+    IMAGE_MODES.has(value)
+  ))) {
+    return true;
+  }
+
+  return [
+    ...row.querySelectorAll('[data-aue-prop]'),
+  ].some((element) => (
+    IMAGE_MODES.has(
+      element.textContent.trim().toLowerCase(),
+    )
+  ));
+}
+
+function isCtaChildRow(row) {
+  if (isTeaserLinkItem(row)) {
+    return true;
+  }
+
+  if (
+    !isMultiCellRow(row)
+    || isImageChildRow(row)
+  ) {
+    return false;
+  }
+
+  const cells = [...row.children];
+
+  const hasLink = cells.some((cell) => (
+    cell.matches?.('a[href]')
+    || cell.querySelector?.('a[href]')
+  ));
+
+  if (!hasLink) {
+    return false;
+  }
+
+  const values = cells.map((cell) => (
+    cell.textContent.trim().toLowerCase()
+  ));
+
+  const hasCtaView = values.some((value) => (
+    VALID_LINK_STYLES.includes(value)
+  ));
+
+  const hasShape = values.some((value) => (
+    [
+      'rectangle',
+      'rounded',
+      'pill',
+    ].includes(value)
+  ));
+
+  return hasCtaView || hasShape;
+}
+
+function collectTeaserChildren(block) {
+  const directRows = getDirectRows(block);
+
+  const instrumentedCtaRows = [
+    ...new Set(
+      getTeaserLinkItems(block)
+        .map((item) => (
+          getTopLevelChild(item, block) || item
+        )),
+    ),
+  ];
+
+  const instrumentedImageRows = [
+    ...new Set(
+      getTeaserImageItems(block)
+        .map((item) => (
+          getTopLevelChild(item, block) || item
+        )),
+    ),
+  ];
+
+  const knownCtaRows = new Set(
+    instrumentedCtaRows,
+  );
+
+  const knownImageRows = new Set(
+    instrumentedImageRows,
+  );
+
+  const structuralImageRows = directRows.filter(
+    (row) => (
+      !knownCtaRows.has(row)
+      && !knownImageRows.has(row)
+      && isImageChildRow(row)
+    ),
+  );
+
+  const imageRows = [
+    ...new Set([
+      ...instrumentedImageRows,
+      ...structuralImageRows,
+    ]),
+  ];
+
+  const allImageRows = new Set(imageRows);
+
+  const structuralCtaRows = directRows.filter(
+    (row) => (
+      !knownCtaRows.has(row)
+      && !allImageRows.has(row)
+      && isCtaChildRow(row)
+    ),
+  );
+
+  const ctaRows = [
+    ...new Set([
+      ...instrumentedCtaRows,
+      ...structuralCtaRows,
+    ]),
+  ];
+
+  let mode = 'none';
+
+  if (
+    instrumentedCtaRows.length
+    || instrumentedImageRows.length
+  ) {
+    mode = (
+      structuralCtaRows.length
+      || structuralImageRows.length
+    )
+      ? 'mixed'
+      : 'instrumented';
+  } else if (
+    ctaRows.length
+    || imageRows.length
+  ) {
+    mode = 'structural';
+  }
+
+  return {
+    ctaRows,
+    imageRows,
+    mode,
+  };
+}
+
+function detachTeaserChildren(children) {
+  const childRows = new Set([
+    ...children.ctaRows,
+    ...children.imageRows,
+  ]);
+
+  childRows.forEach((row) => {
+    row.remove();
+  });
+}
+
+function decorateCtaChildren(ctaRows) {
+  if (!ctaRows.length) {
+    return [];
+  }
+
+  loadCSS(
+    `${window.hlx.codeBasePath}/blocks/cta/cta.css`,
+  );
+
+  return ctaRows.map((row, index) => {
+    /*
+     * Capture the authored values before decorateCta()
+     * transforms the child row.
+     */
+    const authoredValues = [...row.children]
+      .map((cell) => (
+        cell.textContent.trim().toLowerCase()
+      ));
+
+    const authoredStyle = authoredValues.find((value) => (
+      VALID_LINK_STYLES.includes(value)
+      && value !== 'default'
+    )) || 'secondary';
+
+    const authoredShape = authoredValues.find((value) => (
+      [
+        'rectangle',
+        'rounded',
+        'pill',
+      ].includes(value)
+    )) || 'pill';
+
+    row.classList.add(
+      'cta',
+      'block',
+      'teaser-v1-cta',
+      'teaser-cta-item',
+    );
+
+    row.dataset.blockName = 'cta';
+
+    decorateCta(row);
+
+    const anchor = row.querySelector('a[href]');
+
+    if (anchor) {
+      anchor.classList.add(
+        'teaser-cta',
+        `teaser-cta-${authoredStyle}`,
+        `teaser-cta-shape-${authoredShape}`,
+      );
     }
 
-    return ![...childItems].some((item) => child.contains(item));
+    console.log(
+      `[teaser-v1] decorated CTA ${index + 1}:`,
+      {
+        anchorFound: Boolean(anchor),
+        authoredStyle,
+        authoredShape,
+        rowClasses: [...row.classList],
+        anchorClasses: anchor
+          ? [...anchor.classList]
+          : [],
+        html: row.outerHTML,
+      },
+    );
+
+    return row;
   });
+}
+
+function readChildItemRows(item) {
+  return [...item.children].map((row) => (
+    row.children[0] || row
+  ));
+}
+
+function readTeaserImageItem(item) {
+  const data = {
+    image: '',
+    imageAlt: '',
+    imagePicture: null,
+    imageMode: 'normal',
+    imageInstrumentation: {
+      item,
+      image: null,
+      imageAlt: null,
+    },
+  };
+
+  const namedProperties = new Set();
+
+  item.querySelectorAll('[data-aue-prop]').forEach((element) => {
+    const property = normalizeKey(
+      element.getAttribute('data-aue-prop') || '',
+    );
+
+    if (!property) {
+      return;
+    }
+
+    namedProperties.add(property);
+
+    if (property === 'image') {
+      const value = extractValue('image', element);
+
+      data.image = value.src;
+      data.imagePicture = value.picture;
+      data.imageInstrumentation.image = element;
+      return;
+    }
+
+    if (property === 'imageAlt') {
+      data.imageAlt = extractValue(
+        'imageAlt',
+        element,
+      );
+      data.imageInstrumentation.imageAlt = element;
+      return;
+    }
+
+    if (property === 'imageMode') {
+      data.imageMode = extractValue(
+        'imageMode',
+        element,
+      );
+    }
+  });
+
+  const rows = readChildItemRows(item);
+
+  IMAGE_ITEM_FIELD_ORDER.forEach((key, index) => {
+    if (namedProperties.has(key)) {
+      return;
+    }
+
+    const row = rows[index];
+
+    if (!row) {
+      return;
+    }
+
+    if (key === 'image') {
+      const value = extractValue(key, row);
+
+      if (value.src) {
+        data.image = value.src;
+        data.imagePicture = value.picture;
+        data.imageInstrumentation.image = row;
+      }
+
+      return;
+    }
+
+    if (key === 'imageAlt') {
+      const value = extractValue(key, row);
+
+      if (value) {
+        data.imageAlt = value;
+        data.imageInstrumentation.imageAlt = row;
+      }
+
+      return;
+    }
+
+    const value = extractValue(key, row);
+
+    if (
+      value !== ''
+      && value !== undefined
+      && value !== null
+    ) {
+      data[key] = value;
+    }
+  });
+
+  const image = item.querySelector('picture img, img');
+
+  if (!data.image && image) {
+    data.image = image.getAttribute('src') || '';
+    data.imagePicture = image.closest('picture');
+    data.imageInstrumentation.image = image;
+  }
+
+  if (!data.imageAlt && image) {
+    data.imageAlt = image.getAttribute('alt') || '';
+  }
+
+  data.imageMode = data.imageMode === 'black-white'
+    ? 'black-white'
+    : 'normal';
+
+  return data;
+}
+
+function readImageChildRow(row) {
+  const instrumentedItem = isTeaserImageItem(row)
+    ? row
+    : row.querySelector(
+      '[data-aue-component="teaser-v1-image"], '
+      + '[data-aue-model="teaser-v1-image"], '
+      + '[data-block-name="teaser-v1-image"], '
+      + '.teaser-v1-image',
+    );
+
+  if (instrumentedItem) {
+    return readTeaserImageItem(
+      instrumentedItem,
+    );
+  }
+
+  const image = row.querySelector(
+    'picture img, img',
+  );
+
+  const picture = image?.closest('picture')
+    || null;
+
+  const cells = row.children.length > 1
+    ? [...row.children]
+    : [
+      ...row.querySelectorAll(
+        ':scope > div > div',
+      ),
+    ];
+
+  const modeCell = cells.find((cell) => (
+    IMAGE_MODES.has(
+      cell.textContent.trim().toLowerCase(),
+    )
+  ));
+
+  const imageMode = (
+    modeCell?.textContent
+      ?.trim()
+      ?.toLowerCase()
+    === 'black-white'
+  )
+    ? 'black-white'
+    : 'normal';
+
+  const altCell = cells.find((cell) => (
+    cell !== modeCell
+    && !cell.querySelector(
+      'picture img, img',
+    )
+    && cell.textContent.trim()
+    && !IMAGE_MODES.has(
+      cell.textContent.trim().toLowerCase(),
+    )
+  ));
+
+  return {
+    image:
+      image?.getAttribute('src') || '',
+    imageAlt:
+      altCell?.textContent.trim()
+      || image?.getAttribute('alt')
+      || '',
+    imagePicture: picture,
+    imageMode,
+    imageInstrumentation: {
+      item: row,
+      image,
+      imageAlt: altCell || null,
+    },
+  };
+}
+
+function readImageChildren(imageRows) {
+  return imageRows
+    .map(readImageChildRow)
+    .filter((item) => (
+      item?.image
+      || item?.imagePicture
+    ));
 }
 
 function parseNamedProperties(block) {
@@ -546,14 +1146,6 @@ function normalizeLinks(
           item.borderColor
           || authoredLink?.borderColor
           || '',
-        hoverBackgroundColor:
-          item.hoverBackgroundColor
-          || authoredLink?.hoverBackgroundColor
-          || '',
-        arrowIconSize:
-          item.arrowIconSize
-          || authoredLink?.arrowIconSize
-          || '24',
         arrowIcon:
           item.arrowIcon
           || authoredLink?.arrowIcon
@@ -570,266 +1162,6 @@ function normalizeLinks(
           authoredLink?.instrumentation || null,
       };
     });
-}
-
-function readChildItemRows(item) {
-  return [...item.children].map((row) => (
-    row.children[0] || row
-  ));
-}
-
-function readTeaserLinkItem(item, fallbackStyle = 'default') {
-  const data = {};
-  const instrumentation = {
-    item,
-    title: null,
-    link: null,
-  };
-
-  item.querySelectorAll('[data-aue-prop]').forEach((element) => {
-    const property = element.getAttribute('data-aue-prop');
-
-    if (!property) {
-      return;
-    }
-
-    const propertyKey = normalizeKey(property);
-    const key = {
-      textCta: 'title',
-      ctaLink: 'link',
-      ctaView: 'linkType',
-      linkTarget: 'target',
-      icon: 'arrowIcon',
-      iconPosition: 'arrowDirection',
-      iconSize: 'arrowIconSize',
-    }[propertyKey] || propertyKey;
-    if (key === 'title' || key === 'link') {
-      instrumentation[key] = element;
-    }
-
-    if (data[key] === undefined) {
-      data[key] = extractValue(key, element);
-    }
-  });
-
-  const rows = readChildItemRows(item);
-  const rowFields = [
-    'textCta',
-    'ctaLink',
-    'icon',
-    'iconPosition',
-    'iconSize',
-    'linkTarget',
-    'ctaView',
-    'shape',
-    'backgroundColor',
-    'hoverBackgroundColor',
-    'textColor',
-    'borderColor',
-    'ctaWidth',
-    'alignment',
-    'arrowColor',
-    'contentLayout',
-  ];
-
-  rows.forEach((row, index) => {
-    const propertyKey = rowFields[index];
-    const key = {
-      textCta: 'title',
-      ctaLink: 'link',
-      ctaView: 'linkType',
-      linkTarget: 'target',
-      icon: 'arrowIcon',
-      iconPosition: 'arrowDirection',
-      iconSize: 'arrowIconSize',
-    }[propertyKey] || propertyKey;
-
-    if (key === 'title' || key === 'link') {
-      instrumentation[key] ||= row;
-    }
-
-    if (!key || data[key] !== undefined) {
-      return;
-    }
-
-    const value = extractValue(key, row);
-
-    if (
-      value !== ''
-      && value !== undefined
-      && value !== null
-    ) {
-      data[key] = value;
-    }
-  });
-
-  const title = typeof data.title === 'string'
-    ? stripHtml(data.title).trim()
-    : '';
-
-  let link = typeof data.link === 'string'
-    ? data.link.trim()
-    : '';
-
-  if (!link) {
-    link = item.querySelector('a')?.getAttribute('href') || '';
-  }
-
-  if (!title || !link || link === '#') return null;
-
-  const renderedStyle = [...item.classList]
-    .find((className) => (
-      className.startsWith('teaser-cta-')
-      || className.startsWith('cta-view-')
-    ))
-    ?.replace(/^(teaser-cta-|cta-view-)/, '');
-  let arrowDirection = data.arrowDirection || 'none';
-  if (arrowDirection === 'before') arrowDirection = 'left';
-  if (arrowDirection === 'after') arrowDirection = 'right';
-
-  return {
-    title,
-    link,
-    style: resolveLinkStyle(
-      data.linkType || renderedStyle,
-      fallbackStyle,
-    ),
-    target: data.target,
-    shape: data.shape || 'rectangle',
-    backgroundColor: data.backgroundColor || '',
-    hoverBackgroundColor: data.hoverBackgroundColor || '',
-    textColor: data.textColor || '',
-    borderColor: data.borderColor || '',
-    arrowIcon: data.arrowIcon?.src || data.arrowIcon || '',
-    arrowIconSize: data.arrowIconSize || '24',
-    arrowDirection,
-    arrowColor: data.arrowColor || 'white',
-    instrumentation,
-  };
-}
-
-function readTeaserLinkItems(block, fallbackStyle = 'default') {
-  return getTeaserLinkItems(block)
-    .map((item) => readTeaserLinkItem(item, fallbackStyle))
-    .filter(Boolean);
-}
-
-function readTeaserImageItem(item) {
-  const data = {
-    image: '',
-    imageAlt: '',
-    imagePicture: null,
-    imageMode: 'normal',
-    imageInstrumentation: {
-      item,
-      image: null,
-      imageAlt: null,
-    },
-  };
-
-  const namedProperties = new Set();
-
-  item.querySelectorAll('[data-aue-prop]').forEach((element) => {
-    const property = normalizeKey(
-      element.getAttribute('data-aue-prop') || '',
-    );
-
-    if (!property) {
-      return;
-    }
-
-    namedProperties.add(property);
-
-    if (property === 'image') {
-      const value = extractValue('image', element);
-
-      data.image = value.src;
-      data.imagePicture = value.picture;
-      data.imageInstrumentation.image = element;
-      return;
-    }
-
-    if (property === 'imageAlt') {
-      data.imageAlt = extractValue(
-        'imageAlt',
-        element,
-      );
-      data.imageInstrumentation.imageAlt = element;
-      return;
-    }
-
-    if (property === 'imageMode') {
-      data.imageMode = extractValue(
-        'imageMode',
-        element,
-      );
-    }
-  });
-
-  const rows = readChildItemRows(item);
-
-  IMAGE_ITEM_FIELD_ORDER.forEach((key, index) => {
-    if (namedProperties.has(key)) {
-      return;
-    }
-
-    const row = rows[index];
-
-    if (!row) {
-      return;
-    }
-
-    if (key === 'image') {
-      const value = extractValue(key, row);
-
-      if (value.src) {
-        data.image = value.src;
-        data.imagePicture = value.picture;
-        data.imageInstrumentation.image = row;
-      }
-
-      return;
-    }
-
-    if (key === 'imageAlt') {
-      const value = extractValue(key, row);
-
-      if (value) {
-        data.imageAlt = value;
-        data.imageInstrumentation.imageAlt = row;
-      }
-
-      return;
-    }
-
-    const value = extractValue(key, row);
-
-    if (
-      value !== ''
-      && value !== undefined
-      && value !== null
-    ) {
-      data[key] = value;
-    }
-  });
-
-  const image = item.querySelector('picture img, img');
-
-  if (!data.image && image) {
-    data.image = image.getAttribute('src') || '';
-    data.imagePicture = image.closest('picture');
-    data.imageInstrumentation.image = image;
-  }
-
-  if (!data.imageAlt && image) {
-    data.imageAlt = image.getAttribute('alt') || '';
-  }
-
-  data.imageMode = data.imageMode === 'black-white'
-    ? 'black-white'
-    : 'normal';
-
-  return data;
 }
 
 function normalizeConfiguration(data) {
@@ -943,57 +1275,48 @@ function normalizeConfiguration(data) {
   return normalizedData;
 }
 
-function readBlockData(block) {
+function readBlockData(block, children) {
   let data = parseSemanticProperties(
     block,
     parseNamedProperties(block),
   );
 
-  data = parsePositionalProperties(block, data);
-  data.images = getTeaserImageItems(block)
-    .map(readTeaserImageItem)
-    .filter(Boolean);
-  data = assignViewAllLinkFromDom(data, block);
+  /*
+   * Universal Editor markup includes named properties.
+   * Published plain HTML omits empty fields, so parse its
+   * configuration from the recognisable style row.
+   */
+  if (block.querySelector('[data-aue-prop]')) {
+    data = parsePositionalProperties(
+      block,
+      data,
+    );
+  } else {
+    data = parsePublishedConfiguration(
+      block,
+      data,
+    );
+  }
+
+  data.images = readImageChildren(
+    children.imageRows,
+  );
+
+  data = assignViewAllLinkFromDom(
+    data,
+    block,
+  );
+
   data = applyDefaults(data);
   data = normalizeConfiguration(data);
 
-  data.links = readTeaserLinkItems(block, 'default');
+  /*
+   * Authored CTA children are decorated independently
+   * using the shared CTA block.
+   */
+  data.links = [];
 
   return data;
-}
-
-function parseDateValue(dateValue) {
-  if (!dateValue) {
-    return null;
-  }
-
-  const normalizedDateValue = String(dateValue).trim();
-  const dateOnlyPattern = /^(\d{4})-(\d{2})-(\d{2})$/;
-  const dateOnlyMatch = dateOnlyPattern.exec(
-    normalizedDateValue,
-  );
-
-  let date = new Date(normalizedDateValue);
-
-  if (dateOnlyMatch) {
-    date = new Date(
-      Number(dateOnlyMatch[1]),
-      Number(dateOnlyMatch[2]) - 1,
-      Number(dateOnlyMatch[3]),
-    );
-
-    if (
-      date.getFullYear() !== Number(dateOnlyMatch[1])
-      || date.getMonth() !== Number(dateOnlyMatch[2]) - 1
-      || date.getDate() !== Number(dateOnlyMatch[3])
-    ) {
-      return null;
-    }
-  }
-
-  return Number.isNaN(date.valueOf())
-    ? null
-    : date;
 }
 
 function formatDate(dateValue, format = 'mmm-d-yyyy') {
@@ -1130,7 +1453,7 @@ function applyClasses(block, data) {
   block.classList.add(...classes);
 }
 
-function createCTAArrow(arrowIcon, direction, color, size = '24') {
+function createCTAArrow(arrowIcon, direction, color) {
   const source = typeof arrowIcon === 'string'
     ? arrowIcon
     : arrowIcon?.src;
@@ -1146,11 +1469,6 @@ function createCTAArrow(arrowIcon, direction, color, size = '24') {
   arrow.className = `teaser-cta-arrow teaser-cta-arrow-${direction} teaser-cta-arrow-${color}`;
   arrow.setAttribute('aria-hidden', 'true');
   arrow.decoding = 'async';
-  const iconSize = Number.parseInt(size, 10);
-  if (iconSize > 0) {
-    arrow.style.width = `${iconSize}px`;
-    arrow.style.height = `${iconSize}px`;
-  }
 
   arrow.addEventListener('error', () => {
     arrow.remove();
@@ -1193,13 +1511,6 @@ function createCTA(link) {
     anchor.style.borderColor = link.borderColor;
   }
 
-  if (link.hoverBackgroundColor) {
-    anchor.style.setProperty(
-      '--teaser-cta-hover-background',
-      link.hoverBackgroundColor,
-    );
-  }
-
   if (link.incomplete) {
     childWrapper?.classList.add('is-incomplete');
   }
@@ -1225,7 +1536,6 @@ function createCTA(link) {
     link.arrowIcon,
     link.arrowDirection,
     link.arrowColor,
-    link.arrowIconSize,
   );
 
   if (arrow && link.arrowDirection === 'left') {
@@ -1432,7 +1742,7 @@ function renderImages(data) {
   return wrapper;
 }
 
-function renderContent(data) {
+function renderContent(data, decoratedCtas = []) {
   const wrapper = document.createElement('div');
   wrapper.className = 'teaser-content';
 
@@ -1525,10 +1835,19 @@ function renderContent(data) {
     wrapper.append(tags);
   }
 
-  const ctas = createCTAs(data.links);
+  if (decoratedCtas.length) {
+    const ctaWrapper = document.createElement('div');
 
-  if (ctas) {
-    wrapper.append(ctas);
+    ctaWrapper.className = 'teaser-ctas';
+
+    ctaWrapper.append(...decoratedCtas);
+    wrapper.append(ctaWrapper);
+  } else {
+    const ctas = createCTAs(data.links);
+
+    if (ctas) {
+      wrapper.append(ctas);
+    }
   }
 
   const viewAll = createViewAll(data);
@@ -1540,7 +1859,10 @@ function renderContent(data) {
   return wrapper;
 }
 
-function renderTeaser(data) {
+function renderTeaser(
+  data,
+  decoratedCtas = [],
+) {
   const wrapper = document.createElement('div');
   wrapper.className = 'teaser-wrapper';
 
@@ -1552,15 +1874,25 @@ function renderTeaser(data) {
 
   const body = document.createElement('div');
   body.className = 'teaser-body';
-  body.append(renderContent(data));
+  body.append(
+    renderContent(
+      data,
+      decoratedCtas,
+    ),
+  );
 
   wrapper.append(body);
   return wrapper;
 }
 
-async function renderPersonalized(block, data) {
+async function renderPersonalized(
+  block,
+  data,
+  decoratedCtas = [],
+) {
   try {
     const targetConfig = getTargetConfig('teaser-v1');
+
     const decision = await getDecision(targetConfig);
 
     if (!decision?.data) {
@@ -1570,19 +1902,27 @@ async function renderPersonalized(block, data) {
         'fallback',
       );
 
-      return renderTeaser(data);
+      return renderTeaser(
+        data,
+        decoratedCtas,
+      );
     }
 
     const personalizedImage = decision.data.image || '';
 
+    const hasPersonalizedLinks = Array.isArray(decision.data.links);
+
     const personalizedData = {
       ...data,
       eyebrow:
-        decision.data.eyebrow || data.eyebrow,
+        decision.data.eyebrow
+        || data.eyebrow,
       title:
-        decision.data.title || data.title,
+        decision.data.title
+        || data.title,
       description:
-        decision.data.description || data.description,
+        decision.data.description
+        || data.description,
       shortDescription:
         decision.data.shortDescription
         || data.shortDescription,
@@ -1599,13 +1939,14 @@ async function renderPersonalized(block, data) {
               data.images?.[0]?.imageMode
               || 'normal',
             imageInstrumentation:
-              data.images?.[0]?.imageInstrumentation
+              data.images?.[0]
+                ?.imageInstrumentation
               || null,
           },
           ...((data.images || []).slice(1)),
         ]
         : data.images,
-      links: Array.isArray(decision.data.links)
+      links: hasPersonalizedLinks
         ? normalizeLinks(
           decision.data.links,
           'default',
@@ -1623,15 +1964,28 @@ async function renderPersonalized(block, data) {
 
     await sendPropositionDisplay(decision);
 
-    return renderTeaser(personalizedData);
+    return renderTeaser(
+      personalizedData,
+      hasPersonalizedLinks
+        ? []
+        : decoratedCtas,
+    );
   } catch (error) {
+    console.error(
+      'teaser-v1: personalization failed',
+      error,
+    );
+
     setPersonalizationAttributes(
       block,
       true,
       'fallback',
     );
 
-    return renderTeaser(data);
+    return renderTeaser(
+      data,
+      decoratedCtas,
+    );
   }
 }
 
@@ -1675,13 +2029,83 @@ function createBackground(data) {
 }
 
 export default async function decorate(block) {
-  const data = readBlockData(block);
+  /*
+   * The Hero block proves that nested children arrive
+   * as multi-cell direct rows on published pages.
+   */
+  console.log(
+    '[teaser-v1] direct rows:',
+    getDirectRows(block).map((row, index) => ({
+      index,
+      cells: row.children.length,
+      hasImage: Boolean(
+        row.querySelector('picture img, img'),
+      ),
+      hasLink: Boolean(
+        row.querySelector('a[href]'),
+      ),
+      values: [...row.children].map((cell) => (
+        cell.textContent.trim()
+      )),
+      html: row.outerHTML,
+    })),
+  );
+  const children = collectTeaserChildren(
+    block,
+  );
+
+  console.log(
+    '[teaser-v1] child mode:',
+    children.mode,
+  );
+
+  console.log(
+    '[teaser-v1] CTA rows:',
+    children.ctaRows.length,
+    children.ctaRows,
+  );
+
+  console.log(
+    '[teaser-v1] Image rows:',
+    children.imageRows.length,
+    children.imageRows,
+  );
+
+  /*
+   * Remove children before parsing the parent.
+   * This prevents child cells from shifting the Teaser
+   * parent field positions.
+   */
+  detachTeaserChildren(children);
+
+  const decoratedCtas = decorateCtaChildren(
+    children.ctaRows,
+  );
+
+  const data = readBlockData(
+    block,
+    children,
+  );
+
+  console.log(
+    '[teaser-v1] parsed data:',
+    data,
+  );
 
   applyClasses(block, data);
 
-  const content = parseBoolean(data.personalizationEnabled)
-    ? await renderPersonalized(block, data)
-    : renderTeaser(data);
+  const content = parseBoolean(
+    data.personalizationEnabled,
+  )
+    ? await renderPersonalized(
+      block,
+      data,
+      decoratedCtas,
+    )
+    : renderTeaser(
+      data,
+      decoratedCtas,
+    );
 
   const supportsBackgroundImage = [
     'background-hero',
@@ -1692,9 +2116,11 @@ export default async function decorate(block) {
     ? createBackground(data)
     : null;
 
-  if (background) {
-    block.replaceChildren(background, content);
-  } else {
-    block.replaceChildren(content);
-  }
+  block.replaceChildren(
+    ...(
+      background
+        ? [background, content]
+        : [content]
+    ),
+  );
 }

@@ -452,38 +452,6 @@ function isMultiCellRow(row) {
     && row.children.length > 1;
 }
 
-function isImageChildRow(row) {
-  if (isTeaserImageItem(row)) {
-    return true;
-  }
-
-  const image = row.querySelector(
-    'picture img, img',
-  );
-
-  if (!image) {
-    return false;
-  }
-
-  const values = [...row.children].map((cell) => (
-    cell.textContent.trim().toLowerCase()
-  ));
-
-  if (values.some((value) => (
-    IMAGE_MODES.has(value)
-  ))) {
-    return true;
-  }
-
-  return [
-    ...row.querySelectorAll('[data-aue-prop]'),
-  ].some((element) => (
-    IMAGE_MODES.has(
-      element.textContent.trim().toLowerCase(),
-    )
-  ));
-}
-
 function isCtaChildRow(row) {
   if (isTeaserLinkItem(row)) {
     return true;
@@ -491,7 +459,6 @@ function isCtaChildRow(row) {
 
   if (
     !isMultiCellRow(row)
-    || isImageChildRow(row)
   ) {
     return false;
   }
@@ -524,6 +491,42 @@ function isCtaChildRow(row) {
   ));
 
   return hasCtaView || hasShape;
+}
+
+function isImageChildRow(row) {
+  if (isTeaserImageItem(row)) {
+    return true;
+  }
+
+  if (isCtaChildRow(row)) {
+    return false;
+  }
+
+  const image = row.querySelector(
+    'picture img, img',
+  );
+
+  if (!image) {
+    return false;
+  }
+
+  const values = [...row.children].map((cell) => (
+    cell.textContent.trim().toLowerCase()
+  ));
+
+  if (values.some((value) => (
+    IMAGE_MODES.has(value)
+  ))) {
+    return true;
+  }
+
+  return [
+    ...row.querySelectorAll('[data-aue-prop]'),
+  ].some((element) => (
+    IMAGE_MODES.has(
+      element.textContent.trim().toLowerCase(),
+    )
+  ));
 }
 
 function collectTeaserChildren(block) {

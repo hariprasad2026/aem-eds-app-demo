@@ -147,7 +147,7 @@
 }
 
 .hero-banner.title-color-grey .hero-banner-title {
-  color: rgb(255 255 255 / 100%);
+  color: #757575;
 }
 
 .hero-banner.description-color-black .hero-banner-description,
@@ -162,7 +162,7 @@
 
 .hero-banner.description-color-grey .hero-banner-description,
 .hero-banner.description-color-grey .hero-banner-description p {
-  color: rgb(255 255 255 / 100%);
+  color: #757575;
 }
 
 

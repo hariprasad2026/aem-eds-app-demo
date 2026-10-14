@@ -638,7 +638,7 @@ function decorateBlocks(main) {
 // }
 
 async function loadHeader(header) {
-  const resp = await fetch('blocks/tcs-header.plain.html');
+  const resp = await fetch('blocks/header-demo.plain.html');
 
   if (!resp.ok) {
     return;
@@ -648,7 +648,7 @@ async function loadHeader(header) {
 
   header.innerHTML = html;
 
-  const headerBlock = header.querySelector('.tcs-header');
+  const headerBlock = header.querySelector('.header-demo');
 
   if (headerBlock) {
     decorateBlock(headerBlock);

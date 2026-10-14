@@ -70,8 +70,8 @@
   display: block;
   width: 36px;
   height: 39.99px;
-  margin-bottom: 8px;
-  background-color: #4673DB;
+  margin-bottom: var(--spacing-xs);
+  background-color: var(--color-brand-500);
   mask-image: var(--hero-banner-icon-src);
   mask-size: contain;
   mask-position: center;
@@ -79,25 +79,25 @@
 }
 
 .hero-banner-eyebrow {
-  font-family: Inter, sans-serif;
-  color: #4673DB;
+  font-family: var(--font-family-eyebrow);
+  color: var(--color-brand-500);
   margin: 0;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: var(--body-font-size-xs);
+  font-weight: var(--font-weight-semibold);
   line-height: 160%;
 }
 
 .hero-banner-title {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-family-heading);
   width: 100%;
   max-width: 1352px;
   min-height: 154px;
   margin: 0;
-  margin-top: 24px;
-  margin-bottom: 40px;
-  color: #000;
+  margin-top: var(--spacing-l);
+  margin-bottom: var(--spacing-2xl);
+  color: var(--heading-color);
   font-size: 64px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   line-height: 120%;
   letter-spacing: -0.025em;
   text-align: center;
@@ -106,16 +106,17 @@
   opacity: 1;
 }
 
-.hero-banner-description {
+
+.hero-banner-description {  
   max-width: 850px;
   margin: 0 0 32px;
   text-align: center;
 }
 
 .hero-banner-description p {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-family-base);
   font-size: 24px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   line-height: 120%;
   letter-spacing: -0.025em;
   margin: 0;
@@ -123,27 +124,28 @@
 
 .hero-banner.hero-banner-bg-black .hero-banner-title,
 .hero-banner.hero-banner-bg-black .hero-banner-description {
-  color: #fff;
+  color: var(--color-white);
 }
 
+
 .hero-banner.icon-color-black .hero-banner-icon {
-  background-color: #000;
+  background-color: var(--color-black);
 }
 
 .hero-banner.icon-color-white .hero-banner-icon {
-  background-color: #fff;
+  background-color: var(--color-white);
 }
 
 .hero-banner.icon-color-blue .hero-banner-icon {
-  background-color: #4673DB;
+  background-color: var(--color-brand-500);
 }
 
 .hero-banner.title-color-black .hero-banner-title {
-  color: #000;
+  color: var(--color-black);
 }
 
 .hero-banner.title-color-white .hero-banner-title {
-  color: #fff;
+  color: var(--color-white);
 }
 
 .hero-banner.title-color-grey .hero-banner-title {
@@ -152,12 +154,12 @@
 
 .hero-banner.description-color-black .hero-banner-description,
 .hero-banner.description-color-black .hero-banner-description p {
-  color: #000;
+  color: var(--color-black);
 }
 
 .hero-banner.description-color-white .hero-banner-description,
 .hero-banner.description-color-white .hero-banner-description p {
-  color: #fff;
+  color: var(--color-white);
 }
 
 .hero-banner.description-color-grey .hero-banner-description,
@@ -171,10 +173,11 @@
   flex-flow: row wrap;
   justify-content: center;
   align-items: center;
-  gap: 16px;
+  gap: var(--spacing-m);
   width: 100%;
-  margin-top: 40px;
+  margin-top: var(--spacing-2xl);
 }
+
 
 .hero-banner-cta-items > div {
   display: flex;
@@ -188,7 +191,7 @@
 .hero-banner-sticky {
   position: absolute;
   left: 50%;
-  bottom: 80px;
+  bottom: var(--spacing-5xl);
   transform: translateX(-50%);
   z-index: 20;
 }
@@ -199,18 +202,14 @@
 
 .hero-banner-align-top .hero-banner-content {
   justify-content: flex-start;
-  padding-top: 80px;
+  padding-top: var(--spacing-5xl);
   padding-bottom: 0;
-}
-
-.hero-banner-align-middle .hero-banner-content {
-  justify-content: center;
 }
 
 .hero-banner-align-bottom .hero-banner-content {
   justify-content: flex-end;
   padding-top: 0;
-  padding-bottom: 80px;
+  padding-bottom: var(--spacing-5xl);
 }
 
 @media (width <= 1024px) {
@@ -220,20 +219,20 @@
   }
 
   .hero-banner-content {
-    padding: 0 32px;
+    padding: 0 var(--spacing-xl);
   }
 
   .hero-banner-title {
     max-width: 936px;
     min-height: 120px;
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
     font-size: 48px;
     line-height: 120%;
     letter-spacing: -0.025em;
     text-align: center;
     vertical-align: middle;
-    margin-top: 20px;
-    margin-bottom: 32px;
+    margin-top: var(--spacing-m);
+    margin-bottom: var(--spacing-xl);
   }
 
   .hero-banner-description {
@@ -245,19 +244,20 @@
   }
 
   .hero-banner-cta-items {
-    margin-top: 32px;
+    margin-top: var(--spacing-xl);
   }
 
   .hero-banner-sticky {
     bottom: 64px !important;
   }
 
+
   .hero-banner-align-top .hero-banner-content {
-    padding-top: 64px;
+    padding-top: var(--spacing-4xl);
   }
 
   .hero-banner-align-bottom .hero-banner-content {
-    padding-bottom: 64px;
+    padding-bottom: var(--spacing-4xl);
   }
 }
 
@@ -274,7 +274,7 @@
   .hero-banner-icon {
     width: 40px;
     height: 40px;
-    margin-bottom: 12px;
+    margin-bottom: var(--spacing-s);
   }
 
   .hero-banner-eyebrow {
@@ -283,18 +283,18 @@
 
   .hero-banner-title {
     min-height: 0;
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
     font-size: 32px;
     line-height: 120%;
     letter-spacing: -0.025em;
     text-align: center;
     vertical-align: middle;
-    margin-top: 16px;
-    margin-bottom: 24px;
+    margin-top: var(--spacing-m);
+    margin-bottom: var(--spacing-l);
   }
 
   .hero-banner-description {
-    margin-bottom: 24px;
+    margin-bottom: var(--spacing-l);
   }
 
   .hero-banner-description p {
@@ -303,19 +303,20 @@
 
   .hero-banner-cta-items {
     flex-direction: row;
-    gap: 12px;
-    margin-top: 24px;
+    gap: var(--spacing-s);
+    margin-top: var(--spacing-l);
   }
+
 
   .hero-banner-sticky {
     bottom: 48px !important;
   }
 
   .hero-banner-align-top .hero-banner-content {
-    padding-top: 48px;
+    padding-top: var(--spacing-3xl);
   }
 
   .hero-banner-align-bottom .hero-banner-content {
-    padding-bottom: 48px;
+    padding-bottom: var(--spacing-3xl);
   }
 }

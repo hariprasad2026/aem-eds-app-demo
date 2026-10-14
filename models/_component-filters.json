@@ -9,6 +9,9 @@
     "...": "./_section.json#/filters"
   },
   {
+    "...": "../blocks/*/_*.json#/filters"
+  },
+  {
     "id": "richtext",
     "components": [
       "richtext"
@@ -117,8 +120,5 @@
         }
       }
     }
-  },
-  {
-    "...": "../blocks/*/_*.json#/filters"
   }
 ]

@@ -1402,6 +1402,36 @@
           }
         },
         {
+          "title": "Title",
+          "id": "two-column-layout-title",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "title",
+                  "model": "two-column-layout-title"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Image",
+          "id": "two-column-layout-image",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "image",
+                  "model": "two-column-layout-image"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Content",
           "id": "two-column-layout-text",
           "plugins": {

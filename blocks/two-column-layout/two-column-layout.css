@@ -6,22 +6,23 @@
   gap: var(--spacing-2xl);
   align-items: start;
 }
- 
+
 /* ========================================
    Left Column
    ======================================== */
- 
+
 .two-column-layout-left {
   align-self: flex-start;
   padding-top: var(--spacing-xl);
 }
- 
+
 .two-column-layout-left h1,
 .two-column-layout-left h2,
 .two-column-layout-left h3,
 .two-column-layout-left h4,
 .two-column-layout-left h5,
-.two-column-layout-left h6 {
+.two-column-layout-left h6,
+.two-column-layout-left p {
   font-size: var(--display-3-size);
   font-weight: var(--font-weight-regular);
   line-height: 1.05;
@@ -29,19 +30,20 @@
   margin: 0;
   padding-left: var(--spacing-l);
   color: var(--heading-color);
+  overflow-wrap: anywhere;
 }
- 
+
 /* ========================================
    Right Column
    ======================================== */
- 
+
 .two-column-layout-right {
-  padding-left: var(--spacing-l);
-  padding-right: var(--spacing-l);
   display: flex;
   flex-direction: column;
+  padding-left: var(--spacing-l);
+  padding-right: var(--spacing-l);
 }
- 
+
 .two-column-layout-right p {
   max-width: 65ch;
   font-family: var(--font-family-base);
@@ -52,71 +54,149 @@
   );
   font-weight: var(--font-weight-regular);
   line-height: var(--body-line-height);
-  margin: var(--spacing-xl) 0;
+  margin: var(--spacing-s) 0;
   color: var(--text-color);
 }
- 
+
 .two-column-layout-right > * + * {
   margin-top: 0;
 }
- 
+
+.two-column-layout-left,
+.two-column-layout-right {
+  min-width: 0;
+}
+
+/* ========================================
+   Image
+   ======================================== */
+
+.two-column-layout-right .two-column-layout-image {
+  width: 100%;
+  margin: var(--spacing-s) 0;
+}
+
+.two-column-layout-image p {
+  max-width: none;
+  margin: 0;
+}
+
+.two-column-layout-image picture {
+  display: block;
+}
+
+.two-column-layout-image img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
 /* ========================================
    CTA - Default Variant
    ======================================== */
- 
+
 .two-column-layout-default .cta {
   width: 100%;
   padding: var(--spacing-xs) 0;
   border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
- 
- 
+
+.two-column-layout-centered .cta {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  margin-inline: auto;
+  padding: var(--spacing-xs) 0;
+}
+
+.two-column-layout-default .cta + .cta {
+  border-top: 0;
+}
+
+.two-column-layout-default .cta:last-of-type {
+  border-bottom: 1px solid var(--border-color);
+}
+
 /* ========================================
    CTA - Centered Variant
    ======================================== */
- 
-.two-column-layout-centered .cta {
-  width: 100%;
-  max-width: 380px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: var(--spacing-xs) 0;
-  position: relative;
-}
- 
-.two-column-layout-centered .cta:last-child::after {
-  display: none !important;
-}
- 
-.two-column-layout-default .cta:last-child {
-  border-bottom: 1px solid var(--border-color);
-}
- 
+
+
+
+/* Line only between CTAs */
+
 .two-column-layout-centered .cta + .cta::before {
   content: '';
   position: absolute;
+  inset-inline-start: 0;
   top: 0;
-  left: 0;
   width: 100%;
   border-top: 1px solid var(--border-color);
 }
- 
- 
+
+/* ========================================
+   Statistics
+   ======================================== */
+
+.two-column-layout-right .statistics-list {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--spacing-l) 0;
+}
+
+.two-column-layout-right .statistics-list .statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--spacing-m);
+  width: 100%;
+}
+
+.two-column-layout-right .statistics-list .statistics-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  min-width: 0;
+  min-height: 0;
+}
+
+.two-column-layout-right .statistics-list .statistics-item .stat-title {
+  color: var(--text-color);
+  font-family: var(--font-family-base);
+  font-size: var(--body-font-size-m);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--body-line-height);
+  overflow-wrap: anywhere;
+}
+
+.two-column-layout-right .statistics-list .statistics-item .stat-value {
+  color: var(--color-brand-500);
+  font-family: var(--font-family-base);
+  font-size: var(--display-2-size);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--display-2-line-height);
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
 /* ========================================
    Mobile
    ======================================== */
- 
+
 @media (width < 900px) {
   .two-column-layout {
     grid-template-columns: 1fr;
     gap: var(--spacing-xl);
     padding: var(--spacing-xl) 0;
   }
- 
+
   .two-column-layout-left {
     padding-top: 0;
   }
- 
+
   .two-column-layout-left h1,
   .two-column-layout-left h2,
   .two-column-layout-left h3,
@@ -126,12 +206,12 @@
     font-size: var(--display-3-size);
     padding-left: 0;
   }
- 
+
   .two-column-layout-right {
     padding-left: 0;
     padding-right: 0;
   }
- 
+
   .two-column-layout-centered .cta {
     max-width: 100%;
   }

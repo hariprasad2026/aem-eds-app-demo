@@ -378,12 +378,15 @@
 /* ==========================================================================
    CARD - 2COL / 3COL (TM SCROLL) LAYOUT (.list-style-card-2col-tm-scroll)
    ========================================================================== */
+
+  .list.list-style-card-2col-tm-scroll{
+      padding: var(--spacing-4xl);
+   }
  
 .list.list-style-card-2col-tm-scroll .list-header {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: var(--spacing-4xl);
   gap: var(--spacing-s);
   margin-bottom: var(--spacing-l);
 }
@@ -895,6 +898,10 @@
 }
  
 @media (width <= 640px) {
+  .list.list-style-card-2col-tm-scroll{
+      padding: var(--spacing-xl);
+   } 
+   
   .list.list-style-card-m-scroll {
     padding: var(--spacing-2xl) var(--spacing-l);
   }

@@ -1,65 +1,55 @@
+/* Figma: centred display statement ("Our 5 pillars of AI transformation") 40/50/64, w500, -0.03em */
 .intro-statement {
+  --intro-statement-color: var(--heading-color);
+  --intro-statement-max-width: 68.125rem; /* 1090 */
+  --intro-statement-size: var(--type-display-l-size);
+  --intro-statement-line-height: var(--type-display-l-line-height);
+  --intro-statement-weight: var(--type-display-l-weight);
+  --intro-statement-tracking: var(--type-display-xl-tracking);
+
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  width: 100%;
-  max-width: 1440px;
-  min-height: 494px;
-  padding: 160px 80px;
-  gap: 10px;
-  box-sizing: border-box;
-  margin: 0 auto;
-  flex: none;
-  order: 1;
-  flex-grow: 0;
-  z-index: 1;
-}
-
-/* Actual authored content only */
-.intro-statement > div:not(.intro-statement-placeholder) {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.intro-statement > div:not(.intro-statement-placeholder) p {
-  width: min(1090px, 100%);
-  margin: 0;
-  font-family: Inter, sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 48px;
-  line-height: 120%;
   text-align: center;
-  letter-spacing: -0.03em;
-  color: #000;
-  flex: none;
-  order: 0;
-  flex-grow: 0;
 }
 
-.intro-statement a {
-  color: #4d7cfe;
+/* authored content only */
+.intro-statement > div:not(.intro-statement-placeholder) {
+  width: 100%;
+  max-width: var(--intro-statement-max-width);
+  color: var(--intro-statement-color);
+  font-size: var(--intro-statement-size);
+  font-weight: var(--intro-statement-weight);
+  line-height: var(--intro-statement-line-height);
+  letter-spacing: var(--intro-statement-tracking);
+  text-wrap: balance;
+}
+
+.intro-statement > div:not(.intro-statement-placeholder) :is(p, h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+.intro-statement > div:not(.intro-statement-placeholder) :is(p, h1, h2, h3, h4, h5, h6) + * {
+  margin-top: var(--spacing-m);
+}
+
+.intro-statement a:any-link {
+  color: var(--link-color);
   text-decoration: none;
 }
 
-/* Placeholder styling */
-.intro-statement-placeholder {
-  padding: 16px;
-  border: 1px dashed #999;
-  color: #666;
-  font-size: 14px;
-  text-align: center;
+.intro-statement a:hover,
+.intro-statement a:focus-visible {
+  color: var(--link-hover-color);
 }
 
-@media (width <= 768px) {
-  .intro-statement {
-    padding: 80px 24px;
-    min-height: 280px;
-  }
-
-  .intro-statement > div:not(.intro-statement-placeholder) p {
-    font-size: 32px;
-  }
+/* empty block placeholder (Universal Editor) */
+.intro-statement .intro-statement-placeholder {
+  padding: var(--spacing-m);
+  border: var(--border-width-s) dashed var(--text-color-subtle);
+  color: var(--text-color-muted);
+  font-size: var(--type-caption-size);
 }

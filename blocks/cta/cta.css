@@ -1,22 +1,82 @@
+/*
+ * Figma buttons: pill, 40/46/50 tall, padding 12/16/12/24, 24px trailing arrow, 8px gap.
+ * Defaults come from the global --button-* tokens (primary dark pill, re-mapped to the
+ * outline-on-dark look inside dark sections / dark hero overlays). Colours picked by authors
+ * are applied inline by cta.js and take precedence.
+ */
 .cta {
+  --cta-bg: var(--button-primary-bg);
+  --cta-bg-hover: var(--button-primary-bg-hover);
+  --cta-border-color: var(--button-primary-border);
+  --cta-text: var(--button-primary-text);
+  --cta-text-hover: var(--button-primary-text-hover);
+  --cta-height: var(--button-height);
+  --cta-padding: var(--button-padding);
+  --cta-gap: var(--button-gap);
+  --cta-radius: var(--button-radius);
+  --cta-font-size: var(--type-button-size);
+  --cta-line-height: 1;
+
   box-sizing: border-box;
 }
 
-.cta-link,
-.cta-link:any-link {
+/* token variants (Figma secondary / outline on dark / footer outline) */
+.cta.secondary {
+  --cta-bg: var(--button-secondary-bg);
+  --cta-bg-hover: var(--button-secondary-bg-hover);
+  --cta-border-color: var(--button-secondary-border);
+  --cta-text: var(--button-secondary-text);
+  --cta-text-hover: var(--button-secondary-text);
+}
+
+.cta.outline-dark {
+  --cta-bg: var(--color-white-10);
+  --cta-bg-hover: var(--color-white-15);
+  --cta-border-color: var(--color-grey-100);
+  --cta-text: var(--color-grey-100);
+  --cta-text-hover: var(--color-white);
+}
+
+.cta.outline-strong {
+  --cta-bg: var(--color-white);
+  --cta-bg-hover: var(--color-grey-100);
+  --cta-border-color: var(--color-grey-700);
+  --cta-text: var(--color-black-pure);
+  --cta-text-hover: var(--color-black-pure);
+  --cta-padding: var(--spacing-s) var(--spacing-l);
+}
+
+/* alignment of the link inside the block */
+.cta.cta-align-left {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.cta.cta-align-center {
+  display: flex;
+  justify-content: center;
+}
+
+.cta.cta-align-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cta .cta-link,
+.cta .cta-link:any-link {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: var(--cta-gap);
   width: auto;
   max-width: 100%;
-  min-width: 44px;
-  min-height: 44px;
-  gap: 8px;
-  padding: 12px 16px 12px 24px;
-  border: 1px solid transparent;
-  color: #000;
-  background-color: transparent;
+  min-height: var(--cta-height);
+  padding: var(--cta-padding);
+  border: var(--border-width-s) solid var(--cta-border-color);
+  border-radius: var(--cta-radius);
+  background-color: var(--cta-bg);
+  color: var(--cta-text);
   text-decoration: none;
   cursor: pointer;
   transition:
@@ -27,186 +87,135 @@
     transform 200ms ease;
 }
 
-.cta-link.cta-link-rectangle {
+/* shapes */
+.cta .cta-link.cta-link-rectangle {
   border-radius: 0;
 }
 
-.cta-link.cta-link-rounded {
-  border-radius: 6px;
+.cta .cta-link.cta-link-rounded {
+  border-radius: var(--radius-xs);
 }
 
-.cta-link.cta-link-pill {
-  border-radius: 9999px;
+.cta .cta-link.cta-link-pill {
+  border-radius: var(--cta-radius);
 }
 
-.cta-link.cta-size-default {
-  min-height: 50px;
+/* sizes: default 40/46/50, small 4px shorter */
+.cta .cta-link.cta-size-small {
+  min-height: calc(var(--cta-height) - var(--spacing-xxs));
 }
 
-.cta-link.cta-size-small {
-  min-height: 46px;
-}
-
-.cta-align-left {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.cta-align-center {
-  display: flex;
-  justify-content: center;
-}
-
-.cta-align-right {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.cta-layout-normal {
+/* layout and width */
+.cta .cta-link.cta-layout-normal {
   display: inline-flex;
 }
 
-.cta-link.cta-layout-space-between {
+.cta .cta-link.cta-layout-space-between {
   display: flex;
-  width: 100%;
   justify-content: space-between;
-}
-
-.cta-link.cta-width-half-link {
-  width: 50%;
-}
-
-.cta-link.cta-width-full-link {
   width: 100%;
 }
 
-/* FIGMA TYPOGRAPHY */
+.cta .cta-link.cta-width-half-link,
+.cta .cta-link.cta-width-full-link {
+  width: 100%;
+}
 
-.cta-text {
+/* label */
+.cta .cta-text {
   display: inline-block;
   min-width: 0;
   overflow-wrap: anywhere;
-  font-family: Inter, sans-serif;
-  font-size: 16px;
-  line-height: 100%;
-  letter-spacing: 0.01em;
-  font-weight: var(--cta-font-weight, 500);
+  font-family: var(--font-family-base);
+  font-size: var(--cta-font-size);
+  font-weight: var(--cta-font-weight, var(--type-button-weight));
+  line-height: var(--cta-line-height);
+  letter-spacing: var(--type-button-tracking);
 }
 
-.cta-typography-compact .cta-text {
-  font-size: 14px;
-  line-height: 120%;
+.cta .cta-typography-compact {
+  --cta-font-size: var(--type-caption-size);
+  --cta-line-height: 1.2;
 }
 
-.cta-icon {
+/* authored icon (24px by default, size set inline) */
+.cta .cta-icon {
   display: block;
   flex-shrink: 0;
   object-fit: contain;
 }
 
-/* HOVER */
-
-.cta-link:hover {
-  background-color: var(
-    --cta-hover-bg,
-    var(--cta-hover-bg-default, inherit)
-  );
-  color: var(
-    --cta-hover-text,
-    inherit
-  );
+/* states */
+.cta .cta-link:hover {
+  background-color: var(--cta-hover-bg, var(--cta-bg-hover));
+  color: var(--cta-hover-text, var(--cta-text-hover));
   text-decoration: none;
 }
 
-/* ACTIVE */
-
-.cta-link:active {
+.cta .cta-link:active {
   transform: translateY(1px);
   filter: brightness(95%);
 }
 
-/* ACCESSIBILITY */
-
-.cta-link:focus {
-  outline: 3px solid currentcolor;
-  outline-offset: 3px;
+.cta .cta-link:focus-visible {
+  outline: var(--border-width-m) solid var(--focus-color);
+  outline-offset: var(--border-width-m);
 }
 
-.cta-link:focus-visible {
-  outline: 3px solid currentcolor;
-  outline-offset: 3px;
-}
-
-.cta-link:focus:not(:focus-visible) {
+.cta .cta-link:focus:not(:focus-visible) {
   outline: none;
 }
 
-/* ARROW COLORS */
-
-.cta-icon-white {
+/* icon colours (authored select, icon is an <img>) */
+.cta .cta-icon-white {
   filter: brightness(0) invert(1);
 }
 
-.cta-icon-black {
+.cta .cta-icon-black {
   filter: brightness(0);
 }
 
-.cta-icon-gray {
+.cta .cta-icon-gray {
   filter: brightness(0) invert(50%);
 }
 
-.cta-icon-dark-gray {
+.cta .cta-icon-dark-gray {
   filter: brightness(0) invert(19%);
 }
 
-.cta-icon-light-gray {
+.cta .cta-icon-light-gray {
   filter: brightness(0) invert(85%);
 }
 
-.cta-icon-cool-gray {
+.cta .cta-icon-cool-gray {
   filter: brightness(0) invert(89%);
 }
 
-.cta-icon-off-white {
+.cta .cta-icon-off-white {
   filter: brightness(0) invert(95%);
 }
 
-.cta-link:hover .cta-icon-hover-black {
+.cta .cta-link:hover .cta-icon-hover-black {
   filter: brightness(0);
 }
 
-.cta-link:hover .cta-icon-hover-gray {
+.cta .cta-link:hover .cta-icon-hover-gray {
   filter: brightness(0) invert(50%);
 }
 
-.cta-link:hover .cta-icon-hover-white {
+.cta .cta-link:hover .cta-icon-hover-white {
   filter: brightness(0) invert(1);
 }
 
-/* MOBILE */
-
-@media (width <= 767px) {
-  .cta-link {
-    max-width: 100%;
-  }
-
-  .cta-text {
-    overflow-wrap: anywhere;
-  }
-
-  .cta-link.cta-width-half-link {
-    width: 100%;
-  }
-
-  .cta-link.cta-width-full-link {
-    width: 100%;
+/* tablet and up */
+@media (width >= 37.5rem) {
+  .cta .cta-link.cta-width-half-link {
+    width: 50%;
   }
 }
 
-/* REDUCED MOTION */
-
 @media (prefers-reduced-motion: reduce) {
-  .cta-link {
+  .cta .cta-link {
     transition: none;
   }
 }

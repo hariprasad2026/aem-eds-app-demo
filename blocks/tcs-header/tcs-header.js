@@ -86,8 +86,7 @@ async function fetchHierarchicalNavData() {
         children: l2.children || [],
       })),
     }));
-  } catch (error) {
-    console.error('Failed to load navigation index:', error);
+  } catch {
     return [];
   }
 }
@@ -179,7 +178,7 @@ export default function decorate(block) {
   block.classList.add(`variant-${config.headerVariant}`);
 
   const navWrapper = document.createElement('div');
-  navWrapper.className = 'tcs-nav-wrapper';
+  navWrapper.className = 'tcs-nav-bar';
 
   const nav = document.createElement('nav');
   nav.id = 'tcs-nav';
@@ -229,7 +228,7 @@ export default function decorate(block) {
 
   // Mobile/Tablet Fullscreen Overlay
   const overlay = document.createElement('div');
-  overlay.className = 'tcs-mobile-nav-overlay hidden';
+  overlay.className = 'tcs-header-overlay tcs-mobile-nav-overlay hidden';
 
   overlay.innerHTML = `
     <div class="tcs-mobile-nav-header">

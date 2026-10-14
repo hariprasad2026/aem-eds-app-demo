@@ -134,7 +134,7 @@ export default function decorate(block) {
     : "Let's build the<br>future together";
 
   const footerContainer = document.createElement('div');
-  footerContainer.className = 'tcs-footer-container';
+  footerContainer.className = 'tcs-footer-content';
 
   const heading = document.createElement('h3');
   heading.className = 'tcs-footer-heading';
@@ -217,7 +217,7 @@ export default function decorate(block) {
           </svg>
         `;
 
-      row.className = 'tcs-footer-hamburger-wrapper';
+      row.className = 'tcs-footer-menu-toggle';
       row.innerHTML = `
         <button class="tcs-footer-hamburger" aria-label="${ariaLabel}" aria-expanded="false">
           <span class="icon-hamburger">
@@ -344,7 +344,7 @@ export default function decorate(block) {
       const link = formatHtmlPath(cells[1]?.querySelector('a')?.href || '#');
       const target = cells[2]?.textContent.trim() || '_self';
 
-      row.className = 'tcs-footer-legal-item-wrapper';
+      row.className = 'tcs-footer-legal-item';
       const legalLink = document.createElement('a');
       legalLink.className = 'tcs-footer-legal-link';
       legalLink.href = link;

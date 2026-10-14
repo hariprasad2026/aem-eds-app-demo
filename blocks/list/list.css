@@ -1,1010 +1,503 @@
+/* variant selectors are mutually exclusive, so specificity order across variants is irrelevant */
+/* stylelint-disable no-descending-specificity */
+
 /* ==========================================================================
- 
-   LIST BLOCK STYLING
- 
+   LIST
+   Variants (set by list.js as .list-style-*):
+   - default              teaser cards in an auto-fill grid
+   - card-m-scroll        2:3 theme cards, 4 columns, horizontal rail on mobile
+   - card-2col-tm-scroll  1:1 image cards, 3 columns, horizontal rail on mobile
+   - hero-card            full-width feature card + row of 4 mixed cards
    ========================================================================== */
- 
+
 .list {
-  /* palette values that have no global equivalent */
-  --list-surface-dark: #20293c;
-  --list-surface-grey: #e3e3e3;
-  --list-text-strong: #303030;
+  --list-gap: var(--grid-gap);
+  --list-radius: var(--radius-md);
+  --list-card-padding: var(--spacing-m);
+  --list-title-color: var(--text-color-body);
+  --list-tag-color: var(--text-color-subtle);
+  --list-meta-color: var(--text-color-muted);
+  --list-card-text: var(--text-color);
+
+  /* solid card palette (Figma theme / report cards) */
+  --list-surface-grey: var(--color-grey-250);
+  --list-surface-dark: var(--color-brand-800);
+  --list-surface-brand: var(--accent-color);
+  --list-media-fallback: var(--color-teal-900);
+  --list-on-dark: var(--color-grey-100);
+  --list-on-dark-muted: var(--color-white-70);
+
+  /* mobile rail (Figma 306px items, 4px indicator) */
+  --list-rail-item: 19.125rem;
+  --list-rail-track: var(--color-grey-150);
+  --list-rail-thumb: var(--color-grey-600);
 }
- 
-.list-wrapper {
-  width: 100%;
-  max-width: var(--container-width);
-  margin: 0 auto;
-  box-sizing: border-box;
- 
-}
- 
-/* Universal Header Lockup */
- 
+
+/* ---------- header lockup ---------- */
+
 .list .list-header {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: flex-end;
-  margin-bottom: var(--spacing-xl);
-  gap: var(--spacing-l);
- 
+  justify-content: space-between;
+  gap: var(--spacing-m) var(--spacing-l);
+  margin-bottom: var(--section-header-gap);
 }
- 
+
 .list .list-main-title {
   margin: 0;
-  font-family: var(--font-family-heading);
-  font-size: 2.25rem;
-  font-weight: var(--font-weight-bold);
-  color: var(--heading-color);
-  line-height: 1.2;
- 
 }
- 
+
 .list .list-header-description {
   margin-top: var(--spacing-xs);
-  font-size: var(--body-font-size-m);
-  color: var(--text-color-muted);
- 
+  color: var(--text-color-subtle);
+  font-size: var(--type-body-m-size);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.4;
 }
- 
+
+.list .list-header-description p {
+  color: inherit;
+}
+
+.list .list-header-description > :last-child {
+  margin-bottom: 0;
+}
+
+/* "Explore insights →" text link (Figma text-link, no pill) */
 .list .list-view-all {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
-  padding: 0.625rem 1.25rem;
-  border-radius: var(--radius-pill);
-  background-color: var(--color-black);
-  color: var(--color-white);
-  font-size: var(--body-font-size-s);
-  font-weight: var(--font-weight-semibold);
+  min-height: var(--button-height);
+  color: var(--text-color);
+  font-size: var(--type-button-size);
+  font-weight: var(--font-weight-regular);
+  line-height: 1;
+  letter-spacing: var(--type-button-tracking);
   text-decoration: none;
   white-space: nowrap;
-  transition: opacity 0.2s ease;
- 
 }
- 
-.list .list-view-all:hover {
-  opacity: 0.85;
- 
+
+.list .list-view-all:hover,
+.list .list-view-all:focus-visible {
+  color: var(--text-color);
+  text-decoration: underline;
 }
- 
-/* Base Card Grid */
- 
+
+/* ---------- grid ---------- */
+
 .list .list-container {
-  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17.5rem), 1fr));
+  gap: var(--list-gap);
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--spacing-l);
- 
+  list-style: none;
 }
- 
+
 .list .list-item {
   display: flex;
- 
+  min-width: 0;
 }
- 
-.list .list-card {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-sizing: border-box;
- 
-}
- 
-.list .list-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
- 
-}
- 
-/* Color Schemes */
- 
-.list .list-card.card-color-grey {
-  background-color: var(--color-neutral-100);
-  color: var(--text-color);
- 
-}
- 
-.list .list-card.card-color-black {
-  background-color: var(--list-surface-dark);
-  color: var(--color-white);
- 
-}
- 
-.list .list-card.card-color-blue {
-  background-color: var(--color-brand-500);
-  color: var(--color-white);
- 
-}
- 
-/* Media Area */
- 
-.list .list-media {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
- 
-}
- 
-.list .list-media picture,
- 
-.list .list-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
- 
-}
- 
-/* Body Content */
- 
-.list .list-body {
-  padding: var(--spacing-l);
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-  flex-grow: 1;
- 
-}
- 
-.list .list-eyebrow {
-  font-size: var(--body-font-size-xs);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.06em;
-  opacity: 0.85;
- 
-}
- 
-.list .list-title {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: var(--font-weight-semibold);
-  line-height: 1.35;
- 
-}
- 
-.list .list-title a {
-  color: inherit;
-  text-decoration: none;
- 
-}
- 
-.list .list-title a:hover {
-  text-decoration: underline;
- 
-}
- 
-.list .list-description {
-  margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  opacity: 0.8;
-  display: -webkit-box;
-  line-clamp: 3;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
- 
-}
- 
-.list .list-date {
-  font-size: var(--body-font-size-xs);
-  opacity: 0.75;
-  margin-top: auto;
-  padding-top: var(--spacing-xs);
- 
-}
- 
+
 .list .list-empty {
   grid-column: 1 / -1;
   padding: var(--spacing-2xl);
-  text-align: center;
-  color: var(--text-color-muted);
+  border: var(--border-width-s) dashed var(--border-color);
+  border-radius: var(--list-radius);
   background-color: var(--surface-subtle);
-  border-radius: var(--radius-md);
-  border: 1px dashed var(--border-color);
- 
+  color: var(--text-color-muted);
+  text-align: center;
 }
- 
-/* ==========================================================================
- 
-   CARDS (M SCROLL) LAYOUT (.list-style-card-m-scroll)
- 
-   ========================================================================== */
- 
-.list.list-style-card-m-scroll {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: var(--container-width);
-  margin: 0 auto;
-  padding: var(--spacing-4xl);
- 
-}
- 
-.list.list-style-card-m-scroll .list-header {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0;
-  gap: var(--spacing-s);
-  margin-bottom: var(--spacing-5xl);
- 
-}
- 
-.list.list-style-card-m-scroll .list-main-title {
-  font-family: var(--font-family-heading);
-  font-style: normal;
-  font-weight: var(--font-weight-semibold);
-  font-size: 48px;
-  line-height: 120%;
-  letter-spacing: -0.03em;
-  color: var(--heading-color);
-  margin: 0;
- 
-}
- 
-/* 4-Column Grid Slot */
- 
-.list.list-style-card-m-scroll .list-container {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--spacing-l);
-  margin: 0;
-  padding: 0;
-  list-style: none;
- 
-}
- 
-.list.list-style-card-m-scroll .list-item {
-  display: flex;
-  width: 100%;
- 
-}
- 
-/* Card Base Container */
- 
-.list.list-style-card-m-scroll .list-card {
+
+/* ---------- card ---------- */
+
+.list .list-card {
+  /* solid fill used by painted cards, overridden per card colour */
+  --list-solid-bg: var(--surface-subtle);
+  --list-solid-text: var(--text-color);
+  --list-solid-title: var(--text-color-body);
+  --list-solid-tag: var(--text-color-subtle);
+  --list-solid-muted: var(--text-color-muted);
+
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Pushes text lockup to top, CTA to bottom */
-  align-items: flex-start;
-  padding: var(--spacing-l);
-  box-sizing: border-box;
   width: 100%;
-  height: 453px;
-  border-radius: var(--radius-md);
-  border: none;
-  box-shadow: none;
+  min-width: 0;
+  border-radius: var(--list-radius);
   overflow: hidden;
   isolation: isolate;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
- 
+  color: var(--list-card-text);
 }
- 
-.list.list-style-card-m-scroll .list-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
- 
+
+.list .list-card.card-color-grey {
+  --list-solid-bg: var(--list-surface-grey);
+  --list-solid-text: var(--color-black);
+  --list-solid-title: var(--color-grey-800);
+  --list-solid-tag: var(--color-grey-500);
+  --list-solid-muted: var(--color-black-70);
 }
- 
-/* Media Area for Image Cards */
- 
-.list.list-style-card-m-scroll .list-media {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  margin: 0;
-  border-radius: var(--radius-md);
- 
+
+.list .list-card.card-color-black {
+  --list-solid-bg: var(--list-surface-dark);
+  --list-solid-text: var(--list-on-dark);
+  --list-solid-title: var(--list-on-dark);
+  --list-solid-tag: var(--list-on-dark-muted);
+  --list-solid-muted: var(--list-on-dark-muted);
 }
- 
-.list.list-style-card-m-scroll .list-media picture,
- 
-.list.list-style-card-m-scroll .list-media img {
+
+.list .list-card.card-color-blue {
+  --list-solid-bg: var(--list-surface-brand);
+  --list-solid-text: var(--accent-contrast);
+  --list-solid-title: var(--accent-contrast);
+  --list-solid-tag: color-mix(in srgb, var(--accent-contrast) 70%, transparent);
+  --list-solid-muted: color-mix(in srgb, var(--accent-contrast) 70%, transparent);
+}
+
+/* painted cards: teaser, theme cards, report cards */
+.list.list-style-default .list-card,
+.list.list-style-card-m-scroll .list-card,
+.list.list-style-hero-card .list-card.no-image {
+  --list-card-text: var(--list-solid-text);
+  --list-title-color: var(--list-solid-title);
+  --list-tag-color: var(--list-solid-tag);
+  --list-meta-color: var(--list-solid-muted);
+
+  background-color: var(--list-solid-bg);
+}
+
+.list .list-media {
+  overflow: hidden;
+}
+
+.list .list-media picture,
+.list .list-media img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
- 
 }
- 
-.list.list-style-card-m-scroll .list-media::after {
-  display: none;
- 
-}
- 
-/* Solid Theme Overrides */
- 
-.list.list-style-card-m-scroll .list-card.card-color-black,
- 
-.list.list-style-card-m-scroll .list-card.no-image.card-color-black {
-  background: var(--list-surface-dark) !important;
-  color: var(--color-white);
- 
-}
- 
-.list.list-style-card-m-scroll .list-card.card-color-blue,
- 
-.list.list-style-card-m-scroll .list-card.no-image.card-color-blue {
-  background: var(--color-brand-500) !important;
-  color: var(--color-white);
- 
-}
- 
-.list.list-style-card-m-scroll .list-card.no-image.card-color-grey {
-  background: var(--list-surface-grey) !important;
-  color: var(--text-color);
- 
-}
- 
-/* Hide image element if card has a solid theme override */
- 
-.list.list-style-card-m-scroll .list-card.card-color-black .list-media,
- 
-.list.list-style-card-m-scroll .list-card.card-color-blue .list-media {
-  display: none;
- 
-}
- 
-/* Text and Metadata Body */
- 
-.list.list-style-card-m-scroll .list-body {
-  position: relative;
-  z-index: 2;
+
+.list .list-body {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 0;
-  gap: var(--spacing-s);
-  width: 100%;
-  height: 100%;
-  background: transparent;
- 
+  flex-grow: 1;
+  gap: var(--spacing-xs);
+  min-width: 0;
+  padding: var(--list-card-padding);
 }
- 
-/* Eyebrow Tag Header */
- 
-.list.list-style-card-m-scroll .list-eyebrow {
-  font-family: var(--font-family-base);
-  font-style: normal;
+
+/* tags: "TAG | TAG" overline */
+.list .list-eyebrow {
+  color: var(--list-tag-color);
+  font-size: var(--type-overline-size);
   font-weight: var(--font-weight-medium);
-  font-size: 14px;
-  line-height: 160%;
-  letter-spacing: 0.01em;
+  line-height: var(--type-overline-line-height);
+  letter-spacing: var(--type-overline-tracking);
   text-transform: uppercase;
-  color: rgb(255 255 255 / 70%);
- 
 }
- 
-.list.list-style-card-m-scroll .list-card:not(.card-color-black, .card-color-blue) .list-eyebrow {
-  color: var(--text-color-muted);
- 
-}
- 
-/* Title Header */
- 
-.list.list-style-card-m-scroll .list-title {
-  font-family: var(--font-family-heading);
-  font-style: normal;
-  font-weight: var(--font-weight-semibold);
-  font-size: 28px;
-  line-height: 120%;
+
+/* article card title (Figma 18/20/24 w500) */
+.list .list-title {
   margin: 0;
-  color: inherit;
- 
+  color: var(--list-title-color);
+  font-size: var(--type-heading-s-size);
+  font-weight: var(--type-heading-s-weight);
+  line-height: var(--type-heading-s-line-height);
+  letter-spacing: var(--type-heading-s-tracking);
 }
- 
-.list.list-style-card-m-scroll .list-title a {
+
+.list .list-title a:any-link {
   color: inherit;
   text-decoration: none;
- 
 }
- 
-.list.list-style-card-m-scroll .list-title a:hover {
+
+.list .list-title a:hover,
+.list .list-title a:focus-visible {
+  color: inherit;
   text-decoration: underline;
- 
 }
- 
-/* Description Copy */
- 
-.list.list-style-card-m-scroll .list-description {
-  font-family: var(--font-family-base);
-  font-style: normal;
-  font-weight: var(--font-weight-medium);
-  font-size: var(--body-font-size-m);
-  line-height: 160%;
-  letter-spacing: 0.01em;
-  opacity: 0.7;
-  margin: 0;
+
+.list .list-description {
   display: -webkit-box;
-  line-clamp: 3;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  margin: 0;
   overflow: hidden;
- 
+  color: var(--list-meta-color);
+  font-size: var(--type-body-s-size);
+  line-height: var(--type-body-s-line-height);
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
- 
-/* Explore Link Pushed to Bottom */
- 
-.list.list-style-card-m-scroll .list-cta {
-  font-family: var(--font-family-base);
-  font-style: normal;
-  font-weight: var(--font-weight-regular);
-  font-size: var(--body-font-size-m);
-  line-height: 100%;
-  letter-spacing: 0.01em;
-  color: inherit;
-  text-decoration: none;
+
+.list .list-author,
+.list .list-date {
+  color: var(--list-meta-color);
+  font-size: var(--type-caption-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--type-caption-line-height);
+}
+
+.list .list-date {
   margin-top: auto;
+}
+
+/* "Explore →" text link */
+.list .list-cta:any-link {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
- 
+  margin-top: auto;
+  padding-top: var(--spacing-xs);
+  color: inherit;
+  font-size: var(--type-button-size);
+  font-weight: var(--font-weight-regular);
+  line-height: 1;
+  letter-spacing: var(--type-button-tracking);
+  text-decoration: none;
 }
- 
-.list.list-style-card-m-scroll .list-cta:hover {
+
+.list .list-cta:hover,
+.list .list-cta:focus-visible {
+  color: inherit;
   text-decoration: underline;
- 
 }
- 
-/* ==========================================================================
- 
-   CARD - 2COL / 3COL (TM SCROLL) LAYOUT (.list-style-card-2col-tm-scroll)
- 
-   ========================================================================== */
- 
-.list.list-style-card-2col-tm-scroll .list-header {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: var(--spacing-4xl);
-  gap: var(--spacing-s);
-  margin-bottom: var(--spacing-l);
- 
+
+/* ---------- default: teaser cards ---------- */
+
+.list.list-style-default .list-media {
+  aspect-ratio: 16 / 9;
 }
- 
-.list.list-style-card-2col-tm-scroll .list-main-title {
-  font-family: var(--font-family-heading);
-  font-style: normal;
-  font-weight: var(--font-weight-semibold);
-  font-size: 48px;
-  line-height: 120%;
-  letter-spacing: -0.03em;
-  color: var(--heading-color);
-  margin: 0;
- 
+
+/* ---------- shared: solid 2:3 cards (theme + report) ---------- */
+
+.list.list-style-card-m-scroll .list-card,
+.list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image {
+  aspect-ratio: 2 / 3;
+  padding: var(--list-card-padding);
 }
- 
+
+.list.list-style-card-m-scroll .list-body,
+.list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image .list-body {
+  padding: 0;
+}
+
+/* theme card title (Figma 24/28/32 w400) */
+.list.list-style-card-m-scroll .list-title,
+.list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image .list-title {
+  font-size: var(--type-heading-m-size);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+/* ---------- shared: article cards (image on top) ---------- */
+
+.list.list-style-card-2col-tm-scroll .list-media,
+.list.list-style-hero-card .list-item:not(.hero-item) .list-media {
+  aspect-ratio: 1;
+  border-radius: var(--list-radius);
+  background-color: var(--list-media-fallback);
+}
+
+.list.list-style-card-2col-tm-scroll .list-body,
+.list.list-style-hero-card .list-item:not(.hero-item) .list-card:not(.no-image) .list-body {
+  padding: var(--spacing-s) 0;
+}
+
+/* ---------- shared: mobile horizontal rail ---------- */
+
+.list.list-style-card-m-scroll .list-container,
 .list.list-style-card-2col-tm-scroll .list-container {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--spacing-l);
-  margin: 0;
-  padding: 0;
-  list-style: none;
- 
+  display: flex;
+  margin-inline-end: calc(-1 * var(--container-gutter));
+  padding-inline-end: var(--container-gutter);
+  padding-bottom: var(--spacing-m);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
 }
- 
+
+.list.list-style-card-m-scroll .list-item,
 .list.list-style-card-2col-tm-scroll .list-item {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0;
-  width: 100%;
- 
+  flex: 0 0 var(--list-rail-item);
+  scroll-snap-align: start;
 }
- 
-/* stylelint-disable-next-line no-descending-specificity */
-.list.list-style-card-2col-tm-scroll .list-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0;
-  width: 100%;
-  background: var(--surface-color);
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-  transform: none;
-  transition: none;
- 
+
+/* 4px progress indicator (Figma track #ededed, thumb grey) */
+.list.list-style-card-m-scroll .list-container::-webkit-scrollbar,
+.list.list-style-card-2col-tm-scroll .list-container::-webkit-scrollbar {
+  height: var(--spacing-xxs);
 }
- 
-.list.list-style-card-2col-tm-scroll .list-card:hover {
-  transform: none;
-  box-shadow: none;
- 
-}
- 
-/* stylelint-disable-next-line no-descending-specificity */
-.list.list-style-card-2col-tm-scroll .list-media {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  height: auto;
-  border-radius: 18px;
-  overflow: hidden;
-  background-color: var(--color-neutral-100);
-  margin-bottom: var(--spacing-s);
-  position: relative;
- 
-}
- 
-.list.list-style-card-2col-tm-scroll .list-media picture,
- 
-.list.list-style-card-2col-tm-scroll .list-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
- 
-}
- 
-.list.list-style-card-2col-tm-scroll .list-card.no-image .list-media {
-  background: #00303E;
-  display: flex;
-  align-items: center;
-  justify-content: center;
- 
-}
- 
-.list.list-style-card-2col-tm-scroll .list-body {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0;
-  gap: var(--spacing-xs);
-  width: 100%;
-  background: var(--surface-color);
- 
-}
- 
-/* stylelint-disable-next-line no-descending-specificity */
-.list.list-style-card-2col-tm-scroll .list-eyebrow {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--spacing-xs);
-  font-family: var(--font-family-base);
-  font-style: normal;
-  font-weight: var(--font-weight-medium);
-  font-size: 14px;
-  line-height: 160%;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-  color: var(--color-neutral-400);
- 
-}
- 
-.list.list-style-card-2col-tm-scroll .list-title {
-  font-family: var(--font-family-heading);
-  font-style: normal;
-  font-weight: var(--font-weight-medium);
-  font-size: 24px;
-  line-height: 140%;
-  letter-spacing: -0.025em;
-  color: var(--list-text-strong);
-  margin: 0;
- 
-}
- 
-/* stylelint-disable-next-line no-descending-specificity */
-.list.list-style-card-2col-tm-scroll .list-title a {
-  color: var(--list-text-strong);
-  text-decoration: none;
- 
-}
- 
-.list.list-style-card-2col-tm-scroll .list-title a:hover {
-  color: var(--heading-color);
-  text-decoration: underline;
- 
-}
- 
-.list.list-style-card-2col-tm-scroll .list-description {
-  font-family: var(--font-family-base);
-  font-style: normal;
-  font-weight: var(--font-weight-medium);
-  font-size: var(--body-font-size-m);
-  line-height: 160%;
-  letter-spacing: -0.015em;
-  color: var(--text-color);
-  opacity: 0.7;
-  margin: 0;
- 
-}
- 
-/* ==========================================================================
- 
-   HERO CARD LAYOUT (.list-style-hero-card)
- 
-   ========================================================================== */
-.list.list-style-hero-card {
-  padding: 0 var(--spacing-4xl);
-}
- 
-.list.list-style-hero-card .list-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0;
-  margin-bottom: var(--spacing-l);
- 
-}
- 
-.list.list-style-hero-card .list-main-title {
-  font-family: var(--font-family-heading);
-  font-style: normal;
-  font-weight: var(--font-weight-semibold);
-  font-size: 48px;
-  line-height: 120%;
-  letter-spacing: -0.03em;
-  color: var(--heading-color);
-  margin: 0;
- 
-}
- 
-.list.list-style-hero-card .list-view-all {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: var(--spacing-s) var(--spacing-l);
-  gap: var(--spacing-xs);
-  height: 50px;
-  background: var(--color-black);
-  border: 2px solid var(--list-text-strong);
+
+.list.list-style-card-m-scroll .list-container::-webkit-scrollbar-track,
+.list.list-style-card-2col-tm-scroll .list-container::-webkit-scrollbar-track {
   border-radius: var(--radius-pill);
-  font-family: var(--font-family-base);
-  font-style: normal;
-  font-weight: var(--font-weight-medium);
-  font-size: var(--body-font-size-m);
-  color: var(--color-neutral-300);
-  text-decoration: none;
-  box-sizing: border-box;
-  transition: opacity 0.2s ease;
- 
+  background: var(--list-rail-track);
 }
- 
-.list.list-style-hero-card .list-view-all:hover {
-  opacity: 0.85;
- 
+
+.list.list-style-card-m-scroll .list-container::-webkit-scrollbar-thumb,
+.list.list-style-card-2col-tm-scroll .list-container::-webkit-scrollbar-thumb {
+  border-radius: var(--radius-pill);
+  background: var(--list-rail-thumb);
 }
- 
-.list.list-style-hero-card .list-container {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--spacing-l);
-  margin: 0;
-  padding: 0;
-  list-style: none;
- 
+
+@supports not selector(::-webkit-scrollbar) {
+  .list.list-style-card-m-scroll .list-container,
+  .list.list-style-card-2col-tm-scroll .list-container {
+    scrollbar-color: var(--list-rail-thumb) var(--list-rail-track);
+    scrollbar-width: thin;
+  }
 }
- 
-.list.list-style-hero-card .list-item.hero-item {
-  grid-column: 1 / -1;
-  width: 100%;
- 
+
+/* ---------- card-m-scroll: theme cards ---------- */
+
+.list.list-style-card-m-scroll .list-card {
+  justify-content: space-between;
 }
- 
-.list.list-style-hero-card .hero-item .list-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-  padding: var(--spacing-2xl);
-  box-sizing: border-box;
-  width: 100%;
-  height: 650px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
+
+.list.list-style-card-m-scroll .list-media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.list.list-style-card-m-scroll .list-card.card-color-black .list-media,
+.list.list-style-card-m-scroll .list-card.card-color-blue .list-media {
+  display: none;
+}
+
+/* image card: white text over a top colour wash */
+.list.list-style-card-m-scroll .list-card.card-color-grey:not(.no-image) {
+  --list-card-text: var(--color-white);
+  --list-title-color: var(--color-grey-100);
+  --list-tag-color: var(--color-white-70);
+  --list-meta-color: var(--color-white-70);
+}
+
+.list.list-style-card-m-scroll .list-card.card-color-grey:not(.no-image) .list-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--overlay-color) 0%, transparent 60%);
+}
+
+/* ---------- card-2col-tm-scroll: 1:1 image cards ---------- */
+
+/* no image: keep the square with a solid fill so rows stay aligned */
+.list.list-style-card-2col-tm-scroll .list-card.no-image::before {
+  content: '';
+  aspect-ratio: 1;
+  border-radius: var(--list-radius);
+  background-color: var(--list-media-fallback);
+}
+
+.list.list-style-card-2col-tm-scroll .list-card.no-image.card-color-black::before {
   background-color: var(--list-surface-dark);
-  isolation: isolate;
-  border: none;
-  box-shadow: none;
- 
 }
- 
-/* stylelint-disable-next-line no-descending-specificity */
+
+.list.list-style-card-2col-tm-scroll .list-card.no-image.card-color-blue::before {
+  background-color: var(--list-surface-brand);
+}
+
+/* ---------- hero-card: feature card + mixed cards ---------- */
+
+.list.list-style-hero-card .list-header {
+  align-items: center;
+}
+
+.list.list-style-hero-card .list-container {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.list.list-style-hero-card .hero-item {
+  grid-column: 1 / -1;
+}
+
+.list.list-style-hero-card .hero-item .list-card {
+  min-height: 32.5rem;
+  padding: var(--spacing-l);
+}
+
+/* Figma: light full-bleed photo with dark text */
+.list.list-style-hero-card .hero-item .list-card:not(.no-image) {
+  --list-card-text: var(--color-black);
+  --list-title-color: var(--color-black);
+  --list-tag-color: var(--color-grey-500);
+  --list-meta-color: var(--color-black-70);
+}
+
 .list.list-style-hero-card .hero-item .list-media {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  margin: 0;
- 
+  z-index: -1;
 }
- 
-.list.list-style-hero-card .hero-item .list-media picture,
- 
-.list.list-style-hero-card .hero-item .list-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
- 
-}
- 
+
 .list.list-style-hero-card .hero-item .list-media::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgb(0 0 0 / 10%) 0%, rgb(0 0 0 / 75%) 100%);
-  z-index: 1;
- 
+  background: linear-gradient(180deg, var(--color-white-60) 0%, transparent 55%);
 }
- 
+
 .list.list-style-hero-card .hero-item .list-body {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   padding: 0;
-  gap: var(--spacing-s);
-  width: 100%;
-  max-width: 1200px;
-  color: var(--color-white);
- 
 }
- 
-/* stylelint-disable-next-line no-descending-specificity */
-.list.list-style-hero-card .hero-item .list-eyebrow {
-  font-family: var(--font-family-base);
-  font-style: normal;
-  font-weight: var(--font-weight-medium);
-  font-size: 14px;
-  line-height: 160%;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-  color: var(--color-neutral-400);
- 
-}
- 
+
+/* feature title (Figma 32 mobile, 40 tablet/desktop, w600) */
 .list.list-style-hero-card .hero-item .list-title {
-  font-family: var(--font-family-heading);
-  font-style: normal;
+  max-width: 31.25rem;
+  font-size: 2rem;
   font-weight: var(--font-weight-semibold);
-  font-size: 48px;
-  line-height: 120%;
+  line-height: 1.2;
   letter-spacing: -0.03em;
-  color: inherit;
-  margin: 0;
- 
 }
- 
+
 .list.list-style-hero-card .hero-item .list-description {
-  font-family: var(--font-family-base);
-  font-style: normal;
-  font-weight: var(--font-weight-regular);
-  font-size: var(--body-font-size-m);
-  line-height: 160%;
-  letter-spacing: 0.01em;
-  color: rgb(255 255 255 / 85%);
-  margin: 0;
- 
+  max-width: 31.25rem;
 }
- 
-.list.list-style-hero-card .hero-item .list-cta {
-  font-family: var(--font-family-base);
-  font-style: normal;
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--body-font-size-m);
-  color: var(--color-white);
-  text-decoration: none;
-  margin-top: var(--spacing-s);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  background: var(--surface-color);
-  border-radius: var(--radius-md);
-  border: none;
-  box-shadow: none;
-  overflow: hidden;
-  transition: transform 0.2s ease;
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-card:hover {
-  transform: translateY(-4px);
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-media {
-  width: 100%;
-  height: 169.88px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  margin-bottom: var(--spacing-s);
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-media picture,
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-body {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0;
-  gap: var(--spacing-xs);
-  width: 100%;
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-eyebrow {
-  font-family: var(--font-family-base);
-  font-style: normal;
-  font-weight: var(--font-weight-medium);
-  font-size: 14px;
-  line-height: 160%;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-  color: var(--color-neutral-400);
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-title {
-  font-family: var(--font-family-heading);
-  font-style: normal;
-  font-weight: var(--font-weight-medium);
-  font-size: 24px;
-  line-height: 140%;
-  letter-spacing: -0.025em;
-  color: var(--list-text-strong);
-  margin: 0;
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-title a {
-  color: var(--list-text-strong);
-  text-decoration: none;
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-title a:hover {
-  color: var(--heading-color);
-  text-decoration: underline;
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-description {
-  font-family: var(--font-family-base);
-  font-style: normal;
-  font-weight: var(--font-weight-regular);
-  font-size: var(--body-font-size-m);
-  line-height: 140%;
-  letter-spacing: -0.005em;
-  color: var(--text-color);
-  opacity: 0.7;
-  margin: 0;
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image {
-  background: var(--list-surface-grey);
-  padding: var(--spacing-l);
-  box-sizing: border-box;
-  height: 453px;
-  justify-content: space-between;
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image.card-color-black {
-  background: var(--list-surface-dark);
-  color: var(--color-white);
- 
-}
- 
-.list.list-style-hero-card .list-item:not(.hero-item) .list-card.no-image.card-color-blue {
-  background: var(--color-brand-500);
-  color: var(--color-white);
- 
-}
- 
-/* ==========================================================================
- 
-   MOBILE & TABLET RESPONSIVE TOUCH SCROLL RULES
- 
-   ========================================================================== */
- 
-@media (width <= 1024px) {
-  .list.list-style-hero-card {
-    padding: 0 var(--spacing-3xl);
-  }
- 
-  .list.list-style-hero-card .list-main-title,
- 
-  .list.list-style-card-m-scroll .list-main-title,
- 
-  .list.list-style-card-2col-tm-scroll .list-main-title {
-    font-size: 32px;
- 
-  }
- 
-  .list.list-style-hero-card .hero-item .list-card {
-    height: auto;
-    min-height: 420px;
-    padding: var(--spacing-l);
- 
-  }
- 
-  .list.list-style-hero-card .hero-item .list-title {
-    font-size: 32px;
- 
-  }
- 
-  .list.list-style-hero-card .list-container {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--spacing-m);
- 
-  }
- 
+
+/* ---------- tablet ---------- */
+
+@media (width >= 37.5rem) {
   .list.list-style-card-m-scroll .list-container,
- 
   .list.list-style-card-2col-tm-scroll .list-container {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: var(--spacing-m);
-    gap: var(--spacing-m);
-    -webkit-overflow-scrolling: touch;
- 
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-inline-end: 0;
+    padding: 0;
+    overflow: visible;
   }
- 
-  .list.list-style-card-m-scroll .list-item {
-    flex: 0 0 280px;
-    scroll-snap-align: start;
- 
+
+  .list.list-style-card-2col-tm-scroll .list-container {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
- 
-  .list.list-style-card-2col-tm-scroll .list-item {
-    flex: 0 0 300px;
-    scroll-snap-align: start;
- 
-  }
- 
-}
- 
-@media (width <= 640px) {
-  .list.list-style-hero-card {
-    padding: 0 var(--spacing-xl);
-  }
- 
+
   .list.list-style-hero-card .list-container {
-    grid-template-columns: 1fr;
- 
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
- 
+
+  .list.list-style-hero-card .hero-item .list-card {
+    aspect-ratio: 1280 / 570;
+    min-height: 0;
+    padding: var(--spacing-2xl);
+  }
+
+  .list.list-style-hero-card .hero-item .list-title {
+    font-size: 2.5rem;
+  }
+}
+
+/* ---------- desktop ---------- */
+
+@media (width >= 75rem) {
+  .list {
+    --list-card-padding: var(--spacing-l);
+  }
+
+  .list.list-style-card-m-scroll .list-description {
+    margin-top: var(--spacing-xs);
+  }
 }

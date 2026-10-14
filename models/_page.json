@@ -286,6 +286,39 @@
                   "value": "story"
                 }
               ]
+            },
+            {
+              "component": "multiselect",
+              "valueType": "string",
+              "name": "theme",
+              "label": "Theme",
+              "description": "Page colour theme. Pick one base theme and optionally one accent palette.",
+              "options": [
+                {
+                  "name": "Light (default)",
+                  "value": "light"
+                },
+                {
+                  "name": "Dark (navy)",
+                  "value": "dark"
+                },
+                {
+                  "name": "Accent: Teal",
+                  "value": "accent-teal"
+                },
+                {
+                  "name": "Accent: Pink",
+                  "value": "accent-pink"
+                },
+                {
+                  "name": "Accent: Green",
+                  "value": "accent-green"
+                },
+                {
+                  "name": "Accent: Yellow",
+                  "value": "accent-yellow"
+                }
+              ]
             }
           ]
         },

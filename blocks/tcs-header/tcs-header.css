@@ -1,246 +1,262 @@
-/* ==========================================================================
-   BASIC TCS HEADER SHELL
-   ========================================================================== */
-.tcs-header {
-  height: 124px;
+/*
+ * TCS header: logo bar only (primary navigation is the floating pill bar in tcs-footer).
+ * Figma desktop: 124px, padding 40/80, transparent, TCS 146x35 left, TATA 50x44 right.
+ * Figma mobile: 64px, padding 16, TCS + TATA logo group left, 32px hamburger right.
+ * The full-screen menu overlay is appended to <body>, so it is scoped by its own root
+ * class .tcs-header-overlay.
+ */
+.tcs-header,
+.tcs-header-overlay {
+  --tcs-header-height: var(--nav-height); /* 64 → 124 */
+  --tcs-header-bg: transparent;
+  --tcs-header-border: transparent;
+  --tcs-header-icon-color: var(--text-color);
+  --tcs-header-padding-block: var(--spacing-m);
+  --tcs-header-logo-gap: 1.75rem; /* 27.8 */
+  --tcs-header-tcs-logo-width: 5.0625rem; /* 81 */
+  --tcs-header-tcs-logo-height: 1.25rem; /* 19.4 */
+  --tcs-header-tata-logo-width: 1.75rem; /* 27.8 */
+  --tcs-header-tata-logo-height: 1.5rem; /* 24 */
+  --tcs-header-toggle-size: 2rem; /* 32 */
 }
 
-.tcs-header .tcs-nav-wrapper {
+.tcs-header {
+  height: var(--tcs-header-height);
+}
+
+.tcs-header .tcs-nav-bar {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 100;
   width: 100%;
-  background-color: #fff;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: var(--border-width-s) solid var(--tcs-header-border);
+  background-color: var(--tcs-header-bg);
 }
 
 .tcs-header nav#tcs-nav {
-  box-sizing: border-box;
   position: relative;
   z-index: 100;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: var(--tcs-header-logo-gap);
+  width: 100%;
+  max-width: calc(var(--container-width) + (var(--container-gutter) * 2));
+  height: var(--tcs-header-height);
   margin: 0 auto;
-  max-width: 1440px;
-  height: 124px;
-  padding: 40px 80px;
+  padding: var(--tcs-header-padding-block) var(--container-gutter);
 }
 
-/* TCS & TATA LOGO IMAGE CONTAINER STYLING */
+/* logos (shared by the bar and the overlay header) */
 .tcs-header .nav-brand-primary,
-.tcs-header .nav-brand-secondary {
+.tcs-header .nav-brand-secondary,
+.tcs-header-overlay .nav-brand-primary,
+.tcs-header-overlay .nav-brand-secondary {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.tcs-header .nav-brand-primary a,
+.tcs-header .nav-brand-secondary a,
+.tcs-header-overlay .nav-brand-primary a,
+.tcs-header-overlay .nav-brand-secondary a {
   display: flex;
   align-items: center;
-  flex: 0 0 auto;
-}
-
-.tcs-header .nav-brand-primary img {
-  width: 146px;
-  height: 34.8px;
-  object-fit: contain;
-}
-
-.tcs-header .nav-brand-secondary img {
-  width: 50px;
-  height: 44px;
-  object-fit: contain;
+  color: var(--tcs-header-icon-color);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
 }
 
 .tcs-header .nav-brand-primary picture,
-.tcs-header .nav-brand-secondary picture {
+.tcs-header .nav-brand-secondary picture,
+.tcs-header-overlay .nav-brand-primary picture,
+.tcs-header-overlay .nav-brand-secondary picture {
   display: flex;
   align-items: center;
 }
 
-.tcs-header .nav-hamburger {
-  display: flex;
-  align-items: center;
-}
-
-/* Header Hamburger Button (Top Header - Clean Vector Icon) */
-.tcs-header-hamburger {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.tcs-header-hamburger svg {
-  width: 28px;
-  height: 20px;
-  stroke: #121213;
-}
-
-/* Dark Variant */
-.tcs-header.variant-dark .tcs-nav-wrapper,
-.tcs-header[data-variant="dark"] .tcs-nav-wrapper {
-  background-color: #1e1e1e;
-  border-bottom-color: #333;
-}
-
-/* ==========================================================================
-   FLOATING CONTROL BAR (HIDDEN AS REQUESTED)
-   ========================================================================== */
-.tcs-floating-control-bar {
-  display: none !important;
-}
-
-/* ==========================================================================
-   MOBILE & TABLET FULLSCREEN OVERLAY
-   ========================================================================== */
-.tcs-mobile-nav-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #fff;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  box-sizing: border-box;
-}
-
-.tcs-mobile-nav-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 24px;
-}
-
-.tcs-mobile-logos {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.tcs-mobile-nav-overlay .tcs-mobile-nav-header .tcs-mobile-logos img {
-  height: 28px;
-  width: auto;
+.tcs-header .nav-brand-primary img,
+.tcs-header-overlay .nav-brand-primary img {
+  width: var(--tcs-header-tcs-logo-width);
+  height: var(--tcs-header-tcs-logo-height);
   object-fit: contain;
 }
 
-.tcs-mobile-close-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
+.tcs-header .nav-brand-secondary img,
+.tcs-header-overlay .nav-brand-secondary img {
+  width: var(--tcs-header-tata-logo-width);
+  height: var(--tcs-header-tata-logo-height);
+  object-fit: contain;
+}
+
+/* hamburger: 32px, right */
+.tcs-header .nav-hamburger {
+  display: flex;
+  align-items: center;
+  margin-inline-start: auto;
+}
+
+.tcs-header .tcs-header-hamburger,
+.tcs-header-overlay .tcs-mobile-close-btn,
+.tcs-header-overlay .tcs-mobile-back-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.tcs-mobile-nav-overlay .tcs-mobile-nav-header .tcs-mobile-close-btn svg {
-  width: 24px;
-  height: 24px;
-  stroke: #1e2222;
-}
-
-.tcs-mobile-nav-body {
-  padding: 10px 24px 120px;
-  flex: 1;
-}
-
-.tcs-mobile-title-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-  margin-top: 8px;
-}
-
-.tcs-mobile-back-btn {
+  margin: 0;
+  padding: 0;
+  border: 0;
   background: none;
-  border: none;
+  color: var(--tcs-header-icon-color);
   cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.tcs-mobile-nav-overlay .tcs-mobile-nav-body .tcs-mobile-back-btn svg {
-  width: 20px;
-  height: 20px;
-  stroke: #1e2222;
+.tcs-header .tcs-header-hamburger svg,
+.tcs-header-overlay .tcs-mobile-close-btn svg {
+  width: var(--tcs-header-toggle-size);
+  height: var(--tcs-header-toggle-size);
+  stroke: currentcolor;
 }
 
-.tcs-mobile-title-row h2.tcs-mobile-title {
-  width: 370px;
-  height: 39px;
-  opacity: 1;
-  margin: 0;
-  font-family: Inter, system-ui, -apple-system, sans-serif;
-  font-weight: 600;
-  font-style: normal;
-  font-size: 32px;
-  line-height: 140%;
-  letter-spacing: -0.025em;
-  color: rgb(12 12 13 / 100%);
+/* dark variant */
+.tcs-header.variant-dark,
+.tcs-header[data-variant='dark'] {
+  --tcs-header-bg: var(--color-grey-900);
+  --tcs-header-border: var(--color-grey-800);
+  --tcs-header-icon-color: var(--color-white);
 }
 
-.tcs-mobile-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* ---------- full-screen menu overlay (mobile / tablet) ---------- */
+.tcs-header-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
   display: flex;
   flex-direction: column;
-}
-
-.tcs-mobile-item {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.tcs-mobile-item-btn,
-.tcs-mobile-item-link {
   width: 100%;
+  height: 100dvh;
+  background: var(--surface-color);
+  color: var(--text-color);
+  overflow-y: auto;
+}
+
+.tcs-header-overlay .tcs-mobile-nav-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 18px 0;
-  background: transparent !important;
-  border: none;
-  font-family: Inter, sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  color: #1e2222;
-  text-align: left;
-  text-decoration: none !important;
+  justify-content: space-between;
+  min-height: var(--tcs-header-height);
+  padding: var(--tcs-header-padding-block) var(--container-gutter);
+}
+
+.tcs-header-overlay .tcs-mobile-logos {
+  display: flex;
+  align-items: center;
+  gap: var(--tcs-header-logo-gap);
+}
+
+.tcs-header-overlay .tcs-mobile-nav-body {
+  flex: 1;
+  padding: var(--spacing-2xl) var(--container-gutter) var(--spacing-6xl);
+}
+
+.tcs-header-overlay .tcs-mobile-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-l);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.tcs-header-overlay .tcs-mobile-back-btn {
+  flex: 0 0 auto;
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+}
+
+.tcs-header-overlay .tcs-mobile-back-btn svg {
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+  stroke: currentcolor;
+}
+
+/* sub-level titles: Inter 400 28/39 -0.025em; root "Menu" title is semibold */
+.tcs-header-overlay .tcs-mobile-title {
+  min-width: 0;
+  margin: 0;
+  color: var(--heading-color);
+  font-size: 1.75rem;
+  font-weight: var(--font-weight-regular);
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+
+.tcs-header-overlay .tcs-mobile-title-row:has(.tcs-mobile-back-btn.hidden) .tcs-mobile-title {
+  font-weight: var(--font-weight-semibold);
+}
+
+.tcs-header-overlay .tcs-mobile-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tcs-header-overlay .tcs-mobile-item {
+  border-bottom: var(--border-width-s) solid var(--divider-color);
+}
+
+.tcs-header-overlay .tcs-mobile-item-btn,
+.tcs-header-overlay .tcs-mobile-item-link:any-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-m);
+  width: 100%;
+  padding: var(--spacing-m) 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-color);
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-regular);
+  line-height: 1.45;
+  text-align: start;
+  text-decoration: none;
   cursor: pointer;
 }
 
-.tcs-mobile-item-btn .arrow {
-  color: #c2c2c2;
-  font-size: 18px;
+.tcs-header-overlay .tcs-mobile-item-link:hover,
+.tcs-header-overlay .tcs-mobile-item-link:focus-visible {
+  color: var(--accent-color);
 }
 
-.hidden {
-  display: none !important;
+/* JS renders "→" text; draw the shared 24px arrow-right icon in light grey instead */
+.tcs-header-overlay .tcs-mobile-item-btn .arrow {
+  flex: 0 0 auto;
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+  background-color: var(--color-grey-400);
+  font-size: 0;
+  mask: url('../../icons/arrow-right.svg') center / contain no-repeat;
 }
 
-/* ==========================================================================
-   RESPONSIVE BREAKPOINTS
-   ========================================================================== */
+/* desktop (Figma 1440): 124px bar, logos at the edges, no hamburger */
+@media (width >= 75rem) {
+  .tcs-header,
+  .tcs-header-overlay {
+    --tcs-header-height: 7.75rem; /* 124 */
+    --tcs-header-padding-block: var(--spacing-2xl);
+    --tcs-header-tcs-logo-width: 9.125rem; /* 146 */
+    --tcs-header-tcs-logo-height: 2.1875rem; /* 35 */
+    --tcs-header-tata-logo-width: 3.125rem; /* 50 */
+    --tcs-header-tata-logo-height: 2.75rem; /* 44 */
+  }
 
-@media (width >= 1025px) {
   .tcs-header nav#tcs-nav {
     justify-content: space-between;
   }
 
-  .tcs-header .nav-brand-primary {
-    margin-right: auto;
-  }
-
   .tcs-header .nav-brand-secondary {
-    margin-left: auto;
+    margin-inline-start: auto;
   }
 
   .tcs-header .nav-hamburger {
@@ -248,29 +264,9 @@
   }
 }
 
-@media (width <= 1024px) {
-  .tcs-header {
-    height: 64px;
-  }
-
-  .tcs-header nav#tcs-nav {
-    height: 64px;
-    padding: 12px 20px;
-  }
-
-  .tcs-header .nav-brand-primary img {
-    width: 100px;
-    height: 24px;
-  }
-
-  .tcs-header .nav-brand-secondary img {
-    width: 42px;
-    height: 36px;
-  }
-
-  .tcs-header .nav-hamburger {
-    display: flex;
-    order: 3;
-    margin-left: auto;
-  }
+/* state helper toggled by tcs-header.js; last so it wins over the display rules above */
+.tcs-header .hidden,
+.tcs-header-overlay.hidden,
+.tcs-header-overlay .hidden {
+  display: none;
 }

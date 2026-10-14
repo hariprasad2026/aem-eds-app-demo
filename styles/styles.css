@@ -10,135 +10,467 @@
  * governing permissions and limitations under the License.
  */
 
+/*
+ * Design tokens follow the Figma "New DS" library and are layered:
+ *   1. primitives  - raw values (colours, spacing, radius, font sizes). Never use in blocks directly
+ *                    when a semantic token exists.
+ *   2. semantic    - role based (surface, text, border, button, type roles). Blocks consume these.
+ *   3. themes      - page themes (body class from "theme" metadata) and section styles
+ *                    (section metadata "style") re-map the semantic tokens.
+ *   4. block tokens - each block may expose its own --{block}-* properties that default to
+ *                    semantic tokens, so variants only override a property, not a rule.
+ * Breakpoints (mobile first): 600px tablet, 900px small desktop, 1200px desktop.
+ * Figma frames: 402px mobile, 1024px tablet, 1440px desktop.
+ */
+
+@font-face {
+  font-family: inter-fallback;
+  size-adjust: 107.12%;
+  ascent-override: 90.44%;
+  descent-override: 22.52%;
+  line-gap-override: 0%;
+  src: local('Arial');
+}
+
 :root {
-  /* breakpoints */
-  --breakpoint-mobile: 20rem;
-  --breakpoint-tablet: 43.75rem;
+  /* ---------- 1. primitives ---------- */
+
+  /* breakpoints (reference only, media queries cannot use custom properties) */
+  --breakpoint-tablet: 37.5rem;
+  --breakpoint-desktop-s: 56.25rem;
   --breakpoint-desktop: 75rem;
   --breakpoint-max: 120rem;
 
-  /* color primitives */
+  /* neutrals */
   --color-white: #fff;
   --color-black: #0c0c0d;
+  --color-black-pure: #000;
   --color-black-90: rgb(12 12 13 / 90%);
   --color-black-85: rgb(12 12 13 / 85%);
   --color-black-80: rgb(12 12 13 / 80%);
   --color-black-70: rgb(12 12 13 / 70%);
+  --color-black-60: rgb(12 12 13 / 60%);
   --color-black-40: rgb(12 12 13 / 40%);
+  --color-black-20: rgb(12 12 13 / 20%);
   --color-black-5: rgb(12 12 13 / 5%);
-  --color-neutral-100: #f5f5f5;
-  --color-neutral-150: #ededee;
-  --color-neutral-200: #e6e6e6;
-  --color-neutral-300: #d9d9d9;
-  --color-neutral-400: #999;
-  --color-brand-500: #4673db;
-  --color-brand-600: #216ac3;
-  --color-brand-200: #a7c8f1;
+  --color-white-70: rgb(255 255 255 / 70%);
+  --color-white-60: rgb(255 255 255 / 60%);
+  --color-white-40: rgb(255 255 255 / 40%);
+  --color-white-15: rgb(255 255 255 / 15%);
+  --color-white-10: rgb(255 255 255 / 10%);
+  --color-ink: #1e2222;
+  --color-grey-900: #242424;
+  --color-grey-800: #303030;
+  --color-grey-700: #494c4d;
+  --color-grey-600: #757575;
+  --color-grey-500: #999;
+  --color-grey-400: #b2b2b2;
+  --color-grey-300: #d9d9d9;
+  --color-grey-250: #e3e3e3;
+  --color-grey-200: #e6e6e6;
+  --color-grey-150: #ededed;
+  --color-grey-100: #f3f3f3;
+  --color-grey-50: #f5f5f5;
+
+  /* brand blue */
   --color-brand-100: #cedff4;
+  --color-brand-200: #a7c8f1;
+  --color-brand-400: #4e84ff;
+  --color-brand-500: #4673db;
+  --color-brand-600: #1b478a;
+  --color-brand-800: #20293c;
   --color-brand-900: #011627;
+  --color-brand-950: #01121f;
 
-  /* semantic color tokens */
-  --background-color: var(--color-white);
-  --background-color-alt: var(--color-neutral-100);
-  --surface-color: var(--color-white);
-  --surface-subtle: var(--color-neutral-100);
-  --surface-strong: var(--color-brand-100);
-  --text-color: var(--color-black);
-  --text-color-muted: var(--color-black-70);
-  --heading-color: var(--color-black);
-  --border-color: var(--color-neutral-200);
-  --link-color: var(--color-brand-600);
-  --link-hover-color: var(--color-brand-900);
-  --focus-color: var(--color-brand-600);
-  --button-primary-bg: var(--color-brand-500);
-  --button-primary-bg-hover: var(--color-brand-900);
-  --button-primary-text: var(--color-white);
-  --button-secondary-bg: var(--color-brand-200);
-  --button-secondary-bg-hover: var(--color-brand-100);
-  --button-secondary-text: var(--color-black);
-  --button-tertiary-bg: var(--color-brand-600);
-  --button-tertiary-bg-hover: var(--color-brand-900);
-  --button-tertiary-text: var(--color-white);
-  --button-disabled-bg: var(--color-neutral-200);
-  --button-disabled-text: var(--color-black-70);
+  /* accents */
+  --color-teal-900: #00303e;
+  --color-green-900: #012d2a;
+  --color-mint-200: #b8efe4;
+  --color-yellow-400: #fdc942;
+  --color-yellow-500: #e8b931;
+  --color-pink-200: #ffcaf5;
+  --color-pink-500: #ff4edc;
+  --color-green-200: #beedcb;
+  --color-green-500: #0bb23d;
+  --color-blue-200: #cadaff;
 
-  /* typography */
-  --font-family-base: inter, roboto, inter-fallback, sans-serif;
-  --font-family-heading: inter, roboto, inter-fallback, sans-serif;
-  --font-family-eyebrow: roboto-condensed, roboto, inter-fallback, sans-serif;
+  /* font families */
+  --font-family-base: inter, inter-fallback, sans-serif;
+  --font-family-heading: var(--font-family-base);
+  --font-family-accent: 'ABC Monument Grotesk', var(--font-family-base);
+
+  /* font weights */
+  --font-weight-light: 300;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  /* display scale (mobile) */
-  --display-1-size: 3.25rem;
-  --display-1-line-height: 1.2;
-  --display-1-weight: var(--font-weight-bold);
-  --display-1-semi-size: 3.25rem;
-  --display-1-semi-line-height: 1.2;
-  --display-1-semi-weight: var(--font-weight-semibold);
-  --display-2-size: 2.6875rem;
-  --display-2-line-height: 1.2;
-  --display-2-weight: var(--font-weight-bold);
-  --display-3-size: 2.25rem;
-  --display-3-line-height: 1.2;
-  --display-3-weight: var(--font-weight-bold);
-  --body-font-size-m: 1rem;
-  --body-font-size-s: 0.875rem;
-  --body-font-size-xs: 0.75rem;
-  --body-line-height: 1.6;
+  /* spacing (Figma Space/200 … Space/5000) */
+  --spacing-xxs: 0.25rem; /* 4 */
+  --spacing-xs: 0.5rem; /* 8 */
+  --spacing-s: 0.75rem; /* 12 */
+  --spacing-m: 1rem; /* 16 */
+  --spacing-l: 1.5rem; /* 24 */
+  --spacing-xl: 2rem; /* 32 */
+  --spacing-2xl: 2.5rem; /* 40 */
+  --spacing-3xl: 3rem; /* 48 */
+  --spacing-4xl: 4rem; /* 64 */
+  --spacing-5xl: 5rem; /* 80 */
+  --spacing-6xl: 7.5rem; /* 120 */
+  --spacing-7xl: 10rem; /* 160 */
+  --spacing-8xl: 12.5rem; /* 200 */
 
-  /* spacing */
-  --spacing-xxs: 0.25rem;
-  --spacing-xs: 0.5rem;
-  --spacing-s: 0.75rem;
-  --spacing-m: 1rem;
-  --spacing-l: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 2.5rem;
-  --spacing-3xl: 3rem;
-  --spacing-4xl: 4rem;
-  --spacing-5xl: 5rem;
-  --spacing-6xl: 7.5rem;
-
-  /* radius and shadows */
-  --radius-sm: 0.5rem;
-  --radius-md: 1rem;
-  --radius-pill: 624.9375rem;
+  /* radius, borders, depth */
+  --radius-xs: 0.5rem; /* Radius/M 8 */
+  --radius-sm: 0.75rem; /* 12 image lockups */
+  --radius-md: 1rem; /* Radius/L 16 cards */
+  --radius-lg: 1.25rem; /* 20 menu panels */
+  --radius-xl: 1.5rem; /* 24 photo tiles */
+  --radius-input: 3.625rem; /* 58 search bar */
+  --radius-pill: 624.9375rem; /* Radius/Full */
+  --border-width-s: 0.0625rem;
+  --border-width-m: 0.125rem;
   --shadow-sm: 0 0.25rem 0.5rem -0.0625rem var(--color-black-5), 0 0.0625rem 0.25rem 0 var(--color-black-5);
   --shadow-md: 0 0.625rem 1.875rem rgb(12 12 13 / 10%);
+  --blur-glass: blur(1.25rem);
 
-  /* layout */
+  /* ---------- 2. semantic tokens ---------- */
+
+  /* surfaces and text */
+  --background-color: var(--color-white);
+  --background-color-alt: var(--color-grey-100);
+  --surface-color: var(--color-white);
+  --surface-subtle: var(--color-grey-100);
+  --surface-muted: var(--color-grey-300);
+  --surface-strong: var(--color-brand-100);
+  --surface-glass: var(--color-white-40);
+  --heading-color: var(--color-black);
+  --text-color: var(--color-black);
+  --text-color-body: var(--color-grey-800);
+  --text-color-muted: var(--color-black-70);
+  --text-color-subtle: var(--color-grey-500);
+  --text-color-inverse: var(--color-white);
+  --accent-color: var(--color-brand-500);
+  --accent-color-hover: var(--color-brand-600);
+  --accent-subtle: var(--color-brand-100);
+  --accent-contrast: var(--color-white);
+  --eyebrow-color: var(--accent-color);
+  --border-color: var(--color-grey-200);
+  --border-color-strong: var(--color-grey-800);
+  --divider-color: var(--color-grey-400);
+  --link-color: var(--accent-color);
+  --link-hover-color: var(--color-brand-900);
+  --focus-color: var(--color-brand-400);
+  --overlay-color: rgb(1 18 31 / 60%);
+
+  /* buttons (Figma: pill, 50px, 12/16/12/24 padding, 24px trailing arrow) */
+  --button-height: 2.5rem;
+  --button-padding: 0.75rem 1rem 0.75rem 1.5rem;
+  --button-gap: var(--spacing-xs);
+  --button-icon-size: 1.5rem;
+  --button-radius: var(--radius-pill);
+  --button-primary-bg: var(--color-black);
+  --button-primary-bg-hover: var(--color-grey-800);
+  --button-primary-border: var(--color-grey-800);
+  --button-primary-text: var(--color-grey-300);
+  --button-primary-text-hover: var(--color-white);
+  --button-secondary-bg: var(--color-white);
+  --button-secondary-bg-hover: var(--color-grey-100);
+  --button-secondary-border: var(--color-grey-800);
+  --button-secondary-text: var(--color-grey-800);
+  --button-tertiary-bg: var(--accent-color);
+  --button-tertiary-bg-hover: var(--accent-color-hover);
+  --button-tertiary-border: var(--accent-color);
+  --button-tertiary-text: var(--accent-contrast);
+  --button-disabled-bg: var(--color-grey-200);
+  --button-disabled-text: var(--color-black-70);
+
+  /* chips and inputs */
+  --chip-bg: var(--color-white);
+  --chip-border: var(--color-grey-200);
+  --chip-text: var(--color-black);
+  --chip-active-bg: var(--color-brand-400);
+  --chip-active-text: var(--color-white);
+  --input-bg: var(--color-white-60);
+  --input-border: var(--color-grey-700);
+
+  /* type roles: size changes per breakpoint, line-height/weight/tracking stay fixed (mobile values here) */
+  --type-display-xl-size: 3.125rem; /* 50 → 64 → 96 */
+  --type-display-xl-line-height: 1.2;
+  --type-display-xl-weight: var(--font-weight-medium);
+  --type-display-xl-tracking: -0.03em;
+  --type-display-l-size: 2.5rem; /* 40 → 50 → 64 : hero h1 */
+  --type-display-l-line-height: 1.2;
+  --type-display-l-weight: var(--font-weight-medium);
+  --type-display-l-tracking: -0.025em;
+  --type-heading-xl-size: 2rem; /* 32 → 40 → 48 */
+  --type-heading-xl-line-height: 1.2;
+  --type-heading-xl-weight: var(--font-weight-semibold);
+  --type-heading-xl-tracking: -0.03em;
+  --type-heading-l-size: 1.75rem; /* 28 → 32 → 40 : section h2 */
+  --type-heading-l-line-height: 1.4;
+  --type-heading-l-weight: var(--font-weight-semibold);
+  --type-heading-l-tracking: -0.025em;
+  --type-heading-m-size: 1.5rem; /* 24 → 28 → 32 : h3, list titles */
+  --type-heading-m-line-height: 1.4;
+  --type-heading-m-weight: var(--font-weight-semibold);
+  --type-heading-m-tracking: 0;
+  --type-heading-s-size: 1.125rem; /* 18 → 20 → 24 : card titles */
+  --type-heading-s-line-height: 1.4;
+  --type-heading-s-weight: var(--font-weight-medium);
+  --type-heading-s-tracking: -0.025em;
+  --type-body-xl-size: 1.125rem; /* 18 → 20 → 24 : lead / intro */
+  --type-body-xl-line-height: 1.4;
+  --type-body-l-size: 1rem; /* 16 → 18 → 20 */
+  --type-body-l-line-height: 1.4;
+  --type-body-m-size: 1rem; /* 16 → 16 → 18 : default body */
+  --type-body-m-line-height: 1.6;
+  --type-body-s-size: 0.75rem; /* 12 → 14 → 16 : card body */
+  --type-body-s-line-height: 1.6;
+  --type-caption-size: 0.75rem; /* 12 → 14 → 14 : meta, legal */
+  --type-caption-line-height: 1.4;
+  --type-overline-size: 0.875rem; /* 14 : uppercase tags */
+  --type-overline-line-height: 1.6;
+  --type-overline-tracking: 0.01em;
+  --type-eyebrow-size: 0.75rem; /* 12 → 14 → 16 : blue kicker above headings */
+  --type-eyebrow-line-height: 1.6;
+  --type-eyebrow-weight: var(--font-weight-semibold);
+  --type-eyebrow-tracking: 0.0125em;
+  --type-button-size: 0.75rem; /* 12 → 14 → 16 */
+  --type-button-weight: var(--font-weight-medium);
+  --type-button-tracking: 0.01em;
+  --type-chip-size: 1rem; /* 16 → 16 → 18 */
+  --type-stat-size: 3.125rem; /* 50 → 64 → 96 */
+  --type-stat-line-height: 1.1;
+  --type-stat-tracking: -0.05em;
+  --type-quote-size: 1.75rem; /* 28 → 32 → 40 */
+  --type-quote-line-height: 1.4;
+  --type-quote-tracking: -0.02em;
+
+  /* layout (Figma: 1440 frame, 1280 content, 80 side / 120 vertical padding on desktop) */
+  --container-width: 80rem;
+  --container-width-narrow: 56.25rem;
   --container-width-max: var(--breakpoint-max);
   --container-gutter: var(--spacing-m);
-  --section-padding-block: var(--spacing-2xl);
+  --section-padding-block: var(--spacing-4xl);
+  --section-header-gap: var(--spacing-2xl);
+  --grid-gap: var(--spacing-m);
   --nav-height: 4rem;
+
+  /* ---------- legacy aliases (referenced by existing blocks) ---------- */
+  --color-neutral-100: var(--color-grey-50);
+  --color-neutral-150: var(--color-grey-150);
+  --color-neutral-200: var(--color-grey-200);
+  --color-neutral-300: var(--color-grey-300);
+  --color-neutral-400: var(--color-grey-500);
+  --tcs-color-brand: var(--color-brand-500);
+  --primary-color: var(--color-brand-500);
+  --light-color: var(--color-grey-100);
+  --overlay-background-color: var(--color-white);
+  --body-font-family: var(--font-family-base);
+  --heading-font-family: var(--font-family-heading);
+  --font-family-eyebrow: var(--font-family-base);
+  --header-height: var(--nav-height);
+  --body-font-size-m: var(--type-body-m-size);
+  --body-font-size-s: var(--type-body-s-size);
+  --body-font-size-xs: var(--type-caption-size);
+  --body-line-height: var(--type-body-m-line-height);
+  --display-1-size: var(--type-display-l-size);
+  --display-1-line-height: var(--type-display-l-line-height);
+  --display-1-weight: var(--type-display-l-weight);
+  --display-2-size: var(--type-heading-l-size);
+  --display-2-line-height: var(--type-heading-l-line-height);
+  --display-2-weight: var(--type-heading-l-weight);
+  --display-3-size: var(--type-heading-m-size);
+  --display-3-line-height: var(--type-heading-m-line-height);
+  --display-3-weight: var(--type-heading-m-weight);
 }
 
-@media (width >= 43.75rem) {
+/* tablet (Figma 1024 frame) */
+@media (width >= 37.5rem) {
   :root {
+    --type-display-xl-size: 4rem;
+    --type-display-l-size: 3.125rem;
+    --type-heading-xl-size: 2.5rem;
+    --type-heading-l-size: 2rem;
+    --type-heading-m-size: 1.75rem;
+    --type-heading-s-size: 1.25rem;
+    --type-body-xl-size: 1.25rem;
+    --type-body-l-size: 1.125rem;
+    --type-body-s-size: 0.875rem;
+    --type-caption-size: 0.875rem;
+    --type-eyebrow-size: 0.875rem;
+    --type-button-size: 0.875rem;
+    --type-stat-size: 4rem;
+    --type-quote-size: 2rem;
+    --button-height: 2.875rem;
     --container-gutter: var(--spacing-l);
     --section-padding-block: var(--spacing-5xl);
+    --section-header-gap: var(--spacing-5xl);
+    --grid-gap: var(--spacing-l);
   }
 }
 
+/* desktop (Figma 1440 frame) */
 @media (width >= 75rem) {
   :root {
-    --display-1-size: 5rem;
-    --display-1-weight: var(--font-weight-regular);
-    --display-1-semi-size: 5rem;
-    --display-1-semi-weight: var(--font-weight-semibold);
-    --display-2-size: 4rem;
-    --display-2-weight: var(--font-weight-regular);
-    --display-3-size: 2.5rem;
-    --display-3-weight: var(--font-weight-regular);
-    --body-font-size-m: 1.125rem;
-    --body-font-size-s: 1rem;
+    --type-display-xl-size: 6rem;
+    --type-display-l-size: 4rem;
+    --type-heading-xl-size: 3rem;
+    --type-heading-l-size: 2.5rem;
+    --type-heading-m-size: 2rem;
+    --type-heading-s-size: 1.5rem;
+    --type-body-xl-size: 1.5rem;
+    --type-body-l-size: 1.25rem;
+    --type-body-m-size: 1.125rem;
+    --type-body-s-size: 1rem;
+    --type-eyebrow-size: 1rem;
+    --type-button-size: 1rem;
+    --type-chip-size: 1.125rem;
+    --type-stat-size: 6rem;
+    --type-quote-size: 2.5rem;
+    --button-height: 3.125rem;
     --container-gutter: var(--spacing-5xl);
     --section-padding-block: var(--spacing-6xl);
   }
 }
+
+/* ---------- 3. themes ----------
+ * Page theme: add "theme" page metadata (e.g. "dark", "accent-teal"); aem.js adds it to <body>.
+ * Section style: add "style" section metadata (e.g. "dark", "glow"); aem.js adds it to the section.
+ * Both only re-map semantic tokens, so every block that uses tokens adapts automatically.
+ */
+
+body.dark,
+main .section.dark,
+main .section.black,
+main .section.brand,
+main .section.teal,
+.theme-dark,
+[data-theme='dark'] {
+  --background-color: var(--color-brand-900);
+  --background-color-alt: var(--color-brand-950);
+  --surface-color: var(--color-teal-900);
+  --surface-subtle: var(--color-white-10);
+  --surface-muted: var(--color-white-15);
+  --surface-strong: var(--color-brand-800);
+  --surface-glass: var(--color-white-15);
+  --heading-color: var(--color-white);
+  --text-color: var(--color-white);
+  --text-color-body: var(--color-grey-100);
+  --text-color-muted: var(--color-white-70);
+  --text-color-subtle: var(--color-white-60);
+  --eyebrow-color: var(--color-brand-200);
+  --border-color: var(--color-white-40);
+  --border-color-strong: var(--color-grey-100);
+  --divider-color: var(--color-white-40);
+  --link-color: var(--color-brand-200);
+  --link-hover-color: var(--color-white);
+  --focus-color: var(--color-brand-200);
+  --button-primary-bg: var(--color-white-10);
+  --button-primary-bg-hover: var(--color-white-15);
+  --button-primary-border: var(--color-grey-100);
+  --button-primary-text: var(--color-grey-100);
+  --button-primary-text-hover: var(--color-white);
+  --button-secondary-bg: transparent;
+  --button-secondary-bg-hover: var(--color-white-10);
+  --button-secondary-border: var(--color-grey-100);
+  --button-secondary-text: var(--color-grey-100);
+  --button-disabled-bg: var(--color-black-70);
+  --button-disabled-text: var(--color-grey-300);
+  --chip-bg: var(--color-white-15);
+  --chip-border: var(--color-grey-200);
+  --chip-text: var(--color-white);
+  --input-bg: var(--color-white);
+}
+
+main .section.black {
+  --background-color: var(--color-black);
+}
+
+main .section.brand {
+  --background-color: var(--accent-color);
+  --eyebrow-color: var(--color-white);
+}
+
+main .section.teal {
+  --background-color: var(--color-teal-900);
+  --surface-color: var(--color-green-900);
+}
+
+/* light themes reset a dark page back to the default tokens */
+body.light,
+main .section.light,
+main .section.highlight,
+main .section.grey,
+main .section.gradient,
+main .section.glow {
+  --background-color: var(--color-white);
+  --surface-color: var(--color-white);
+  --surface-subtle: var(--color-grey-100);
+  --surface-muted: var(--color-grey-300);
+  --surface-strong: var(--color-brand-100);
+  --heading-color: var(--color-black);
+  --text-color: var(--color-black);
+  --text-color-body: var(--color-grey-800);
+  --text-color-muted: var(--color-black-70);
+  --text-color-subtle: var(--color-grey-500);
+  --eyebrow-color: var(--accent-color);
+  --border-color: var(--color-grey-200);
+  --border-color-strong: var(--color-grey-800);
+  --divider-color: var(--color-grey-400);
+  --link-color: var(--accent-color);
+  --link-hover-color: var(--color-brand-900);
+  --focus-color: var(--color-brand-400);
+  --button-primary-bg: var(--color-black);
+  --button-primary-bg-hover: var(--color-grey-800);
+  --button-primary-border: var(--color-grey-800);
+  --button-primary-text: var(--color-grey-300);
+  --button-secondary-bg: var(--color-white);
+  --button-secondary-bg-hover: var(--color-grey-100);
+  --button-secondary-border: var(--color-grey-800);
+  --button-secondary-text: var(--color-grey-800);
+  --chip-bg: var(--color-white);
+  --chip-border: var(--color-grey-200);
+  --chip-text: var(--color-black);
+  --input-bg: var(--color-white-60);
+}
+
+main .section.grey,
+main .section.highlight {
+  --background-color: var(--color-grey-100);
+}
+
+/* accent palettes: page theme or section style, recolours eyebrows, links, tertiary buttons, accents */
+.accent-teal {
+  --accent-color: var(--color-teal-900);
+  --accent-color-hover: var(--color-green-900);
+  --accent-subtle: var(--color-mint-200);
+}
+
+.accent-pink {
+  --accent-color: var(--color-pink-500);
+  --accent-color-hover: #d13fb4;
+  --accent-subtle: var(--color-pink-200);
+  --accent-contrast: var(--color-black);
+}
+
+.accent-green {
+  --accent-color: var(--color-green-500);
+  --accent-color-hover: var(--color-green-900);
+  --accent-subtle: var(--color-green-200);
+  --accent-contrast: var(--color-black);
+}
+
+.accent-yellow {
+  --accent-color: var(--color-yellow-500);
+  --accent-color-hover: var(--color-yellow-400);
+  --accent-subtle: #fdf1cf;
+  --accent-contrast: var(--color-black);
+}
+
+/* ---------- 4. base elements ---------- */
 
 *,
 *::before,
@@ -156,9 +488,10 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: var(--font-family-base);
-  font-size: var(--body-font-size-m);
-  line-height: var(--body-line-height);
+  font-size: var(--type-body-m-size);
+  line-height: var(--type-body-m-line-height);
   text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 body.appear {
@@ -166,13 +499,13 @@ body.appear {
 }
 
 ::selection {
-  background: var(--surface-strong);
-  color: var(--heading-color);
+  background: var(--accent-subtle);
+  color: var(--color-black);
 }
 
 :focus-visible {
-  outline: 0.125rem solid var(--focus-color);
-  outline-offset: 0.125rem;
+  outline: var(--border-width-m) solid var(--focus-color);
+  outline-offset: var(--border-width-m);
 }
 
 header {
@@ -199,39 +532,65 @@ h6 {
   margin-bottom: var(--spacing-m);
   color: var(--heading-color);
   font-family: var(--font-family-heading);
-  font-weight: var(--font-weight-semibold);
-  line-height: 1.2;
   scroll-margin: calc(var(--nav-height) + var(--spacing-l));
 }
 
-h1 {
-  font-size: var(--display-1-size);
-  font-weight: var(--display-1-weight);
-  line-height: var(--display-1-line-height);
+h1,
+.display-l {
+  font-size: var(--type-display-l-size);
+  font-weight: var(--type-display-l-weight);
+  line-height: var(--type-display-l-line-height);
+  letter-spacing: var(--type-display-l-tracking);
 }
 
-h2 {
-  font-size: var(--display-2-size);
-  font-weight: var(--display-2-weight);
-  line-height: var(--display-2-line-height);
+h2,
+.heading-l {
+  font-size: var(--type-heading-l-size);
+  font-weight: var(--type-heading-l-weight);
+  line-height: var(--type-heading-l-line-height);
+  letter-spacing: var(--type-heading-l-tracking);
 }
 
-h3 {
-  font-size: var(--display-3-size);
-  font-weight: var(--display-3-weight);
-  line-height: var(--display-3-line-height);
+h3,
+.heading-m {
+  font-size: var(--type-heading-m-size);
+  font-weight: var(--type-heading-m-weight);
+  line-height: var(--type-heading-m-line-height);
+  letter-spacing: var(--type-heading-m-tracking);
 }
 
-h4 {
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
+h4,
+.heading-s {
+  font-size: var(--type-heading-s-size);
+  font-weight: var(--type-heading-s-weight);
+  line-height: var(--type-heading-s-line-height);
+  letter-spacing: var(--type-heading-s-tracking);
 }
 
 h5 {
-  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-size: var(--type-body-l-size);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--type-body-l-line-height);
 }
 
 h6 {
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-size: var(--type-body-m-size);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--type-body-m-line-height);
+}
+
+.display-xl {
+  font-size: var(--type-display-xl-size);
+  font-weight: var(--type-display-xl-weight);
+  line-height: var(--type-display-xl-line-height);
+  letter-spacing: var(--type-display-xl-tracking);
+}
+
+.heading-xl {
+  font-size: var(--type-heading-xl-size);
+  font-weight: var(--type-heading-xl-weight);
+  line-height: var(--type-heading-xl-line-height);
+  letter-spacing: var(--type-heading-xl-tracking);
 }
 
 p,
@@ -245,18 +604,43 @@ blockquote {
 }
 
 p {
-  color: var(--text-color-muted);
+  color: var(--text-color-body);
+}
+
+.lead {
+  font-size: var(--type-body-xl-size);
+  line-height: var(--type-body-xl-line-height);
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: var(--spacing-l);
+  color: var(--eyebrow-color);
+  font-size: var(--type-eyebrow-size);
+  font-weight: var(--type-eyebrow-weight);
+  line-height: var(--type-eyebrow-line-height);
+  letter-spacing: var(--type-eyebrow-tracking);
+}
+
+.overline {
+  display: inline-block;
+  color: var(--text-color-subtle);
+  font-size: var(--type-overline-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--type-overline-line-height);
+  letter-spacing: var(--type-overline-tracking);
+  text-transform: uppercase;
 }
 
 code,
 pre {
-  font-size: var(--body-font-size-s);
+  font-size: var(--type-body-s-size);
 }
 
 pre {
   padding: var(--spacing-m);
-  border-radius: var(--radius-sm);
-  border: 0.0625rem solid var(--border-color);
+  border-radius: var(--radius-xs);
+  border: var(--border-width-s) solid var(--border-color);
   background-color: var(--surface-subtle);
   overflow-x: auto;
   white-space: pre;
@@ -279,7 +663,7 @@ label {
   display: inline-block;
   margin-bottom: var(--spacing-xs);
   color: var(--heading-color);
-  font-size: var(--body-font-size-s);
+  font-size: var(--type-body-s-size);
   font-weight: var(--font-weight-medium);
 }
 
@@ -288,8 +672,8 @@ textarea,
 select {
   width: 100%;
   min-height: 2.75rem;
-  border: 0.0625rem solid var(--border-color);
-  border-radius: var(--radius-sm);
+  border: var(--border-width-s) solid var(--border-color);
+  border-radius: var(--radius-xs);
   padding: 0.625rem 0.75rem;
   background-color: var(--surface-color);
   color: var(--text-color);
@@ -302,14 +686,14 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: var(--color-black-80);
+  color: var(--text-color-muted);
 }
 
 a:any-link {
   color: var(--link-color);
   text-decoration: underline;
   text-underline-offset: 0.12em;
-  text-decoration-thickness: 0.0625rem;
+  text-decoration-thickness: var(--border-width-s);
   overflow-wrap: break-word;
 }
 
@@ -317,6 +701,8 @@ a:hover,
 a:focus-visible {
   color: var(--link-hover-color);
 }
+
+/* ---------- 5. buttons ---------- */
 
 p.button-wrapper {
   margin: var(--spacing-s) 0;
@@ -328,21 +714,34 @@ button.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 2.75rem;
+  gap: var(--button-gap);
+  min-height: var(--button-height);
   max-width: 100%;
   margin: 0;
-  border: 0.0625rem solid transparent;
-  border-radius: var(--radius-pill);
-  padding: 0.65em 1.25em;
-  font: inherit;
-  font-size: var(--body-font-size-s);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
+  border: var(--border-width-s) solid transparent;
+  border-radius: var(--button-radius);
+  padding: var(--button-padding);
+  font-family: var(--font-family-base);
+  font-size: var(--type-button-size);
+  font-weight: var(--type-button-weight);
+  line-height: 1;
+  letter-spacing: var(--type-button-tracking);
   text-decoration: none;
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* trailing arrow (Figma: 24px arrow, 8px after label) */
+a.button:any-link::after,
+button.button::after {
+  content: '';
+  flex: 0 0 var(--button-icon-size);
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+  background-color: currentcolor;
+  mask: url('../icons/arrow-right.svg') center / contain no-repeat;
 }
 
 a.button[aria-disabled='true'],
@@ -353,7 +752,7 @@ button.button:disabled {
 
 a.button.primary,
 button.button.primary {
-  border-color: var(--button-primary-bg);
+  border-color: var(--button-primary-border);
   background-color: var(--button-primary-bg);
   color: var(--button-primary-text);
 }
@@ -362,13 +761,13 @@ a.button.primary:hover,
 a.button.primary:focus-visible,
 button.button.primary:hover,
 button.button.primary:focus-visible {
-  border-color: var(--button-primary-bg-hover);
   background-color: var(--button-primary-bg-hover);
+  color: var(--button-primary-text-hover);
 }
 
 a.button.secondary,
 button.button.secondary {
-  border-color: var(--button-secondary-bg);
+  border-color: var(--button-secondary-border);
   background-color: var(--button-secondary-bg);
   color: var(--button-secondary-text);
 }
@@ -377,7 +776,6 @@ a.button.secondary:hover,
 a.button.secondary:focus-visible,
 button.button.secondary:hover,
 button.button.secondary:focus-visible {
-  border-color: var(--button-secondary-bg-hover);
   background-color: var(--button-secondary-bg-hover);
 }
 
@@ -385,7 +783,7 @@ a.button.tertiary,
 button.button.tertiary,
 a.button.accent,
 button.button.accent {
-  border-color: var(--button-tertiary-bg);
+  border-color: var(--button-tertiary-border);
   background-color: var(--button-tertiary-bg);
   color: var(--button-tertiary-text);
 }
@@ -413,6 +811,8 @@ button.button:disabled:focus-visible {
   color: var(--button-disabled-text);
 }
 
+/* ---------- 6. layout and sections ---------- */
+
 .container,
 main > .section > div {
   width: min(var(--container-width), calc(100% - (var(--container-gutter) * 2)));
@@ -420,77 +820,121 @@ main > .section > div {
   margin-inline: auto;
 }
 
-.section,
 main > .section {
   position: relative;
+  padding-block: var(--section-padding-block);
+  background: var(--background-color);
+  color: var(--text-color);
 }
 
-.section-light,
-main .section.light,
-main .section.highlight,
-.section[data-background='light'] {
-  background: var(--surface-subtle);
+main > .section:first-of-type {
+  padding-block-start: 0;
 }
 
-.section-dark,
-.section[data-background='dark'] {
-  background: var(--color-black-90);
-  color: var(--color-white);
+/* full-bleed blocks own their spacing */
+main > .section.hero-banner-container:has(> .hero-banner-wrapper:only-child),
+main > .section.carousel-container:has(> .carousel-wrapper:only-child) {
+  padding-block: 0;
 }
 
-.section-dark h1,
-.section-dark h2,
-.section-dark h3,
-.section-dark h4,
-.section-dark h5,
-.section-dark h6,
-.section-dark p,
-.section[data-background='dark'] h1,
-.section[data-background='dark'] h2,
-.section[data-background='dark'] h3,
-.section[data-background='dark'] h4,
-.section[data-background='dark'] h5,
-.section[data-background='dark'] h6,
-.section[data-background='dark'] p {
-  color: var(--color-white);
+main > .section:empty {
+  display: none;
 }
 
-.section-accent,
-.section[data-background='accent'] {
-  background: var(--surface-strong);
+/* several blocks authored in one section are spaced like separate sections */
+main > .section > [class$='-wrapper'] + [class$='-wrapper']:not(.default-content-wrapper) {
+  margin-top: var(--section-padding-block);
 }
 
-.card,
-.cards > ul > li,
+/* stacked full-bleed banners sit flush against each other (Figma: sponsorship banners) */
+main > .section > :has(> .teaser-v1.background-hero) + :has(> .teaser-v1.background-hero) {
+  margin-top: 0;
+}
+
+main > .section > .default-content-wrapper:not(:last-child) {
+  margin-bottom: var(--section-header-gap);
+}
+
+main > .section > .default-content-wrapper > :last-child {
+  margin-bottom: 0;
+}
+
+/* "Full Width" section setting lifts the 1280px content cap but keeps the gutters */
+main > .section[data-sectionwidth='full-width'] > div {
+  width: calc(100% - (var(--container-gutter) * 2));
+  max-width: none;
+}
+
+/* section spacing modifiers (section "style") */
+main > .section.no-padding {
+  padding-block: 0;
+}
+
+main > .section.no-padding-top {
+  padding-block-start: 0;
+}
+
+main > .section.no-padding-bottom {
+  padding-block-end: 0;
+}
+
+main > .section.narrow > div {
+  width: min(var(--container-width-narrow), calc(100% - (var(--container-gutter) * 2)));
+}
+
+main > .section.centered > .default-content-wrapper {
+  text-align: center;
+}
+
+/* hero gradient (Home): off-white into light brand blue */
+main > .section.gradient {
+  background:
+    radial-gradient(120% 80% at 50% 100%, var(--color-brand-200) 0%, var(--color-brand-100) 35%, transparent 75%),
+    var(--color-white);
+}
+
+/* soft blue/yellow glow (canvas prompt, closing CTA) */
+main > .section.glow {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+main > .section.glow::before,
+main > .section.glow::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: 60%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(7.5rem);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+main > .section.glow::before {
+  inset: auto auto -30% -15%;
+  background: var(--color-yellow-500);
+}
+
+main > .section.glow::after {
+  inset: auto -15% -30% auto;
+  background: var(--color-brand-500);
+}
+
+/* utility surfaces */
 .surface-card {
-  border: 0.0625rem solid var(--border-color);
+  padding: var(--spacing-l);
   border-radius: var(--radius-md);
-  background: var(--surface-color);
-  box-shadow: var(--shadow-sm);
-}
-
-.card,
-.surface-card {
-  padding: var(--spacing-xl);
-}
-
-.eyebrow {
-  display: inline-block;
-  margin-bottom: var(--spacing-s);
-  color: var(--text-color-muted);
-  font-family: var(--font-family-eyebrow);
-  font-size: var(--body-font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  background: var(--surface-muted);
 }
 
 .grid {
   display: grid;
-  gap: var(--spacing-l);
+  gap: var(--grid-gap);
 }
 
-@media (width >= 43.75rem) {
+@media (width >= 37.5rem) {
   .grid.grid-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -504,31 +948,4 @@ main .section.highlight,
   .grid.grid-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-}
-
-.display-1-semi {
-  font-size: var(--display-1-semi-size);
-  font-weight: var(--display-1-semi-weight);
-  line-height: var(--display-1-semi-line-height);
-}
-
-[data-theme='dark'],
-.theme-dark {
-  --background-color: var(--color-black);
-  --background-color-alt: var(--color-black-85);
-  --surface-color: var(--color-black);
-  --surface-subtle: var(--color-black-85);
-  --surface-strong: var(--color-black-80);
-  --text-color: var(--color-white);
-  --text-color-muted: var(--color-neutral-300);
-  --heading-color: var(--color-white);
-  --border-color: var(--color-black-40);
-  --button-primary-bg: var(--color-brand-500);
-  --button-primary-bg-hover: var(--color-brand-900);
-  --button-secondary-bg: var(--color-brand-200);
-  --button-secondary-bg-hover: var(--color-brand-100);
-  --button-tertiary-bg: var(--color-brand-600);
-  --button-tertiary-bg-hover: var(--color-brand-900);
-  --button-disabled-bg: var(--color-black-70);
-  --button-disabled-text: var(--color-neutral-300);
 }

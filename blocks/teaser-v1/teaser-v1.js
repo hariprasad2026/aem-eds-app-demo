@@ -341,9 +341,13 @@ function getSemanticPropertyRows(block) {
     'h1, h2, h3, h4, h5, h6',
   ));
   const headingIndex = rows.indexOf(headingRow);
-  const descriptionRow = rows.find((row, index) => (
-    index > headingIndex && row.querySelector('p')
-  ));
+  // the description row follows the title; plain-text descriptions have no <p>
+  const rowAfterHeading = headingRow ? rows[headingIndex + 1] : null;
+  const descriptionRow = rowAfterHeading && !rowAfterHeading.querySelector('picture, img')
+    ? rowAfterHeading
+    : rows.find((row, index) => (
+      index > headingIndex && row.querySelector('p')
+    ));
 
   return {
     headingRow,
@@ -369,7 +373,7 @@ function parseSemanticProperties(block, existingData) {
     }
   }
 
-  if (descriptionRow && !data.description) {
+  if (descriptionRow?.textContent.trim() && !data.description) {
     data.description = descriptionRow.innerHTML.trim();
   }
 
@@ -602,6 +606,7 @@ function readTeaserLinkItem(item, fallbackStyle = 'default') {
       icon: 'arrowIcon',
       iconPosition: 'arrowDirection',
       iconSize: 'arrowIconSize',
+      iconColor: 'arrowColor',
     }[propertyKey] || propertyKey;
     if (key === 'title' || key === 'link') {
       instrumentation[key] = element;
@@ -613,7 +618,13 @@ function readTeaserLinkItem(item, fallbackStyle = 'default') {
   });
 
   const rows = readChildItemRows(item);
-  const rowFields = [
+  // current "cta" model (22 fields, no ctaView); the 16-field list below is the legacy order
+  const rowFields = rows.length >= 19 ? [
+    'textCta', 'ctaLink', 'icon', 'iconPosition', 'linkTarget', 'iconSize',
+    'shape', 'backgroundColor', 'textColor', 'borderColor',
+    'hoverBackgroundColor', 'borderWidth', 'backdropBlur', 'hoverTextColor',
+    'ctaWidth', 'alignment', 'arrowColor',
+  ] : [
     'textCta',
     'ctaLink',
     'icon',
@@ -767,8 +778,12 @@ function readTeaserImageItem(item) {
   });
 
   const rows = readChildItemRows(item);
+  // published markup folds imageAlt into the img alt, leaving [image, imageMode]
+  const imageFields = rows.length === 2
+    ? ['image', 'imageMode']
+    : IMAGE_ITEM_FIELD_ORDER;
 
-  IMAGE_ITEM_FIELD_ORDER.forEach((key, index) => {
+  imageFields.forEach((key, index) => {
     if (namedProperties.has(key)) {
       return;
     }
@@ -1675,6 +1690,14 @@ function createBackground(data) {
 }
 
 export default async function decorate(block) {
+  // published markup has no item hooks: multi-cell rows are image / CTA child items
+  [...block.children].forEach((row) => {
+    if (row.children.length < 2 || isTeaserChildItem(row)) return;
+    row.classList.add(row.children[0].querySelector('picture, img')
+      ? 'teaser-v1-image'
+      : 'teaser-v1-cta');
+  });
+
   const data = readBlockData(block);
 
   applyClasses(block, data);

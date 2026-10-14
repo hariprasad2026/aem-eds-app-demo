@@ -61,10 +61,9 @@ export default function decorate(block) {
   const { heading, headingSource, stats } = readStats(block);
 
   if (!getText(heading) && !stats.length) return;
-  block.classList.add('rte-google-font-705');
 
   const wrapper = document.createElement('div');
-  wrapper.className = 'statistics-list-wrapper';
+  wrapper.className = 'statistics-list-inner';
 
   const content = document.createElement('div');
   content.className = 'statistics-content';

@@ -31,8 +31,76 @@
           "label": "Style",
           "options": [
             {
-              "name": "Highlight",
+              "name": "Background: Grey",
+              "value": "grey"
+            },
+            {
+              "name": "Background: Dark navy",
+              "value": "dark"
+            },
+            {
+              "name": "Background: Black",
+              "value": "black"
+            },
+            {
+              "name": "Background: Brand blue",
+              "value": "brand"
+            },
+            {
+              "name": "Background: Teal",
+              "value": "teal"
+            },
+            {
+              "name": "Background: Light gradient",
+              "value": "gradient"
+            },
+            {
+              "name": "Background: Blue/yellow glow",
+              "value": "glow"
+            },
+            {
+              "name": "Background: Light (reset on dark page)",
+              "value": "light"
+            },
+            {
+              "name": "Highlight (legacy)",
               "value": "highlight"
+            },
+            {
+              "name": "Accent: Teal",
+              "value": "accent-teal"
+            },
+            {
+              "name": "Accent: Pink",
+              "value": "accent-pink"
+            },
+            {
+              "name": "Accent: Green",
+              "value": "accent-green"
+            },
+            {
+              "name": "Accent: Yellow",
+              "value": "accent-yellow"
+            },
+            {
+              "name": "Layout: Narrow content",
+              "value": "narrow"
+            },
+            {
+              "name": "Layout: Centered text",
+              "value": "centered"
+            },
+            {
+              "name": "Spacing: No padding",
+              "value": "no-padding"
+            },
+            {
+              "name": "Spacing: No top padding",
+              "value": "no-padding-top"
+            },
+            {
+              "name": "Spacing: No bottom padding",
+              "value": "no-padding-bottom"
             }
           ]
         },

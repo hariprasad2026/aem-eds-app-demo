@@ -8,8 +8,7 @@ button,
 input,
 textarea,
 select,
-.button-container .button,
-.card,
+.button-wrapper .button,
 .surface-card {
   transition:
     color 0.2s ease,
@@ -19,7 +18,6 @@ select,
     transform 0.2s ease;
 }
 
-.card:hover,
 .surface-card:hover {
   transform: translateY(-0.125rem);
   box-shadow: var(--shadow-md);

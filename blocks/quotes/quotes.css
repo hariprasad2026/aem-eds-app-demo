@@ -1,322 +1,215 @@
+/*
+ * Quotes: testimonial card overlapping a portrait (Figma "Leading with responsibility").
+ * Desktop: 782px white card overlaps a 702x869 portrait by 204px. Tablet/mobile: stacked.
+ */
+.quotes {
+  --quotes-card-bg: var(--surface-color);
+  --quotes-card-padding-block: var(--spacing-l);
+  --quotes-card-padding-inline: var(--spacing-m);
+  --quotes-text-color: var(--text-color);
+  --quotes-text-size: 1.25rem; /* 20 → 24 → 32 */
+  --quotes-text-line-height: 1.4;
+  --quotes-text-tracking: -0.02em;
+  --quotes-name-size: var(--type-body-xl-size); /* 18 → 20 → 24 */
+  --quotes-name-line-height: 1.4;
+  --quotes-mark-color: var(--accent-color);
+  --quotes-mark-size: 4rem; /* 64 → 80 → 120 */
+  --quotes-mark-gap: var(--spacing-s);
+  --quotes-mark-open-col: calc(var(--quotes-mark-size) * 0.55); /* 66 @ 120 */
+  --quotes-mark-close-col: calc(var(--quotes-mark-size) * 0.385); /* 46 @ 120 */
+  --quotes-media-ratio: 4 / 5;
+  --quotes-stack-overlap: var(--spacing-3xl);
+}
+
 .quotes blockquote {
-    margin: 0 auto;
-    max-width: 900px;
-    padding: var(--spacing-3xl);
-    background-color: var(--quote-bg, transparent);
-    color: var(--text-color);
-    border-radius: var(--radius-md);
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: var(--quotes-text-color);
+}
+
+.quotes blockquote.image {
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .quotes .quote-content {
-    position: relative;
-    z-index: 1;
+  position: relative;
+  z-index: 1;
+  padding-block: var(--quotes-card-padding-block);
+  padding-inline:
+    calc(var(--quotes-card-padding-inline) + var(--quotes-mark-open-col) + var(--quotes-mark-gap))
+    calc(var(--quotes-card-padding-inline) + var(--quotes-mark-close-col) + var(--quotes-mark-gap));
+  background-color: var(--quote-bg, var(--quotes-card-bg));
 }
 
-@media (width >=900px) {
-    .quotes blockquote {
-        padding: var(--spacing-3xl);
-    }
+/* stacked: card overlaps the bottom of the portrait slightly */
+.quotes blockquote.image .quote-content:has(+ .quote-media) {
+  margin: calc(-1 * var(--quotes-stack-overlap)) var(--quotes-card-padding-inline) 0;
 }
 
-.quotes blockquote .quote-title {
-    margin-bottom: var(--spacing-m);
-    color: var(--heading-color);
-    line-height: 1.6;
+.quotes .quote-eyebrow {
+  margin-bottom: var(--spacing-s);
+  color: var(--eyebrow-color);
+  font-size: var(--type-eyebrow-size);
+  font-weight: var(--type-eyebrow-weight);
+  line-height: var(--type-eyebrow-line-height);
+  letter-spacing: var(--type-eyebrow-tracking);
 }
 
-.quotes blockquote .quote-quotation {
-    color: var(--text-color);
-    font-size: clamp(1.875rem, 1.4rem + 1vw, 2.125rem);
-    line-height: 1.4;
+.quotes .quote-title,
+.quotes .quote-title :is(h1, h2, h3, h4, h5, h6, p) {
+  color: var(--accent-color);
+  font-size: var(--type-heading-l-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--type-heading-l-line-height);
+  letter-spacing: var(--type-heading-l-tracking);
 }
 
-.quotes blockquote .quote-quotation> :first-child {
-    text-indent: -0.5ch;
+.quotes .quote-title {
+  margin-bottom: var(--spacing-l);
 }
 
-.quotes blockquote .quote-quotation p:first-child::before {
-    content: "“";
+.quotes .quote-title > :last-child,
+.quotes .quote-quotation > :last-child,
+.quotes .quote-author-details > :last-child {
+  margin-bottom: 0;
 }
 
-.quotes blockquote .quote-quotation p:last-child::after {
-    content: "”";
+.quotes .quote-quotation {
+  position: relative;
+  color: var(--quotes-text-color);
+  font-size: var(--quotes-text-size);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--quotes-text-line-height);
+  letter-spacing: var(--quotes-text-tracking);
 }
 
-.quotes .quote-author-image {
-    margin-top: var(--spacing-l);
+.quotes .quote-quotation p {
+  color: inherit;
 }
 
-.quotes .quote-author-image picture,
-.quotes .quote-author-image img {
-    width: var(--spacing-3xl);
-    height: var(--spacing-3xl);
-    min-width: var(--spacing-3xl);
-    max-width: var(--spacing-3xl);
-    border-radius: var(--radius-pill);
-    object-fit: cover;
-    display: block;
+/* decorative quote marks: open top-left, closing = same glyph rotated, bottom-right */
+.quotes .quote-quotation::before,
+.quotes .quote-quotation::after {
+  content: '\201C';
+  position: absolute;
+  color: var(--quotes-mark-color);
+  font-size: var(--quotes-mark-size);
+  font-weight: var(--font-weight-regular);
+  line-height: 0.77;
+  letter-spacing: -0.02em;
+  pointer-events: none;
+}
+
+.quotes .quote-quotation::before {
+  top: 0;
+  inset-inline-start: calc(-1 * (var(--quotes-mark-open-col) + var(--quotes-mark-gap)));
+}
+
+.quotes .quote-quotation::after {
+  bottom: 0;
+  inset-inline-end: calc(-1 * (var(--quotes-mark-close-col) + var(--quotes-mark-gap)));
+  transform: rotate(180deg);
 }
 
 .quotes .quote-profile {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-s);
-    margin-top: var(--spacing-l);
+  margin-top: var(--spacing-l);
 }
 
-.quotes .quote-profile-text {
-    font-size: var(--body-font-size-s);
-    line-height: 1.4;
-    color: var(--text-color);
+.quotes .quote-author-image {
+  display: none;
+}
+
+.quotes .quote-author-details {
+  color: var(--quotes-text-color);
+  font-size: var(--quotes-name-size);
+  line-height: var(--quotes-name-line-height);
+  letter-spacing: -0.015em;
+}
+
+.quotes .quote-author-details p {
+  margin: 0;
+  color: inherit;
+  font-weight: var(--font-weight-regular);
 }
 
 .quotes .quote-media {
-    width: min(100%, 640px);
-    justify-self: center;
+  width: 100%;
+  aspect-ratio: var(--quotes-media-ratio);
+  overflow: hidden;
 }
 
 .quotes .quote-media picture,
 .quotes .quote-media img {
-    width: 100%;
-    height: auto;
-    display: block;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 25% top;
 }
 
-.quotes blockquote.image {
-    max-width: 1120px;
-    display: grid;
-    gap: 0;
-    align-items: start;
-    background: transparent;
-    overflow: visible;
-}
-
-.quotes blockquote.image .quote-content {
-    background-color: var(--quote-bg, var(--surface-color));
-    width: 420px;
-    padding: 22px 22px 16px 48px;
-    position: relative;
-    z-index: 0;
-    box-shadow: none;
-}
-
-.quotes blockquote.image .quote-quotation {
-    position: relative;
-    max-width: 340px;
-    margin-left: 0;
-    margin-bottom: 22px;
-    font-size: clamp(1.05rem, 0.95rem + 0.35vw, 1.2rem);
-    font-weight: var(--font-weight-regular);
-    line-height: 1.45;
-    color: var(--heading-color);
-}
-
-.quotes .quote-author-details {
-    margin-top: 0;
-    font-size: 0.98rem;
-    line-height: 1.35;
-    color: var(--heading-color);
-}
-
-.quotes .quote-author-details p {
-    margin: 0;
-    color: inherit;
-    font-weight: var(--font-weight-regular);
-}
-
-.quotes .quote-author-details p:first-child {
-    margin-bottom: 2px;
-    font-weight: var(--font-weight-regular);
-}
-
-.quotes blockquote.image .quote-quotation p {
-    margin: 0;
-    padding: 0;
-    color: inherit;
-}
-
-.quotes blockquote.image .quote-quotation p:first-child::before {
-    content: "“";
-    position: absolute;
-    left: -30px;
-    top: -6px;
-    color: var(--color-brand-500);
-    font-size: 34px;
-    font-weight: var(--font-weight-bold);
-    line-height: 1;
-    letter-spacing: -0.22em;
-}
-
-.quotes blockquote.image .quote-quotation p:last-child::after {
-    content: "”";
-    position: absolute;
-    right: 4px;
-    bottom: -28px;
-    color: var(--color-brand-500);
-    font-size: 34px;
-    font-weight: var(--font-weight-bold);
-    line-height: 1;
-    letter-spacing: -0.22em;
-}
-
-.quotes blockquote.image .quote-profile {
-    display: block;
-    margin-top: var(--spacing-xxs);
-}
-
-.quotes blockquote.image .quote-author-image {
-    display: none;
-}
-
-.quotes blockquote.image .quote-media {
-    width: 480px;
-    max-width: 480px;
-    aspect-ratio: 0.62;
-    overflow: hidden;
-    border-radius: 0;
-}
-
-.quotes blockquote.image .quote-media picture,
-.quotes blockquote.image .quote-media img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    object-position: 25% top;
-}
-
-@media (width >=900px) {
-    .quotes blockquote.image {
-        grid-template-columns: 420px 220px;
-        justify-content: center;
-        gap: 0;
-        padding: 60px var(--container-gutter);
-    }
-
-    .quotes blockquote.image .quote-content {
-        grid-column: 1;
-        margin-top: 132px;
-        margin-right: 0;
-    }
-
-    @media (width >=900px) {
-        .quotes .quote-media.quote-media-alt {
-            grid-column: 2;
-            grid-row: 1;
-            margin-top: 132px;
-            margin-left: -120px;
-            place-self: start start;
-        }
-    }
-}
-
-@media (width <=1024px) and (width >=768px) {
-    .quotes blockquote.image {
-        grid-template-columns: 420px 160px;
-        justify-content: center;
-    }
-
-    .quotes blockquote.image .quote-content {
-        width: 390px;
-        margin-top: 50px;
-        margin-right: -200px;
-        padding: 20px 18px 14px 40px;
-    }
-
-    .quotes blockquote.image .quote-quotation {
-        max-width: 315px;
-        font-size: 1rem;
-    }
-
-    .quotes blockquote.image .quote-media {
-        width: 420px;
-        max-width: 420px;
-    }
-
-    .quotes blockquote.image .quote-quotation p:first-child::before {
-        left: -20px;
-        top: -6px;
-        font-size: 30px;
-    }
-
-    .quotes blockquote.image .quote-quotation p:last-child::after {
-        right: 8px;
-        bottom: -20px;
-        font-size: 30px;
-    }
-}
-
-@media (width < 768px) {
-    .quotes blockquote.image {
-        display: flex;
-        flex-direction: column-reverse;
-    }
-
-    .quotes blockquote.image .quote-content {
-        width: calc(100% - var(--spacing-xs));
-        margin: calc(var(--spacing-5xl) * -0.625) var(--spacing-xxs) 0;
-        padding: var(--spacing-l);
-        box-sizing: border-box;
-        max-width: none;
-    }
-
-    .quotes blockquote.image .quote-media {
-        width: 100%;
-        max-width: none;
-    }
-
-    .quotes blockquote.image .quote-quotation {
-        max-width: 100%;
-        margin-bottom: var(--spacing-m);
-        font-size: 0.95rem;
-        line-height: 1.4;
-        padding-left: var(--spacing-xs);
-    }
-
-    .quotes .quote-author-details {
-        font-size: 0.92rem;
-    }
-
-    .quotes blockquote.image .quote-quotation p:first-child::before {
-        left: -10px;
-        top: -2px;
-        font-size: 26px;
-    }
-
-    .quotes blockquote.image .quote-quotation p:last-child::after {
-        right: var(--spacing-xs);
-        bottom: -18px;
-        font-size: 26px;
-    }
-}
-
+/* placeholder when no portrait is authored */
 .quotes .quote-media.quote-media-alt {
-    width: 220px;
-    height: 330px;
-    min-height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 132px;
-    margin-left: 24px;
-    padding: var(--spacing-m);
-    background: var(--surface-subtle);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    box-sizing: border-box;
-    font-size: var(--body-font-size-m);
-    color: var(--text-color-muted);
-    text-align: center;
-    overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-m);
+  border: var(--border-width-s) solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  color: var(--text-color-muted);
+  font-size: var(--type-body-m-size);
+  text-align: center;
 }
 
-@media (width >=900px) {
-    .quotes .quote-media.quote-media-alt {
-        grid-column: 2;
-        grid-row: 1;
-        margin-top: 132px;
-        margin-left: -120px;
-        place-self: start start;
-    }
+/* tablet (Figma 1024) */
+@media (width >= 37.5rem) {
+  .quotes {
+    --quotes-card-padding-block: var(--spacing-l);
+    --quotes-card-padding-inline: var(--spacing-l);
+    --quotes-text-size: 1.5rem;
+    --quotes-mark-size: 5rem;
+    --quotes-media-ratio: 4 / 3;
+    --quotes-stack-overlap: var(--spacing-4xl);
+  }
+
+  .quotes .quote-profile {
+    margin-top: var(--spacing-xl);
+  }
+}
+
+/* desktop (Figma 1440): card overlaps portrait by 204px, card vertically centred */
+@media (width >= 75rem) {
+  .quotes {
+    --quotes-card-padding-inline: var(--spacing-2xl);
+    --quotes-text-size: 2rem;
+    --quotes-mark-size: 7.5rem;
+    --quotes-media-ratio: 702 / 869;
+  }
+
+  .quotes blockquote.image {
+    display: grid;
+
+    /* 578 card-only | 204 overlap | 498 image-only  (782 card, 702 image, 1280 total) */
+    grid-template-columns: minmax(0, 578fr) minmax(0, 204fr) minmax(0, 498fr);
+    align-items: center;
+  }
+
+  .quotes blockquote.image .quote-content,
+  .quotes blockquote.image .quote-content:has(+ .quote-media) {
+    grid-area: 1 / 1 / 2 / 3;
+    margin: 0;
+  }
+
+  .quotes blockquote.image .quote-content:only-child {
+    grid-column: 1 / -1;
+  }
+
+  .quotes blockquote.image .quote-media {
+    grid-area: 1 / 2 / 2 / 4;
+  }
+
+  .quotes .quote-profile {
+    margin-top: var(--spacing-2xl);
+  }
 }

@@ -12,7 +12,7 @@ export default function decorate(block) {
   const background = block.children[5]?.textContent?.trim().toLowerCase();
 
   const wrapper = document.createElement('div');
-  wrapper.className = 'testimonial-wrapper';
+  wrapper.className = 'testimonial-body';
 
   if (background === 'grey') {
     wrapper.classList.add('grey');

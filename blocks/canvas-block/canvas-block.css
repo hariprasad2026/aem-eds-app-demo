@@ -1,142 +1,172 @@
+/* canvas-block (Figma "Canvas - What are you looking to do?")
+ * Section owns outer padding and container width; the stage only adds the extra
+ * inner breathing room from Figma (80 / 160 / 160 total) and the glow blobs.
+ */
 .canvas-block {
+  --canvas-block-bg: var(--background-color);
+  --canvas-block-radius: var(--radius-lg);
+  --canvas-block-padding-block: var(--spacing-m);
+  --canvas-block-gap: var(--spacing-l);
+  --canvas-block-title-color: var(--heading-color);
+  --canvas-block-title-size: var(--type-heading-l-size); /* mobile 28/34 */
+  --canvas-block-text-color: var(--text-color);
+  --canvas-block-chip-gap: var(--spacing-s);
+  --canvas-block-glow-1: var(--color-yellow-500);
+  --canvas-block-glow-2: var(--accent-color);
+  --canvas-block-glow-1-opacity: 0.1;
+  --canvas-block-glow-2-opacity: 0.2;
+  --canvas-block-glow-blur: 6.25rem;
+
   position: relative;
   width: 100%;
 }
 
-.canvas-block-stage {
+.canvas-block .canvas-block-stage {
   position: relative;
-  box-sizing: border-box;
   display: flex;
-  width: 100%;
-  min-width: 0;
-  min-height: 900px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  min-width: 0;
+  padding-block: var(--canvas-block-padding-block);
+  border-radius: var(--canvas-block-radius);
+  background: var(--canvas-block-bg);
   overflow: clip;
-  padding: 160px 80px;
-  border-radius: 20px;
-  background: #fff;
+  isolation: isolate;
 }
 
-.canvas-block-content {
+.canvas-block .canvas-block-content {
   position: relative;
   z-index: 2;
-  box-sizing: border-box;
   display: flex;
-  width: 1280px;
-  max-width: 100%;
-  min-width: 0;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
-  padding: 0 80px;
+  gap: var(--canvas-block-gap);
+  width: 100%;
+  min-width: 0;
 }
 
-.canvas-block-title {
+/* display heading (Figma 28/34 mobile, 64/77 tablet, 96/115 desktop, w500 -0.03em) */
+.canvas-block .canvas-block-title {
   width: 100%;
-  max-width: 1120px;
+  max-width: 70rem;
   min-width: 0;
   margin: 0;
-  color: #0c0c0d;
-  font-size: 40px;
-  font-weight: 500;
-  line-height: 1.4;
+  color: var(--canvas-block-title-color);
+  font-size: var(--canvas-block-title-size);
+  font-weight: var(--type-display-xl-weight);
+  line-height: var(--type-display-xl-line-height);
+  letter-spacing: var(--type-display-xl-tracking);
   text-align: center;
   overflow-wrap: anywhere;
 }
 
-.canvas-block-description {
+/* subtitle (Figma 16/26 → 18/29 w500) */
+.canvas-block .canvas-block-description {
   width: 100%;
-  max-width: 812px;
+  max-width: 20.0625rem;
   min-width: 0;
-  color: #0c0c0d;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1.6;
+  color: var(--canvas-block-text-color);
+  font-size: var(--type-body-m-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--type-body-m-line-height);
+  letter-spacing: -0.005em;
   text-align: center;
   overflow-wrap: anywhere;
 }
 
-.canvas-block-search-slot {
+/* the floating AI input (tcs-footer) docks into this slot */
+.canvas-block .canvas-block-search-slot {
   position: sticky;
   z-index: 3;
-  top: 16px;
+  top: var(--spacing-m);
   display: flex;
-  width: 100%;
-  max-width: 812px;
   justify-content: center;
+  width: 100%;
+  max-width: 50.75rem;
 }
 
-.canvas-block-options {
+.canvas-block .canvas-block-options {
   position: relative;
   z-index: 2;
   display: flex;
-  width: 100%;
-  max-width: 900px;
-  min-height: 118px;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: var(--canvas-block-chip-gap);
+  width: 100%;
+  max-width: 56.25rem;
 }
 
-.canvas-block-options-row {
+.canvas-block .canvas-block-options-row {
   display: flex;
-  width: 100%;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
+  gap: var(--canvas-block-chip-gap);
+  width: 100%;
 }
 
-.canvas-block-option-pill:any-link {
-  box-sizing: border-box;
+/* chips (Figma pill 12/32, Inter 500 16/26 → 18/29, 1px border) */
+.canvas-block .canvas-block-option-pill:any-link {
   display: flex;
-  max-width: 100%;
-  min-height: 53px;
   align-items: center;
   justify-content: center;
-  padding: 12px 32px;
-  border: 1px solid #d8d8d8;
-  border-radius: 999px;
-  background: #fff;
-  color: #0c0c0d;
-  font-size: 18px;
-  font-weight: 500;
+  max-width: 100%;
+  padding: var(--spacing-s) var(--spacing-xl);
+  border: var(--border-width-s) solid var(--chip-border);
+  border-radius: var(--radius-pill);
+  background: var(--chip-bg);
+  color: var(--chip-text);
+  font-size: var(--type-chip-size);
+  font-weight: var(--font-weight-medium);
   line-height: 1.6;
+  letter-spacing: -0.005em;
+  text-align: center;
   text-decoration: none;
-  transition: background-color 0.25s ease, border-color 0.25s ease;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
 
-.canvas-block-option-pill:any-link:hover {
-  border-color: #4673db;
-  background: #f4f7ff;
-  color: #0c0c0d;
+.canvas-block .canvas-block-option-pill:any-link:hover {
+  border-color: var(--accent-color);
+  color: var(--chip-text);
   text-decoration: none;
 }
 
-.canvas-block-glow {
+.canvas-block .canvas-block-option-pill:any-link:focus-visible {
+  outline: var(--border-width-m) solid var(--focus-color);
+  outline-offset: var(--border-width-m);
+}
+
+.canvas-block .canvas-block-option-pill.is-active:any-link,
+.canvas-block .canvas-block-option-pill[aria-current]:any-link {
+  border-color: var(--chip-active-bg);
+  background: var(--chip-active-bg);
+  color: var(--chip-active-text);
+}
+
+/* glow blobs (Figma: yellow bottom-left, blue bottom-right, heavy blur) */
+.canvas-block .canvas-block-glow {
   position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(var(--canvas-block-glow-blur));
   pointer-events: none;
 }
 
-.canvas-block-glow-yellow {
-  top: 679px;
-  left: 6.46%;
-  width: 451px;
-  height: 322px;
-  background: #e8b931;
-  opacity: 0.4;
-  filter: blur(222px);
+.canvas-block .canvas-block-glow-yellow {
+  inset: auto auto -6.25rem -20%;
+  width: min(28.1875rem, 70%);
+  height: 20.125rem;
+  background: var(--canvas-block-glow-1);
+  opacity: var(--canvas-block-glow-1-opacity);
 }
 
-.canvas-block-glow-blue {
-  top: 679px;
-  right: 6.94%;
-  width: 538px;
-  height: 384px;
-  background: #4673db;
-  opacity: 0.4;
-  filter: blur(222px);
+.canvas-block .canvas-block-glow-blue {
+  inset: auto -20% -6.25rem auto;
+  width: min(22.6875rem, 70%);
+  height: 16.1875rem;
+  background: var(--canvas-block-glow-2);
+  opacity: var(--canvas-block-glow-2-opacity);
 }
 
 .canvas-block[data-motion-type='fade'].is-motion-visible .canvas-block-stage {
@@ -160,7 +190,7 @@
 @keyframes canvas-block-slide-up {
   from {
     opacity: 0;
-    translate: 0 18px;
+    translate: 0 1.125rem;
   }
 
   to {
@@ -169,78 +199,41 @@
   }
 }
 
-@media (width <=1024px) {
-  .canvas-block-stage {
-    min-height: 760px;
-    padding: 100px 32px;
+/* tablet (Figma 1024) */
+@media (width >= 37.5rem) {
+  .canvas-block {
+    --canvas-block-padding-block: var(--spacing-5xl);
+    --canvas-block-gap: var(--spacing-2xl);
+    --canvas-block-title-size: var(--type-display-xl-size);
+    --canvas-block-glow-1-opacity: 0.4;
+    --canvas-block-glow-2-opacity: 0.4;
+    --canvas-block-glow-blur: 13.875rem;
   }
 
-  .canvas-block-content {
-    padding: 0 24px;
+  .canvas-block .canvas-block-description {
+    max-width: 50.75rem;
   }
 
-  .canvas-block-title {
-    font-size: 32px;
+  .canvas-block .canvas-block-options {
+    min-height: 7.375rem;
   }
 
-  .canvas-block-description {
-    font-size: 16px;
+  .canvas-block .canvas-block-glow-yellow {
+    inset: auto auto -6.25rem 6.46%;
+    width: 28.1875rem;
+  }
+
+  .canvas-block .canvas-block-glow-blue {
+    inset: auto 6.94% -10.1875rem auto;
+    width: 33.625rem;
+    height: 24rem;
   }
 }
 
-@media (width <=768px) {
+/* desktop (Figma 1440): section 120 + stage 40 = Figma 160 */
+@media (width >= 75rem) {
   .canvas-block {
-    width: calc(100% + 48px);
-    margin-inline: -24px;
-  }
-
-  .canvas-block-stage {
-    min-height: 764px;
-    padding: 80px 16px;
-  }
-
-  .canvas-block-content {
-    gap: 24px;
-    padding: 0;
-  }
-
-  .canvas-block-options {
-    min-height: 0;
-  }
-
-  .canvas-block-options-row {
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .canvas-block-title {
-    font-size: 28px;
-    font-family: Inter, sans-serif;
-  }
-
-  .canvas-block-option-pill:any-link {
-    min-height: 48px;
-    padding: 10px 20px;
-    font-size: 16px;
-  }
-
-  .canvas-block-glow-yellow,
-  .canvas-block-glow-blue {
-    top: auto;
-    bottom: -80px;
-    width: 70vw;
-    height: 220px;
-    filter: blur(100px);
-    opacity: 0.28;
-  }
-
-  .canvas-block-glow-yellow {
-    left: -20%;
-  }
-
-  .canvas-block-glow-blue {
-    right: -20%;
+    --canvas-block-padding-block: var(--spacing-2xl);
   }
 }
 

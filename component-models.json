@@ -3955,21 +3955,6 @@
         ]
       },
       {
-        "component": "text",
-        "valueType": "string",
-        "name": "viewAllTitle",
-        "label": "CTA Title",
-        "value": "View all"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "viewAllLink",
-        "label": "CTA Link",
-        "description": "Destination URL for the header CTA.",
-        "value": ""
-      },
-      {
         "component": "select",
         "valueType": "string",
         "name": "motionType",
@@ -3999,100 +3984,7 @@
         "valueType": "string",
         "name": "listTitle",
         "label": "List Title",
-        "value": "Our transformation solutions"
-      },
-      {
-        "component": "separator",
-        "name": "ctaPreferencesSeparator",
-        "label": "CTA Preferences"
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "ctaView",
-        "label": "CTA View",
-        "value": "primary",
-        "options": [
-          {
-            "name": "Primary",
-            "value": "primary"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "ctaShape",
-        "label": " CTA Shape",
-        "value": "pill",
-        "condition": "ctaView == 'primary' || ctaView == 'secondary'",
-        "options": [
-          {
-            "name": "Rectangle",
-            "value": "rectangle"
-          },
-          {
-            "name": "Rounded",
-            "value": "rounded"
-          },
-          {
-            "name": "Pill",
-            "value": "pill"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "ctaBackgroundColor",
-        "label": "CTA Background Color",
-        "value": "#111820",
-        "condition": "ctaView == 'primary'",
-        "options": [
-          {
-            "name": "Black",
-            "value": "#000000"
-          },
-          {
-            "name": "White",
-            "value": "#ffffff"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "ctaTextColor",
-        "label": "CTA Text Color",
-        "value": "#ffffff",
-        "options": [
-          {
-            "name": "Black",
-            "value": "#000000"
-          },
-          {
-            "name": "White",
-            "value": "#ffffff"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "ctaBorderColor",
-        "label": "CTA Border Color",
-        "value": "#111820",
-        "condition": "ctaView == 'primary' || ctaView == 'secondary'",
-        "options": [
-          {
-            "name": "Border",
-            "value": "#000000"
-          },
-          {
-            "name": "No Border",
-            "value": "#ffffff"
-          }
-        ]
+        "value": "Table-list title here..."
       }
     ]
   },
@@ -4104,15 +3996,7 @@
         "valueType": "string",
         "name": "heading",
         "label": "Heading",
-        "value": "Our transformation solutions"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "exploreLink",
-        "label": "Explore All Link",
-        "description": "Legacy header link. The parent View All settings take precedence when configured.",
-        "value": ""
+        "value": "Table-list title here..."
       }
     ]
   },
@@ -4142,110 +4026,12 @@
         "value": "Risk free business experimentation and decision making"
       },
       {
-        "component": "aem-content",
-        "valueType": "string",
-        "name": "link",
-        "label": "Page Reference",
-        "description": "Destination page path for the card.",
-        "value": ""
-      },
-      {
         "component": "aem-tag",
         "valueType": "string[]",
         "name": "tags",
         "label": "Tags",
         "description": "Optional. Displayed above the description when Show Tags is enabled.",
         "value": []
-      },
-      {
-        "component": "text",
-        "name": "ctaTitle",
-        "label": "CTA Title",
-        "valueType": "string"
-      },
-      {
-        "component": "select",
-        "name": "ctaView",
-        "label": "CTA Style",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Primary",
-            "value": "primary"
-          },
-          {
-            "name": "Secondary",
-            "value": "secondary"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "ctaShape",
-        "label": "CTA Shape",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Rectangle",
-            "value": "rectangle"
-          },
-          {
-            "name": "Rounded",
-            "value": "rounded"
-          },
-          {
-            "name": "Pill",
-            "value": "pill"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "ctaBackgroundColor",
-        "label": "CTA Background Color",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Black",
-            "value": "black"
-          },
-          {
-            "name": "White",
-            "value": "white"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "ctaTextColor",
-        "label": "CTA Text Color",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Black",
-            "value": "black"
-          },
-          {
-            "name": "White",
-            "value": "white"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "ctaBorderStyle",
-        "label": "CTA Border Style",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Border",
-            "value": "border"
-          },
-          {
-            "name": "Borderless",
-            "value": "borderless"
-          }
-        ]
       }
     ]
   },

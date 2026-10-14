@@ -3,48 +3,34 @@
     {
       "title": "Table List",
       "id": "table-list",
-      "plugins": {
-        "xwalk": {
-          "page": {
-            "resourceType": "core/franklin/components/block/v1/block",
-            "template": {
-              "name": "Table List",
-              "model": "table-list",
-              "filter": "table-list"
-            }
-          }
-        }
-      }
-    },
-    {
-      "title": "Table List Header",
-      "id": "table-list-header",
-      "plugins": {
-        "xwalk": {
-          "page": {
-            "resourceType": "core/franklin/components/block/v1/block/item",
-            "template": {
-              "name": "Table List Header",
-              "model": "table-list-header"
-            }
-          }
-        }
-      }
+      "plugins": { "xwalk": { "page": {
+        "resourceType": "core/franklin/components/block/v1/block",
+        "template": { "name": "Table List", "model": "table-list", "filter": "table-list" }
+      } } }
     },
     {
       "title": "Table List Card",
       "id": "table-list-card",
-      "plugins": {
-        "xwalk": {
-          "page": {
-            "resourceType": "core/franklin/components/block/v1/block/item",
-            "template": {
-              "name": "Table List Card",
-              "model": "table-list-card"
-            }
-          }
-        }
-      }
+      "plugins": { "xwalk": { "page": {
+        "resourceType": "core/franklin/components/block/v1/block/item",
+        "template": { "name": "Table List Card", "model": "table-list-card", "filter": "table-list-card" }
+      } } }
+    },
+    {
+      "title": "Add CTA Header",
+      "id": "table-list-cta-header",
+      "plugins": { "xwalk": { "page": {
+        "resourceType": "core/franklin/components/block/v1/block",
+        "template": { "name": "CTA Header", "model": "cta" }
+      } } }
+    },
+    {
+      "title": "Add CTA Card",
+      "id": "table-list-cta-card",
+      "plugins": { "xwalk": { "page": {
+        "resourceType": "core/franklin/components/block/v1/block",
+        "template": { "name": "CTA Card", "model": "cta" }
+      } } }
     }
   ],
   "models": [
@@ -52,211 +38,38 @@
       "id": "table-list",
       "fields": [
         {
-          "component": "select",
-          "valueType": "string",
-          "name": "variations",
-          "label": "Variations",
-          "value": "",
+          "component": "select", "valueType": "string", "name": "variations", "label": "Variations", "value": "",
           "options": [
-            {
-              "name": "Default",
-              "value": ""
-            },
-            {
-              "name": "Black Theme",
-              "value": "dark"
-            },
-            {
-              "name": "No Number",
-              "value": "no-number"
-            },
-            {
-              "name": "Description First",
-              "value": "description-first"
-            },
-            {
-              "name": "Title Right",
-              "value": "title-right"
-            }
+            { "name": "Default", "value": "" },
+            { "name": "Black Theme", "value": "dark" },
+            { "name": "No Number", "value": "no-number" },
+            { "name": "Description First", "value": "description-first" },
+            { "name": "Title Right", "value": "title-right" }
           ]
         },
         {
-          "component": "number",
-          "valueType": "number",
-          "name": "maxCards",
-          "label": "Maximum Cards",
-          "description": "Display between 1 and 4 cards.",
-          "value": 4,
-          "validation": {
-            "numberMin": 1,
-            "numberMax": 4,
-            "customErrorMsg": "Maximum Cards must be between 1 and 4."
-          }
+          "component": "number", "valueType": "number", "name": "maxCards", "label": "Maximum Cards",
+          "description": "Display between 1 and 4 cards.", "value": 4,
+          "validation": { "numberMin": 1, "numberMax": 4, "customErrorMsg": "Maximum Cards must be between 1 and 4." }
         },
         {
-          "component": "boolean",
-          "valueType": "boolean",
-          "name": "showTags",
-          "label": "Show Tags",
-          "description": "Display each card's tags above its description in the Title Right variation.",
-          "value": false
+          "component": "boolean", "valueType": "boolean", "name": "showTags", "label": "Show Tags",
+          "description": "Display each card's tags above its description in the Title Right variation.", "value": false
         },
         {
-          "component": "select",
-          "valueType": "string",
-          "name": "cardColor",
-          "label": "Card Color",
-          "value": "white",
+          "component": "select", "valueType": "string", "name": "cardColor", "label": "Card Color", "value": "white",
+          "options": [ { "name": "White", "value": "white" }, { "name": "Black", "value": "black" } ]
+        },
+        {
+          "component": "select", "valueType": "string", "name": "motionType", "label": "Motion Type", "value": "none",
           "options": [
-            {
-              "name": "White",
-              "value": "white"
-            },
-            {
-              "name": "Black",
-              "value": "black"
-            }
+            { "name": "None", "value": "none" }, { "name": "Fade", "value": "fade" },
+            { "name": "Slide", "value": "slide" }, { "name": "Reveal", "value": "reveal" }
           ]
         },
         {
-          "component": "text",
-          "valueType": "string",
-          "name": "viewAllTitle",
-          "label": "CTA Title",
-          "value": "View all"
-        },
-        {
-          "component": "richtext",
-          "valueType": "string",
-          "name": "viewAllLink",
-          "label": "CTA Link",
-          "description": "Destination URL for the header CTA.",
-          "value": ""
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "motionType",
-          "label": "Motion Type",
-          "value": "none",
-          "options": [
-            {
-              "name": "None",
-              "value": "none"
-            },
-            {
-              "name": "Fade",
-              "value": "fade"
-            },
-            {
-              "name": "Slide",
-              "value": "slide"
-            },
-            {
-              "name": "Reveal",
-              "value": "reveal"
-            }
-          ]
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "listTitle",
-          "label": "List Title",
-          "value": "Our transformation solutions"
-        },
-        {
-          "component": "separator",
-          "name": "ctaPreferencesSeparator",
-          "label": "CTA Preferences"
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "ctaView",
-          "label": "CTA View",
-          "value": "primary",
-          "options": [
-            {
-              "name": "Primary",
-              "value": "primary"
-            }
-          ]
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "ctaShape",
-          "label": " CTA Shape",
-          "value": "pill",
-          "condition": "ctaView == 'primary' || ctaView == 'secondary'",
-          "options": [
-            {
-              "name": "Rectangle",
-              "value": "rectangle"
-            },
-            {
-              "name": "Rounded",
-              "value": "rounded"
-            },
-            {
-              "name": "Pill",
-              "value": "pill"
-            }
-          ]
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "ctaBackgroundColor",
-          "label": "CTA Background Color",
-          "value": "#111820",
-          "condition": "ctaView == 'primary'",
-          "options": [
-            {
-              "name": "Black",
-              "value": "#000000"
-            },
-            {
-              "name": "White",
-              "value": "#ffffff"
-            }
-          ]
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "ctaTextColor",
-          "label": "CTA Text Color",
-          "value": "#ffffff",
-          "options": [
-            {
-              "name": "Black",
-              "value": "#000000"
-            },
-            {
-              "name": "White",
-              "value": "#ffffff"
-            }
-          ]
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "ctaBorderColor",
-          "label": "CTA Border Color",
-          "value": "#111820",
-          "condition": "ctaView == 'primary' || ctaView == 'secondary'",
-          "options": [
-            {
-              "name": "Border",
-              "value": "#000000"
-            },
-            {
-              "name": "No Border",
-              "value": "#ffffff"
-            }
-          ]
+          "component": "text", "valueType": "string", "name": "listTitle", "label": "List Title",
+          "value": "Table-list title here..."
         }
       ]
     },
@@ -264,19 +77,8 @@
       "id": "table-list-header",
       "fields": [
         {
-          "component": "text",
-          "valueType": "string",
-          "name": "heading",
-          "label": "Heading",
-          "value": "Our transformation solutions"
-        },
-        {
-          "component": "richtext",
-          "valueType": "string",
-          "name": "exploreLink",
-          "label": "Explore All Link",
-          "description": "Legacy header link. The parent View All settings take precedence when configured.",
-          "value": ""
+          "component": "text", "valueType": "string", "name": "heading", "label": "Heading",
+          "value": "Table-list title here..."
         }
       ]
     },
@@ -284,143 +86,26 @@
       "id": "table-list-card",
       "fields": [
         {
-          "component": "text",
-          "valueType": "string",
-          "name": "number",
-          "label": "Number",
-          "description": "Optional. Leave blank to number cards automatically.",
-          "value": ""
+          "component": "text", "valueType": "string", "name": "number", "label": "Number",
+          "description": "Optional. Leave blank to number cards automatically.", "value": ""
         },
         {
-          "component": "richtext",
-          "valueType": "string",
-          "name": "title",
-          "label": "Title",
-          "value": "TwinX"
+          "component": "richtext", "valueType": "string", "name": "title", "label": "Title", "value": "TwinX"
         },
         {
-          "component": "richtext",
-          "valueType": "string",
-          "name": "description",
-          "label": "Description",
+          "component": "richtext", "valueType": "string", "name": "description", "label": "Description",
           "value": "Risk free business experimentation and decision making"
         },
         {
-          "component": "aem-content",
-          "valueType": "string",
-          "name": "link",
-          "label": "Page Reference",
-          "description": "Destination page path for the card.",
-          "value": ""
-        },
-        {
-          "component": "aem-tag",
-          "valueType": "string[]",
-          "name": "tags",
-          "label": "Tags",
-          "description": "Optional. Displayed above the description when Show Tags is enabled.",
-          "value": []
-        },
-        {
-          "component": "text",
-          "name": "ctaTitle",
-          "label": "CTA Title",
-          "valueType": "string"
-        },
-        {
-          "component": "select",
-          "name": "ctaView",
-          "label": "CTA Style",
-          "valueType": "string",
-          "options": [
-            {
-              "name": "Primary",
-              "value": "primary"
-            },
-            {
-              "name": "Secondary",
-              "value": "secondary"
-            }
-          ]
-        },
-        {
-          "component": "select",
-          "name": "ctaShape",
-          "label": "CTA Shape",
-          "valueType": "string",
-          "options": [
-            {
-              "name": "Rectangle",
-              "value": "rectangle"
-            },
-            {
-              "name": "Rounded",
-              "value": "rounded"
-            },
-            {
-              "name": "Pill",
-              "value": "pill"
-            }
-          ]
-        },
-        {
-          "component": "select",
-          "name": "ctaBackgroundColor",
-          "label": "CTA Background Color",
-          "valueType": "string",
-          "options": [
-            {
-              "name": "Black",
-              "value": "black"
-            },
-            {
-              "name": "White",
-              "value": "white"
-            }
-          ]
-        },
-        {
-          "component": "select",
-          "name": "ctaTextColor",
-          "label": "CTA Text Color",
-          "valueType": "string",
-          "options": [
-            {
-              "name": "Black",
-              "value": "black"
-            },
-            {
-              "name": "White",
-              "value": "white"
-            }
-          ]
-        },
-        {
-          "component": "select",
-          "name": "ctaBorderStyle",
-          "label": "CTA Border Style",
-          "valueType": "string",
-          "options": [
-            {
-              "name": "Border",
-              "value": "border"
-            },
-            {
-              "name": "Borderless",
-              "value": "borderless"
-            }
-          ]
+          "component": "aem-tag", "valueType": "string[]", "name": "tags", "label": "Tags",
+          "description": "Optional. Displayed above the description when Show Tags is enabled.", "value": []
         }
       ]
     }
   ],
   "filters": [
-    {
-      "id": "table-list",
-      "components": [
-        "table-list-header",
-        "table-list-card"
-      ]
-    }
+    { "id": "table-list", "components": [ "table-list-header", "table-list-card", "table-list-cta-header", "table-list-cta-card" ] },
+    { "id": "table-list-header", "components": [ "table-list-cta-header" ] },
+    { "id": "table-list-card", "components": [ "table-list-cta-card" ] }
   ]
 }

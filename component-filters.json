@@ -156,7 +156,21 @@
     "id": "table-list",
     "components": [
       "table-list-header",
-      "table-list-card"
+      "table-list-card",
+      "table-list-cta-header",
+      "table-list-cta-card"
+    ]
+  },
+  {
+    "id": "table-list-header",
+    "components": [
+      "table-list-cta-header"
+    ]
+  },
+  {
+    "id": "table-list-card",
+    "components": [
+      "table-list-cta-card"
     ]
   },
   {

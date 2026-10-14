@@ -53,7 +53,7 @@
    ========================================= */
 
 .table-list .table-list-cta:any-link,
-.table-list .table-list-explore a:any-link {
+.table-list .table-list-explore>a:any-link {
   --cta-background-color: #000;
   --cta-text-color: #fff;
   --cta-border-color: #000;
@@ -81,7 +81,7 @@
 }
 
 .table-list .table-list-header .table-list-cta::after,
-.table-list .table-list-explore a::after {
+.table-list .table-list-explore>a::after {
   position: static;
   display: inline-block;
   content: '\2192';
@@ -91,36 +91,36 @@
 }
 
 .table-list .table-list-cta.cta-shape-rectangle,
-.table-list .table-list-explore a.cta-shape-rectangle {
+.table-list .table-list-explore>a.cta-shape-rectangle {
   border-radius: 0;
 }
 
 .table-list .table-list-cta.cta-shape-rounded,
-.table-list .table-list-explore a.cta-shape-rounded {
+.table-list .table-list-explore>a.cta-shape-rounded {
   border-radius: 8px;
 }
 
 .table-list .table-list-cta.cta-shape-pill,
-.table-list .table-list-explore a.cta-shape-pill {
+.table-list .table-list-explore>a.cta-shape-pill {
   border-radius: 999px;
 }
 
 .table-list .table-list-cta.cta-primary:any-link,
-.table-list .table-list-explore a.cta-primary:any-link {
+.table-list .table-list-explore>a.cta-primary:any-link {
   border-color: var(--cta-border-color, #000);
   background-color: var(--cta-background-color, #000);
   color: var(--cta-text-color, #fff);
 }
 
 .table-list .table-list-cta.cta-secondary:any-link,
-.table-list .table-list-explore a.cta-secondary:any-link {
+.table-list .table-list-explore>a.cta-secondary:any-link {
   border-color: var(--cta-border-color, #000);
   background-color: transparent;
   color: var(--cta-text-color, #000);
 }
 
 .table-list .table-list-cta.cta-text:any-link,
-.table-list .table-list-explore a.cta-text:any-link {
+.table-list .table-list-explore>a.cta-text:any-link {
   min-height: auto;
   padding: 4px 0;
   border-color: transparent;
@@ -129,27 +129,27 @@
 }
 
 .table-list .table-list-cta:hover,
-.table-list .table-list-explore a:hover {
+.table-list .table-list-explore>a:hover {
   text-decoration: none;
 }
 
 .table-list .table-list-cta.cta-primary:hover,
-.table-list .table-list-explore a.cta-primary:hover {
+.table-list .table-list-explore>a.cta-primary:hover {
   filter: brightness(0.88);
 }
 
 .table-list .table-list-cta.cta-secondary:hover,
-.table-list .table-list-explore a.cta-secondary:hover {
+.table-list .table-list-explore>a.cta-secondary:hover {
   background-color: rgb(127 127 127 / 10%);
 }
 
 .table-list .table-list-cta.cta-text:hover,
-.table-list .table-list-explore a.cta-text:hover {
+.table-list .table-list-explore>a.cta-text:hover {
   text-decoration: underline;
 }
 
 .table-list .table-list-cta:focus-visible,
-.table-list .table-list-explore a:focus-visible {
+.table-list .table-list-explore>a:focus-visible {
   outline: 2px solid currentcolor;
   outline-offset: 4px;
 }
@@ -799,7 +799,7 @@
   }
 
   .table-list .table-list-cta:any-link,
-  .table-list .table-list-explore a:any-link {
+  .table-list .table-list-explore>a:any-link {
     font-size: 16px;
   }
 
@@ -1295,5 +1295,61 @@
   .table-list.no-number .table-list-link {
     grid-column: 2;
     grid-row: 1 / 3;
+  }
+}
+
+/* =========================================
+   UNIVERSAL EDITOR — AUTHORED CTA BLOCKS
+   ========================================= */
+
+/* Header: keep the authored CTA beside the heading. */
+.table-list .table-list-explore>.cta {
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0;
+}
+
+/* Card: position the authored CTA in the action column. */
+.table-list .table-list-link>.cta {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: flex-end;
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+/* Do not force the standalone CTA link into the legacy arrow button. */
+.table-list .table-list-link>.cta .cta-link {
+  max-width: 100%;
+  cursor: pointer;
+}
+
+/* Prevent nested CTA blocks from expanding the list width. */
+.table-list .table-list-explore>.cta,
+.table-list .table-list-link>.cta,
+.table-list .table-list-explore>.cta *,
+.table-list .table-list-link>.cta * {
+  box-sizing: border-box;
+}
+
+/* Dark theme: preserve the standalone CTA's own authored colors. */
+.table-list.dark .table-list-explore>.cta,
+.table-list.dark .table-list-link>.cta,
+.table-list.card-black .table-list-explore>.cta,
+.table-list.card-black .table-list-link>.cta {
+  color: inherit;
+}
+
+/* Responsive layout. */
+@media (width < 600px) {
+  .table-list .table-list-explore>.cta {
+    max-width: 100%;
+  }
+
+  .table-list .table-list-link>.cta {
+    max-width: 100%;
   }
 }

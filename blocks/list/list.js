@@ -70,14 +70,29 @@ function getProp(block, name, fallback = '') {
 
   const readValue = (element) => {
     if (!element) return '';
+    const storedValue = element.dataset.value
+      || element.getAttribute('value')
+      || element.value;
+    if (name === 'tags') {
+      if (storedValue) return storedValue;
+      const anchors = [
+        ...(element.matches('a[href]') ? [element] : []),
+        ...element.querySelectorAll('a[href]'),
+      ];
+      if (anchors.length > 1) {
+        return anchors
+          .map((tag) => tag.getAttribute('href') || tag.textContent.trim())
+          .filter(Boolean);
+      }
+      const anchor = element.matches('a') ? element : element.querySelector('a[href]');
+      if (anchor) return anchor.getAttribute('href') || anchor.textContent.trim();
+      return element.textContent.trim();
+    }
     const image = element.matches('img') ? element : element.querySelector('picture img, img');
     if (image) return image.getAttribute('src') || image.src;
     const anchor = element.matches('a') ? element : element.querySelector('a[href]');
     if (anchor) return anchor.getAttribute('href') || anchor.textContent.trim();
-    return element.dataset.value
-      || element.getAttribute('value')
-      || element.value
-      || element.textContent.trim();
+    return storedValue || element.textContent.trim();
   };
 
   if (block.dataset[name] !== undefined) return block.dataset[name];

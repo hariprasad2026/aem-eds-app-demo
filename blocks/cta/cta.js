@@ -1,3 +1,5 @@
+import { isAuthoringMode } from '../../scripts/endpointconfig.js';
+
 const DEFAULTS = {
   textcta: '',
   ctaLink: '',
@@ -255,15 +257,18 @@ export default function decorate(block) {
 
   const cta = createCta(data);
 
-  block.replaceChildren();
-
   block.classList.add(
     `cta-align-${data.alignment}`,
   );
 
   if (!cta) {
+    if (!isAuthoringMode()) {
+      block.replaceChildren();
+    }
     return;
   }
+
+  block.replaceChildren();
 
   switch (data.ctaWidth) {
     case 'half':

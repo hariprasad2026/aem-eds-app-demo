@@ -49,11 +49,8 @@ function getLottoAssetUrl(block, field, icon) {
     return fieldUrl;
   }
 
-  if (fieldUrl) {
-    // eslint-disable-next-line no-console
-    console.warn(`hero-banner: "${fieldUrl}" is not allowed for the Lotto image type. Use a .zip or .svg file.`);
-    return '';
-  }
+  // Any other authored file type is not allowed for the Lotto image type.
+  if (fieldUrl) return '';
 
   const candidate = [...block.querySelectorAll('a[href], img[src]')]
     .filter((node) => node !== icon)
@@ -63,6 +60,7 @@ function getLottoAssetUrl(block, field, icon) {
   return candidate || '';
 }
 
+// JSZip (vendored, ~28 KB gzipped) is only loaded on demand for Lotto .zip backgrounds.
 async function loadJSZip() {
   if (!window.JSZip) {
     await loadScript(`${window.hlx.codeBasePath}/scripts/jszip.min.js`);
@@ -87,11 +85,11 @@ export async function extractZipImages(zipUrl) {
       && ZIP_IMAGE_MIME_TYPES[getExtension(entry.name)])
     .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
 
-  return Promise.all(entries.map(async (entry) => {
+  const blobs = await Promise.all(entries.map(async (entry) => {
     const data = await entry.async('uint8array');
-    const blob = new Blob([data], { type: ZIP_IMAGE_MIME_TYPES[getExtension(entry.name)] });
-    return URL.createObjectURL(blob);
+    return new Blob([data], { type: ZIP_IMAGE_MIME_TYPES[getExtension(entry.name)] });
   }));
+  return blobs.map((blob) => URL.createObjectURL(blob));
 }
 
 function renderBackgroundLayers(block, urls, alt) {
@@ -105,6 +103,12 @@ function renderBackgroundLayers(block, urls, alt) {
   urls.forEach((url) => {
     const img = document.createElement('img');
     img.className = 'hero-banner-bg-layer';
+    if (url.startsWith('blob:')) {
+      // The decoded image stays rendered; release the object URL once it is no longer needed.
+      const revoke = () => URL.revokeObjectURL(url);
+      img.addEventListener('load', revoke, { once: true });
+      img.addEventListener('error', revoke, { once: true });
+    }
     img.src = url;
     img.alt = '';
     img.setAttribute('aria-hidden', 'true');
@@ -114,23 +118,32 @@ function renderBackgroundLayers(block, urls, alt) {
   block.prepend(bg);
 }
 
-async function applyLottoBackground(block, assetUrl, alt) {
-  try {
-    if (getExtension(assetUrl) === 'svg') {
-      renderBackgroundLayers(block, [assetUrl], alt);
-      return;
-    }
+// Authored URLs use width=750; request a larger rendition for a full-width hero.
+function toLargeRendition(src) {
+  return src.replace(/([?&]width=)\d+/, (match, prefix) => `${prefix}2000`);
+}
 
-    const urls = await extractZipImages(assetUrl);
-    if (!urls.length) {
-      // eslint-disable-next-line no-console
-      console.warn(`hero-banner: no images found inside ${assetUrl}`);
-      return;
-    }
-    renderBackgroundLayers(block, urls, alt);
+/**
+ * Renders the Lotto background. If the zip cannot be loaded or contains no images,
+ * falls back to the authored hero image (if any) so the hero never ends up blank.
+ */
+async function applyLottoBackground(block, assetUrl, alt, fallbackSrc) {
+  if (getExtension(assetUrl) === 'svg') {
+    renderBackgroundLayers(block, [assetUrl], alt);
+    return;
+  }
+
+  let urls = [];
+  try {
+    urls = await extractZipImages(assetUrl);
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error('hero-banner: failed to render Lotto background', e);
+    urls = [];
+  }
+
+  if (urls.length) {
+    renderBackgroundLayers(block, urls, alt);
+  } else if (fallbackSrc) {
+    renderBackgroundLayers(block, [toLargeRendition(fallbackSrc)], alt);
   }
 }
 
@@ -423,7 +436,9 @@ export default function decorate(block) {
   if (content.heroImageType === 'lotto') {
     // Lotto: only .zip / .svg. Images inside a zip are extracted and rendered as background.
     if (lottoUrl) {
-      applyLottoBackground(block, lottoUrl, content.heroImageAlt);
+      applyLottoBackground(block, lottoUrl, content.heroImageAlt, content.heroImageSrc);
+    } else if (content.heroImageSrc) {
+      renderBackgroundLayers(block, [toLargeRendition(content.heroImageSrc)], content.heroImageAlt);
     }
   } else {
     // Default: any image format is allowed. The authored reference may be rendered as an
@@ -434,9 +449,7 @@ export default function decorate(block) {
     const bgSrc = fieldUrl || content.heroImageSrc;
     if (bgSrc) {
       // Render a real <img> layer (instead of a CSS background) so it is visible in the DOM.
-      // Authored URLs use width=750; request a larger rendition for a full-width hero.
-      const largeSrc = bgSrc.replace(/([?&]width=)\d+/, (match, prefix) => `${prefix}2000`);
-      renderBackgroundLayers(block, [largeSrc], content.heroImageAlt);
+      renderBackgroundLayers(block, [toLargeRendition(bgSrc)], content.heroImageAlt);
     }
   }
 
@@ -479,7 +492,7 @@ export default function decorate(block) {
     if (typeof content.description === 'string') {
       description.textContent = content.description;
     } else {
-      description.innerHTML = content.description.innerHTML;
+      description.append(...content.description.childNodes);
     }
 
     contentWrapper.append(description);

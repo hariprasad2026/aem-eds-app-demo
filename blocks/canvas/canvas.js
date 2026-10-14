@@ -1,5 +1,9 @@
+import { moveInstrumentation } from '../../scripts/scripts.js';
+
 const DEFAULT_SEARCH_WATERMARK = 'Search';
 
+// Block-level config fields, in model order. In xwalk markup each of these renders as a
+// single-cell row; every row after them is an authored option item (label | link).
 const CANVAS_FIELD_ORDER = [
   'canvasType',
   'canvasSearchWatermark',
@@ -11,11 +15,8 @@ const CANVAS_FIELD_ORDER = [
   'canvasDescription',
   'showNavigation',
   'showMicrophone',
-  'canvasNavRootPath',
-  'canvasNavDepth',
   'enableSearch',
   'maximumOptions',
-  'optionsType',
 ];
 
 const FIELD_ALIASES = {
@@ -35,11 +36,6 @@ const FIELD_ALIASES = {
   showmicrophone: 'showMicrophone',
   enablesearch: 'enableSearch',
   maximumoptions: 'maximumOptions',
-  optionstype: 'optionsType',
-  canvasnavrootpath: 'canvasNavRootPath',
-  navrootpath: 'canvasNavRootPath',
-  canvasnavdepth: 'canvasNavDepth',
-  navdepth: 'canvasNavDepth',
 };
 
 function normalizeFieldKey(value = '') {
@@ -70,65 +66,63 @@ function extractCellValue(cell) {
   return cell.textContent.trim();
 }
 
-function extractOptionValue(cell) {
-  const link = cell?.querySelector('a');
-  return link ? { label: link.textContent.trim(), url: link.href } : null;
-}
-
 function extractAuthoredOptions(optionRows) {
-  return optionRows.map((option) => {
-    const fields = {};
-    [...option.children].forEach((row) => {
-      const cells = [...row.children];
-      if (cells.length < 2) return;
-      const key = normalizeFieldKey(cells[0].textContent);
-      if (['optionlabel', 'label', 'title'].includes(key)) {
-        fields.label = extractOptionValue(cells[1])?.label || cells[1].textContent.trim();
-      } else if (['optionlink', 'link', 'url', 'href'].includes(key)) {
-        fields.url = extractCellValue(cells[1]);
-      }
-    });
-
-    if (!fields.label || !fields.url) {
-      const cells = [...option.children];
-      if (!fields.label && cells[0]) {
-        fields.label = extractOptionValue(cells[0])?.label || cells[0].textContent.trim();
-      }
-      if (!fields.url && cells[1]) {
-        fields.url = extractOptionValue(cells[1])?.url || extractCellValue(cells[1]);
-      }
-    }
-
-    return fields;
-  }).filter((item) => item.label);
+  return optionRows.map((row) => {
+    const [labelCell, linkCell] = [...row.children];
+    const link = linkCell?.querySelector('a');
+    return {
+      row,
+      label: labelCell?.textContent.trim() || '',
+      url: link ? link.href : linkCell?.textContent.trim() || '',
+    };
+  }).filter((item) => item.label && item.url);
 }
 
+/**
+ * Splits block rows into config data and option rows. Config rows are either explicit
+ * key/value rows (key cell matches a field name) or the first CANVAS_FIELD_ORDER.length
+ * positional rows; all remaining rows are treated as option items.
+ */
 function extractData(block) {
   const data = {};
+  const optionRows = [];
   let fieldIndex = 0;
 
   [...block.children].forEach((row) => {
-    if (row.classList.contains('canvas-option')) return;
-
     const cells = [...row.children];
     if (!cells.length) return;
 
-    const rawKey = cells[0]?.textContent?.trim() || '';
-    const normalizedKey = normalizeFieldKey(rawKey);
-    const explicitKey = FIELD_ALIASES[normalizedKey]
-            || (CANVAS_FIELD_ORDER.includes(rawKey) ? rawKey : '');
+    const [keyCell, valueCell] = cells;
+    const explicitKey = FIELD_ALIASES[normalizeFieldKey(keyCell.textContent)];
+    let fieldName;
+    let fieldCell;
 
-    if (explicitKey && cells.length > 1) {
-      data[explicitKey] = extractCellValue(cells[1]);
+    if (explicitKey && valueCell) {
+      fieldName = explicitKey;
+      fieldCell = valueCell;
+    } else if (fieldIndex < CANVAS_FIELD_ORDER.length) {
+      fieldName = CANVAS_FIELD_ORDER[fieldIndex];
+      fieldCell = keyCell;
+      fieldIndex += 1;
+    } else {
+      optionRows.push(row);
       return;
     }
 
-    const fieldName = CANVAS_FIELD_ORDER[fieldIndex];
-    fieldIndex += 1;
-    if (fieldName) data[fieldName] = extractCellValue(cells[0]);
+    data[fieldName] = extractCellValue(fieldCell);
+    if (fieldName === 'canvasDescription') data.canvasDescriptionCell = fieldCell;
   });
 
-  return data;
+  return { data, optionRows };
+}
+
+function createDescription(data) {
+  const cell = data.canvasDescriptionCell;
+  if (!cell || !cell.textContent.trim()) return null;
+  const description = document.createElement('div');
+  description.className = 'canvas-description';
+  description.append(...cell.childNodes);
+  return description;
 }
 
 function asBoolean(value, fallback = true) {
@@ -286,18 +280,6 @@ function createImageElement(source, altText) {
     const trimmed = source.trim();
     if (!trimmed) return null;
 
-    if (trimmed.startsWith('<')) {
-      const wrapper = document.createElement('div');
-      wrapper.innerHTML = trimmed;
-      const image = wrapper.querySelector('img');
-      if (image) {
-        image.alt = image.alt || altText || 'Canvas icon';
-        image.setAttribute('loading', 'lazy');
-        return image;
-      }
-      return null;
-    }
-
     const isRelativeImagePath = /\.(avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(trimmed);
     if (trimmed.startsWith('/') || trimmed.startsWith('http') || trimmed.startsWith('data:') || isRelativeImagePath) {
       const image = document.createElement('img');
@@ -429,20 +411,27 @@ function buildNavigationTree(indexData, rootPath, depth = 3) {
   return sortTree(rootNodes);
 }
 
-async function fetchNavigationData(rootPath, depth = 3) {
-  try {
-    const response = await fetch('/query-index.json', { cache: 'no-store' });
-    if (!response.ok) return [];
-    const payload = await response.json();
-    const indexData = Array.isArray(payload) ? payload : payload.data || [];
-    return buildNavigationTree(indexData, rootPath, depth);
-  } catch (error) {
-    return [];
+let navigationDataPromise;
+
+// query-index is fetched once per page and shared by every canvas instance
+function fetchNavigationData() {
+  if (!navigationDataPromise) {
+    navigationDataPromise = fetch('/query-index.json')
+      .then((response) => (response.ok ? response.json() : []))
+      .then((payload) => {
+        const indexData = Array.isArray(payload) ? payload : payload.data || [];
+        return buildNavigationTree(indexData, '/', 3);
+      })
+      .catch(() => {
+        navigationDataPromise = undefined;
+        return [];
+      });
   }
+  return navigationDataPromise;
 }
 
 async function renderNavigationMenu(menuButton, data) {
-  const items = await fetchNavigationData('/', 3);
+  const items = await fetchNavigationData();
   const wrapper = menuButton.closest('.canvas-search');
   const toolbar = wrapper.querySelector('.canvas-search-toolbar');
   const panel = document.createElement('div');
@@ -826,10 +815,10 @@ function createSearchBar({
 }
 
 function renderSearchCanvas(block, data) {
-  const titleText = data.canvasTitle || data.canvastitle || '';
-  const descriptionText = data.canvasDescription || data.canvasdescription || '';
+  const titleText = data.canvasTitle || '';
+  const description = createDescription(data);
 
-  if (titleText || descriptionText) {
+  if (titleText || description) {
     const intro = document.createElement('div');
     intro.className = 'canvas-search-intro';
 
@@ -840,12 +829,7 @@ function renderSearchCanvas(block, data) {
       intro.appendChild(title);
     }
 
-    if (descriptionText) {
-      const description = document.createElement('div');
-      description.className = 'canvas-description';
-      description.innerHTML = descriptionText;
-      intro.appendChild(description);
-    }
+    if (description) intro.appendChild(description);
 
     block.appendChild(intro);
   }
@@ -864,23 +848,7 @@ function renderSearchCanvas(block, data) {
   attachCanvasMotion(block);
 }
 
-async function fetchIntentOptions(maxOptions = 5) {
-  try {
-    const response = await fetch('/blocks/canvas/dummy.json');
-
-    if (!response.ok) {
-      return [];
-    }
-
-    const data = await response.json();
-
-    return (data.options || []).slice(0, maxOptions);
-  } catch (error) {
-    return [];
-  }
-}
-
-async function renderIntentCanvas(block, data, authoredOptions) {
+function renderIntentCanvas(block, data, optionRows) {
   const section = document.createElement('section');
   section.className = 'canvas-intent';
 
@@ -895,7 +863,7 @@ async function renderIntentCanvas(block, data, authoredOptions) {
   const optionsFrame = document.createElement('div');
   optionsFrame.className = 'canvas-intent-options-frame';
 
-  const titleText = data.canvasTitle || data.canvastitle || '';
+  const titleText = data.canvasTitle || '';
   if (titleText) {
     const title = document.createElement('h2');
     title.className = 'canvas-title';
@@ -903,13 +871,8 @@ async function renderIntentCanvas(block, data, authoredOptions) {
     content.appendChild(title);
   }
 
-  const descriptionText = data.canvasDescription || data.canvasdescription || '';
-  if (descriptionText) {
-    const description = document.createElement('div');
-    description.className = 'canvas-description';
-    description.innerHTML = descriptionText;
-    content.appendChild(description);
-  }
+  const description = createDescription(data);
+  if (description) content.appendChild(description);
 
   const searchSlot = document.createElement('div');
   searchSlot.className = 'canvas-search-slot';
@@ -934,25 +897,18 @@ async function renderIntentCanvas(block, data, authoredOptions) {
 
   const maxOptions = Math.min(
     5,
-    toPositiveInt(data.maximumOptions || data.maximumoptions, 5),
+    toPositiveInt(data.maximumOptions, 5),
   );
 
-  const configuredOptions = extractAuthoredOptions(authoredOptions);
-  const optionsType = String(data.optionsType || data.optionstype || 'default')
-    .trim()
-    .toLowerCase();
-  const fallbackOptions = optionsType === 'default'
-    ? await fetchIntentOptions(maxOptions)
-    : [];
-  const options = (configuredOptions.length ? configuredOptions : fallbackOptions)
-    .slice(0, maxOptions);
+  const options = extractAuthoredOptions(optionRows).slice(0, maxOptions);
 
   options.forEach((item, index) => {
     const option = document.createElement('a');
 
     option.className = 'canvas-option-pill';
-    option.href = item.url || '#';
-    option.textContent = item.label || '';
+    option.href = item.url;
+    option.textContent = item.label;
+    moveInstrumentation(item.row, option);
 
     const rowIndex = Math.floor(index / 3);
     let row = optionsContainer.children[rowIndex];
@@ -964,7 +920,7 @@ async function renderIntentCanvas(block, data, authoredOptions) {
     row.appendChild(option);
   });
 
-  optionsFrame.appendChild(optionsContainer);
+  if (options.length) optionsFrame.appendChild(optionsContainer);
   section.appendChild(content);
   section.appendChild(optionsFrame);
   block.appendChild(section);
@@ -975,15 +931,14 @@ async function renderIntentCanvas(block, data, authoredOptions) {
 }
 
 export default function decorate(block) {
-  const data = extractData(block);
-  const optionList = [...block.querySelectorAll('.canvas-option')];
+  const { data, optionRows } = extractData(block);
 
-  block.innerHTML = '';
+  block.replaceChildren();
 
-  const canvasType = String(data.canvasType || data.canvastype || 'search').trim().toLowerCase();
+  const canvasType = String(data.canvasType || 'search').trim().toLowerCase();
   const normalizedType = canvasType === 'intent' ? 'intent' : 'search';
-  const canvasStyle = normalizeCanvasStyle(data.canvasStyle || data.canvasstyle);
-  const motionType = normalizeMotionType(data.motionType || data.motiontype);
+  const canvasStyle = normalizeCanvasStyle(data.canvasStyle);
+  const motionType = normalizeMotionType(data.motionType);
 
   block.classList.add('canvas');
   block.classList.add(`canvas-${normalizedType}`);
@@ -994,7 +949,7 @@ export default function decorate(block) {
   block.classList.add(`canvas-${canvasStyle}`);
 
   if (normalizedType === 'intent') {
-    renderIntentCanvas(block, data, optionList);
+    renderIntentCanvas(block, data, optionRows);
     return;
   }
 

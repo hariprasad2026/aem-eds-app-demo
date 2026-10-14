@@ -17,22 +17,56 @@ function filterIndex(query, indexData) {
 }
 
 /**
- * Renders result items in HTML format.
+ * Allows only http(s) and relative URLs for result links.
+ * @param {string} url
+ * @returns {string}
+ */
+function safeHref(url) {
+  const value = (url || '').trim();
+  if (!value) return '#';
+  try {
+    const parsed = new URL(value, window.location.href);
+    return ['http:', 'https:'].includes(parsed.protocol) ? value : '#';
+  } catch {
+    return '#';
+  }
+}
+
+/**
+ * Renders result items as DOM nodes.
  * @param {Array} results
- * @returns {string} HTML string
+ * @returns {Element} Results list or "no results" message
  */
 function renderResults(results) {
   if (results.length === 0) {
-    return '<p class="search-no-results">No results found.</p>';
+    const empty = document.createElement('p');
+    empty.className = 'search-no-results';
+    empty.textContent = 'No results found.';
+    return empty;
   }
 
-  const items = results.slice(0, 10).map((res) => {
-    const title = res.title || res.path;
-    const desc = res.description ? `<p class="search-result-description">${res.description}</p>` : '';
-    return `<li class="search-result-item"><a href="${res.path}" class="search-result-link"><span class="search-result-title">${title}</span>${desc}</a></li>`;
-  }).join('');
-
-  return `<ul class="search-results-list">${items}</ul>`;
+  const list = document.createElement('ul');
+  list.className = 'search-results-list';
+  results.slice(0, 10).forEach((res) => {
+    const li = document.createElement('li');
+    li.className = 'search-result-item';
+    const a = document.createElement('a');
+    a.className = 'search-result-link';
+    a.href = safeHref(res.path);
+    const title = document.createElement('span');
+    title.className = 'search-result-title';
+    title.textContent = res.title || res.path || '';
+    a.append(title);
+    if (res.description) {
+      const desc = document.createElement('p');
+      desc.className = 'search-result-description';
+      desc.textContent = res.description;
+      a.append(desc);
+    }
+    li.append(a);
+    list.append(li);
+  });
+  return list;
 }
 
 /**
@@ -42,7 +76,7 @@ function renderResults(results) {
 export default async function decorate(block) {
   // Extract values from DOM populated by Edge Delivery Services
   const indexCell = block.querySelector(':scope > div:nth-child(1) > div');
-  const indexUrl = indexCell ? indexCell.textContent.trim() : '/query-index.json';
+  const indexUrl = indexCell?.textContent.trim() || '/query-index.json';
 
   // Clear existing raw markup
   block.innerHTML = '';
@@ -103,9 +137,8 @@ export default async function decorate(block) {
           const json = await resp.json();
           indexData = json.data || json;
         }
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('Failed to load search index:', err);
+      } catch {
+        // index unavailable: leave indexData null so no results are rendered
       }
     }
   };
@@ -116,7 +149,7 @@ export default async function decorate(block) {
     if (!indexData) return;
     const query = input.value;
     const matches = filterIndex(query, indexData);
-    resultsWrapper.innerHTML = renderResults(matches);
+    resultsWrapper.replaceChildren(renderResults(matches));
   };
 
   // Event Listeners

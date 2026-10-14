@@ -1,10 +1,11 @@
 import {
-  loadHeader,
-  loadFooter,
+  decorateBlock,
   decorateIcons,
   decorateSections,
   decorateBlocks,
   decorateTemplateAndTheme,
+  getMetadata,
+  loadBlock,
   waitForFirstImage,
   loadSection,
   loadSections,
@@ -56,6 +57,59 @@ async function loadFonts() {
   } catch (e) {
     // do nothing
   }
+}
+
+/**
+ * Loads an authored block from a fragment page into a page landmark (header/footer).
+ * The path comes from page metadata (e.g. "header" / "footer") or falls back to a site default,
+ * and is always resolved from the site root so nested pages load the same fragment.
+ * @param {Element} container the <header> or <footer> element
+ * @param {string} metaName metadata name that can override the fragment path
+ * @param {string} defaultPath site-root path of the fragment page
+ * @param {string} blockName name of the block inside the fragment
+ */
+async function loadFragmentBlock(container, metaName, defaultPath, blockName) {
+  if (!container) return;
+  const metaPath = getMetadata(metaName);
+  const path = new URL(metaPath || defaultPath, window.location).pathname
+    .replace(/(\.plain)?\.html$/, '');
+
+  const resp = await fetch(`${path}.plain.html`);
+  if (!resp.ok) return;
+
+  const fragment = new DOMParser().parseFromString(await resp.text(), 'text/html');
+  const sourceBlock = fragment.querySelector(`.${blockName}`);
+  if (!sourceBlock) return;
+
+  // fragment media is referenced relative to the fragment page
+  const fragmentUrl = new URL(path, window.location);
+  sourceBlock.querySelectorAll('img[src^="./media_"], source[srcset^="./media_"]').forEach((el) => {
+    const attr = el.tagName === 'IMG' ? 'src' : 'srcset';
+    el.setAttribute(attr, new URL(el.getAttribute(attr), fragmentUrl).href);
+  });
+
+  const block = document.importNode(sourceBlock, true);
+  container.replaceChildren(block);
+  decorateBlock(block);
+  await loadBlock(block);
+}
+
+/**
+ * Loads the site header (tcs-header block) from the header fragment.
+ * @param {Element} header header element
+ */
+function loadHeader(header) {
+  return loadFragmentBlock(header, 'header', '/blocks/tcs-header', 'tcs-header');
+}
+
+/**
+ * Loads the site footer (tcs-footer block) from the footer fragment,
+ * unless the page authors its own footer block.
+ * @param {Element} footer footer element
+ */
+function loadFooter(footer) {
+  if (document.querySelector('main .tcs-footer')) return Promise.resolve();
+  return loadFragmentBlock(footer, 'footer', '/tcs-footer', 'tcs-footer');
 }
 
 /**

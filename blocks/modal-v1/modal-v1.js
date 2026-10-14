@@ -32,6 +32,22 @@ function getLinkText(element) {
   return getText(link || element);
 }
 
+/**
+ * Returns the resolved URL if it is https: (or same-origin, e.g. relative paths on
+ * the local dev server), otherwise an empty string. Rejects javascript:, data:, etc.
+ */
+function toSafeUrl(value) {
+  if (!value) return '';
+  try {
+    const url = new URL(value, window.location.href);
+    if (url.protocol === 'https:') return url.href;
+    if (url.protocol === 'http:' && url.origin === window.location.origin) return url.href;
+  } catch (e) {
+    // invalid URL
+  }
+  return '';
+}
+
 function createButton(text, href, secondary = false) {
   if (!text) return null;
 
@@ -106,7 +122,8 @@ function createImage(image, alt) {
   return wrapper;
 }
 
-function createVideo(video) {
+function createVideo(videoUrl) {
+  const video = toSafeUrl(videoUrl);
   if (!video) return null;
 
   const wrapper = document.createElement('div');
@@ -115,7 +132,8 @@ function createVideo(video) {
 
   const iframe = document.createElement('iframe');
 
-  iframe.src = video;
+  // src is only set while the modal is open (see setupModal) so the video stops on close
+  iframe.dataset.src = video;
   iframe.title = 'Modal video';
   iframe.loading = 'lazy';
   iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
@@ -267,6 +285,11 @@ function setupModal(modal, trigger) {
 
   let previousFocus = null;
 
+  const iframes = [...dialog.querySelectorAll('iframe[data-src]')];
+
+  // eslint-disable-next-line no-use-before-define
+  const onKeyDown = (event) => handleKeyDown(event);
+
   function openModal() {
     previousFocus = document.activeElement;
 
@@ -288,12 +311,25 @@ function setupModal(modal, trigger) {
       'true',
     );
 
+    iframes.forEach((iframe) => {
+      iframe.src = iframe.dataset.src;
+    });
+
+    document.addEventListener('keydown', onKeyDown);
+
     requestAnimationFrame(() => {
       closeButton.focus();
     });
   }
 
   function closeModal() {
+    document.removeEventListener('keydown', onKeyDown);
+
+    // unload embedded players so playback stops
+    iframes.forEach((iframe) => {
+      iframe.removeAttribute('src');
+    });
+
     overlay.classList.remove(
       `${CLASS_PREFIX}-is-open`,
     );
@@ -384,11 +420,6 @@ function setupModal(modal, trigger) {
       }
     },
   );
-
-  document.addEventListener(
-    'keydown',
-    handleKeyDown,
-  );
 }
 
 export default function decorate(block) {
@@ -436,7 +467,7 @@ export default function decorate(block) {
 
   const content = getHTML(contentElement);
 
-  const video = getText(videoElement);
+  const video = getLink(videoElement) || getText(videoElement);
 
   const cta1Text = getLinkText(cta1Container);
 

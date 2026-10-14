@@ -38,8 +38,6 @@
       "table",
       "table-list",
       "tabs-new",
-      "tcs-footer",
-      "tcs-header",
       "teaser-v1",
       "testimonial",
       "text-with-link",
@@ -60,6 +58,18 @@
         "format": []
       }
     }
+  },
+  {
+    "id": "canvas-block",
+    "components": [
+      "canvas-block-option"
+    ]
+  },
+  {
+    "id": "canvas",
+    "components": [
+      "canvas-option"
+    ]
   },
   {
     "id": "cards",
@@ -87,7 +97,6 @@
       "image",
       "button",
       "title",
-      "quote",
       "demo-card-column-item"
     ]
   },
@@ -128,7 +137,7 @@
     ]
   },
   {
-    "id": "richtext",
+    "id": "quotes-richtext",
     "components": [
       "richtext"
     ],
@@ -206,7 +215,7 @@
     ]
   },
   {
-    "id": "richtext",
+    "id": "testimonial-richtext",
     "components": [
       "richtext"
     ],
@@ -223,7 +232,7 @@
     ]
   },
   {
-    "id": "column",
+    "id": "title-with-column-column",
     "components": [
       "title",
       "text",

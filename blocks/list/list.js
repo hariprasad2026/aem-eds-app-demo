@@ -185,6 +185,26 @@ function normalizePath(path) {
   return clean;
 }
 
+/**
+ * Resolves an href for rendering: same-origin/relative links are normalized,
+ * external http(s)/mailto/tel links are kept as-is, anything else is dropped.
+ */
+function resolveHref(path) {
+  const value = String(path || '').trim();
+  if (!value) return '/';
+  let url;
+  try {
+    url = new URL(value, window.location.href);
+  } catch {
+    return '#';
+  }
+  if (url.origin === window.location.origin) {
+    if (!['http:', 'https:'].includes(url.protocol)) return '#';
+    return `${normalizePath(url.pathname)}${url.search}${url.hash}`;
+  }
+  return ['http:', 'https:', 'mailto:', 'tel:'].includes(url.protocol) ? value : '#';
+}
+
 async function fetchQueryIndex() {
   const configuredOrigin = getAEMPublish();
   const codeOrigin = new URL(import.meta.url).origin;
@@ -383,7 +403,7 @@ function renderItem(item, config, index = 0, solidIndex = 0) {
     title.className = 'list-title';
     if (config.linkItems) {
       const link = document.createElement('a');
-      link.href = normalizePath(item.path);
+      link.href = resolveHref(item.path);
       link.textContent = item.title || item.name || 'Untitled';
       title.append(link);
     } else {
@@ -420,8 +440,8 @@ function renderItem(item, config, index = 0, solidIndex = 0) {
   if (config.linkItems && (config.listStyle === 'card-m-scroll' || isHero || config.showIcon)) {
     const cta = document.createElement('a');
     cta.className = 'list-cta';
-    cta.href = normalizePath(item.path);
-    cta.innerHTML = 'Explore &rarr;';
+    cta.href = resolveHref(item.path);
+    cta.textContent = 'Explore \u2192';
     body.append(cta);
   }
 
@@ -502,7 +522,7 @@ export default async function decorate(block) {
     if (config.description) {
       const desc = document.createElement('div');
       desc.className = 'list-header-description';
-      desc.innerHTML = config.description;
+      desc.textContent = config.description;
       titleGroup.append(desc);
     }
     header.append(titleGroup);
@@ -510,8 +530,8 @@ export default async function decorate(block) {
     if (config.ctaLabel && config.ctaLink) {
       const ctaBtn = document.createElement('a');
       ctaBtn.className = 'list-view-all';
-      ctaBtn.href = normalizePath(config.ctaLink);
-      ctaBtn.innerHTML = `${config.ctaLabel} &rarr;`;
+      ctaBtn.href = resolveHref(config.ctaLink);
+      ctaBtn.textContent = `${config.ctaLabel} \u2192`;
       header.append(ctaBtn);
     }
 

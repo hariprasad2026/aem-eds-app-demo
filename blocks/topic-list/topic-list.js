@@ -1,6 +1,6 @@
-export default function decorate(block) {
-  block.classList.add('topic-list');
+import { moveInstrumentation } from '../../scripts/scripts.js';
 
+export default function decorate(block) {
   [...block.children].forEach((row) => {
     const cells = [...row.children];
 
@@ -16,15 +16,21 @@ export default function decorate(block) {
       return;
     }
 
-    const href = link.getAttribute('href');
+    const anchor = document.createElement('a');
+    anchor.href = link.href;
+    moveInstrumentation(link, anchor);
 
-    row.innerHTML = `
-      <a href="${href}">
-        <span class="topic-list-text">${text}</span>
-        <span class="topic-list-arrow">→</span>
-      </a>
-    `;
+    const label = document.createElement('span');
+    label.className = 'topic-list-text';
+    label.textContent = text;
 
+    const arrow = document.createElement('span');
+    arrow.className = 'topic-list-arrow';
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '→';
+
+    anchor.append(label, arrow);
+    row.replaceChildren(anchor);
     row.classList.add('topic-list-item');
   });
 }

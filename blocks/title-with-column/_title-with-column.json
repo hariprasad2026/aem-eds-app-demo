@@ -8,6 +8,7 @@
           "page": {
             "resourceType": "core/franklin/components/columns/v1/columns",
             "template": {
+              "name": "Title with Column",
               "columns": "2",
               "rows": "1"
             }
@@ -45,7 +46,7 @@
       ]
     },
     {
-      "id": "column",
+      "id": "title-with-column-column",
       "components": [
         "title",
         "text",

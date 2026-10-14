@@ -142,7 +142,7 @@ function embedVimeo(url, options) {
   params.set('background', '0');
   const temp = document.createElement('div');
   temp.innerHTML = `<div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.25%;">
-      <iframe src="https://player.vimeo.com/video/${video}?${params}"
+      <iframe src="https://player.vimeo.com/video/${encodeURIComponent(video)}?${params}"
       style="border: 0; top: 0; left: 0; width: 100%; height: 100%; position: absolute;" 
       frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen  
       title="Content from Vimeo" loading="lazy"></iframe>

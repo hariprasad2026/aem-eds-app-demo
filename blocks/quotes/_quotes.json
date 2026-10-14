@@ -109,7 +109,7 @@
     ],
     "filters": [
         {
-            "id": "richtext",
+            "id": "quotes-richtext",
             "components": [
                 "richtext"
             ],

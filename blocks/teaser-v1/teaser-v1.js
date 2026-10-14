@@ -115,10 +115,67 @@ function parseBoolean(value, defaultValue = false) {
   return defaultValue;
 }
 
+// parse in an inert document so markup never executes (no image loads / handlers)
+function parseInertHtml(value = '') {
+  return new DOMParser().parseFromString(String(value), 'text/html').body;
+}
+
 function stripHtml(value = '') {
-  const element = document.createElement('div');
-  element.innerHTML = String(value);
-  return element.textContent.trim();
+  return parseInertHtml(value).textContent.trim();
+}
+
+/**
+ * Allows only http(s), mailto, tel and relative URLs.
+ */
+function safeHref(url, fallback = '') {
+  const value = String(url || '').trim();
+  if (!value) return fallback;
+  try {
+    const parsed = new URL(value, window.location.href);
+    return ['http:', 'https:', 'mailto:', 'tel:'].includes(parsed.protocol) ? value : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+const RICH_TEXT_TAGS = [
+  'P', 'BR', 'STRONG', 'B', 'EM', 'I', 'U', 'S', 'SUB', 'SUP', 'SPAN',
+  'UL', 'OL', 'LI', 'A', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6',
+];
+
+/**
+ * Rebuilds rich text (authored or personalization HTML) from an allow-list of
+ * formatting tags; drops all attributes except safe link hrefs.
+ */
+function sanitizeRichText(source, target) {
+  [...source.childNodes].forEach((node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      target.append(node.textContent);
+      return;
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    if (!RICH_TEXT_TAGS.includes(node.tagName)) {
+      if (!['SCRIPT', 'STYLE', 'TEMPLATE', 'IFRAME', 'OBJECT', 'EMBED'].includes(node.tagName)) {
+        sanitizeRichText(node, target);
+      }
+      return;
+    }
+    const element = document.createElement(node.tagName.toLowerCase());
+    if (node.tagName === 'A') {
+      const href = safeHref(node.getAttribute('href'));
+      if (href) element.href = href;
+      if (node.getAttribute('target') === '_blank') {
+        element.target = '_blank';
+        element.rel = 'noopener noreferrer';
+      }
+    }
+    sanitizeRichText(node, element);
+    target.append(element);
+  });
+}
+
+function setRichText(element, html) {
+  sanitizeRichText(parseInertHtml(html), element);
 }
 
 function getAnchorHref(element) {
@@ -1183,7 +1240,7 @@ function createCTA(link) {
   let childWrapper = null;
   const style = resolveLinkStyle(link.style, 'default');
 
-  anchor.href = link.link;
+  anchor.href = safeHref(link.link, '#');
   anchor.classList.add(
     'teaser-cta',
     `teaser-cta-${style}`,
@@ -1304,7 +1361,7 @@ function createViewAll(data) {
   const anchor = document.createElement('a');
 
   anchor.className = 'teaser-view-all';
-  anchor.href = href;
+  anchor.href = safeHref(href, '#');
   anchor.textContent = stripHtml(text);
 
   return anchor;
@@ -1518,7 +1575,7 @@ function renderContent(data) {
       const description = document.createElement('div');
 
       description.className = 'teaser-description';
-      description.innerHTML = data.description;
+      setRichText(description, data.description);
 
       wrapper.append(description);
     }
@@ -1528,7 +1585,7 @@ function renderContent(data) {
 
       shortDescription.className = 'teaser-short-description';
 
-      shortDescription.innerHTML = data.shortDescription;
+      setRichText(shortDescription, data.shortDescription);
 
       wrapper.append(shortDescription);
     }

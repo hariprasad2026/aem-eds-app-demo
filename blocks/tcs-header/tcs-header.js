@@ -1,14 +1,30 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
-function formatHtmlPath(path) {
-  if (!path || path === '/') return path || '#';
-  let resolvedPath = path;
-  if (!resolvedPath.startsWith('/content/')) {
-    resolvedPath = `/content/2026/39/briskdeer43959${
-      resolvedPath.startsWith('/') ? '' : '/'
-    }${resolvedPath}`;
+/**
+ * Returns a site-relative path as-is (query-index paths are already site-relative).
+ * @param {string} path
+ * @returns {string}
+ */
+function toSitePath(path) {
+  if (!path) return '#';
+  return path.startsWith('/') ? path : `/${path}`;
+}
+
+/**
+ * Allows only http(s), mailto, tel and relative URLs.
+ * @param {string} url
+ * @param {string} fallback
+ * @returns {string}
+ */
+function safeHref(url, fallback = '#') {
+  const value = (url || '').trim();
+  if (!value) return fallback;
+  try {
+    const parsed = new URL(value, window.location.href);
+    return ['http:', 'https:', 'mailto:', 'tel:'].includes(parsed.protocol) ? value : fallback;
+  } catch {
+    return fallback;
   }
-  return resolvedPath.endsWith('.html') ? resolvedPath : `${resolvedPath}.html`;
 }
 
 async function fetchHierarchicalNavData() {
@@ -48,7 +64,7 @@ async function fetchHierarchicalNavData() {
         navTree[l1Key] = {
           key: l1Key,
           title: item.title && segments.length === 1 ? item.title : l1Key.replace(/-/g, ' '),
-          path: formatHtmlPath(`/${locale ? `${locale}/` : ''}${l1Key}`),
+          path: toSitePath(`/${locale ? `${locale}/` : ''}${l1Key}`),
           children: {},
         };
       }
@@ -61,7 +77,7 @@ async function fetchHierarchicalNavData() {
           navTree[l1Key].children[l2Key] = {
             key: l2Key,
             title: item.title && segments.length === 2 ? item.title : l2Key.replace(/-/g, ' '),
-            path: formatHtmlPath(`/${locale ? `${locale}/` : ''}${l1Key}/${l2Key}`),
+            path: toSitePath(`/${locale ? `${locale}/` : ''}${l1Key}/${l2Key}`),
             children: [],
           };
         }
@@ -73,7 +89,7 @@ async function fetchHierarchicalNavData() {
           navTree[l1Key].children[l2Key].children.push({
             key: l3Key,
             title: item.title || l3Key.replace(/-/g, ' '),
-            path: formatHtmlPath(`/${locale ? `${locale}/` : ''}${l1Key}/${l2Key}/${l3Key}`),
+            path: toSitePath(`/${locale ? `${locale}/` : ''}${l1Key}/${l2Key}/${l3Key}`),
           });
         }
       }
@@ -93,16 +109,13 @@ async function fetchHierarchicalNavData() {
 
 function getProp(block, name, fallback = '') {
   const lower = name.toLowerCase();
+  // row order of the published markup: *Alt fields collapse into their image, so they have no row
   const fieldOrder = [
     'headerVariant',
     'tcsLogo',
-    'tcsLogoAlt',
     'tcsLogoLink',
     'tataLogo',
-    'tataLogoAlt',
     'tataLogoLink',
-    'searchVariation',
-    'searchPlaceholder',
     'motionType',
   ];
 
@@ -153,6 +166,10 @@ function getProp(block, name, fallback = '') {
   }
 
   // 4. Positional fallback with URL strictness check
+  if (name.endsWith('Alt')) {
+    const imageRow = rows[fieldOrder.indexOf(name.slice(0, -3))];
+    return imageRow?.querySelector('img')?.getAttribute('alt') || fallback;
+  }
   const fieldIndex = fieldOrder.indexOf(name);
   if (fieldIndex >= 0 && rows[fieldIndex]) {
     const cols = [...rows[fieldIndex].children];
@@ -187,7 +204,7 @@ export default function decorate(block) {
   const brandPrimary = document.createElement('div');
   brandPrimary.className = 'nav-brand-primary';
   const primaryAnchor = document.createElement('a');
-  primaryAnchor.href = config.tcsLogoLink;
+  primaryAnchor.href = safeHref(config.tcsLogoLink, '/');
   if (config.tcsLogo) {
     primaryAnchor.append(createOptimizedPicture(config.tcsLogo, config.tcsLogoAlt, false, [{ width: '300' }]));
   } else {
@@ -199,7 +216,7 @@ export default function decorate(block) {
   const brandSecondary = document.createElement('div');
   brandSecondary.className = 'nav-brand-secondary';
   const secondaryAnchor = document.createElement('a');
-  secondaryAnchor.href = config.tataLogoLink;
+  secondaryAnchor.href = safeHref(config.tataLogoLink, '/');
   if (config.tataLogo) {
     secondaryAnchor.append(createOptimizedPicture(config.tataLogo, config.tataLogoAlt, false, [{ width: '300' }]));
   } else {
@@ -288,10 +305,12 @@ export default function decorate(block) {
       if (hasChildren) {
         const btn = document.createElement('button');
         btn.className = 'tcs-mobile-item-btn';
-        btn.innerHTML = `
-          <span>${item.title}</span>
-          <span class="arrow">→</span>
-        `;
+        const label = document.createElement('span');
+        label.textContent = item.title;
+        const arrow = document.createElement('span');
+        arrow.className = 'arrow';
+        arrow.textContent = '→';
+        btn.append(label, arrow);
         btn.addEventListener('click', () => {
           navHistory.push({ items, title });
           renderMobileLevel(item.children, item.title, false);
@@ -300,7 +319,7 @@ export default function decorate(block) {
       } else {
         const a = document.createElement('a');
         a.className = 'tcs-mobile-item-link';
-        a.href = item.path;
+        a.href = safeHref(item.path);
         a.textContent = item.title;
         li.append(a);
       }

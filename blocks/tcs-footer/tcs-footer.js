@@ -9,21 +9,86 @@ const getChevronSvg = () => `
   </svg>
 `;
 
+const HAMBURGER_SVG = `
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <line x1="3" y1="12" x2="21" y2="12"></line>
+    <line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+`;
+
+const CLOSE_SVG = `
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+`;
+
 /**
- * Resolves content paths for AEM authoring/publishing environments
+ * Returns a site-relative path as-is (query-index paths are already site-relative).
  */
-function formatHtmlPath(path) {
-  if (!path || path === '/') return path || '#';
+function toSitePath(path) {
+  if (!path) return '#';
+  return path.startsWith('/') ? path : `/${path}`;
+}
 
-  let resolvedPath = path;
-
-  if (!resolvedPath.startsWith('/content/')) {
-    resolvedPath = `/content/2026/39/briskdeer43959${
-      resolvedPath.startsWith('/') ? '' : '/'
-    }${resolvedPath}`;
+/**
+ * Allows only http(s), mailto, tel and relative URLs.
+ */
+function safeHref(url, fallback = '#') {
+  const value = (url || '').trim();
+  if (!value) return fallback;
+  try {
+    const parsed = new URL(value, window.location.href);
+    return ['http:', 'https:', 'mailto:', 'tel:'].includes(parsed.protocol) ? value : fallback;
+  } catch {
+    return fallback;
   }
+}
 
-  return resolvedPath.endsWith('.html') ? resolvedPath : `${resolvedPath}.html`;
+/**
+ * Creates a nav link (pill or submenu item) from index data without HTML interpolation.
+ */
+function createNavLink(item, className, withArrow = false) {
+  const a = document.createElement('a');
+  a.className = className;
+  a.href = safeHref(item.path);
+  if (withArrow) {
+    const label = document.createElement('span');
+    label.textContent = item.title;
+    const arrow = document.createElement('span');
+    arrow.className = 'arrow';
+    arrow.textContent = '→';
+    a.append(label, arrow);
+  } else {
+    a.textContent = item.title;
+  }
+  return a;
+}
+
+/**
+ * Creates the chevron expand button for nav pills.
+ */
+function createChevronButton() {
+  const btn = document.createElement('button');
+  btn.className = 'chevron-btn';
+  btn.setAttribute('aria-label', 'Expand subpages');
+  btn.innerHTML = getChevronSvg();
+  return btn;
+}
+
+/**
+ * Resolves the search results URL: uses a search URL exposed by the header/canvas
+ * (data-search-url) if present, otherwise falls back to /search.
+ */
+function getSearchUrl(query) {
+  const source = document.querySelector('.tcs-header[data-search-url], .canvas[data-search-url], .canvas-block[data-search-url]');
+  const base = safeHref(source?.dataset.searchUrl, '/search');
+  const url = new URL(base, window.location.href);
+  url.searchParams.set('q', query);
+  return url.origin === window.location.origin
+    ? `${url.pathname}${url.search}${url.hash}`
+    : url.href;
 }
 
 /**
@@ -78,7 +143,7 @@ async function fetchHierarchicalNavData() {
         navTree[l1Key] = {
           key: l1Key,
           title: item.title && segments.length === 1 ? item.title : l1Key.replace(/-/g, ' '),
-          path: formatHtmlPath(`/${locale ? `${locale}/` : ''}${l1Key}`),
+          path: toSitePath(`/${locale ? `${locale}/` : ''}${l1Key}`),
           children: {},
         };
       }
@@ -91,7 +156,7 @@ async function fetchHierarchicalNavData() {
           navTree[l1Key].children[l2Key] = {
             key: l2Key,
             title: item.title && segments.length === 2 ? item.title : l2Key.replace(/-/g, ' '),
-            path: formatHtmlPath(`/${locale ? `${locale}/` : ''}${l1Key}/${l2Key}`),
+            path: toSitePath(`/${locale ? `${locale}/` : ''}${l1Key}/${l2Key}`),
             children: [],
           };
         }
@@ -103,7 +168,7 @@ async function fetchHierarchicalNavData() {
           navTree[l1Key].children[l2Key].children.push({
             key: l3Key,
             title: item.title || l3Key.replace(/-/g, ' '),
-            path: formatHtmlPath(`/${locale ? `${locale}/` : ''}${l1Key}/${l2Key}/${l3Key}`),
+            path: toSitePath(`/${locale ? `${locale}/` : ''}${l1Key}/${l2Key}/${l3Key}`),
           });
         }
       }
@@ -116,9 +181,7 @@ async function fetchHierarchicalNavData() {
         children: l2.children || [],
       })),
     }));
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Failed to load navigation index:', error);
+  } catch {
     return [];
   }
 }
@@ -128,17 +191,27 @@ export default function decorate(block) {
 
   // 1. Heading Title (First row of block)
   const mainTitleRow = blockRows.shift();
-  const rawTitle = mainTitleRow?.textContent.trim();
-  const titleText = rawTitle
-    ? rawTitle.replace("Let's build the future together", "Let's build the<br>future together")
-    : "Let's build the<br>future together";
+  const defaultTitle = "Let's build the future together";
+  const rawTitle = mainTitleRow?.textContent.trim() || defaultTitle;
 
   const footerContainer = document.createElement('div');
   footerContainer.className = 'tcs-footer-content';
 
   const heading = document.createElement('h3');
   heading.className = 'tcs-footer-heading';
-  heading.innerHTML = titleText;
+  const splitAt = rawTitle.indexOf(defaultTitle);
+  if (splitAt >= 0) {
+    // keep the designed line break without interpolating authored text into HTML
+    heading.append(
+      rawTitle.slice(0, splitAt),
+      "Let's build the",
+      document.createElement('br'),
+      'future together',
+      rawTitle.slice(splitAt + defaultTitle.length),
+    );
+  } else {
+    heading.textContent = rawTitle;
+  }
   footerContainer.append(heading);
 
   // Floating Control Bar Containers
@@ -207,32 +280,35 @@ export default function decorate(block) {
       const authoredIconSrc = authoredImg ? authoredImg.src : cells[0]?.textContent.trim();
       const ariaLabel = cells[1]?.textContent.trim() || cells[0]?.textContent.trim() || 'Open navigation menu';
 
-      const hamburgerIconContent = authoredIconSrc && (authoredImg || authoredIconSrc.startsWith('/') || authoredIconSrc.startsWith('http'))
-        ? `<img src="${authoredIconSrc}" alt="${ariaLabel}" class="custom-hamburger-icon" />`
-        : `
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        `;
+      const button = document.createElement('button');
+      button.className = 'tcs-footer-hamburger';
+      button.setAttribute('aria-label', ariaLabel);
+      button.setAttribute('aria-expanded', 'false');
 
+      const hamburgerIcon = document.createElement('span');
+      hamburgerIcon.className = 'icon-hamburger';
+      const iconSrc = authoredIconSrc && (authoredImg || authoredIconSrc.startsWith('/') || authoredIconSrc.startsWith('http'))
+        ? safeHref(authoredIconSrc, '')
+        : '';
+      if (iconSrc) {
+        const img = document.createElement('img');
+        img.src = iconSrc;
+        img.alt = ariaLabel;
+        img.className = 'custom-hamburger-icon';
+        hamburgerIcon.append(img);
+      } else {
+        hamburgerIcon.innerHTML = HAMBURGER_SVG;
+      }
+
+      const closeIcon = document.createElement('span');
+      closeIcon.className = 'icon-close hidden';
+      closeIcon.innerHTML = CLOSE_SVG;
+
+      button.append(hamburgerIcon, closeIcon);
       row.className = 'tcs-footer-menu-toggle';
-      row.innerHTML = `
-        <button class="tcs-footer-hamburger" aria-label="${ariaLabel}" aria-expanded="false">
-          <span class="icon-hamburger">
-            ${hamburgerIconContent}
-          </span>
-          <span class="icon-close hidden">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </span>
-        </button>
-      `;
+      row.replaceChildren(button);
       hamburgerWrapperNode = row;
-      hamburgerBtnNode = row.querySelector('.tcs-footer-hamburger');
+      hamburgerBtnNode = button;
     } else if (model === 'tcs-footer-search' && !searchBoxWrapperNode) {
       const variation = cells[0]?.textContent.trim().toLowerCase() || 'both';
       const placeholder = cells[1]?.textContent.trim() || 'Ask Canvas Search';
@@ -244,13 +320,7 @@ export default function decorate(block) {
       formEl.className = 'tcs-search-form';
       formEl.action = '#';
 
-      let contentHtml = '';
-
-      if (variation !== 'voice-only') {
-        contentHtml += `<input type="text" class="tcs-search-input" placeholder="${placeholder}" aria-label="Ask Canvas Search">`;
-      }
-
-      contentHtml += '<div class="tcs-footer-search-actions">';
+      let contentHtml = '<div class="tcs-footer-search-actions">';
 
       if (variation === 'both' || variation === 'voice-only') {
         contentHtml += `
@@ -272,11 +342,20 @@ export default function decorate(block) {
           </svg>
         </button></div>`;
 
+      // static markup only (no authored values)
       formEl.innerHTML = contentHtml;
-      row.innerHTML = '';
-      row.append(formEl);
 
-      const inputEl = formEl.querySelector('.tcs-search-input');
+      let inputEl = null;
+      if (variation !== 'voice-only') {
+        inputEl = document.createElement('input');
+        inputEl.type = 'text';
+        inputEl.className = 'tcs-search-input';
+        inputEl.placeholder = placeholder;
+        inputEl.setAttribute('aria-label', 'Ask Canvas Search');
+        formEl.prepend(inputEl);
+      }
+      row.replaceChildren(formEl);
+
       const micBtn = formEl.querySelector('.mic-btn');
 
       if (inputEl) {
@@ -288,8 +367,8 @@ export default function decorate(block) {
       formEl.addEventListener('submit', (e) => {
         e.preventDefault();
         if (inputEl) searchQueryVariable = inputEl.value;
-        // eslint-disable-next-line no-console
-        console.log('Search Query Variable:', searchQueryVariable);
+        const query = searchQueryVariable.trim();
+        if (query) window.location.href = getSearchUrl(query);
       });
 
       if (micBtn && inputEl) {
@@ -321,7 +400,7 @@ export default function decorate(block) {
       }
     } else if (model === 'tcs-footer-cta') {
       const label = cells[0]?.textContent.trim() || 'Click here';
-      const link = formatHtmlPath(cells[1]?.querySelector('a')?.href || '#');
+      const link = safeHref(cells[1]?.querySelector('a')?.getAttribute('href'));
       const target = cells[2]?.textContent.trim() || '_self';
 
       row.className = 'tcs-footer-cta-item';
@@ -329,19 +408,27 @@ export default function decorate(block) {
       ctaBtn.className = 'tcs-footer-cta-btn';
       ctaBtn.href = link;
       ctaBtn.target = target;
-      ctaBtn.innerHTML = `<span>${label}</span><span class="arrow">→</span>`;
+      const ctaLabel = document.createElement('span');
+      ctaLabel.textContent = label;
+      const ctaArrow = document.createElement('span');
+      ctaArrow.className = 'arrow';
+      ctaArrow.textContent = '→';
+      ctaBtn.append(ctaLabel, ctaArrow);
 
       if (cells[0]) moveInstrumentation(cells[0], ctaBtn);
-      row.innerHTML = '';
-      row.append(ctaBtn);
+      row.replaceChildren(ctaBtn);
       ctaRow.append(row);
     } else if (model === 'tcs-footer-copyright') {
       row.className = 'tcs-footer-copyright';
-      row.innerHTML = cells[0]?.innerHTML || '©TATA Consultancy Services';
+      if (cells[0]?.childNodes.length) {
+        row.replaceChildren(...cells[0].childNodes);
+      } else {
+        row.textContent = '©TATA Consultancy Services';
+      }
       bottomRow.prepend(row);
     } else if (model === 'tcs-footer-legal-item') {
       const label = cells[0]?.textContent.trim() || 'Privacy & Terms';
-      const link = formatHtmlPath(cells[1]?.querySelector('a')?.href || '#');
+      const link = safeHref(cells[1]?.querySelector('a')?.getAttribute('href'));
       const target = cells[2]?.textContent.trim() || '_self';
 
       row.className = 'tcs-footer-legal-item';
@@ -352,8 +439,7 @@ export default function decorate(block) {
       legalLink.textContent = label;
 
       if (cells[0]) moveInstrumentation(cells[0], legalLink);
-      row.innerHTML = '';
-      row.append(legalLink);
+      row.replaceChildren(legalLink);
       legalNav.append(row);
     }
   });
@@ -384,20 +470,10 @@ export default function decorate(block) {
       return;
     }
 
-    subMenuPanel.innerHTML = `
-      <div class="tcs-submenu-grid">
-        ${items
-    .map(
-      (item) => `
-          <a href="${item.path}" class="tcs-submenu-item">
-            <span>${item.title}</span>
-            <span class="arrow">→</span>
-          </a>
-        `,
-    )
-    .join('')}
-      </div>
-    `;
+    const grid = document.createElement('div');
+    grid.className = 'tcs-submenu-grid';
+    items.forEach((item) => grid.append(createNavLink(item, 'tcs-submenu-item', true)));
+    subMenuPanel.replaceChildren(grid);
     subMenuPanel.classList.remove('hidden');
   };
 
@@ -422,7 +498,7 @@ export default function decorate(block) {
   };
 
   const renderL2SubNavigation = (l1Data) => {
-    navPillsRow.innerHTML = '';
+    navPillsRow.replaceChildren();
     updateButtonStateAndPosition('L2');
 
     const l2Group = document.createElement('div');
@@ -433,10 +509,8 @@ export default function decorate(block) {
       l2Pill.className = 'tcs-nav-pill l2-pill';
       const hasL3 = l2.children && l2.children.length > 0;
 
-      l2Pill.innerHTML = `
-        <a href="${l2.path}" class="tcs-pill-link">${l2.title}</a>
-        ${hasL3 ? `<button class="chevron-btn" aria-label="Expand subpages">${getChevronSvg()}</button>` : ''}
-      `;
+      l2Pill.append(createNavLink(l2, 'tcs-pill-link'));
+      if (hasL3) l2Pill.append(createChevronButton());
 
       const triggerL3View = (e) => {
         if (e) e.stopPropagation();
@@ -462,7 +536,7 @@ export default function decorate(block) {
   };
 
   const renderL1ParentNavigation = async () => {
-    navPillsRow.innerHTML = '';
+    navPillsRow.replaceChildren();
     subMenuPanel.classList.add('hidden');
     updateButtonStateAndPosition('L1');
 
@@ -475,10 +549,8 @@ export default function decorate(block) {
       l1Pill.className = `tcs-nav-pill ${idx === 0 ? 'active' : ''}`;
       const hasL2 = l1.children && l1.children.length > 0;
 
-      l1Pill.innerHTML = `
-        <a href="${l1.path}" class="tcs-pill-link">${l1.title}</a>
-        ${hasL2 ? `<button class="chevron-btn" aria-label="Expand subpages">${getChevronSvg()}</button>` : ''}
-      `;
+      l1Pill.append(createNavLink(l1, 'tcs-pill-link'));
+      if (hasL2) l1Pill.append(createChevronButton());
 
       const enterSubPageNavigation = (e) => {
         if (e) e.stopPropagation();

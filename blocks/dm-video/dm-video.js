@@ -2,6 +2,22 @@ const prefersReducedMotion = window.matchMedia
   ? window.matchMedia('(prefers-reduced-motion: reduce)')
   : { matches: false };
 
+/**
+ * Returns the resolved URL if it is https: (or same-origin, e.g. relative paths on
+ * the local dev server), otherwise an empty string. Rejects javascript:, data:, etc.
+ */
+function toSafeUrl(value) {
+  if (!value) return '';
+  try {
+    const url = new URL(value, window.location.href);
+    if (url.protocol === 'https:') return url.href;
+    if (url.protocol === 'http:' && url.origin === window.location.origin) return url.href;
+  } catch (e) {
+    // invalid URL
+  }
+  return '';
+}
+
 function getFirstUrlFromText(text) {
   if (!text) return '';
 
@@ -157,8 +173,11 @@ function getMimeTypeFromUrl(url) {
 export default function decorate(block) {
   const rows = [...block.children];
 
-  const thumbnailUrl = getUrlValueFromBlock(block, 'thumbnail', rows[0]) || getPosterUrlFromRow(rows[0]);
-  const rawVideoUrl = getUrlValueFromBlock(block, 'videoUrl', rows[1]);
+  const thumbnailUrl = toSafeUrl(
+    getUrlValueFromBlock(block, 'thumbnail', rows[0]) || getPosterUrlFromRow(rows[0]),
+  );
+  const authoredVideoUrl = getUrlValueFromBlock(block, 'videoUrl', rows[1]);
+  const rawVideoUrl = toSafeUrl(authoredVideoUrl);
 
   const autoplay = getAuthoredBoolean(block, 'autoplay', rows[2])
     && !prefersReducedMotion.matches;
@@ -170,10 +189,17 @@ export default function decorate(block) {
   const muted = getAuthoredBoolean(block, 'muted', rows[5]);
 
   if (!rawVideoUrl) {
+    // do not leave a rejected (non-https) URL rendered as an authored link
+    if (authoredVideoUrl) block.textContent = '';
     return;
   }
 
-  const { href: videoHref, mode } = resolveDmVideoDelivery(rawVideoUrl);
+  const { href: resolvedHref, mode } = resolveDmVideoDelivery(rawVideoUrl);
+  const videoHref = toSafeUrl(resolvedHref);
+
+  if (!videoHref) {
+    return;
+  }
 
   block.textContent = '';
 
@@ -184,9 +210,9 @@ export default function decorate(block) {
     const iframe = document.createElement('iframe');
     iframe.className = 'dm-video-iframe';
 
-    iframe.src = autoplay || loop
+    iframe.src = toSafeUrl(autoplay || loop
       ? withPlaybackParams(videoHref, autoplay, loop)
-      : videoHref;
+      : videoHref);
 
     iframe.title = 'Embedded video';
 

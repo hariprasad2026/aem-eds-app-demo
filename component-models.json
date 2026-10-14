@@ -1157,18 +1157,6 @@
             "name": "maximumOptions",
             "label": "Maximum Options",
             "value": 5
-          },
-          {
-            "component": "select",
-            "name": "optionsType",
-            "label": "Options Type",
-            "value": "default",
-            "options": [
-              {
-                "name": "Default",
-                "value": "default"
-              }
-            ]
           }
         ]
       }
@@ -1346,18 +1334,6 @@
             "name": "maximumOptions",
             "label": "Maximum Options",
             "value": 5
-          },
-          {
-            "component": "select",
-            "name": "optionsType",
-            "label": "Options Type",
-            "value": "default",
-            "options": [
-              {
-                "name": "Default",
-                "value": "default"
-              }
-            ]
           }
         ]
       }
@@ -5149,7 +5125,7 @@
         "name": "eyebrow",
         "label": "Eyebrow Text",
         "value": "",
-        "filter": "richtext"
+        "filter": "testimonial-richtext"
       },
       {
         "component": "richtext",
@@ -5157,7 +5133,7 @@
         "name": "quotation",
         "label": "Quote",
         "value": "",
-        "filter": "richtext"
+        "filter": "testimonial-richtext"
       },
       {
         "component": "boolean",
@@ -5172,7 +5148,7 @@
         "name": "attribution",
         "label": "Attribution",
         "value": "",
-        "filter": "richtext"
+        "filter": "testimonial-richtext"
       },
       {
         "component": "select",

@@ -36,6 +36,22 @@ function getCellValue(cell) {
   return asText(cell);
 }
 
+/**
+ * Returns the resolved URL if it is https: (or same-origin, e.g. relative paths on
+ * the local dev server), otherwise an empty string. Rejects javascript:, data:, etc.
+ */
+function toSafeUrl(value) {
+  if (!value) return '';
+  try {
+    const url = new URL(value, window.location.href);
+    if (url.protocol === 'https:') return url.href;
+    if (url.protocol === 'http:' && url.origin === window.location.origin) return url.href;
+  } catch (e) {
+    // invalid URL
+  }
+  return '';
+}
+
 function detectTypeFromUrl(url) {
   if (!url) {
     return '';
@@ -150,7 +166,7 @@ function normalizeBlock(block) {
   ] = cells;
 
   data.type = asText(typeCell);
-  data.url = getCellValue(urlCell);
+  data.url = toSafeUrl(getCellValue(urlCell));
   data.title = asText(titleValueCell);
   data.caption = asText(captionValueCell);
 
@@ -188,7 +204,7 @@ function createFrame(data) {
   const iframe = document.createElement('iframe');
 
   iframe.className = 'embed-iframe';
-  iframe.src = src;
+  iframe.src = toSafeUrl(src);
   iframe.title = data.title || 'Embedded content';
   iframe.loading = 'lazy';
   iframe.allowFullscreen = true;
@@ -215,6 +231,18 @@ export default async function decorate(block) {
   } = normalizeBlock(block);
 
   if (!data.url) {
+    const isEditor = block.hasAttribute('data-aue-resource')
+      || document.documentElement.classList.contains('adobe-ue-edit');
+
+    // the authoring hint is only meant for Universal Editor
+    if (!isEditor) {
+      const wrapper = block.parentElement?.classList.contains('embedv1-wrapper')
+        ? block.parentElement
+        : block;
+      wrapper.remove();
+      return;
+    }
+
     block.classList.add('embed-empty');
 
     const placeholder = document.createElement('div');
@@ -249,9 +277,12 @@ export default async function decorate(block) {
   frameWrapper.append(createFrame(data));
   wrapper.append(frameWrapper);
 
+  // a <figure> may only have one <figcaption>: title and caption share it
+  const figcaption = document.createElement('figcaption');
+
   if (data.title) {
     const title = createElement(
-      'figcaption',
+      'div',
       'embed-title',
       data.title,
     );
@@ -260,12 +291,12 @@ export default async function decorate(block) {
       moveInstrumentation(titleCell, title);
     }
 
-    wrapper.append(title);
+    figcaption.append(title);
   }
 
   if (data.caption) {
     const caption = createElement(
-      'figcaption',
+      'div',
       'embed-caption',
       data.caption,
     );
@@ -274,7 +305,11 @@ export default async function decorate(block) {
       moveInstrumentation(captionCell, caption);
     }
 
-    wrapper.append(caption);
+    figcaption.append(caption);
+  }
+
+  if (figcaption.children.length) {
+    wrapper.append(figcaption);
   }
 
   block.append(wrapper);

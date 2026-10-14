@@ -150,7 +150,9 @@ export default async function decorate(block) {
     button.setAttribute('aria-controls', panelId);
     button.setAttribute('aria-selected', index === 0);
 
-    button.innerHTML = `<span>${tabTitle}</span>`;
+    const buttonLabel = document.createElement('span');
+    buttonLabel.textContent = tabTitle;
+    button.append(buttonLabel);
 
     button.addEventListener('click', () => {
       block.querySelectorAll('.tabs-panel').forEach((tabPanel) => {

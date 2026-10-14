@@ -1,9 +1,12 @@
+import { moveInstrumentation } from '../../scripts/scripts.js';
+
+// Block-level config fields, in model order. In xwalk markup each of these renders as a
+// single-cell row; every row after them is an authored option item (label | link).
 const FIELD_ORDER = [
   'canvasTitle',
   'canvasDescription',
   'motionType',
   'maximumOptions',
-  'optionsType',
 ];
 
 function normalizeKey(value = '') {
@@ -15,52 +18,54 @@ function extractValue(cell) {
   return link ? link.href || link.textContent.trim() : cell?.textContent.trim() || '';
 }
 
+/**
+ * Splits block rows into config data and option rows. Config rows are either explicit
+ * key/value rows (key cell matches a field name) or the first FIELD_ORDER.length positional
+ * rows; all remaining rows are treated as option items.
+ */
 function extractData(block) {
   const data = {};
+  const optionRows = [];
   let fieldIndex = 0;
 
   [...block.children].forEach((row) => {
-    if (row.classList.contains('canvas-block-option')) return;
     const cells = [...row.children];
     if (!cells.length) return;
 
-    const key = normalizeKey(cells[0].textContent);
-    const fieldName = FIELD_ORDER.find((field) => normalizeKey(field) === key);
-    if (fieldName && cells.length > 1) {
-      data[fieldName] = extractValue(cells[1]);
+    const [keyCell, valueCell] = cells;
+    const key = normalizeKey(keyCell.textContent);
+    const explicitKey = FIELD_ORDER.find((field) => normalizeKey(field) === key);
+    let fieldName;
+    let fieldCell;
+
+    if (explicitKey && valueCell) {
+      fieldName = explicitKey;
+      fieldCell = valueCell;
+    } else if (fieldIndex < FIELD_ORDER.length) {
+      fieldName = FIELD_ORDER[fieldIndex];
+      fieldCell = keyCell;
+      fieldIndex += 1;
+    } else {
+      optionRows.push(row);
       return;
     }
 
-    const fallbackField = FIELD_ORDER[fieldIndex];
-    fieldIndex += 1;
-    if (fallbackField) data[fallbackField] = extractValue(cells[0]);
+    data[fieldName] = extractValue(fieldCell);
+    if (fieldName === 'canvasDescription') data.canvasDescriptionCell = fieldCell;
   });
 
-  return data;
+  return { data, optionRows };
 }
 
 function extractOptions(optionRows) {
-  return optionRows.map((option) => {
-    const fields = {};
-    [...option.children].forEach((row) => {
-      const cells = [...row.children];
-      if (cells.length < 2) return;
-      const key = normalizeKey(cells[0].textContent);
-      if (['optionlabel', 'label', 'title'].includes(key)) {
-        fields.label = cells[1].textContent.trim();
-      } else if (['optionlink', 'link', 'url', 'href'].includes(key)) {
-        fields.url = extractValue(cells[1]);
-      }
-    });
-
-    if (!fields.label || !fields.url) {
-      const cells = [...option.children];
-      if (!fields.label && cells[0]) fields.label = cells[0].textContent.trim();
-      if (!fields.url && cells[1]) fields.url = extractValue(cells[1]);
-    }
-
-    return fields;
-  }).filter((option) => option.label);
+  return optionRows.map((row) => {
+    const [labelCell, linkCell] = [...row.children];
+    return {
+      row,
+      label: labelCell?.textContent.trim() || '',
+      url: extractValue(linkCell),
+    };
+  }).filter((option) => option.label && option.url);
 }
 
 function normalizeMotionType(value) {
@@ -71,17 +76,6 @@ function normalizeMotionType(value) {
 function positiveInteger(value, fallback) {
   const parsed = Number.parseInt(value, 10);
   return Number.isNaN(parsed) ? fallback : Math.max(parsed, 0);
-}
-
-async function fetchDefaultOptions(maximumOptions) {
-  try {
-    const response = await fetch('/blocks/canvas-block/dummy.json');
-    if (!response.ok) return [];
-    const data = await response.json();
-    return (data.options || []).slice(0, maximumOptions);
-  } catch (error) {
-    return [];
-  }
 }
 
 function attachMotion(block) {
@@ -95,7 +89,7 @@ function attachMotion(block) {
   observer.observe(block);
 }
 
-async function render(block, data, authoredOptions) {
+function render(block, data, optionRows) {
   const section = document.createElement('section');
   section.className = 'canvas-block-stage';
 
@@ -115,10 +109,10 @@ async function render(block, data, authoredOptions) {
     content.appendChild(title);
   }
 
-  if (data.canvasDescription) {
+  if (data.canvasDescription && data.canvasDescriptionCell) {
     const description = document.createElement('div');
     description.className = 'canvas-block-description';
-    description.innerHTML = data.canvasDescription;
+    description.append(...data.canvasDescriptionCell.childNodes);
     content.appendChild(description);
   }
 
@@ -129,16 +123,14 @@ async function render(block, data, authoredOptions) {
   const optionsContainer = document.createElement('div');
   optionsContainer.className = 'canvas-block-options';
   const maximumOptions = Math.min(5, positiveInteger(data.maximumOptions, 5));
-  const options = extractOptions(authoredOptions);
-  const configuredOptions = options.length
-    ? options.slice(0, maximumOptions)
-    : await fetchDefaultOptions(maximumOptions);
+  const options = extractOptions(optionRows).slice(0, maximumOptions);
 
-  configuredOptions.forEach((item, index) => {
+  options.forEach((item, index) => {
     const link = document.createElement('a');
     link.className = 'canvas-block-option-pill';
-    link.href = item.url || '#';
-    link.textContent = item.label || '';
+    link.href = item.url;
+    link.textContent = item.label;
+    moveInstrumentation(item.row, link);
 
     const rowIndex = Math.floor(index / 3);
     let row = optionsContainer.children[rowIndex];
@@ -150,16 +142,15 @@ async function render(block, data, authoredOptions) {
     row.appendChild(link);
   });
 
-  content.appendChild(optionsContainer);
+  if (options.length) content.appendChild(optionsContainer);
   section.appendChild(content);
   block.appendChild(section);
   attachMotion(block);
 }
 
 export default function decorate(block) {
-  const data = extractData(block);
-  const optionRows = [...block.querySelectorAll('.canvas-block-option')];
-  block.innerHTML = '';
+  const { data, optionRows } = extractData(block);
+  block.replaceChildren();
   block.classList.add('canvas-block');
   block.dataset.motionType = normalizeMotionType(data.motionType);
   render(block, data, optionRows);

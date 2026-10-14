@@ -1,0 +1,67 @@
+/* Title With Column: large heading on the left, body copy on the right */
+
+.title-with-column {
+  padding: 32px 0;
+}
+
+.title-with-column > div {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+.title-with-column :is(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+  padding-left: 25px;
+  font-family: inherit;
+  font-size: 40px;
+  font-weight: 200;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+@media (width >= 600px) {
+  .title-with-column > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 900px) {
+  .title-with-column {
+    padding: 0;
+  }
+
+  .title-with-column > div {
+    gap: 40px;
+  }
+
+  .title-with-column :is(h1, h2, h3, h4, h5, h6) {
+    font-size: 46px;
+  }
+
+  /* Left column */
+  .title-with-column > div > div:first-child {
+    align-self: flex-start;
+    padding-top: 34px;
+  }
+
+  /* Right column */
+  .title-with-column > div > div:last-child {
+    flex: 1;
+    padding-right: 25px;
+    padding-left: 25px;
+  }
+
+  .title-with-column > div > div:last-child p {
+    max-width: 65ch;
+    margin: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .title-with-column > div > div:last-child > * + * {
+    margin-top: 48px;
+  }
+}

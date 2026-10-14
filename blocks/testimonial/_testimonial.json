@@ -33,7 +33,7 @@
           "name": "eyebrow",
           "label": "Eyebrow Text",
           "value": "",
-          "filter": "richtext"
+          "filter": "testimonial-richtext"
         },
         {
           "component": "richtext",
@@ -41,7 +41,7 @@
           "name": "quotation",
           "label": "Quote",
           "value": "",
-          "filter": "richtext"
+          "filter": "testimonial-richtext"
         },
         {
           "component": "boolean",
@@ -56,7 +56,7 @@
           "name": "attribution",
           "label": "Attribution",
           "value": "",
-          "filter": "richtext"
+          "filter": "testimonial-richtext"
         },
         {
   "component": "select",
@@ -80,7 +80,7 @@
   ],
   "filters": [
     {
-      "id": "richtext",
+      "id": "testimonial-richtext",
       "components": [
         "richtext"
       ],

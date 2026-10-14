@@ -1,5 +1,21 @@
 const COLOR_VALUE_PATTERN = /^#(?:[\da-f]{3}|[\da-f]{6}|[\da-f]{8})$/i;
 
+/**
+ * Converts an attribution paragraph (a paragraph whose only content is an <em>)
+ * into a <cite>. Other emphasis is left untouched.
+ */
+function convertAttribution(container) {
+  container.querySelectorAll(':scope > p').forEach((p) => {
+    const nodes = [...p.childNodes]
+      .filter((n) => n.nodeType !== Node.TEXT_NODE || n.textContent.trim());
+    if (nodes.length !== 1 || nodes[0].nodeName !== 'EM') return;
+    const em = nodes[0];
+    const cite = document.createElement('cite');
+    cite.append(...em.childNodes);
+    em.replaceWith(cite);
+  });
+}
+
 export default async function decorate(block) {
   const eyebrowField = block.children[0]?.firstElementChild;
   const title = block.children[1]?.firstElementChild;
@@ -42,57 +58,34 @@ export default async function decorate(block) {
     content.append(quotation);
   }
 
-  const hasImage = profileImageField?.querySelector('img');
+  const picture = profileImageField?.querySelector('picture') || profileImageField?.querySelector('img');
+  const altText = imageAltTextField?.textContent?.trim();
+  const img = picture?.tagName === 'IMG' ? picture : picture?.querySelector('img');
 
-  if (hasImage || authorDetailsField?.textContent.trim()) {
+  if (img && altText) img.alt = altText;
+
+  if (authorDetailsField?.textContent.trim()) {
     const profileWrapper = document.createElement('div');
     profileWrapper.className = 'quote-profile';
 
-    if (hasImage) {
-      const imageWrapper = document.createElement('div');
-      imageWrapper.className = 'quote-author-image';
-      imageWrapper.innerHTML = profileImageField.innerHTML;
-      profileWrapper.append(imageWrapper);
-    }
-
-    if (authorDetailsField?.textContent.trim()) {
-      const details = document.createElement('div');
-      details.className = 'quote-author-details';
-      details.innerHTML = authorDetailsField.innerHTML;
-      profileWrapper.append(details);
-    }
+    const details = document.createElement('div');
+    details.className = 'quote-author-details';
+    details.append(...authorDetailsField.childNodes);
+    convertAttribution(details);
+    profileWrapper.append(details);
 
     content.append(profileWrapper);
   }
 
-  const media = document.createElement('div');
-
-  if (hasImage) {
-    media.className = 'quote-media';
-    media.innerHTML = profileImageField.innerHTML;
-  } else {
-    media.className = 'quote-media quote-media-alt';
-
-    const altText = imageAltTextField?.textContent?.trim();
-
-    if (altText) {
-      media.textContent = altText;
-    }
-  }
-
   blockquote.append(content);
 
-  if (hasImage || media.textContent.trim()) {
+  // the authored portrait is moved (not copied) into the media column
+  if (picture) {
+    const media = document.createElement('div');
+    media.className = 'quote-media';
+    media.append(picture);
     blockquote.append(media);
   }
-
-  const ems = blockquote.querySelectorAll('em');
-
-  ems.forEach((em) => {
-    const cite = document.createElement('cite');
-    cite.innerHTML = em.innerHTML;
-    em.replaceWith(cite);
-  });
 
   const bgColor = colors[
     backgroundField?.textContent.trim().toLowerCase()
@@ -102,6 +95,5 @@ export default async function decorate(block) {
     blockquote.style.setProperty('--quote-bg', bgColor);
   }
 
-  block.innerHTML = '';
-  block.append(blockquote);
+  block.replaceChildren(blockquote);
 }

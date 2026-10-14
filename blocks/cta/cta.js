@@ -154,11 +154,15 @@ function readBlockContent(block) {
 
 function createCta(data) {
   const href = data.ctaLink.trim();
-  const label = data.textcta.trim() || href;
+  const label = data.textcta.trim();
 
-  if (!label) {
+  if (!label && !data.icon) {
     return null;
   }
+
+  const accessibleLabel = label
+    || data.icon.getAttribute('alt')?.trim()
+    || 'Open link';
 
   const link = document.createElement(href ? 'a' : 'span');
 
@@ -174,7 +178,7 @@ function createCta(data) {
     link.href = href;
   }
 
-  link.setAttribute('aria-label', label);
+  link.setAttribute('aria-label', accessibleLabel);
 
   if (href && data.linkTarget === 'new-window') {
     link.target = '_blank';
@@ -212,7 +216,7 @@ function createCta(data) {
 
   if (
     data.icon
-    && data.iconPosition === 'before'
+    && (!label || data.iconPosition === 'before')
   ) {
     const icon = createIcon(
       data.icon,
@@ -226,15 +230,18 @@ function createCta(data) {
     }
   }
 
-  const text = document.createElement('span');
+  if (label) {
+    const text = document.createElement('span');
 
-  text.className = 'cta-text';
-  text.textContent = label;
+    text.className = 'cta-text';
+    text.textContent = label;
 
-  link.append(text);
+    link.append(text);
+  }
 
   if (
     data.icon
+    && label
     && data.iconPosition === 'after'
   ) {
     const icon = createIcon(

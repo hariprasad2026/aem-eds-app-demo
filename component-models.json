@@ -1933,6 +1933,27 @@
       {
         "component": "select",
         "valueType": "string",
+        "name": "ctaWidth",
+        "label": "Width",
+        "value": "auto",
+        "options": [
+          {
+            "name": "Auto",
+            "value": "auto"
+          },
+          {
+            "name": "Half Width",
+            "value": "half"
+          },
+          {
+            "name": "Full Width",
+            "value": "full"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
         "name": "contentLayout",
         "label": "Content Layout",
         "value": "normal",
@@ -1965,27 +1986,6 @@
           {
             "name": "Right",
             "value": "right"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "ctaWidth",
-        "label": "Width",
-        "value": "auto",
-        "options": [
-          {
-            "name": "Auto",
-            "value": "auto"
-          },
-          {
-            "name": "Half Width",
-            "value": "half"
-          },
-          {
-            "name": "Full Width",
-            "value": "full"
           }
         ]
       },

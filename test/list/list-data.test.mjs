@@ -3,12 +3,14 @@ import { readFileSync } from 'node:fs';
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  ITEM_FIELDS, applyOverrides, applyTagMatching, buildCards, deduplicateCards, isSafeUrl, kindOf, limitCards,
+  ITEM_FIELDS, applyOverrides, applyTagMatching, buildCards, deduplicateCards, isSafeUrl, kindOf,
+  limitCards,
   normalizeConfig, normalizePageToCard, resolveFixedItems, resolveParentPages, sortCards, toSafeId,
   validateConfig, withIds,
 } from '../../blocks/list/list-data.js';
 import { matchCells } from '../../utils/cells.js';
 import { resolveRedirect } from '../../utils/redirects.js';
+// eslint-disable-next-line import/extensions -- test fixtures are ES modules (.mjs)
 import { PAGES } from './fixtures.mjs';
 
 const paths = (cards) => cards.map((card) => card.sourcePath || card.url);
@@ -58,7 +60,8 @@ describe('configuration', () => {
     it(`responsive combination desktop/tablet/mobile = ${combo}`, () => {
       const [d, t, m] = [...combo].map((c) => MODES[c]);
       const c = config({ desktopmode: d, tabletmode: t, mobilemode: m });
-      assert.deepEqual([c.responsive.desktop.mode, c.responsive.tablet.mode, c.responsive.mobile.mode], [d, t, m]);
+      const { desktop, tablet, mobile } = c.responsive;
+      assert.deepEqual([desktop.mode, tablet.mode, mobile.mode], [d, t, m]);
     });
   });
 });
@@ -77,7 +80,9 @@ describe('parent / child pages', () => {
     const depth2 = resolveParentPages(PAGES, '/en/insights', 2).map((p) => p.path);
     assert.ok(depth2.includes('/en/insights/2026/deep-dive'));
     assert.ok(!resolveParentPages(PAGES, '/en/insights', 1).map((p) => p.path).includes('/en/insights/2026/deep-dive'));
-    const c = config({ source: 'parent', parentpath: '/en/insights', directchildrenonly: 'false', childdepth: '2' });
+    const c = config({
+      source: 'parent', parentpath: '/en/insights', directchildrenonly: 'false', childdepth: '2',
+    });
     assert.equal(c.childDepth, 2);
   });
   it('lists nothing for a missing parent', () => {
@@ -196,7 +201,9 @@ describe('tag-based pages', () => {
       source: 'tags', rootpath: '/en/insights', tags: 'tcs:topic/ai', includedescendants: 'false',
     }), { pages: PAGES });
     assert.ok(!paths(direct).includes('/en/insights/2026/deep-dive'));
-    const deep = buildCards(config({ source: 'tags', rootpath: '/en/insights', tags: 'tcs:topic/ai', maxdepth: '2' }), { pages: PAGES });
+    const deep = buildCards(config({
+      source: 'tags', rootpath: '/en/insights', tags: 'tcs:topic/ai', maxdepth: '2',
+    }), { pages: PAGES });
     assert.ok(paths(deep).includes('/en/insights/2026/deep-dive'));
   });
   it('no tags or no matches: no cards', () => {

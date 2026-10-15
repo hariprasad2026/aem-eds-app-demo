@@ -1,0 +1,1184 @@
+{
+  "definitions": [
+    {
+      "title": "Filter List",
+      "id": "filter-list",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Filter List",
+              "model": "filter-list",
+              "key-value": true,
+              "showResultCount": false,
+              "layout": "masonry",
+              "cardsPerPage": 9,
+              "loadMoreCount": 6,
+              "source": "query-index",
+              "sortBy": "latest",
+              "showAll": true,
+              "multiSelect": false,
+              "advancedFilter": true,
+              "filterLogic": "and",
+              "cardStyle": "mixed",
+              "enableFeatured": true,
+              "featuredRule": "featured",
+              "featuredCount": 2,
+              "enableHero": false,
+              "heroRule": "featured",
+              "imageSource": "featured-image",
+              "fallbackImage": "thumbnail-image",
+              "eyebrowSource": "content-type",
+              "titleSource": "title",
+              "descriptionSource": "description",
+              "tagSource": "tags",
+              "urlSource": "path",
+              "authorSource": "author"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "filter-list",
+      "fields": [
+        {
+          "component": "tab",
+          "name": "contentTab",
+          "label": "Content"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "title",
+          "label": "Title",
+          "description": "e.g. Explore the Agentic bank"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "description",
+          "label": "Description"
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "showResultCount",
+          "label": "Show result count",
+          "value": false
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "layout",
+          "label": "Default layout",
+          "value": "masonry",
+          "options": [
+            {
+              "name": "Masonry",
+              "value": "masonry"
+            },
+            {
+              "name": "Grid",
+              "value": "grid"
+            },
+            {
+              "name": "List",
+              "value": "list"
+            }
+          ]
+        },
+        {
+          "component": "number",
+          "valueType": "number",
+          "name": "cardsPerPage",
+          "label": "Cards per page",
+          "description": "Cards shown first; Load more shows the next ones.",
+          "value": 9,
+          "min": 1,
+          "max": 48
+        },
+        {
+          "component": "number",
+          "valueType": "number",
+          "name": "loadMoreCount",
+          "label": "Load more count",
+          "description": "Cards added by each Load more.",
+          "value": 6,
+          "min": 1,
+          "max": 48
+        },
+        {
+          "component": "tab",
+          "name": "sourceTab",
+          "label": "Source"
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "source",
+          "label": "Datasource",
+          "value": "query-index",
+          "options": [
+            {
+              "name": "Query Index",
+              "value": "query-index"
+            },
+            {
+              "name": "Manual List",
+              "value": "manual"
+            }
+          ]
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "rootPath",
+          "label": "Root path",
+          "description": "Pages below this page, e.g. /en/insights. Empty: the whole site of the language.",
+          "condition": {
+            "!==": [
+              {
+                "var": "source"
+              },
+              "manual"
+            ]
+          }
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "pages",
+          "label": "Pages",
+          "description": "The pages to list, in this order; their cards come from their metadata.",
+          "multi": true,
+          "condition": {
+            "===": [
+              {
+                "var": "source"
+              },
+              "manual"
+            ]
+          }
+        },
+        {
+          "component": "multiselect",
+          "valueType": "string",
+          "name": "pageTypes",
+          "label": "Page types",
+          "description": "Only pages of these page types (page-type metadata). None: every page type.",
+          "options": [
+            {
+              "name": "Article",
+              "value": "article"
+            },
+            {
+              "name": "Blog",
+              "value": "blog"
+            },
+            {
+              "name": "Report",
+              "value": "report"
+            },
+            {
+              "name": "Case Study",
+              "value": "case-study"
+            },
+            {
+              "name": "News",
+              "value": "news"
+            },
+            {
+              "name": "Event",
+              "value": "event"
+            }
+          ]
+        },
+        {
+          "component": "multiselect",
+          "valueType": "string",
+          "name": "contentTypes",
+          "label": "Content types",
+          "description": "Only pages of these content types (content-type metadata). None: every content type.",
+          "options": [
+            {
+              "name": "Article",
+              "value": "article"
+            },
+            {
+              "name": "Blog",
+              "value": "blog"
+            },
+            {
+              "name": "Report",
+              "value": "report"
+            },
+            {
+              "name": "Case Study",
+              "value": "case-study"
+            },
+            {
+              "name": "News",
+              "value": "news"
+            },
+            {
+              "name": "Event",
+              "value": "event"
+            },
+            {
+              "name": "Whitepaper",
+              "value": "whitepaper"
+            },
+            {
+              "name": "Podcast",
+              "value": "podcast"
+            },
+            {
+              "name": "Video",
+              "value": "video"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "sortBy",
+          "label": "Sort by",
+          "value": "latest",
+          "options": [
+            {
+              "name": "Latest First",
+              "value": "latest"
+            },
+            {
+              "name": "Featured First",
+              "value": "featured"
+            },
+            {
+              "name": "Priority",
+              "value": "priority"
+            },
+            {
+              "name": "Alphabetical",
+              "value": "alphabetical"
+            }
+          ]
+        },
+        {
+          "component": "tab",
+          "name": "filtersTab",
+          "label": "Filters"
+        },
+        {
+          "component": "aem-tag",
+          "valueType": "string",
+          "name": "primaryCategory",
+          "label": "Primary filter category",
+          "description": "A tag root, e.g. tcs:industry. Without Primary filter tags, its tags used by the pages are the filters."
+        },
+        {
+          "component": "container",
+          "name": "primaryTags",
+          "label": "Primary filter tags",
+          "description": "The filters shown, in this order (labels from the taxonomy).",
+          "multi": true,
+          "fields": [
+            {
+              "component": "aem-tag",
+              "valueType": "string",
+              "name": "tagId",
+              "label": "Tag Id"
+            }
+          ]
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "showAll",
+          "label": "Show All filter",
+          "value": true
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "multiSelect",
+          "label": "Allow multi select",
+          "description": "Several filters at once: pages with every selected tag.",
+          "value": false
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "advancedFilter",
+          "label": "Enable advanced filter",
+          "description": "The filter button opens the Advanced filter categories.",
+          "value": true
+        },
+        {
+          "component": "tab",
+          "name": "advancedTab",
+          "label": "Advanced"
+        },
+        {
+          "component": "container",
+          "name": "advancedCategories",
+          "label": "Advanced filter categories",
+          "multi": true,
+          "fields": [
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "categoryLabel",
+              "label": "Category label",
+              "description": "e.g. Industry"
+            },
+            {
+              "component": "aem-tag",
+              "valueType": "string",
+              "name": "taxonomyRoot",
+              "label": "Taxonomy root",
+              "description": "e.g. tcs:industry; its tags used by the pages are the options."
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "filterLogic",
+          "label": "Filter logic",
+          "description": "AND: pages with every selected option. OR: pages with any of them.",
+          "value": "and",
+          "options": [
+            {
+              "name": "AND",
+              "value": "and"
+            },
+            {
+              "name": "OR",
+              "value": "or"
+            }
+          ]
+        },
+        {
+          "component": "tab",
+          "name": "cardsTab",
+          "label": "Cards"
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "cardStyle",
+          "label": "Card style",
+          "value": "mixed",
+          "options": [
+            {
+              "name": "Default",
+              "value": "default"
+            },
+            {
+              "name": "Compact",
+              "value": "compact"
+            },
+            {
+              "name": "Featured",
+              "value": "featured"
+            },
+            {
+              "name": "Mixed",
+              "value": "mixed"
+            }
+          ]
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "enableFeatured",
+          "label": "Enable featured cards",
+          "description": "Large cards, one after each page of cards.",
+          "value": true
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "featuredRule",
+          "label": "Featured rule",
+          "value": "featured",
+          "options": [
+            {
+              "name": "featured=true",
+              "value": "featured"
+            },
+            {
+              "name": "priority<=3",
+              "value": "priority"
+            },
+            {
+              "name": "Manual",
+              "value": "manual"
+            }
+          ],
+          "condition": {
+            "===": [
+              {
+                "var": "enableFeatured"
+              },
+              true
+            ]
+          }
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "featuredPages",
+          "label": "Featured pages",
+          "multi": true,
+          "condition": {
+            "and": [
+              {
+                "===": [
+                  {
+                    "var": "enableFeatured"
+                  },
+                  true
+                ]
+              },
+              {
+                "===": [
+                  {
+                    "var": "featuredRule"
+                  },
+                  "manual"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "component": "number",
+          "valueType": "number",
+          "name": "featuredCount",
+          "label": "Featured card count",
+          "value": 2,
+          "min": 1,
+          "max": 12,
+          "condition": {
+            "===": [
+              {
+                "var": "enableFeatured"
+              },
+              true
+            ]
+          }
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "enableHero",
+          "label": "Enable hero card",
+          "description": "A large spotlight card first.",
+          "value": false
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "heroRule",
+          "label": "Hero rule",
+          "value": "featured",
+          "options": [
+            {
+              "name": "Latest",
+              "value": "latest"
+            },
+            {
+              "name": "Featured",
+              "value": "featured"
+            },
+            {
+              "name": "Manual",
+              "value": "manual"
+            }
+          ],
+          "condition": {
+            "===": [
+              {
+                "var": "enableHero"
+              },
+              true
+            ]
+          }
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "heroPage",
+          "label": "Hero page",
+          "condition": {
+            "and": [
+              {
+                "===": [
+                  {
+                    "var": "enableHero"
+                  },
+                  true
+                ]
+              },
+              {
+                "===": [
+                  {
+                    "var": "heroRule"
+                  },
+                  "manual"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "component": "tab",
+          "name": "mappingTab",
+          "label": "Mapping"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "imageSource",
+          "label": "Image source",
+          "description": "The metadata column of the card image.",
+          "value": "featured-image"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "fallbackImage",
+          "label": "Fallback image",
+          "description": "The column used when the page has no image source.",
+          "value": "thumbnail-image"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "eyebrowSource",
+          "label": "Eyebrow source",
+          "description": "The content type label, e.g. Article.",
+          "value": "content-type"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "titleSource",
+          "label": "Title source",
+          "value": "title"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "descriptionSource",
+          "label": "Description source",
+          "value": "description"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "tagSource",
+          "label": "Tag source",
+          "value": "tags"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "urlSource",
+          "label": "Url source",
+          "value": "path"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "authorSource",
+          "label": "Author source",
+          "description": "author, or author-id (from the Authors sheet).",
+          "value": "author"
+        },
+        {
+          "component": "tab",
+          "name": "additionalTab",
+          "label": "Additional"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "classes_anchor",
+          "label": "Anchor ID",
+          "description": "A unique ID of the block on the page, starting with anchor-, e.g. anchor-our-services; link to it with #anchor-our-services.",
+          "validation": {
+            "regExp": "^anchor-[a-z0-9][a-z0-9-]*$",
+            "customErrorMsg": "Start with anchor-, then lower-case letters, digits and hyphens."
+          }
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "classes_hideblock",
+          "label": "Hide block",
+          "description": "Hides the whole block on the page until it is turned off (shown faded in the editor).",
+          "value": false
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_paddingleft",
+          "label": "Padding left",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "pl-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "pl-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "pl-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "pl-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "pl-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "pl-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "pl-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "pl-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "pl-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "pl-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "pl-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "pl-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "pl-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "pl-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_paddingright",
+          "label": "Padding right",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "pr-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "pr-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "pr-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "pr-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "pr-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "pr-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "pr-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "pr-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "pr-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "pr-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "pr-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "pr-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "pr-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "pr-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_paddingtop",
+          "label": "Padding top",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "pt-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "pt-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "pt-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "pt-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "pt-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "pt-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "pt-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "pt-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "pt-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "pt-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "pt-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "pt-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "pt-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "pt-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_paddingbottom",
+          "label": "Padding bottom",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "pb-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "pb-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "pb-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "pb-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "pb-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "pb-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "pb-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "pb-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "pb-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "pb-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "pb-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "pb-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "pb-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "pb-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_marginleft",
+          "label": "Margin left",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "ml-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "ml-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "ml-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "ml-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "ml-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "ml-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "ml-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "ml-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "ml-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "ml-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "ml-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "ml-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "ml-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "ml-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_marginright",
+          "label": "Margin right",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "mr-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "mr-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "mr-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "mr-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "mr-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "mr-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "mr-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "mr-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "mr-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "mr-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "mr-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "mr-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "mr-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "mr-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_margintop",
+          "label": "Margin top",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "mt-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "mt-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "mt-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "mt-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "mt-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "mt-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "mt-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "mt-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "mt-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "mt-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "mt-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "mt-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "mt-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "mt-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_marginbottom",
+          "label": "Margin bottom",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "mb-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "mb-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "mb-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "mb-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "mb-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "mb-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "mb-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "mb-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "mb-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "mb-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "mb-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "mb-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "mb-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "mb-3000"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

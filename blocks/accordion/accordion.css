@@ -1,0 +1,81 @@
+/* Accordion (Block Collection), site styles: rows with dividers and a chevron */
+.accordion {
+  border-top: var(--border-width-100) solid var(--color-border-default);
+}
+
+.accordion .accordion-item {
+  border-bottom: var(--border-width-100) solid var(--color-border-default);
+}
+
+.accordion .accordion-item-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-600);
+  padding: var(--space-600) 0;
+  color: var(--color-text-default);
+  font-size: var(--heading-font-size-m);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.417;
+  letter-spacing: calc(-0.015 * var(--heading-font-size-m));
+  list-style: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.accordion .accordion-item-label::-webkit-details-marker {
+  display: none;
+}
+
+.accordion .accordion-item-label > * {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.accordion .accordion-item-label::after {
+  content: '';
+  flex: none;
+  width: var(--icon-size-s);
+  height: var(--icon-size-s);
+  background-color: currentcolor;
+  mask: url('../../icons/chevron-down.svg') center / contain no-repeat;
+  transition: transform 0.2s;
+}
+
+.accordion .accordion-item-label:hover,
+.accordion .accordion-item-label:focus-visible {
+  color: var(--color-text-brand);
+}
+
+.accordion .accordion-item-label:focus-visible {
+  outline: var(--border-width-200) solid var(--color-border-brand);
+  outline-offset: 0.125rem;
+}
+
+.accordion .accordion-item[open] .accordion-item-label::after {
+  transform: rotate(180deg);
+}
+
+.accordion .accordion-item-body {
+  padding: 0 0 var(--space-600);
+  color: var(--color-text-neutral-secondary);
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+}
+
+.accordion .accordion-item-body > :first-child {
+  margin-top: 0;
+}
+
+.accordion .accordion-item-body > :last-child {
+  margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion .accordion-item-label,
+  .accordion .accordion-item-label::after {
+    transition: none;
+  }
+}

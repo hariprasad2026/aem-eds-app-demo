@@ -1,0 +1,907 @@
+{
+  "fields": {
+    "header": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "description": "The heading of the cards, e.g. Related to Agentic AI."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "titleType",
+        "label": "Heading type",
+        "value": "h2",
+        "options": [
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "link",
+        "label": "CTA link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "linkText",
+        "label": "CTA text"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "linkType",
+        "label": "CTA style",
+        "value": "",
+        "options": [
+          {
+            "name": "Text link",
+            "value": ""
+          },
+          {
+            "name": "Primary button",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary button",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "listLabel",
+        "label": "Accessible list label",
+        "description": "Names the cards for screen readers when there is no title."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "componentId",
+        "label": "Component ID",
+        "description": "Unique on the page (letters, digits, - and _); used for deep links and analytics, so changing it changes those. Empty: generated.",
+        "validation": {
+          "regExp": "^[A-Za-z][A-Za-z0-9_-]*$",
+          "customErrorMsg": "Start with a letter; use letters, digits, - and _."
+        }
+      }
+    ],
+    "cards": [
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "displayAsTeaser",
+        "label": "Display as teaser",
+        "value": true,
+        "description": "Cards; off: a list of links (title rows)."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "cardStyle",
+        "label": "Card style",
+        "value": "image",
+        "options": [
+          {
+            "name": "Image card",
+            "value": "image"
+          },
+          {
+            "name": "Panel",
+            "value": "panel"
+          },
+          {
+            "name": "Report",
+            "value": "report"
+          },
+          {
+            "name": "Statistic",
+            "value": "stat"
+          },
+          {
+            "name": "Mixed (by page)",
+            "value": "mixed"
+          }
+        ],
+        "description": "Mixed: items of the content type Report as report cards, items without an image as panels, others as image cards.",
+        "condition": {
+          "===": [
+            {
+              "var": "displayAsTeaser"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "cardTheme",
+        "label": "Card colour",
+        "value": "",
+        "options": [
+          {
+            "name": "Default for the style",
+            "value": ""
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Navy",
+            "value": "navy"
+          },
+          {
+            "name": "Brand blue",
+            "value": "brand"
+          },
+          {
+            "name": "Light blue",
+            "value": "brand-light"
+          },
+          {
+            "name": "Light grey",
+            "value": "grey"
+          },
+          {
+            "name": "Mid grey",
+            "value": "mid-grey"
+          },
+          {
+            "name": "Grey gradient",
+            "value": "gradient"
+          },
+          {
+            "name": "Image background",
+            "value": "image"
+          }
+        ],
+        "condition": {
+          "===": [
+            {
+              "var": "displayAsTeaser"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "imageRatio",
+        "label": "Image ratio",
+        "value": "16-9",
+        "options": [
+          {
+            "name": "16:9",
+            "value": "16-9"
+          },
+          {
+            "name": "1:1",
+            "value": "1-1"
+          },
+          {
+            "name": "4:3",
+            "value": "4-3"
+          },
+          {
+            "name": "3:2",
+            "value": "3-2"
+          }
+        ],
+        "condition": {
+          "===": [
+            {
+              "var": "displayAsTeaser"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "panelHeight",
+        "label": "Panel height",
+        "value": "portrait",
+        "options": [
+          {
+            "name": "Portrait (2:3)",
+            "value": "portrait"
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "Content",
+            "value": "auto"
+          }
+        ],
+        "description": "Panel, report and statistic cards.",
+        "condition": {
+          "===": [
+            {
+              "var": "displayAsTeaser"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "featureFirst",
+        "label": "First card as feature",
+        "value": false,
+        "description": "The first card as a large spotlight above the others.",
+        "condition": {
+          "===": [
+            {
+              "var": "displayAsTeaser"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "linkItems",
+        "label": "Link items",
+        "value": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "openInNewTab",
+        "label": "Open links in a new tab",
+        "value": false,
+        "description": "The default for the items."
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showImage",
+        "label": "Show image",
+        "value": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showEyebrow",
+        "label": "Show eyebrow",
+        "value": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showTags",
+        "label": "Show tags",
+        "value": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showDescription",
+        "label": "Show description",
+        "value": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showDate",
+        "label": "Show date",
+        "value": true
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "dateFormat",
+        "label": "Date format",
+        "value": "dd-mmm-yy",
+        "options": [
+          {
+            "name": "04 Sep 26",
+            "value": "dd-mmm-yy"
+          },
+          {
+            "name": "04-09-2026",
+            "value": "dd-mm-yyyy"
+          },
+          {
+            "name": "09-04-2026",
+            "value": "mm-dd-yyyy"
+          },
+          {
+            "name": "Sep 4, 2026",
+            "value": "mmm-d-yyyy"
+          },
+          {
+            "name": "04/09/26",
+            "value": "dd/mm/yy"
+          }
+        ],
+        "condition": {
+          "===": [
+            {
+              "var": "showDate"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showCta",
+        "label": "Show call to action",
+        "value": true
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "imageLoading",
+        "label": "Image loading",
+        "value": "lazy",
+        "options": [
+          {
+            "name": "Lazy",
+            "value": "lazy"
+          },
+          {
+            "name": "Eager (first screen)",
+            "value": "eager"
+          }
+        ]
+      }
+    ],
+    "layout": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "desktopMode",
+        "label": "Desktop display",
+        "value": "grid",
+        "options": [
+          {
+            "name": "Grid",
+            "value": "grid"
+          },
+          {
+            "name": "Horizontal scroll",
+            "value": "horizontal-scroll"
+          }
+        ],
+        "description": "Grid or horizontal scroll on desktop (1200px and wider), independently of the other breakpoints."
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "desktopColumns",
+        "label": "Desktop columns",
+        "value": 4,
+        "min": 1,
+        "max": 6,
+        "condition": {
+          "===": [
+            {
+              "var": "desktopMode"
+            },
+            "grid"
+          ]
+        }
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "desktopGap",
+        "label": "Desktop gap (px)",
+        "value": 24,
+        "min": 0,
+        "max": 120,
+        "description": "Space between the cards."
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "desktopVisible",
+        "label": "Desktop items visible",
+        "value": 4.2,
+        "min": 1,
+        "max": 8,
+        "description": "Cards in view, e.g. 4.2 shows 4 and a part of the next one.",
+        "condition": {
+          "===": [
+            {
+              "var": "desktopMode"
+            },
+            "horizontal-scroll"
+          ]
+        }
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "desktopCardWidth",
+        "label": "Desktop card width (px)",
+        "value": 0,
+        "min": 0,
+        "max": 1200,
+        "description": "A fixed card width (120 or more); 0 uses Items visible.",
+        "condition": {
+          "===": [
+            {
+              "var": "desktopMode"
+            },
+            "horizontal-scroll"
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "desktopControls",
+        "label": "Previous / next buttons on desktop",
+        "value": false,
+        "condition": {
+          "===": [
+            {
+              "var": "desktopMode"
+            },
+            "horizontal-scroll"
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "desktopIndicator",
+        "label": "Scroll indicator on desktop",
+        "value": false,
+        "condition": {
+          "===": [
+            {
+              "var": "desktopMode"
+            },
+            "horizontal-scroll"
+          ]
+        }
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "tabletMode",
+        "label": "Tablet display",
+        "value": "grid",
+        "options": [
+          {
+            "name": "Grid",
+            "value": "grid"
+          },
+          {
+            "name": "Horizontal scroll",
+            "value": "horizontal-scroll"
+          }
+        ],
+        "description": "Grid or horizontal scroll on tablet (600 to 1199px), independently of the other breakpoints."
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "tabletColumns",
+        "label": "Tablet columns",
+        "value": 4,
+        "min": 1,
+        "max": 6,
+        "condition": {
+          "===": [
+            {
+              "var": "tabletMode"
+            },
+            "grid"
+          ]
+        }
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "tabletGap",
+        "label": "Tablet gap (px)",
+        "value": 24,
+        "min": 0,
+        "max": 120,
+        "description": "Space between the cards."
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "tabletVisible",
+        "label": "Tablet items visible",
+        "value": 3.3,
+        "min": 1,
+        "max": 8,
+        "description": "Cards in view, e.g. 4.2 shows 4 and a part of the next one.",
+        "condition": {
+          "===": [
+            {
+              "var": "tabletMode"
+            },
+            "horizontal-scroll"
+          ]
+        }
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "tabletCardWidth",
+        "label": "Tablet card width (px)",
+        "value": 0,
+        "min": 0,
+        "max": 1200,
+        "description": "A fixed card width (120 or more); 0 uses Items visible.",
+        "condition": {
+          "===": [
+            {
+              "var": "tabletMode"
+            },
+            "horizontal-scroll"
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "tabletControls",
+        "label": "Previous / next buttons on tablet",
+        "value": false,
+        "condition": {
+          "===": [
+            {
+              "var": "tabletMode"
+            },
+            "horizontal-scroll"
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "tabletIndicator",
+        "label": "Scroll indicator on tablet",
+        "value": false,
+        "condition": {
+          "===": [
+            {
+              "var": "tabletMode"
+            },
+            "horizontal-scroll"
+          ]
+        }
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "mobileMode",
+        "label": "Mobile display",
+        "value": "grid",
+        "options": [
+          {
+            "name": "Grid",
+            "value": "grid"
+          },
+          {
+            "name": "Horizontal scroll",
+            "value": "horizontal-scroll"
+          }
+        ],
+        "description": "Grid or horizontal scroll on mobile (up to 599px), independently of the other breakpoints."
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "mobileColumns",
+        "label": "Mobile columns",
+        "value": 1,
+        "min": 1,
+        "max": 6,
+        "condition": {
+          "===": [
+            {
+              "var": "mobileMode"
+            },
+            "grid"
+          ]
+        }
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "mobileGap",
+        "label": "Mobile gap (px)",
+        "value": 16,
+        "min": 0,
+        "max": 120,
+        "description": "Space between the cards."
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "mobileVisible",
+        "label": "Mobile items visible",
+        "value": 1.2,
+        "min": 1,
+        "max": 8,
+        "description": "Cards in view, e.g. 4.2 shows 4 and a part of the next one.",
+        "condition": {
+          "===": [
+            {
+              "var": "mobileMode"
+            },
+            "horizontal-scroll"
+          ]
+        }
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "mobileCardWidth",
+        "label": "Mobile card width (px)",
+        "value": 0,
+        "min": 0,
+        "max": 1200,
+        "description": "A fixed card width (120 or more); 0 uses Items visible.",
+        "condition": {
+          "===": [
+            {
+              "var": "mobileMode"
+            },
+            "horizontal-scroll"
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "mobileControls",
+        "label": "Previous / next buttons on mobile",
+        "value": false,
+        "condition": {
+          "===": [
+            {
+              "var": "mobileMode"
+            },
+            "horizontal-scroll"
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "mobileIndicator",
+        "label": "Scroll indicator on mobile",
+        "value": true,
+        "condition": {
+          "===": [
+            {
+              "var": "mobileMode"
+            },
+            "horizontal-scroll"
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "equalHeight",
+        "label": "Equal card height",
+        "value": false,
+        "description": "All rows as tall as the tallest card."
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "stretchCards",
+        "label": "Stretch cards to row height",
+        "value": true
+      }
+    ],
+    "scroll": [
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "scrollSnap",
+        "label": "Scroll snap",
+        "value": true
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "snapAlign",
+        "label": "Snap alignment",
+        "value": "start",
+        "options": [
+          {
+            "name": "Start",
+            "value": "start"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          }
+        ],
+        "condition": {
+          "===": [
+            {
+              "var": "scrollSnap"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "hideScrollbar",
+        "label": "Hide native scrollbar",
+        "value": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "mouseDrag",
+        "label": "Allow mouse drag",
+        "value": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "touchSwipe",
+        "label": "Allow touch swipe",
+        "value": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "keyboardScrolling",
+        "label": "Keyboard scrolling",
+        "value": true,
+        "description": "Arrow keys, Home and End when the list has focus."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "scrollStep",
+        "label": "Scroll step",
+        "value": "one-card",
+        "options": [
+          {
+            "name": "One card",
+            "value": "one-card"
+          },
+          {
+            "name": "Viewport",
+            "value": "viewport"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "loop",
+        "label": "Loop",
+        "value": false,
+        "description": "Next at the end goes back to the start."
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "initialIndex",
+        "label": "Initial item index",
+        "value": 0,
+        "min": 0,
+        "max": 200,
+        "description": "The card shown first (0: the first)."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "edgePadding",
+        "label": "Edge",
+        "value": "bleed",
+        "options": [
+          {
+            "name": "Cards run to the edge",
+            "value": "bleed"
+          },
+          {
+            "name": "Inside the content width",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "reducedMotion",
+        "label": "Reduced motion support",
+        "value": true,
+        "description": "No smooth scrolling for visitors who prefer reduced motion."
+      }
+    ],
+    "advanced": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "emptyMessage",
+        "label": "Empty message",
+        "condition": {
+          "===": [
+            {
+              "var": "emptyBehavior"
+            },
+            "message"
+          ]
+        }
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "analyticsEnabled",
+        "label": "Analytics",
+        "value": true,
+        "description": "Card clicks and scrolling in the Adobe Data Layer."
+      },
+      {
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "classes",
+        "label": "Style options",
+        "options": [
+          {
+            "name": "Compact statistic title",
+            "value": "stat-compact"
+          },
+          {
+            "name": "Dividers between rows",
+            "value": "dividers"
+          },
+          {
+            "name": "Header centred",
+            "value": "header-center"
+          }
+        ]
+      }
+    ]
+  }
+}

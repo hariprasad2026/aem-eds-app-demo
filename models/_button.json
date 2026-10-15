@@ -8,9 +8,7 @@
           "page": {
             "resourceType": "core/franklin/components/button/v1/button",
             "template": {
-              "model": "button",
-              "linkType": "primary",
-              "buttonStyle": "boxed"
+              "model": "button"
             }
           }
         }
@@ -38,13 +36,37 @@
         },
         {
           "component": "select",
-          "name": "linkType",
-          "label": "Type",
+          "name": "buttonView",
+          "label": "Views",
+          "value": "button",
           "options": [
             {
-              "name": "Default",
-              "value": ""
+              "name": "Button",
+              "value": "button"
             },
+            {
+              "name": "Icon",
+              "value": "icon"
+            },
+            {
+              "name": "Link",
+              "value": "link"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "linkType",
+          "label": "Type",
+          "value": "primary",
+          "condition": {
+            "or": [
+              { "!": { "var": "buttonView" } },
+              { "===": [{ "var": "buttonView" }, "button"] },
+              { "===": [{ "var": "buttonView" }, "icon"] }
+            ]
+          },
+          "options": [
             {
               "name": "Primary",
               "value": "primary"
@@ -54,28 +76,52 @@
               "value": "secondary"
             },
             {
-              "name": "Accent",
-              "value": "accent"
+              "name": "Tertiary",
+              "value": "tertiary"
             }
           ]
         },
         {
           "component": "select",
-          "name": "buttonStyle",
-          "label": "Button style",
-          "value": "boxed",
+          "name": "buttonIcon",
+          "label": "Icon",
+          "condition": { "===": [{ "var": "buttonView" }, "icon"] },
           "options": [
             {
-              "name": "Box style",
-              "value": "boxed"
+              "name": "Arrow right",
+              "value": "arrow-right"
             },
             {
-              "name": "Without box",
-              "value": "no-box"
+              "name": "Chevron right",
+              "value": "chevron-right"
             },
             {
-              "name": "Curved box",
-              "value": "curved"
+              "name": "Chevron down",
+              "value": "chevron-down"
+            },
+            {
+              "name": "Search",
+              "value": "search"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "name": "buttonAlignment",
+          "label": "Alignment",
+          "value": "left",
+          "options": [
+            {
+              "name": "Left",
+              "value": "left"
+            },
+            {
+              "name": "Center",
+              "value": "center"
+            },
+            {
+              "name": "Right",
+              "value": "right"
             }
           ]
         }

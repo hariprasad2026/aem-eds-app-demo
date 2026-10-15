@@ -1,0 +1,113 @@
+/* Gen Carousel: every slide holds a block (or content) styled by its own CSS */
+.gen-carousel {
+  position: relative;
+}
+
+.gen-carousel .gen-carousel-slides {
+  position: relative;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  overflow: auto hidden;
+  list-style: none;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.gen-carousel .gen-carousel-slides::-webkit-scrollbar {
+  display: none;
+}
+
+/* Auto only: the slides move on their own, they can't be swiped */
+.gen-carousel.auto .gen-carousel-slides {
+  overflow-x: hidden;
+}
+
+.gen-carousel .gen-carousel-slide {
+  position: relative;
+  display: flex;
+  flex: 0 0 100%;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  isolation: isolate;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* the slide content (a block wrapper or default content) fills the slide height,
+   so slides of different blocks line up */
+.gen-carousel .gen-carousel-slide > * {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  margin: 0;
+}
+
+.gen-carousel .gen-carousel-slide > * > .block {
+  flex: 1 0 auto;
+}
+
+/* controls: pause / play, previous, dots, next */
+.gen-carousel .gen-carousel-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-400);
+  margin-top: var(--space-600);
+}
+
+.gen-carousel .gen-carousel-dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-100);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 24px hit area around the visible pill */
+.gen-carousel .gen-carousel-dot {
+  display: grid;
+  place-items: center;
+  min-width: var(--space-600);
+  height: var(--space-600);
+  border: 0;
+  border-radius: var(--radius-full);
+  padding: 0 var(--space-100);
+  background: none;
+  cursor: pointer;
+}
+
+.gen-carousel .gen-carousel-dot::before {
+  content: '';
+  width: var(--space-200);
+  height: var(--space-200);
+  border-radius: var(--radius-full);
+  background-color: var(--color-border-neutral-tertiary);
+  transition: width 0.2s ease, background-color 0.2s ease;
+}
+
+.gen-carousel .gen-carousel-dot:hover::before {
+  background-color: var(--color-bg-brand-hover);
+}
+
+.gen-carousel .gen-carousel-dot[aria-current='true']::before {
+  width: var(--space-600);
+  background-color: var(--color-bg-brand);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gen-carousel .gen-carousel-dot::before {
+    transition: none;
+  }
+}
+
+@media (width >= 900px) {
+  .gen-carousel .gen-carousel-controls {
+    margin-top: var(--space-800);
+  }
+}

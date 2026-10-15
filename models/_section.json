@@ -35,6 +35,50 @@
               "value": "highlight"
             }
           ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "sectionWidth",
+          "label": "Width Type",
+          "value": "full-width",
+          "options": [
+            {
+              "name": "Full Width",
+              "value": "full-width"
+            },
+            {
+              "name": "Fixed Width",
+              "value": "fixed-width"
+            }
+          ]
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "roundedEdge",
+          "label": "Rounded edge"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "backgroundImage",
+          "label": "Background Image",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "backgroundImageAlt",
+          "label": "Image alt text",
+          "description": "Describe the image for screen readers. Leave empty if the image is decorative."
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "anchorName",
+          "label": "Anchor name",
+          "description": "Lets Anchor List links jump to this section, e.g. overview (lowercase, no spaces)."
         }
       ]
     }
@@ -47,10 +91,29 @@
         "image",
         "button",
         "title",
+        "page-header",
         "hero",
+        "teaser",
+        "quote",
+        "testimonial",
+        "anchor-list",
+        "accordion",
+        "tabs-block",
+        "table",
+        "table-list",
+        "list",
+        "separator",
+        "embed",
+        "video",
+        "modal",
+        "form-variations",
+        "filter-list",
+        "interactive-dashboard",
+        "conversation-canvas",
         "cards",
         "columns",
-        "fragment"
+        "fragment",
+        "footer"
       ]
     }
   ]

@@ -1,0 +1,75 @@
+/*
+ * Modal (Block Collection), site styles. The dialog is centered in the visible area and never
+ * taller than it: --modal-top and --modal-height are the visible part of the page (modal.js;
+ * in a frame, e.g. Universal Editor, that's less than the frame), else the viewport. Long
+ * content scrolls inside the dialog (the page behind stays still), the close button at the top.
+ */
+body.modal-open {
+  overflow: hidden;
+}
+
+.modal dialog::backdrop {
+  background-color: rgb(12 12 13 / 75%);
+}
+
+.modal dialog {
+  --modal-gap: var(--space-600);
+
+  top: calc(var(--modal-top, 0rem) + var(--modal-height, 100dvh) / 2);
+  bottom: auto;
+  width: calc(100vw - 3rem);
+  max-width: 56.25rem;
+  max-height: calc(var(--modal-height, 100dvh) - 2 * var(--modal-gap));
+  margin: 0 auto;
+  border: 0;
+  border-radius: var(--radius-l);
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: var(--color-bg-default);
+  color: var(--color-text-default);
+  transform: translateY(-50%);
+}
+
+.modal dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+/* in a frame, until the visible area is measured (modal.js) */
+.modal dialog[data-measuring] {
+  visibility: hidden;
+}
+
+.modal dialog .modal-content {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 var(--space-600) var(--space-600);
+}
+
+/* the close button stays at the top right while the content scrolls below it */
+.modal .close-button {
+  position: sticky;
+  top: var(--space-200);
+  z-index: 1;
+  flex: none;
+  align-self: flex-end;
+  margin: var(--space-200) var(--space-200) 0 0;
+  background-color: var(--color-bg-default);
+}
+
+.modal dialog .section {
+  padding: 0;
+}
+
+@media (width >= 900px) {
+  .modal dialog {
+    --modal-gap: var(--space-1000);
+
+    width: calc(100vw - 4rem);
+  }
+
+  .modal dialog .modal-content {
+    padding: 0 var(--space-800) var(--space-800);
+  }
+}

@@ -1,0 +1,19 @@
+/* Interactive Dashboard: placeholder until the design and logic are defined */
+.interactive-dashboard:empty {
+  display: none;
+}
+
+/* Universal Editor: a visible, selectable placeholder */
+.adobe-ue-edit .interactive-dashboard:empty {
+  display: grid;
+  place-items: center;
+  min-height: 10rem;
+  border: var(--border-width-200) dashed var(--color-border-secondary);
+  border-radius: var(--radius-l);
+  color: var(--color-text-secondary);
+  font-size: var(--body-font-size-m);
+}
+
+.adobe-ue-edit .interactive-dashboard:empty::before {
+  content: attr(data-placeholder) ' (placeholder)';
+}

@@ -1,0 +1,194 @@
+/* Quote (TCS.com DS Figma "Text & Image Overlap", 2590-300067) */
+.quote {
+  --quote-bg: var(--color-bg-default);
+  --quote-mark-size: 5rem;
+  --quote-mark-column: 2.5rem;
+
+  background-color: var(--quote-bg);
+}
+
+.quote.bg-grey {
+  --quote-bg: var(--color-bg-secondary);
+
+  padding: var(--space-1000) var(--space-600);
+}
+
+/* eyebrow and title */
+.quote .quote-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-300);
+  margin-bottom: var(--space-1000);
+}
+
+.quote .quote-eyebrow {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--body-font-size-l);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.625;
+}
+
+.quote .quote-title {
+  margin: 0;
+  color: var(--color-text-brand);
+  font-size: var(--heading-font-size-xxl);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
+  letter-spacing: calc(-0.03 * var(--heading-font-size-xxl));
+}
+
+/* image first on mobile; the card overlaps its bottom edge */
+.quote .quote-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.quote .quote-media {
+  order: -1;
+}
+
+.quote .quote-media picture,
+.quote .quote-media img {
+  display: block;
+  width: 100%;
+}
+
+.quote .quote-media img {
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.quote .quote-card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: var(--quote-mark-column) minmax(0, 1fr) var(--quote-mark-column);
+  gap: var(--space-300);
+  margin: 0;
+  padding: var(--space-600);
+  background-color: var(--quote-bg);
+}
+
+.quote.quote-has-media .quote-card {
+  margin: calc(-1 * var(--space-1200)) var(--space-400) 0;
+}
+
+/* Image Position (Mobile) Bottom: the image below, the card overlaps its top edge */
+.quote.image-bottom .quote-media {
+  order: 1;
+}
+
+.quote.image-bottom:where(.quote-has-media) .quote-card {
+  margin: 0 var(--space-400) calc(-1 * var(--space-1200));
+}
+
+/* opening and closing quote marks (Figma: 120px brand blue, closing mark at the bottom) */
+.quote .quote-card::before,
+.quote .quote-card::after {
+  color: var(--color-text-brand);
+  font-size: var(--quote-mark-size);
+  line-height: 0.77;
+  letter-spacing: calc(-0.02 * var(--quote-mark-size));
+}
+
+.quote .quote-card::before {
+  content: '\201C';
+  content: '\201C' / '';
+}
+
+.quote .quote-card::after {
+  content: '\201D';
+  content: '\201D' / '';
+  align-self: end;
+}
+
+.quote .quote-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1000);
+  min-width: 0;
+}
+
+.quote .quote-text {
+  margin: 0;
+  color: var(--color-text-default);
+  font-size: var(--heading-font-size-l);
+  line-height: 1.39;
+  letter-spacing: calc(-0.02 * var(--heading-font-size-l));
+}
+
+.quote .quote-author {
+  color: var(--color-text-default);
+  font-size: var(--heading-font-size-m);
+  line-height: 1.417;
+  letter-spacing: calc(-0.015 * var(--heading-font-size-m));
+}
+
+.quote :is(.quote-text, .quote-author) > * {
+  margin: 0;
+}
+
+.quote :is(.quote-text, .quote-author) > * + * {
+  margin-top: var(--space-200);
+}
+
+@media (width >= 900px) {
+  .quote {
+    --quote-mark-size: 7.5rem;
+  }
+
+  .quote.bg-grey {
+    padding: var(--space-3000) var(--space-2000);
+  }
+
+  .quote .quote-header {
+    margin-bottom: var(--space-2000);
+  }
+
+  .quote .quote-body {
+    max-width: 70rem;
+    margin-inline: auto;
+  }
+
+  /* card (702 of 1120) overlaps the portrait image (622 of 1120) by 204px */
+  .quote.quote-has-media .quote-body {
+    display: grid;
+    grid-template-columns: 498fr 204fr 418fr;
+    align-items: center;
+  }
+
+  .quote.quote-has-media .quote-card {
+    grid-area: 1 / 1 / 2 / 3;
+    grid-template-columns: 4.125rem minmax(0, 1fr) 2.875rem;
+    margin: 0;
+    padding: var(--space-600) var(--space-1000);
+  }
+
+  .quote.quote-has-media .quote-media {
+    grid-area: 1 / 2 / 2 / 4;
+  }
+
+  .quote .quote-media img {
+    aspect-ratio: 622 / 869;
+  }
+
+  .quote:not(.quote-has-media) .quote-card {
+    grid-template-columns: 4.125rem minmax(0, 1fr) 2.875rem;
+    padding: var(--space-600) var(--space-1000);
+  }
+
+  /* Image Position (Desktop) Left: mirrored, the card overlaps the image's right edge */
+  .quote.quote-has-media.image-left .quote-body {
+    grid-template-columns: 418fr 204fr 498fr;
+  }
+
+  .quote.quote-has-media.image-left .quote-card {
+    grid-area: 1 / 2 / 2 / 4;
+  }
+
+  .quote.quote-has-media.image-left .quote-media {
+    grid-area: 1 / 1 / 2 / 3;
+  }
+}

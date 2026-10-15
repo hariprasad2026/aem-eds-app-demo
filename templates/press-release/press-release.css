@@ -1,0 +1,45 @@
+/* Press release template */
+
+/* Media contacts (Media Contacts data sheet) */
+main .template-media-contacts .contact-list {
+  padding-block-start: var(--space-600);
+  border-block-start: 0.0625rem solid var(--color-border-default);
+}
+
+main .template-media-contacts .contact-list-heading {
+  margin: 0 0 var(--space-500);
+  font-size: var(--heading-font-size-s);
+  letter-spacing: calc(-0.025 * var(--heading-font-size-s));
+}
+
+main .template-media-contacts ul {
+  display: grid;
+  gap: var(--space-600);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+main .template-media-contacts li > * {
+  margin: 0;
+}
+
+main .template-media-contacts .contact-list-name {
+  font-weight: var(--font-weight-semibold);
+}
+
+main .template-media-contacts .contact-list-designation {
+  font-size: var(--body-font-size-s);
+}
+
+@media (width >= 600px) {
+  main .template-media-contacts ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width >= 900px) {
+  main .template-media-contacts ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

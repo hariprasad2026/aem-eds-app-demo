@@ -1,37 +1,129 @@
 version: 1
- 
+
 indices:
   pages:
     include:
-      - "/**"
+      - '/**'
     exclude:
-      - "/**.json"
+      - '/**.json'
+      # not content pages of the locale sites (/en, /de-de, ...): fragments (incl. nav and
+      # footer), error pages and data sheets; block libraries and templates aren't published
+      # (paths.json), excluded as a safeguard
+      - '/*/references/**'
+      - '/*/error-pages/**'
+      - '/*/data/**'
+      - '/*/nav'
+      - '/*/footer'
+      - '/*/block-library'
+      - '/*/block-library/**'
+      - '/site-global-templates/**'
+      - '/**/fragments/**'
+      - '/**/modals/**'
     target: /query-index.json
     properties:
-      title:
-        select: head > title
-        value: textContent(el)
-      description:
-        select: head > meta[name="description"]
-        value: attribute(el, "content")
-      image:
-        select: head > meta[property="og:image"]
-        value: attribute(el, "content")
-      imageAlt:
-        select: head > meta[property="og:image:alt"]
-        value: attribute(el, "content")
-      tags:
-        select: head > meta[name="cq-tags"]
-        value: attribute(el, "content")
-      persona:
-        select: head > meta[name="persona"]
-        value: attribute(el, "content")
-      intent:
-        select: head > meta[name="intent"]
-        value: attribute(el, "content")
       lastModified:
         select: none
         value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
       robots:
         select: head > meta[name="robots"]
+        value: attribute(el, "content")
+      title:
+        select: head > meta[property="og:title"]
+        value: attribute(el, "content")
+      description:
+        select: head > meta[name="description"]
+        value: attribute(el, "content")
+      image:
+        select: head > meta[property="og:image"]
+        value: match(attribute(el, "content"), "https?:\/\/[^/]+(\/.*)")
+      tags:
+        select: head > meta[property="article:tag"]
+        values: attribute(el, "content")
+      # columns of the locales' bulk metadata sheets (e.g. /de-de/metadata.json)
+      metaTitle:
+        select: head > meta[name="meta-title"]
+        value: attribute(el, "content")
+      metaDescription:
+        select: head > meta[name="meta-description"]
+        value: attribute(el, "content")
+      pageType:
+        select: head > meta[name="page-type"]
+        value: attribute(el, "content")
+      contentType:
+        select: head > meta[name="content-type"]
+        value: attribute(el, "content")
+      author:
+        select: head > meta[name="author"]
+        value: attribute(el, "content")
+      authorId:
+        select: head > meta[name="author-id"]
+        value: attribute(el, "content")
+      publishDate:
+        select: head > meta[name="publish-date"]
+        value: attribute(el, "content")
+      modifiedDate:
+        select: head > meta[name="modified-date"]
+        value: attribute(el, "content")
+      readingTime:
+        select: head > meta[name="reading-time"]
+        value: attribute(el, "content")
+      thumbnailImage:
+        select: head > meta[name="thumbnail-image"]
+        value: attribute(el, "content")
+      featuredImage:
+        select: head > meta[name="featured-image"]
+        value: attribute(el, "content")
+      region:
+        select: head > meta[name="region"]
+        value: attribute(el, "content")
+      country:
+        select: head > meta[name="country"]
+        value: attribute(el, "content")
+      language:
+        select: head > meta[name="language"]
+        value: attribute(el, "content")
+      persona:
+        select: head > meta[name="persona"]
+        value: attribute(el, "content")
+      campaignId:
+        select: head > meta[name="campaign-id"]
+        value: attribute(el, "content")
+      featured:
+        select: head > meta[name="featured"]
+        value: attribute(el, "content")
+      priority:
+        select: head > meta[name="priority"]
+        value: attribute(el, "content")
+      # earlier names of featured / priority (Filter List), read as fallbacks
+      featureCard:
+        select: head > meta[name="feature-card"]
+        value: attribute(el, "content")
+      featuredPriority:
+        select: head > meta[name="featured-priority"]
+        value: attribute(el, "content")
+      # List cards: card-specific metadata (else the page's title, description and images)
+      cardTitle:
+        select: head > meta[name="card-title"]
+        value: attribute(el, "content")
+      cardDescription:
+        select: head > meta[name="card-description"]
+        value: attribute(el, "content")
+      cardImage:
+        select: head > meta[name="card-image"]
+        value: attribute(el, "content")
+      cardImageAlt:
+        select: head > meta[name="card-image-alt"]
+        value: attribute(el, "content")
+      imageAlt:
+        select: head > meta[name="image-alt"]
+        value: attribute(el, "content")
+      eyebrow:
+        select: head > meta[name="eyebrow"]
+        value: attribute(el, "content")
+      category:
+        select: head > meta[name="category"]
+        value: attribute(el, "content")
+      # pages hidden from navigation aren't listed by the List block
+      hideInNav:
+        select: head > meta[name="hide-in-nav"]
         value: attribute(el, "content")

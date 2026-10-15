@@ -1,0 +1,453 @@
+/*
+ * Table List (TCS DS Figma "List"): a heading with a call to action above a divided list.
+ * Variation 1 (industries): title | description | arrow; on mobile the number and title above
+ * the description. Variation 2 (solutions): description | large title | outline button.
+ * Variation 3 (products): description | number and large title | diagonal arrow.
+ * Mobile first; tablet from 600px, desktop from 1200px.
+ */
+.table-list {
+  --table-list-header-spacing: var(--space-1000);
+  --table-list-item-gap: var(--space-400);
+  --table-list-item-padding: var(--space-1000);
+  --table-list-divider: var(--border-width-100) solid var(--slate-400);
+  --table-list-arrow-size: 3rem;
+  --table-list-motion-duration: 500ms;
+
+  color: var(--color-text-default);
+}
+
+/* header: heading and call to action, which goes below the heading when they don't fit */
+.table-list .table-list-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-300);
+  margin-bottom: var(--table-list-header-spacing);
+}
+
+.table-list .table-list-heading {
+  flex: 1 1 50%;
+  min-width: 0;
+  margin: 0;
+  font-size: 2rem;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.19;
+  letter-spacing: -0.06rem;
+}
+
+.table-list .table-list-cta {
+  flex: none;
+  margin: 0;
+}
+
+.table-list .table-list-cta .button:not(.tertiary) {
+  font-size: var(--body-font-size-xs);
+  letter-spacing: calc(0.01 * var(--body-font-size-xs));
+}
+
+/* items */
+.table-list .table-list-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--table-list-item-gap);
+}
+
+.table-list .table-list-item {
+  position: relative;
+  display: grid;
+  grid-template: 'main action' 'description action' / minmax(0, 1fr) auto;
+  gap: var(--space-400) var(--space-1000);
+  padding-bottom: var(--table-list-item-padding);
+  border-bottom: var(--table-list-divider);
+}
+
+.table-list .table-list-main {
+  grid-area: main;
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.table-list .table-list-number,
+.table-list .table-list-title {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+.table-list .table-list-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* the trademark sign keeps the title's size and baseline (the glyph is raised itself) */
+.table-list .table-list-trademark {
+  font-size: inherit;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+.table-list .table-list-description {
+  grid-area: description;
+  margin: 0;
+}
+
+/* rich text: the description's paragraphs and lists keep its size */
+.table-list .table-list-description > * {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.table-list .table-list-description > * + * {
+  margin-top: var(--space-200);
+}
+
+.table-list .table-list-action {
+  grid-area: action;
+  align-self: start;
+}
+
+/* arrows: the whole item is the link */
+.table-list .table-list-arrow {
+  display: block;
+  width: var(--table-list-arrow-size);
+  height: var(--table-list-arrow-size);
+  background-color: currentcolor;
+  color: var(--color-icon-default);
+  mask: url('../../icons/arrow-right.svg') center / contain no-repeat;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.table-list .table-list-arrow.arrow-up-right {
+  mask-image: url('../../icons/arrow-up-right.svg');
+}
+
+.table-list a.table-list-arrow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+/* links in the description stay clickable above the item's link */
+.table-list .table-list-description a {
+  position: relative;
+  z-index: 1;
+}
+
+.table-list a.table-list-arrow:focus-visible {
+  outline: var(--border-width-200) solid var(--color-border-brand);
+  outline-offset: 0.25rem;
+}
+
+.table-list a.table-list-arrow:focus-visible,
+.table-list .table-list-item:hover a.table-list-arrow {
+  color: var(--color-text-brand);
+  transform: translateX(var(--space-100));
+}
+
+/* Variation 1: number and title above the description on mobile */
+.table-list.industries .table-list-main {
+  font-size: var(--body-font-size-m);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.375;
+  letter-spacing: calc(-0.02 * var(--body-font-size-m));
+  gap: calc(0.3 * var(--body-font-size-m));
+}
+
+.table-list.industries .table-list-description {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.42;
+  letter-spacing: -0.015rem;
+}
+
+/* Variation 2: description, large title and button stacked on mobile */
+.table-list.solutions .table-list-item {
+  grid-template: 'description' 'main' 'action' / minmax(0, 1fr);
+}
+
+.table-list.solutions .table-list-main {
+  gap: 0.75rem;
+  font-size: 2.5rem;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.2;
+  letter-spacing: -0.025rem;
+}
+
+.table-list.solutions .table-list-description {
+  color: var(--grey-900);
+  font-size: var(--body-font-size-m);
+  line-height: 1.39;
+}
+
+/* Variation 3: description above the number and large title on mobile */
+.table-list.products {
+  --table-list-item-gap: var(--space-1000);
+  --table-list-divider: var(--border-width-200) solid var(--grey-200);
+  --table-list-arrow-size: var(--icon-size-m);
+
+  color: var(--grey-900);
+}
+
+.table-list.products .table-list-heading {
+  font-weight: var(--font-weight-regular);
+  line-height: 1.4;
+}
+
+.table-list.products .table-list-cta .button.tertiary {
+  font-size: var(--body-font-size-l);
+  letter-spacing: calc(0.01 * var(--body-font-size-l));
+}
+
+.table-list.products .table-list-item {
+  grid-template: 'description action' 'main action' / minmax(0, 1fr) auto;
+}
+
+.table-list.products .table-list-main {
+  align-items: center;
+  gap: var(--space-400);
+  font-size: 3rem;
+  line-height: 1.17;
+  letter-spacing: -0.075rem;
+}
+
+.table-list.products .table-list-number {
+  color: var(--slate-300);
+  font-size: 1.5rem;
+  letter-spacing: -0.0375rem;
+}
+
+.table-list.products .table-list-trademark {
+  margin-inline-start: 0.45rem;
+}
+
+.table-list.products .table-list-description {
+  font-size: var(--body-font-size-m);
+  line-height: 1.39;
+}
+
+.table-list.products .table-list-action {
+  align-self: center;
+}
+
+.table-list.products .table-list-arrow {
+  color: var(--grey-900);
+}
+
+/* Variation 1: no divider below the last item */
+.table-list.industries .table-list-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+/* motion: items are hidden until they scroll into view (JS adds motion-ready and is-visible;
+   never in the Universal Editor or with reduced motion) */
+@media (prefers-reduced-motion: no-preference) {
+  :root:not(.adobe-ue-edit) .table-list.motion-ready .table-list-item:not(.is-visible) {
+    opacity: 0;
+  }
+
+  :root:not(.adobe-ue-edit) .table-list.motion-fade .table-list-item.is-visible {
+    animation: table-list-fade var(--table-list-motion-duration) ease backwards;
+  }
+
+  :root:not(.adobe-ue-edit) .table-list.motion-slide .table-list-item.is-visible {
+    animation: table-list-slide var(--table-list-motion-duration) ease backwards;
+  }
+
+  :root:not(.adobe-ue-edit) .table-list.motion-reveal .table-list-item.is-visible {
+    animation: table-list-reveal var(--table-list-motion-duration) ease backwards;
+  }
+}
+
+@keyframes table-list-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes table-list-slide {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-500));
+  }
+}
+
+@keyframes table-list-reveal {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .table-list .table-list-arrow {
+    transition: none;
+  }
+}
+
+/* tablet: the parts side by side */
+@media (width >= 600px) {
+  .table-list {
+    --table-list-header-spacing: var(--space-2000);
+  }
+
+  .table-list .table-list-heading {
+    font-size: 2.5rem;
+    letter-spacing: -0.075rem;
+    line-height: 1.2;
+  }
+
+  .table-list .table-list-item,
+  .table-list.solutions .table-list-item,
+  .table-list.products .table-list-item {
+    grid-template: 'main description action' / minmax(0, 1fr) minmax(0, 1fr) auto;
+    column-gap: var(--space-400);
+  }
+
+  .table-list.solutions .table-list-item,
+  .table-list.products .table-list-item {
+    grid-template-areas: 'description main action';
+    align-items: center;
+  }
+
+  .table-list .table-list-action {
+    margin-inline-start: var(--space-600);
+  }
+
+  .table-list.solutions .table-list-action {
+    align-self: center;
+  }
+
+  .table-list.numbers-mobile .table-list-number {
+    display: none;
+  }
+
+  .table-list.industries .table-list-description {
+    font-size: 1.25rem;
+    letter-spacing: -0.0125rem;
+    line-height: 1.4;
+  }
+
+  .table-list.industries .table-list-arrow {
+    color: var(--slate-400);
+  }
+
+  .table-list.solutions .table-list-main,
+  .table-list.products .table-list-main {
+    justify-content: flex-end;
+    text-align: end;
+  }
+
+  .table-list.solutions .table-list-description,
+  .table-list.products .table-list-description {
+    font-size: 1.125rem;
+  }
+
+  .table-list.products .table-list-item {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) auto;
+  }
+
+  .table-list.products .table-list-main {
+    justify-content: space-between;
+    font-size: 3.5rem;
+    letter-spacing: -0.0875rem;
+  }
+
+  .table-list.products .table-list-number {
+    font-size: 1.505rem;
+    letter-spacing: -0.0376rem;
+  }
+
+  .table-list.products .table-list-trademark {
+    margin-inline-start: 0.525rem;
+  }
+}
+
+/* desktop */
+@media (width >= 1200px) {
+  .table-list {
+    --table-list-item-gap: var(--space-600);
+  }
+
+  .table-list .table-list-heading {
+    font-size: 3rem;
+    letter-spacing: -0.09rem;
+  }
+
+  .table-list .table-list-cta .button:not(.tertiary) {
+    font-size: var(--button-font-size);
+    letter-spacing: calc(0.01 * var(--button-font-size));
+  }
+
+  .table-list .table-list-item {
+    column-gap: var(--space-600);
+  }
+
+  .table-list .table-list-action {
+    margin-inline-start: var(--space-400);
+  }
+
+  /* Variation 1: inset from the section edges, title emphasized */
+  .table-list.industries {
+    padding-inline: var(--space-2000);
+  }
+
+  .table-list.industries .table-list-item {
+    align-items: center;
+  }
+
+  .table-list.industries .table-list-main {
+    gap: 0.525rem;
+    font-size: 1.75rem;
+    letter-spacing: -0.035rem;
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.39;
+  }
+
+  .table-list.industries .table-list-description {
+    font-weight: var(--font-weight-regular);
+  }
+
+  .table-list.solutions .table-list-main {
+    gap: 1.2rem;
+    font-size: 4rem;
+    letter-spacing: -0.04rem;
+    line-height: 1.4;
+  }
+
+  .table-list.products {
+    --table-list-item-gap: var(--space-1000);
+    --table-list-arrow-size: var(--icon-size-l);
+  }
+
+  .table-list.products .table-list-item {
+    grid-template-columns: minmax(0, 476fr) minmax(0, 695fr) auto;
+    column-gap: var(--space-1000);
+  }
+
+  .table-list.products .table-list-main {
+    font-size: 5.625rem;
+    letter-spacing: -0.1406rem;
+    line-height: 1.4;
+  }
+
+  .table-list.products .table-list-number {
+    font-size: 2.4975rem;
+    letter-spacing: -0.0624rem;
+  }
+
+  .table-list.products .table-list-trademark {
+    margin-inline-start: 0.8438rem;
+  }
+
+  .table-list.products .table-list-description {
+    font-size: 1.5rem;
+    line-height: 1.42;
+  }
+}

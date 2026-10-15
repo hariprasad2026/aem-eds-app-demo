@@ -2,7 +2,9 @@
   {
     "id": "main",
     "components": [
-      "section"
+      "section",
+      "gen-carousel",
+      "tabs"
     ]
   },
   {
@@ -12,10 +14,35 @@
       "image",
       "button",
       "title",
+      "page-header",
       "hero",
+      "teaser",
+      "quote",
+      "testimonial",
+      "anchor-list",
+      "accordion",
+      "tabs-block",
+      "table",
+      "table-list",
+      "list",
+      "separator",
+      "embed",
+      "video",
+      "modal",
+      "form-variations",
+      "filter-list",
+      "interactive-dashboard",
+      "conversation-canvas",
       "cards",
       "columns",
-      "fragment"
+      "fragment",
+      "footer"
+    ]
+  },
+  {
+    "id": "accordion",
+    "components": [
+      "accordion-item"
     ]
   },
   {
@@ -38,5 +65,92 @@
       "button",
       "title"
     ]
+  },
+  {
+    "id": "conversation-canvas",
+    "components": [
+      "conversation-canvas-button"
+    ]
+  },
+  {
+    "id": "form-variations",
+    "components": [
+      "field-text",
+      "field-select",
+      "field-textarea",
+      "field-checkbox",
+      "contact-card",
+      "field-submit"
+    ]
+  },
+  {
+    "id": "gen-carousel",
+    "components": [
+      "hero",
+      "teaser"
+    ]
+  },
+  {
+    "id": "list",
+    "components": [
+      "list-item"
+    ]
+  },
+  {
+    "id": "table-list",
+    "components": [
+      "table-list-card"
+    ]
+  },
+  {
+    "id": "table",
+    "components": [
+      "table-row"
+    ]
+  },
+  {
+    "id": "table-2-columns",
+    "components": [
+      "table-col-2"
+    ]
+  },
+  {
+    "id": "table-3-columns",
+    "components": [
+      "table-col-3"
+    ]
+  },
+  {
+    "id": "table-4-columns",
+    "components": [
+      "table-col-4"
+    ]
+  },
+  {
+    "id": "table-5-columns",
+    "components": [
+      "table-col-5"
+    ]
+  },
+  {
+    "id": "tabs",
+    "components": [
+      "tab",
+      "columns",
+      "title",
+      "text",
+      "image",
+      "button"
+    ]
+  },
+  {
+    "id": "tabs-block",
+    "components": [
+      "tabs-item"
+    ]
+  },
+  {
+    "id": "video",
+    "components": []
   }
 ]

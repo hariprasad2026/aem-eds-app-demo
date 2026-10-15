@@ -9,7 +9,11 @@
             "resourceType": "core/franklin/components/block/v1/block",
             "template": {
               "name": "Hero",
-              "model": "hero"
+              "model": "hero",
+              "classes_alignment": "align-middle",
+              "content_titleType": "h1",
+              "classes_horizontal": "align-center",
+              "classes_textAlignment": "text-center"
             }
           }
         }
@@ -21,25 +25,900 @@
       "id": "hero",
       "fields": [
         {
+          "component": "tab",
+          "name": "imageSection",
+          "label": "Image"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "content_icon",
+          "label": "Icon",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "content_iconAlt",
+          "label": "Icon Image Alt Text",
+          "description": "Leave empty if the icon is decorative."
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_media",
+          "label": "Hero Image type",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Lotto",
+              "value": "lottie"
+            }
+          ],
+          "description": "Default: the Hero Image Path is an image. Lotto: it is a Lottie animation file (.json), played as the hero background."
+        },
+        {
           "component": "reference",
           "valueType": "string",
           "name": "image",
-          "label": "Image",
+          "label": "Hero Image Path",
+          "description": "Default: an image. Lotto: a Lottie animation file (.json).",
           "multi": false
         },
         {
           "component": "text",
           "valueType": "string",
           "name": "imageAlt",
-          "label": "Alt",
-          "value": ""
+          "label": "Hero Image alt text",
+          "description": "Leave empty if the image or animation is decorative."
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes",
+          "label": "Hero View",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Contained image",
+              "value": "media-contained"
+            }
+          ],
+          "description": "Default: the image fills the hero behind the content. Contained image: the image (e.g. an illustration) is shown whole, centered behind the content."
+        },
+        {
+          "component": "tab",
+          "name": "contentSection",
+          "label": "Content"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "content_eyebrow",
+          "label": "Eyebrow"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "content_title",
+          "label": "Title"
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "content_titleType",
+          "label": "Title heading level",
+          "description": "Use H1 for the first hero of a page, H2 for the others.",
+          "value": "h1",
+          "options": [
+            {
+              "name": "H1",
+              "value": "h1"
+            },
+            {
+              "name": "H2",
+              "value": "h2"
+            }
+          ]
         },
         {
           "component": "richtext",
-          "name": "text",
+          "valueType": "string",
+          "name": "content_description",
+          "label": "Description",
+          "value": ""
+        },
+        {
+          "component": "tab",
+          "name": "linkSection",
+          "label": "Links"
+        },
+        {
+          "component": "container",
+          "name": "ctas",
+          "label": "CTA List",
+          "multi": true,
+          "fields": [
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "ctaText",
+              "label": "CTA Title"
+            },
+            {
+              "component": "aem-content",
+              "valueType": "string",
+              "name": "cta",
+              "label": "CTA Link"
+            },
+            {
+              "component": "select",
+              "valueType": "string",
+              "name": "ctaTarget",
+              "label": "CTA Link Type",
+              "value": "",
+              "options": [
+                {
+                  "name": "Default",
+                  "value": ""
+                },
+                {
+                  "name": "Open in New Window",
+                  "value": "new-window"
+                }
+              ]
+            },
+            {
+              "component": "select",
+              "valueType": "string",
+              "name": "ctaType",
+              "label": "CTA view",
+              "value": "",
+              "options": [
+                {
+                  "name": "Default",
+                  "value": ""
+                },
+                {
+                  "name": "Primary",
+                  "value": "primary"
+                },
+                {
+                  "name": "Secondary",
+                  "value": "secondary"
+                }
+              ]
+            },
+            {
+              "component": "select",
+              "valueType": "string",
+              "name": "ctaArrow",
+              "label": "CTA Arrow",
+              "description": "Direction of the arrow next to the CTA text.",
+              "value": "right",
+              "options": [
+                {
+                  "name": "Right",
+                  "value": "right"
+                },
+                {
+                  "name": "Down",
+                  "value": "down"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_motion",
+          "label": "Motion Type",
+          "description": "Animates the hero when it comes into view (not when reduced motion is preferred).",
           "value": "",
-          "label": "Text",
-          "valueType": "string"
+          "options": [
+            {
+              "name": "None",
+              "value": ""
+            },
+            {
+              "name": "Fade in",
+              "value": "motion-fade"
+            },
+            {
+              "name": "Slide up",
+              "value": "motion-slide"
+            },
+            {
+              "name": "Zoom (image)",
+              "value": "motion-zoom"
+            }
+          ]
+        },
+        {
+          "component": "tab",
+          "name": "styleSection",
+          "label": "Style"
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_alignment",
+          "label": "Vertical Alignment",
+          "value": "align-middle",
+          "options": [
+            {
+              "name": "Top",
+              "value": "align-top"
+            },
+            {
+              "name": "Middle",
+              "value": "align-middle"
+            },
+            {
+              "name": "Bottom",
+              "value": "align-bottom"
+            }
+          ],
+          "description": "Position of the content block: top, middle or bottom of the hero."
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_horizontal",
+          "label": "Horizontal Alignment",
+          "value": "align-center",
+          "options": [
+            {
+              "name": "Left",
+              "value": "align-left"
+            },
+            {
+              "name": "Center",
+              "value": "align-center"
+            },
+            {
+              "name": "Right",
+              "value": "align-right"
+            }
+          ],
+          "description": "Position of the content block: left, center or right of the hero (on desktop)."
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_textAlignment",
+          "label": "Text Alignment",
+          "description": "Alignment of the icon, text and CTAs inside the content block.",
+          "value": "text-center",
+          "options": [
+            {
+              "name": "Left align",
+              "value": "text-left"
+            },
+            {
+              "name": "Center align",
+              "value": "text-center"
+            },
+            {
+              "name": "Right align",
+              "value": "text-right"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_background",
+          "label": "BG Color",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Light, no overlay",
+              "value": "bg-light"
+            },
+            {
+              "name": "Dark blue",
+              "value": "bg-dark"
+            },
+            {
+              "name": "Dark blue (subtle)",
+              "value": "bg-dark-subtle"
+            },
+            {
+              "name": "Black",
+              "value": "bg-black"
+            }
+          ],
+          "description": "Default: light, the image under a white overlay. Light, no overlay: the image as is (e.g. a light gradient) with dark text. The dark options put white text over a navy or black overlay."
+        },
+        {
+          "component": "tab",
+          "name": "additionalTab",
+          "label": "Additional"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "classes_anchor",
+          "label": "Anchor ID",
+          "description": "A unique ID of the block on the page, starting with anchor-, e.g. anchor-our-services; link to it with #anchor-our-services.",
+          "validation": {
+            "regExp": "^anchor-[a-z0-9][a-z0-9-]*$",
+            "customErrorMsg": "Start with anchor-, then lower-case letters, digits and hyphens."
+          }
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "classes_hideblock",
+          "label": "Hide block",
+          "description": "Hides the whole block on the page until it is turned off (shown faded in the editor).",
+          "value": false
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_paddingleft",
+          "label": "Padding left",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "pl-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "pl-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "pl-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "pl-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "pl-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "pl-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "pl-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "pl-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "pl-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "pl-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "pl-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "pl-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "pl-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "pl-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_paddingright",
+          "label": "Padding right",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "pr-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "pr-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "pr-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "pr-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "pr-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "pr-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "pr-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "pr-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "pr-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "pr-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "pr-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "pr-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "pr-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "pr-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_paddingtop",
+          "label": "Padding top",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "pt-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "pt-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "pt-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "pt-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "pt-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "pt-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "pt-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "pt-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "pt-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "pt-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "pt-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "pt-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "pt-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "pt-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_paddingbottom",
+          "label": "Padding bottom",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "pb-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "pb-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "pb-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "pb-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "pb-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "pb-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "pb-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "pb-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "pb-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "pb-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "pb-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "pb-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "pb-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "pb-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_marginleft",
+          "label": "Margin left",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "ml-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "ml-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "ml-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "ml-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "ml-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "ml-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "ml-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "ml-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "ml-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "ml-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "ml-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "ml-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "ml-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "ml-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_marginright",
+          "label": "Margin right",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "mr-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "mr-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "mr-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "mr-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "mr-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "mr-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "mr-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "mr-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "mr-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "mr-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "mr-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "mr-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "mr-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "mr-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_margintop",
+          "label": "Margin top",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "mt-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "mt-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "mt-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "mt-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "mt-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "mt-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "mt-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "mt-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "mt-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "mt-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "mt-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "mt-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "mt-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "mt-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_marginbottom",
+          "label": "Margin bottom",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "mb-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "mb-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "mb-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "mb-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "mb-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "mb-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "mb-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "mb-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "mb-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "mb-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "mb-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "mb-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "mb-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "mb-3000"
+            }
+          ]
         }
       ]
     }

@@ -1,0 +1,74 @@
+/* Table (Block Collection), site styles */
+.table.block {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* a table wider than its container: a focusable region */
+.table.block:focus-visible {
+  outline: var(--border-width-200) solid var(--color-border-brand);
+  outline-offset: var(--space-100);
+}
+
+.table.block table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  color: var(--color-text-default);
+  font-size: var(--body-font-size-s);
+  line-height: 1.5;
+}
+
+.table.block table thead tr {
+  border-bottom: var(--border-width-200) solid var(--color-border-neutral);
+}
+
+.table.block table tbody tr {
+  border-bottom: var(--border-width-100) solid var(--color-border-default);
+}
+
+.table.block table th {
+  font-weight: var(--font-weight-semibold);
+}
+
+.table.block table th,
+.table.block table td {
+  padding: var(--space-300) var(--space-400);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table.block table :is(th, td) p {
+  margin: 0;
+}
+
+.table.block table td p + p {
+  margin-top: var(--space-100);
+}
+
+/* No Header */
+.table.block.no-header table tbody tr:first-child {
+  border-top: var(--border-width-200) solid var(--color-border-neutral);
+}
+
+/* Striped */
+.table.block.striped table tbody tr:nth-child(odd) {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Bordered */
+.table.block.bordered table :is(th, td) {
+  border: var(--border-width-100) solid var(--color-border-default);
+}
+
+@media (width >= 900px) {
+  .table.block table {
+    font-size: var(--body-font-size-m);
+  }
+}
+
+/* First Column Header: row headers */
+.table.block tbody th {
+  font-weight: var(--font-weight-semibold);
+  text-align: start;
+}

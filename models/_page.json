@@ -21,6 +21,57 @@
           "name": "keywords",
           "multi": true,
           "label": "Keywords"
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "page-type",
+          "label": "Page Type",
+          "description": "The Site Global Template of the page (layout and template code). Overrides the page-type column of the metadata sheet.",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Home",
+              "value": "home"
+            },
+            {
+              "name": "Article",
+              "value": "article"
+            },
+            {
+              "name": "Blog",
+              "value": "blog"
+            },
+            {
+              "name": "Press Release",
+              "value": "press-release"
+            }
+          ]
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "nav",
+          "label": "Navigation",
+          "description": "The header (nav) page of this page and, unless they set their own, its child pages. Empty: the nearest parent page's Navigation (or the metadata sheet's nav column), else the locale's references/nav."
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "footer",
+          "label": "Footer",
+          "description": "The footer page of this page and, unless they set their own, its child pages. Empty: the nearest parent page's Footer (or the metadata sheet's footer column), else the locale's references/footer."
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "error-page",
+          "label": "404 Page",
+          "description": "The page shown when a page below this one isn't found. Empty: the nearest parent page's 404 Page (or the metadata sheet's error-page column), else the locale's error-pages/404."
         }
       ]
     }

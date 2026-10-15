@@ -1,0 +1,55 @@
+/* Embed (Block Collection), site styles */
+.embed {
+  max-width: 56.25rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.embed:not(.embed-is-loaded, :has(.embed-placeholder)) {
+  /* reserve space to avoid layout shift */
+  aspect-ratio: 16 / 9;
+}
+
+.embed.embed-twitter .twitter-tweet-rendered {
+  margin-inline: auto;
+}
+
+.embed .embed-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-l);
+}
+
+.embed .embed-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.embed .embed-placeholder {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-l);
+}
+
+.embed .embed-placeholder picture {
+  position: absolute;
+  inset: 0;
+}
+
+.embed .embed-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.embed .embed-placeholder .embed-placeholder-play {
+  position: relative;
+  transform: scale(1.4);
+}

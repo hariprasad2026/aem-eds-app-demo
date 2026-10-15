@@ -1,0 +1,17 @@
+/*
+ * Tab: shown only in Universal Editor (edit mode), as the label of the tab's content, so
+ * authors can select the Tab and edit its Title, ID and Active tab. Hidden on the page by
+ * blocks/tabs/tabs.css.
+ */
+.tab .tab-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-200);
+  margin: 0 0 var(--space-400);
+  border: var(--border-width-100) dashed var(--color-border-brand);
+  border-radius: var(--radius-s);
+  padding: var(--space-100) var(--space-300);
+  color: var(--color-text-brand);
+  font-size: var(--body-font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}

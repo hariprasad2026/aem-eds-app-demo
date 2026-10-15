@@ -1,0 +1,631 @@
+/*
+ * Separator: one rule (.separator-rule, a native <hr>) in .separator-line, styled by the block
+ * classes of separator.js (variant-*, theme-*, line-*, thickness-*, color-*, opacity-*, width-*,
+ * max-*, align-*, spacing and {desktop,tablet,mobile}-* overrides, hide-*). All layout and
+ * responsive behaviour is CSS: mobile < 600px, tablet 600-1199px, desktop >= 1200px (the
+ * project's breakpoints). Colours, widths, spacing and thicknesses are site tokens.
+ */
+.separator {
+  /* palette of the line colours on light backgrounds (theme light, or auto) */
+  --separator-default: var(--color-border-neutral-tertiary);
+  --separator-subtle: var(--color-border-default);
+  --separator-neutral: var(--color-border-neutral-secondary);
+  --separator-strong: var(--color-border-neutral);
+  --separator-primary: var(--color-border-brand);
+  --separator-secondary: var(--color-border-brand-tertiary);
+  --separator-accent: var(--color-bg-warning);
+  --separator-inverse: var(--white-500);
+
+  /* the line (set by the classes below) */
+  --separator-color: var(--separator-default);
+  --separator-style: solid;
+  --separator-thickness: var(--border-width-100);
+  --separator-opacity: 1;
+  --separator-width: 100%;
+  --separator-bleed: 0;
+  --separator-cap: 999rem;
+  --separator-max: 999rem;
+  --separator-limit: 999rem;
+  --separator-justify: center;
+  --separator-inset: 0rem;
+  --separator-space-top: var(--space-600);
+  --separator-space-bottom: var(--space-600);
+
+  display: flex;
+  justify-content: var(--separator-justify);
+  padding-block: var(--separator-space-top) var(--separator-space-bottom);
+}
+
+.separator .separator-line {
+  position: relative;
+  flex: none;
+  box-sizing: border-box;
+  width: calc(var(--separator-width) + var(--separator-bleed) * 2 * var(--section-padding-inline));
+  max-width: min(var(--separator-max), var(--separator-cap), var(--separator-limit));
+  margin-inline: calc(var(--separator-bleed) * -1 * var(--section-padding-inline));
+  padding-inline: var(--separator-inset);
+  opacity: var(--separator-opacity);
+}
+
+.separator .separator-rule {
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-block-start: var(--separator-thickness) var(--separator-style) var(--separator-color);
+}
+
+/* themes: auto follows dark and brand sections */
+.separator.theme-dark,
+.section.dark .separator.theme-auto {
+  --separator-default: var(--slate-600);
+  --separator-subtle: var(--slate-800);
+  --separator-neutral: var(--slate-500);
+  --separator-strong: var(--slate-200);
+  --separator-primary: var(--brand-300);
+  --separator-secondary: var(--brand-400);
+  --separator-inverse: var(--black-500);
+}
+
+.separator.theme-brand,
+.section.brand .separator.theme-auto {
+  --separator-default: var(--color-border-brand);
+  --separator-subtle: var(--brand-300);
+  --separator-neutral: var(--slate-600);
+  --separator-strong: var(--brand-600);
+  --separator-primary: var(--brand-500);
+  --separator-secondary: var(--brand-400);
+  --separator-inverse: var(--white-1000);
+}
+
+/* line colour, opacity, style and thickness */
+.separator.color-default { --separator-color: var(--separator-default); }
+.separator.color-subtle { --separator-color: var(--separator-subtle); }
+.separator.color-neutral { --separator-color: var(--separator-neutral); }
+.separator.color-strong { --separator-color: var(--separator-strong); }
+.separator.color-primary { --separator-color: var(--separator-primary); }
+.separator.color-secondary { --separator-color: var(--separator-secondary); }
+.separator.color-accent { --separator-color: var(--separator-accent); }
+.separator.color-inverse { --separator-color: var(--separator-inverse); }
+.separator.contrast-high { --separator-color: var(--separator-strong); }
+.separator.opacity-25 { --separator-opacity: 0.25; }
+.separator.opacity-50 { --separator-opacity: 0.5; }
+.separator.opacity-75 { --separator-opacity: 0.75; }
+.separator.line-dashed { --separator-style: dashed; }
+.separator.line-dotted { --separator-style: dotted; }
+.separator.thickness-thin { --separator-thickness: var(--border-width-100); }
+.separator.thickness-medium { --separator-thickness: var(--border-width-200); }
+.separator.thickness-thick { --separator-thickness: var(--border-width-300); }
+
+/* gradient: the colour fading out at both ends */
+.separator.line-gradient .separator-rule {
+  height: var(--separator-thickness);
+  border: 0;
+  background: linear-gradient(90deg, transparent, var(--separator-color) 20%, var(--separator-color) 80%, transparent);
+}
+
+/* none: the spacing only (a semantic break stays for assistive technologies) */
+.separator.line-none .separator-rule {
+  border: 0;
+}
+
+/* width (the share of the content width), maximum width and alignment */
+.separator.width-auto,
+.separator.width-100-percent { --separator-width: 100%; }
+.separator.width-25-percent { --separator-width: 25%; }
+.separator.width-50-percent { --separator-width: 50%; }
+.separator.width-75-percent { --separator-width: 75%; }
+
+.separator.width-content-width {
+  --separator-width: 100%;
+  --separator-cap: var(--content-max-width);
+}
+
+.separator.width-full-bleed {
+  --separator-width: 100%;
+  --separator-bleed: 1;
+}
+
+.separator.max-small { --separator-max: 20rem; }
+.separator.max-medium { --separator-max: 40rem; }
+.separator.max-large { --separator-max: 60rem; }
+.separator.max-extra-large { --separator-max: 80rem; }
+.separator.max-content-container { --separator-max: var(--content-max-width); }
+.separator.respect-max { --separator-limit: var(--content-max-width); }
+.separator.align-start { --separator-justify: start; }
+.separator.align-center { --separator-justify: center; }
+.separator.align-end { --separator-justify: end; }
+
+/* variants not covered by the line settings */
+.separator.variant-inset { --separator-inset: var(--space-1000); }
+
+/* spacing: padding, so it never collapses with the content around it */
+.separator.section-padding {
+  padding-block: 0;
+}
+
+/* decorations: start, center and end shapes on the line, visual only */
+.separator .separator-decoration {
+  --separator-shape-size: calc(var(--separator-thickness) * 3 + 0.375rem);
+
+  position: absolute;
+  top: 50%;
+  width: var(--separator-shape-size);
+  height: var(--separator-shape-size);
+  background: var(--separator-color);
+  translate: 0 -50%;
+}
+
+.separator .separator-decoration-start { inset-inline-start: var(--separator-inset); }
+.separator .separator-decoration-end { inset-inline-end: var(--separator-inset); }
+
+.separator .separator-decoration-center {
+  inset-inline: 0;
+  margin-inline: auto;
+}
+
+.separator .separator-decoration-dot { border-radius: var(--radius-full); }
+
+.separator .separator-decoration-diamond {
+  transform: rotate(45deg) scale(0.8);
+}
+
+/* the line fills its container whatever the width settings */
+.separator.stretch .separator-line {
+  width: 100%;
+  margin-inline: 0;
+}
+
+/* the editor: a separator hidden everywhere stays selectable, with a note */
+.separator .separator-editor-note {
+  margin: var(--space-200) 0 0;
+  color: var(--color-text-neutral-secondary);
+  font-size: var(--body-font-size-xs);
+  text-align: center;
+}
+
+.separator.hidden-all {
+  display: none;
+}
+
+.adobe-ue-edit .separator.hidden-all {
+  display: block;
+  outline: var(--border-width-100) dashed var(--color-border-secondary);
+}
+
+/* animation on view (only once the script has prepared it, so a failure never hides it) */
+.separator[class*='animate-'] .separator-line {
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.separator.animate-draw-from-start .separator-line {
+  transform-origin: left center;
+}
+
+.separator.animate-draw-from-start:dir(rtl) .separator-line {
+  transform-origin: right center;
+}
+
+.separator.animate-ready:not(.is-visible) .separator-line {
+  opacity: 0;
+}
+
+.separator.animate-draw-from-start.animate-ready:not(.is-visible, .reduced-motion) .separator-line,
+.separator.animate-draw-from-center.animate-ready:not(.is-visible, .reduced-motion) .separator-line {
+  opacity: 1;
+  transform: scaleX(0);
+}
+
+/* mobile only (Figma 402 frames) */
+@media (width < 600px) {
+  .separator.hide-mobile {
+    display: none;
+  }
+
+  .separator.mobile-width-auto,
+  .separator.mobile-width-100-percent {
+    --separator-width: 100%;
+    --separator-bleed: 0;
+    --separator-cap: 999rem;
+  }
+
+  .separator.mobile-width-25-percent {
+    --separator-width: 25%;
+    --separator-bleed: 0;
+  }
+
+  .separator.mobile-width-50-percent {
+    --separator-width: 50%;
+    --separator-bleed: 0;
+  }
+
+  .separator.mobile-width-75-percent {
+    --separator-width: 75%;
+    --separator-bleed: 0;
+  }
+
+  .separator.mobile-width-content-width {
+    --separator-width: 100%;
+    --separator-bleed: 0;
+    --separator-cap: var(--content-max-width);
+  }
+
+  .separator.mobile-width-full-bleed {
+    --separator-width: 100%;
+    --separator-bleed: 1;
+  }
+
+  .separator.mobile-thickness-thin {
+    --separator-thickness: var(--border-width-100);
+  }
+
+  .separator.mobile-thickness-medium {
+    --separator-thickness: var(--border-width-200);
+  }
+
+  .separator.mobile-thickness-thick {
+    --separator-thickness: var(--border-width-300);
+  }
+
+  .separator.mobile-align-start {
+    --separator-justify: start;
+  }
+
+  .separator.mobile-align-center {
+    --separator-justify: center;
+  }
+
+  .separator.mobile-align-end {
+    --separator-justify: end;
+  }
+
+  .separator.mobile-top-none {
+    --separator-space-top: 0;
+  }
+
+  .separator.mobile-top-2xs {
+    --separator-space-top: var(--space-100);
+  }
+
+  .separator.mobile-top-xs {
+    --separator-space-top: var(--space-200);
+  }
+
+  .separator.mobile-top-small {
+    --separator-space-top: var(--space-400);
+  }
+
+  .separator.mobile-top-medium {
+    --separator-space-top: var(--space-600);
+  }
+
+  .separator.mobile-top-large {
+    --separator-space-top: var(--space-1000);
+  }
+
+  .separator.mobile-top-xl {
+    --separator-space-top: var(--space-1600);
+  }
+
+  .separator.mobile-top-2xl {
+    --separator-space-top: var(--space-2000);
+  }
+
+  .separator.mobile-bottom-none {
+    --separator-space-bottom: 0;
+  }
+
+  .separator.mobile-bottom-2xs {
+    --separator-space-bottom: var(--space-100);
+  }
+
+  .separator.mobile-bottom-xs {
+    --separator-space-bottom: var(--space-200);
+  }
+
+  .separator.mobile-bottom-small {
+    --separator-space-bottom: var(--space-400);
+  }
+
+  .separator.mobile-bottom-medium {
+    --separator-space-bottom: var(--space-600);
+  }
+
+  .separator.mobile-bottom-large {
+    --separator-space-bottom: var(--space-1000);
+  }
+
+  .separator.mobile-bottom-xl {
+    --separator-space-bottom: var(--space-1600);
+  }
+
+  .separator.mobile-bottom-2xl {
+    --separator-space-bottom: var(--space-2000);
+  }
+}
+
+/* tablet only (Figma 1024 frames) */
+@media (600px <= width < 1200px) {
+  .separator.hide-tablet {
+    display: none;
+  }
+
+  .separator.tablet-width-auto,
+  .separator.tablet-width-100-percent {
+    --separator-width: 100%;
+    --separator-bleed: 0;
+    --separator-cap: 999rem;
+  }
+
+  .separator.tablet-width-25-percent {
+    --separator-width: 25%;
+    --separator-bleed: 0;
+  }
+
+  .separator.tablet-width-50-percent {
+    --separator-width: 50%;
+    --separator-bleed: 0;
+  }
+
+  .separator.tablet-width-75-percent {
+    --separator-width: 75%;
+    --separator-bleed: 0;
+  }
+
+  .separator.tablet-width-content-width {
+    --separator-width: 100%;
+    --separator-bleed: 0;
+    --separator-cap: var(--content-max-width);
+  }
+
+  .separator.tablet-width-full-bleed {
+    --separator-width: 100%;
+    --separator-bleed: 1;
+  }
+
+  .separator.tablet-thickness-thin {
+    --separator-thickness: var(--border-width-100);
+  }
+
+  .separator.tablet-thickness-medium {
+    --separator-thickness: var(--border-width-200);
+  }
+
+  .separator.tablet-thickness-thick {
+    --separator-thickness: var(--border-width-300);
+  }
+
+  .separator.tablet-align-start {
+    --separator-justify: start;
+  }
+
+  .separator.tablet-align-center {
+    --separator-justify: center;
+  }
+
+  .separator.tablet-align-end {
+    --separator-justify: end;
+  }
+
+  .separator.tablet-top-none {
+    --separator-space-top: 0;
+  }
+
+  .separator.tablet-top-2xs {
+    --separator-space-top: var(--space-100);
+  }
+
+  .separator.tablet-top-xs {
+    --separator-space-top: var(--space-200);
+  }
+
+  .separator.tablet-top-small {
+    --separator-space-top: var(--space-400);
+  }
+
+  .separator.tablet-top-medium {
+    --separator-space-top: var(--space-600);
+  }
+
+  .separator.tablet-top-large {
+    --separator-space-top: var(--space-1000);
+  }
+
+  .separator.tablet-top-xl {
+    --separator-space-top: var(--space-1600);
+  }
+
+  .separator.tablet-top-2xl {
+    --separator-space-top: var(--space-2000);
+  }
+
+  .separator.tablet-bottom-none {
+    --separator-space-bottom: 0;
+  }
+
+  .separator.tablet-bottom-2xs {
+    --separator-space-bottom: var(--space-100);
+  }
+
+  .separator.tablet-bottom-xs {
+    --separator-space-bottom: var(--space-200);
+  }
+
+  .separator.tablet-bottom-small {
+    --separator-space-bottom: var(--space-400);
+  }
+
+  .separator.tablet-bottom-medium {
+    --separator-space-bottom: var(--space-600);
+  }
+
+  .separator.tablet-bottom-large {
+    --separator-space-bottom: var(--space-1000);
+  }
+
+  .separator.tablet-bottom-xl {
+    --separator-space-bottom: var(--space-1600);
+  }
+
+  .separator.tablet-bottom-2xl {
+    --separator-space-bottom: var(--space-2000);
+  }
+}
+
+/* desktop (Figma 1440 frames) */
+@media (width >= 1200px) {
+  .separator.hide-desktop {
+    display: none;
+  }
+
+  .separator.desktop-width-auto,
+  .separator.desktop-width-100-percent {
+    --separator-width: 100%;
+    --separator-bleed: 0;
+    --separator-cap: 999rem;
+  }
+
+  .separator.desktop-width-25-percent {
+    --separator-width: 25%;
+    --separator-bleed: 0;
+  }
+
+  .separator.desktop-width-50-percent {
+    --separator-width: 50%;
+    --separator-bleed: 0;
+  }
+
+  .separator.desktop-width-75-percent {
+    --separator-width: 75%;
+    --separator-bleed: 0;
+  }
+
+  .separator.desktop-width-content-width {
+    --separator-width: 100%;
+    --separator-bleed: 0;
+    --separator-cap: var(--content-max-width);
+  }
+
+  .separator.desktop-width-full-bleed {
+    --separator-width: 100%;
+    --separator-bleed: 1;
+  }
+
+  .separator.desktop-thickness-thin {
+    --separator-thickness: var(--border-width-100);
+  }
+
+  .separator.desktop-thickness-medium {
+    --separator-thickness: var(--border-width-200);
+  }
+
+  .separator.desktop-thickness-thick {
+    --separator-thickness: var(--border-width-300);
+  }
+
+  .separator.desktop-align-start {
+    --separator-justify: start;
+  }
+
+  .separator.desktop-align-center {
+    --separator-justify: center;
+  }
+
+  .separator.desktop-align-end {
+    --separator-justify: end;
+  }
+
+  .separator.desktop-top-none {
+    --separator-space-top: 0;
+  }
+
+  .separator.desktop-top-2xs {
+    --separator-space-top: var(--space-100);
+  }
+
+  .separator.desktop-top-xs {
+    --separator-space-top: var(--space-200);
+  }
+
+  .separator.desktop-top-small {
+    --separator-space-top: var(--space-400);
+  }
+
+  .separator.desktop-top-medium {
+    --separator-space-top: var(--space-600);
+  }
+
+  .separator.desktop-top-large {
+    --separator-space-top: var(--space-1000);
+  }
+
+  .separator.desktop-top-xl {
+    --separator-space-top: var(--space-1600);
+  }
+
+  .separator.desktop-top-2xl {
+    --separator-space-top: var(--space-2000);
+  }
+
+  .separator.desktop-bottom-none {
+    --separator-space-bottom: 0;
+  }
+
+  .separator.desktop-bottom-2xs {
+    --separator-space-bottom: var(--space-100);
+  }
+
+  .separator.desktop-bottom-xs {
+    --separator-space-bottom: var(--space-200);
+  }
+
+  .separator.desktop-bottom-small {
+    --separator-space-bottom: var(--space-400);
+  }
+
+  .separator.desktop-bottom-medium {
+    --separator-space-bottom: var(--space-600);
+  }
+
+  .separator.desktop-bottom-large {
+    --separator-space-bottom: var(--space-1000);
+  }
+
+  .separator.desktop-bottom-xl {
+    --separator-space-bottom: var(--space-1600);
+  }
+
+  .separator.desktop-bottom-2xl {
+    --separator-space-bottom: var(--space-2000);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .separator .separator-line {
+    transform: none;
+  }
+}
+
+/* Windows high contrast: the system text colour */
+@media (forced-colors: active) {
+  .separator .separator-rule {
+    border-color: CanvasText;
+  }
+
+  .separator.line-gradient .separator-rule,
+  .separator .separator-decoration {
+    background: CanvasText;
+    forced-color-adjust: none;
+  }
+}
+
+@media print {
+  .separator.print-hide {
+    display: none;
+  }
+
+  .separator .separator-line {
+    opacity: 1;
+    transform: none;
+    print-color-adjust: exact;
+  }
+}

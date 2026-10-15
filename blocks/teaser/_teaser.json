@@ -1,0 +1,1557 @@
+{
+  "definitions": [
+    {
+      "title": "Teaser",
+      "id": "teaser",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Teaser",
+              "model": "teaser",
+              "key-value": true,
+              "titleType": "h2",
+              "imagePosition": "left",
+              "showEyebrow": true,
+              "showDescription": true,
+              "dateFormat": "dd-mm-yyyy",
+              "primaryCtaStyle": "primary",
+              "secondaryCtaStyle": "secondary"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "teaser",
+      "fields": [
+        {
+          "component": "tab",
+          "name": "contentTab",
+          "label": "Content"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "eyebrow",
+          "label": "Eyebrow"
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "showEyebrow",
+          "label": "Show Eyebrow",
+          "value": true
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "title",
+          "label": "Title"
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "titleType",
+          "label": "Title Type",
+          "value": "h2",
+          "options": [
+            {
+              "name": "H1",
+              "value": "h1"
+            },
+            {
+              "name": "H2",
+              "value": "h2"
+            },
+            {
+              "name": "H3",
+              "value": "h3"
+            },
+            {
+              "name": "H4",
+              "value": "h4"
+            },
+            {
+              "name": "H5",
+              "value": "h5"
+            },
+            {
+              "name": "H6",
+              "value": "h6"
+            }
+          ]
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "titleHidden",
+          "label": "Hide Title",
+          "description": "The title stays available to screen readers.",
+          "value": false
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "description",
+          "label": "Description",
+          "value": ""
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "showDescription",
+          "label": "Show Description",
+          "value": true
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "shortDescription",
+          "label": "Short Description",
+          "description": "Shown after the links.",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "viewAllText",
+          "label": "View All Text"
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "viewAll",
+          "label": "View All Link"
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "showDate",
+          "label": "Show Date",
+          "value": false
+        },
+        {
+          "component": "date-time",
+          "valueType": "date",
+          "name": "date",
+          "label": "Date",
+          "condition": {
+            "===": [
+              {
+                "var": "showDate"
+              },
+              true
+            ]
+          }
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "dateFormat",
+          "label": "Date Format",
+          "value": "dd-mm-yyyy",
+          "condition": {
+            "===": [
+              {
+                "var": "showDate"
+              },
+              true
+            ]
+          },
+          "options": [
+            {
+              "name": "DD-MM-YYYY",
+              "value": "dd-mm-yyyy"
+            },
+            {
+              "name": "MM-DD-YYYY",
+              "value": "mm-dd-yyyy"
+            },
+            {
+              "name": "MMM d, yyyy",
+              "value": "mmm-d-yyyy"
+            },
+            {
+              "name": "DD/MM/YY",
+              "value": "dd/mm/yy"
+            }
+          ]
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "dateLabel",
+          "label": "Date label",
+          "description": "Shown before the date, e.g. Published.",
+          "condition": {
+            "===": [
+              {
+                "var": "showDate"
+              },
+              true
+            ]
+          }
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "readingTime",
+          "label": "Reading time",
+          "description": "Minutes (e.g. 14, shown as \"14 min read\") or any text."
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "displayTags",
+          "label": "Display Tags",
+          "value": false
+        },
+        {
+          "component": "aem-tag",
+          "valueType": "string",
+          "name": "tags",
+          "label": "Tags",
+          "multi": true,
+          "condition": {
+            "===": [
+              {
+                "var": "displayTags"
+              },
+              true
+            ]
+          }
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "listenLink",
+          "label": "Listen link",
+          "description": "An audio version of the page: shows the listen icon."
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "download",
+          "label": "Download",
+          "value": false,
+          "description": "Shows the download icon (prints the page or saves it as PDF)."
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "socialShare",
+          "label": "Share",
+          "value": false,
+          "description": "Shows the share icon (share dialog, or the link copied)."
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "authorName",
+          "label": "Author name"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "authorDesignation",
+          "label": "Author designation",
+          "description": "e.g. TCS Role."
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "authorImage",
+          "label": "Author image",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "authorImageAlt",
+          "label": "Author image alt text",
+          "description": "Leave empty if the image is decorative."
+        },
+        {
+          "component": "tab",
+          "name": "imageTab",
+          "label": "Image"
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "imageFormat",
+          "label": "Image type",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Lotto",
+              "value": "lottie"
+            }
+          ],
+          "description": "Default: the Image is a picture. Lotto: the Image is a Lottie animation file (.json)."
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "image",
+          "label": "Image",
+          "multi": false,
+          "description": "Image & Text: beside the text. Text split: in the text column (e.g. a chart). Background image and Card: behind the text."
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "imageAlt",
+          "label": "Image alt text",
+          "description": "Leave empty if the image is decorative."
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "hideImage",
+          "label": "Hide Image",
+          "value": false
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "imagePosition",
+          "label": "Image position",
+          "value": "left",
+          "condition": {
+            "or": [
+              {
+                "!": {
+                  "var": "classes"
+                }
+              },
+              {
+                "===": [
+                  {
+                    "var": "classes"
+                  },
+                  ""
+                ]
+              }
+            ]
+          },
+          "options": [
+            {
+              "name": "Left",
+              "value": "left"
+            },
+            {
+              "name": "Right",
+              "value": "right"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "imagePositionMobile",
+          "label": "Image position (mobile)",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Top",
+              "value": "mobile-image-top"
+            },
+            {
+              "name": "Bottom",
+              "value": "mobile-image-bottom"
+            }
+          ],
+          "description": "Image above or below the text on mobile (narrower than 900px). Default: above, or in the text order for Text split."
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "imageRatio",
+          "label": "Image ratio",
+          "value": "",
+          "options": [
+            {
+              "name": "Default (10:9)",
+              "value": ""
+            },
+            {
+              "name": "Portrait (8:9)",
+              "value": "ratio-8-9"
+            },
+            {
+              "name": "Square (1:1)",
+              "value": "ratio-1-1"
+            },
+            {
+              "name": "Original",
+              "value": "ratio-original"
+            }
+          ],
+          "condition": {
+            "or": [
+              {
+                "!": {
+                  "var": "classes"
+                }
+              },
+              {
+                "or": [
+                  {
+                    "===": [
+                      {
+                        "var": "classes"
+                      },
+                      ""
+                    ]
+                  },
+                  {
+                    "===": [
+                      {
+                        "var": "classes"
+                      },
+                      "no-image"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "imageCorners",
+          "label": "Image corners",
+          "value": "",
+          "options": [
+            {
+              "name": "Rounded",
+              "value": ""
+            },
+            {
+              "name": "Square",
+              "value": "square"
+            }
+          ],
+          "condition": {
+            "or": [
+              {
+                "!": {
+                  "var": "classes"
+                }
+              },
+              {
+                "or": [
+                  {
+                    "===": [
+                      {
+                        "var": "classes"
+                      },
+                      ""
+                    ]
+                  },
+                  {
+                    "===": [
+                      {
+                        "var": "classes"
+                      },
+                      "no-image"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "component": "tab",
+          "name": "styleTab",
+          "label": "Style"
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes",
+          "label": "Layout",
+          "value": "",
+          "options": [
+            {
+              "name": "Image & Text",
+              "value": ""
+            },
+            {
+              "name": "Text split (title left, text right)",
+              "value": "no-image"
+            },
+            {
+              "name": "Background image",
+              "value": "background"
+            },
+            {
+              "name": "Card",
+              "value": "card"
+            }
+          ],
+          "description": "Image & Text: image and text side by side. Text split: title left, text, links and stats right. Background image: the image behind centered text. Card: a rounded card with the image behind its text."
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "bgColor",
+          "label": "BG Color",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Grey",
+              "value": "grey"
+            },
+            {
+              "name": "Dark",
+              "value": "dark"
+            },
+            {
+              "name": "Dark green",
+              "value": "dark-green"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "textAlignment",
+          "label": "Text alignment",
+          "value": "",
+          "options": [
+            {
+              "name": "Layout default",
+              "value": ""
+            },
+            {
+              "name": "Left",
+              "value": "text-left"
+            },
+            {
+              "name": "Center",
+              "value": "text-center"
+            },
+            {
+              "name": "Right",
+              "value": "text-right"
+            }
+          ],
+          "description": "Layout default: left, centered for Background image and when Image & Text has no image."
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "verticalAlignment",
+          "label": "Vertical alignment",
+          "value": "",
+          "options": [
+            {
+              "name": "Layout default",
+              "value": ""
+            },
+            {
+              "name": "Top",
+              "value": "valign-top"
+            },
+            {
+              "name": "Center",
+              "value": "valign-middle"
+            },
+            {
+              "name": "Bottom",
+              "value": "valign-bottom"
+            }
+          ],
+          "description": "How the text and the image (or the two text columns) line up. Layout default: center, top for Text split."
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "titleSize",
+          "label": "Title size",
+          "value": "",
+          "options": [
+            {
+              "name": "Layout default",
+              "value": ""
+            },
+            {
+              "name": "Medium (40px)",
+              "value": "title-m"
+            },
+            {
+              "name": "Large (48px)",
+              "value": "title-l"
+            },
+            {
+              "name": "Extra large (64px)",
+              "value": "title-xl"
+            },
+            {
+              "name": "Display (96px)",
+              "value": "title-display"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "titleWeight",
+          "label": "Title weight",
+          "value": "",
+          "options": [
+            {
+              "name": "Layout default",
+              "value": ""
+            },
+            {
+              "name": "Regular",
+              "value": "title-regular"
+            },
+            {
+              "name": "Semibold",
+              "value": "title-semibold"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "descriptionSize",
+          "label": "Description size",
+          "value": "",
+          "options": [
+            {
+              "name": "Layout default",
+              "value": ""
+            },
+            {
+              "name": "Regular (18px)",
+              "value": "text-regular"
+            },
+            {
+              "name": "Large (24px)",
+              "value": "text-large"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "eyebrowStyle",
+          "label": "Eyebrow style",
+          "value": "",
+          "options": [
+            {
+              "name": "Brand",
+              "value": ""
+            },
+            {
+              "name": "Label (uppercase, grey)",
+              "value": "eyebrow-label"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "topSpacing",
+          "label": "Top spacing",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Page header (extra space above)",
+              "value": "spacing-header"
+            }
+          ],
+          "description": "Page header: the larger space above a teaser that opens a page."
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "personalization",
+          "label": "Personalization",
+          "value": false
+        },
+        {
+          "component": "tab",
+          "name": "linksTab",
+          "label": "Links"
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "multiLinks",
+          "label": "Multiple links",
+          "description": "On: a list of links. Off: a primary and a secondary button.",
+          "value": false
+        },
+        {
+          "component": "container",
+          "name": "links",
+          "label": "Links",
+          "multi": true,
+          "condition": {
+            "===": [
+              {
+                "var": "multiLinks"
+              },
+              true
+            ]
+          },
+          "fields": [
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "ctaText",
+              "label": "CTA Title"
+            },
+            {
+              "component": "aem-content",
+              "valueType": "string",
+              "name": "cta",
+              "label": "CTA Link"
+            },
+            {
+              "component": "select",
+              "valueType": "string",
+              "name": "ctaTarget",
+              "label": "CTA Link Type",
+              "value": "",
+              "options": [
+                {
+                  "name": "Default",
+                  "value": ""
+                },
+                {
+                  "name": "Open in New Window",
+                  "value": "new-window"
+                }
+              ]
+            },
+            {
+              "component": "select",
+              "valueType": "string",
+              "name": "ctaStyle",
+              "label": "CTA Link Style",
+              "value": "",
+              "options": [
+                {
+                  "name": "Text link",
+                  "value": ""
+                },
+                {
+                  "name": "List",
+                  "value": "list"
+                },
+                {
+                  "name": "Primary Button",
+                  "value": "primary"
+                },
+                {
+                  "name": "Secondary Button",
+                  "value": "secondary"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "linkArrow",
+          "label": "List arrow",
+          "value": "",
+          "options": [
+            {
+              "name": "Right",
+              "value": ""
+            },
+            {
+              "name": "Down right",
+              "value": "arrow-down-right"
+            }
+          ],
+          "description": "Arrow of the List link style."
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "primaryCtaText",
+          "label": "Primary CTA Title",
+          "condition": {
+            "!": {
+              "var": "multiLinks"
+            }
+          }
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "primaryCta",
+          "label": "Primary CTA Link",
+          "condition": {
+            "!": {
+              "var": "multiLinks"
+            }
+          }
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "primaryCtaTarget",
+          "label": "Primary CTA Link Type",
+          "value": "",
+          "condition": {
+            "!": {
+              "var": "multiLinks"
+            }
+          },
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Open in New Window",
+              "value": "new-window"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "primaryCtaStyle",
+          "label": "Primary CTA Link Style",
+          "value": "primary",
+          "condition": {
+            "!": {
+              "var": "multiLinks"
+            }
+          },
+          "options": [
+            {
+              "name": "Text link",
+              "value": ""
+            },
+            {
+              "name": "List",
+              "value": "list"
+            },
+            {
+              "name": "Primary Button",
+              "value": "primary"
+            },
+            {
+              "name": "Secondary Button",
+              "value": "secondary"
+            }
+          ]
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "secondaryCtaText",
+          "label": "Secondary CTA Title",
+          "condition": {
+            "!": {
+              "var": "multiLinks"
+            }
+          }
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "secondaryCta",
+          "label": "Secondary CTA Link",
+          "condition": {
+            "!": {
+              "var": "multiLinks"
+            }
+          }
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "secondaryCtaTarget",
+          "label": "Secondary CTA Link Type",
+          "value": "",
+          "condition": {
+            "!": {
+              "var": "multiLinks"
+            }
+          },
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Open in New Window",
+              "value": "new-window"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "secondaryCtaStyle",
+          "label": "Secondary CTA Link Style",
+          "value": "secondary",
+          "condition": {
+            "!": {
+              "var": "multiLinks"
+            }
+          },
+          "options": [
+            {
+              "name": "Text link",
+              "value": ""
+            },
+            {
+              "name": "List",
+              "value": "list"
+            },
+            {
+              "name": "Primary Button",
+              "value": "primary"
+            },
+            {
+              "name": "Secondary Button",
+              "value": "secondary"
+            }
+          ]
+        },
+        {
+          "component": "tab",
+          "name": "statsTab",
+          "label": "Stats"
+        },
+        {
+          "component": "container",
+          "name": "stats",
+          "label": "Stats",
+          "multi": true,
+          "fields": [
+            {
+              "component": "richtext",
+              "valueType": "string",
+              "name": "statLabel",
+              "label": "Stats Title",
+              "value": ""
+            },
+            {
+              "component": "richtext",
+              "valueType": "string",
+              "name": "statValue",
+              "label": "Stats Value",
+              "description": "A single line, e.g. 40%.",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "component": "tab",
+          "name": "additionalTab",
+          "label": "Additional"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "classes_anchor",
+          "label": "Anchor ID",
+          "description": "A unique ID of the block on the page, starting with anchor-, e.g. anchor-our-services; link to it with #anchor-our-services.",
+          "validation": {
+            "regExp": "^anchor-[a-z0-9][a-z0-9-]*$",
+            "customErrorMsg": "Start with anchor-, then lower-case letters, digits and hyphens."
+          }
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "classes_hideblock",
+          "label": "Hide block",
+          "description": "Hides the whole block on the page until it is turned off (shown faded in the editor).",
+          "value": false
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_paddingleft",
+          "label": "Padding left",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "pl-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "pl-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "pl-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "pl-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "pl-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "pl-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "pl-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "pl-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "pl-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "pl-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "pl-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "pl-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "pl-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "pl-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_paddingright",
+          "label": "Padding right",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "pr-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "pr-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "pr-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "pr-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "pr-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "pr-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "pr-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "pr-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "pr-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "pr-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "pr-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "pr-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "pr-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "pr-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_paddingtop",
+          "label": "Padding top",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "pt-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "pt-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "pt-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "pt-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "pt-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "pt-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "pt-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "pt-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "pt-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "pt-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "pt-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "pt-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "pt-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "pt-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_paddingbottom",
+          "label": "Padding bottom",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "pb-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "pb-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "pb-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "pb-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "pb-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "pb-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "pb-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "pb-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "pb-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "pb-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "pb-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "pb-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "pb-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "pb-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_marginleft",
+          "label": "Margin left",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "ml-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "ml-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "ml-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "ml-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "ml-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "ml-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "ml-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "ml-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "ml-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "ml-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "ml-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "ml-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "ml-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "ml-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_marginright",
+          "label": "Margin right",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "mr-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "mr-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "mr-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "mr-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "mr-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "mr-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "mr-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "mr-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "mr-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "mr-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "mr-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "mr-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "mr-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "mr-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_margintop",
+          "label": "Margin top",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "mt-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "mt-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "mt-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "mt-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "mt-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "mt-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "mt-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "mt-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "mt-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "mt-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "mt-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "mt-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "mt-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "mt-3000"
+            }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "classes_marginbottom",
+          "label": "Margin bottom",
+          "value": "",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "0 (none)",
+              "value": "mb-0"
+            },
+            {
+              "name": "0.25rem (space-100)",
+              "value": "mb-100"
+            },
+            {
+              "name": "0.5rem (space-200)",
+              "value": "mb-200"
+            },
+            {
+              "name": "0.75rem (space-300)",
+              "value": "mb-300"
+            },
+            {
+              "name": "1rem (space-400)",
+              "value": "mb-400"
+            },
+            {
+              "name": "1.25rem (space-500)",
+              "value": "mb-500"
+            },
+            {
+              "name": "1.5rem (space-600)",
+              "value": "mb-600"
+            },
+            {
+              "name": "2rem (space-800)",
+              "value": "mb-800"
+            },
+            {
+              "name": "2.5rem (space-1000)",
+              "value": "mb-1000"
+            },
+            {
+              "name": "3rem (space-1200)",
+              "value": "mb-1200"
+            },
+            {
+              "name": "4rem (space-1600)",
+              "value": "mb-1600"
+            },
+            {
+              "name": "5rem (space-2000)",
+              "value": "mb-2000"
+            },
+            {
+              "name": "6rem (space-2400)",
+              "value": "mb-2400"
+            },
+            {
+              "name": "7.5rem (space-3000)",
+              "value": "mb-3000"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

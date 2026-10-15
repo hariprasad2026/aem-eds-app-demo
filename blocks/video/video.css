@@ -1,0 +1,140 @@
+/* Video (Block Collection based), site styles */
+.video {
+  --video-aspect-ratio: 16 / 9;
+  --video-radius: 0;
+  --video-max-width: 56.25rem;
+
+  max-width: var(--video-max-width);
+  margin: 0 auto;
+}
+
+.video.video-rounded {
+  --video-radius: var(--radius-l);
+}
+
+/* Size */
+.video.video-size-full {
+  --video-max-width: none;
+}
+
+.video.video-size-medium {
+  --video-max-width: 40rem;
+}
+
+.video.video-size-small {
+  --video-max-width: 26.25rem;
+}
+
+/* Alignment (sizes other than full width) */
+.video.video-align-left {
+  margin-inline: 0 auto;
+}
+
+.video.video-align-right {
+  margin-inline: auto 0;
+}
+
+/* the player area keeps the aspect ratio, so the page doesn't shift while it loads */
+.video .video-media {
+  position: relative;
+  aspect-ratio: var(--video-aspect-ratio);
+  overflow: hidden;
+  border-radius: var(--video-radius);
+  background-color: var(--color-bg-neutral);
+}
+
+/* pause / stop for a video playing without controls (WCAG 2.2.2) */
+.video .video-media > .video-toggle {
+  position: absolute;
+  z-index: 2;
+  inset-block-end: var(--space-300);
+  inset-inline-end: var(--space-300);
+}
+
+.video .video-media > video,
+.video .video-media > .video-frame,
+.video .video-media > .video-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video .video-media > .video-placeholder {
+  display: grid;
+  place-items: center;
+}
+
+.video .video-media > video {
+  display: block;
+  object-fit: cover;
+}
+
+.video .video-frame iframe,
+.modal .video-modal-player .video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video .video-placeholder picture {
+  position: absolute;
+  inset: 0;
+}
+
+.video .video-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video .video-placeholder .video-placeholder-play {
+  position: relative;
+  transform: scale(1.4);
+}
+
+/* the poster stays until the video can play, then gives way to it */
+.video[data-embed-loaded='true'] .video-placeholder,
+.video[data-embed-loaded='false'] .video-placeholder + * {
+  visibility: hidden;
+}
+
+/* caption and transcript link below the video */
+.video .video-caption {
+  margin-top: var(--space-300);
+  color: var(--color-text-secondary);
+  font-size: var(--body-font-size-s);
+}
+
+.video .video-caption > :first-child {
+  margin-top: 0;
+}
+
+.video .video-caption > :last-child {
+  margin-bottom: 0;
+}
+
+.video .video-caption + p,
+.video .video-media + p {
+  margin: var(--space-200) 0 0;
+  font-size: var(--body-font-size-s);
+}
+
+/* Play in a Pop-up: the player in the modal dialog */
+.modal .video-modal-player {
+  position: relative;
+  width: min(90vw, 75rem, calc(80vh * (var(--video-aspect-ratio))));
+  aspect-ratio: var(--video-aspect-ratio);
+}
+
+.modal .video-modal-player > video {
+  width: 100%;
+  height: 100%;
+}
+
+.modal .video-modal-player > .video-frame {
+  position: absolute;
+  inset: 0;
+}

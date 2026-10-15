@@ -1,0 +1,278 @@
+/*
+ * Page Header (TCS.com DS Figma "Secondary Page Header" / "L3 Header"). Layouts: landing
+ * (text and the featured image), secondary (eyebrow above title | text), article (meta row,
+ * title and author | text) and display (tags and a display title | text).
+ */
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1000);
+  padding-top: var(--space-1000);
+}
+
+/* eyebrow: the content type, or the tags (Figma Eyebrow / Tag) */
+.page-header .page-header-eyebrow,
+.page-header .page-header-tags {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--body-font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.57;
+  letter-spacing: calc(0.01 * var(--body-font-size-xs));
+  text-transform: uppercase;
+}
+
+.page-header .page-header-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-200) var(--space-400);
+  padding: 0;
+  list-style: none;
+}
+
+.page-header .page-header-title {
+  margin: 0;
+  color: var(--color-text-default);
+  font-size: var(--heading-font-size-xxl);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.2;
+  letter-spacing: calc(-0.03 * var(--heading-font-size-xxl));
+}
+
+.page-header .page-header-intro,
+.page-header .page-header-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1000);
+  min-width: 0;
+}
+
+.page-header .page-header-description {
+  color: var(--color-text-default);
+  font-size: var(--body-font-size-l);
+  line-height: 1.417;
+}
+
+.page-header .page-header-description > * {
+  margin: 0;
+}
+
+.page-header .page-header-description > * + * {
+  margin-top: var(--space-600);
+}
+
+/* the CTA List: buttons and text links, wrapping */
+.page-header .page-header-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-400) var(--space-1000);
+}
+
+/* article: meta row (tags, content type | date, reading time, actions) */
+.page-header .page-header-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-400) var(--space-1000);
+}
+
+.page-header .page-header-labels,
+.page-header .page-header-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-200) var(--space-1000);
+}
+
+.page-header .page-header-labels {
+  gap: var(--space-200) var(--space-600);
+}
+
+.page-header :is(.page-header-date, .page-header-reading-time) {
+  margin: 0;
+  color: var(--color-text-default);
+  font-size: var(--body-font-size-xs);
+  font-weight: var(--font-weight-light);
+  line-height: 1.21;
+  letter-spacing: calc(0.005 * var(--body-font-size-xs));
+}
+
+/* the content type next to the tags (Figma "Collection") */
+.page-header .page-header-collection {
+  margin: 0;
+  color: var(--color-text-default);
+  font-size: var(--body-font-size-s);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.375;
+}
+
+.page-header .page-header-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-100);
+}
+
+/* listen / download / share: dark icons (Figma), brand on hover */
+.page-header .page-header-actions :is(a, button).button.icon-button.tertiary {
+  color: var(--color-icon-default);
+}
+
+.page-header .page-header-actions :is(a, button).button.icon-button.tertiary:is(:hover, :focus-visible) {
+  color: var(--color-icon-brand);
+}
+
+.page-header .page-header-status {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin: var(--space-100) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--body-font-size-xs);
+  white-space: nowrap;
+}
+
+.page-header .page-header-status:empty {
+  display: none;
+}
+
+/* author: round image, name and designation */
+.page-header .page-header-author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-200);
+}
+
+.page-header .page-header-author-image img {
+  display: block;
+  width: var(--space-1000);
+  height: var(--space-1000);
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.page-header .page-header-author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  color: var(--color-text-default);
+  font-size: var(--heading-font-size-xs);
+  line-height: 1.375;
+}
+
+.page-header :is(.page-header-author-name, .page-header-author-designation) {
+  margin: 0;
+}
+
+.page-header .page-header-author-name {
+  font-weight: var(--font-weight-light);
+}
+
+/* linked to the author's LinkedIn profile (Authors data sheet) */
+.page-header .page-header-author-name a {
+  color: inherit;
+}
+
+.page-header .page-header-author-designation {
+  font-weight: var(--font-weight-medium);
+}
+
+.page-header .page-header-columns {
+  display: grid;
+  gap: var(--space-1000);
+}
+
+/* landing: content type eyebrow, large semibold title, smaller text; the featured image */
+.page-header.landing .page-header-intro {
+  gap: var(--space-400);
+}
+
+.page-header.landing .page-header-title {
+  font-size: var(--display-font-size-1);
+  letter-spacing: calc(-0.03 * var(--display-font-size-1));
+  font-weight: var(--font-weight-semibold);
+}
+
+.page-header.landing .page-header-description {
+  margin-top: var(--space-1000);
+  font-size: var(--body-font-size-m);
+  line-height: 1.61;
+}
+
+.page-header.landing .page-header-ctas {
+  margin-top: var(--space-600);
+}
+
+.page-header .page-header-media picture,
+.page-header .page-header-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* secondary: semibold title */
+.page-header.secondary .page-header-title {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* article: large regular title */
+.page-header.article .page-header-title {
+  font-size: var(--display-font-size-2);
+  letter-spacing: calc(-0.03 * var(--display-font-size-2));
+}
+
+/* display: the tags as a pipe-separated eyebrow, a display title */
+.page-header.display .page-header-tags li + li::before {
+  content: '|';
+  margin-right: var(--space-400);
+}
+
+.page-header.display .page-header-intro {
+  gap: var(--space-300);
+}
+
+.page-header.display .page-header-title {
+  color: var(--color-text-neutral);
+  font-size: var(--display-font-size-1);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: calc(-0.02 * var(--display-font-size-1));
+}
+
+@media (width >= 900px) {
+  .page-header {
+    padding-top: var(--space-3000);
+  }
+
+  .page-header .page-header-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-header:is(.secondary, .article) .page-header-summary {
+    padding-top: var(--space-300);
+  }
+
+  .page-header.landing.page-header-has-image {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2000);
+    align-items: center;
+  }
+
+  .page-header.display .page-header-columns {
+    align-items: center;
+  }
+
+  .page-header:is(.landing, .display) .page-header-title {
+    font-size: 6rem;
+  }
+
+  .page-header.landing .page-header-title {
+    letter-spacing: -0.18rem;
+  }
+
+  .page-header.display .page-header-title {
+    letter-spacing: -0.12rem;
+  }
+}

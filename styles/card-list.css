@@ -1,0 +1,958 @@
+/*
+ * Card list (TCS.com DS Figma "List" variations 1-14: 402 / 1024 / 1440 frames), shared by the
+ * List and Cards blocks (imported by their block CSS; markup from
+ * decorators/card-list-decorator.js). A header (title, description, CTA), then cards (image,
+ * panel, report, statistic, feature) or rows of links, in a grid or a horizontal scroller
+ * chosen per breakpoint: mobile (< 600px), tablet (600-1199px), desktop (>= 1200px), with the
+ * classes {breakpoint}-grid / -scroll, -controls, -indicator and the custom properties
+ * --list-{columns,gap,visible,card-width}-{breakpoint} set by the decorator.
+ * The type scale follows the Figma frames (the site's type tokens step at 900px); colours,
+ * spacing and radii are site tokens.
+ */
+.card-list {
+  /* Figma colours without a site token */
+  --list-dark: #20293c;
+  --list-gradient: linear-gradient(135deg, #cfd9e3 0%, #e2e1dd 100%);
+  --list-track: var(--grey-200);
+  --list-thumb: var(--slate-600);
+  --list-bleed: 0rem;
+
+  /* the active breakpoint's layout (mobile first) */
+  --list-columns: var(--list-columns-mobile, 1);
+  --list-gap: var(--list-gap-mobile, 1rem);
+  --list-visible: var(--list-visible-mobile, 1.2);
+  --list-card-width: var(--list-card-width-mobile);
+  --list-item-size: var(--list-card-width, calc((100cqi - var(--list-bleed) - (var(--list-visible) - 1) * var(--list-gap)) / var(--list-visible)));
+
+  /* type scale (Figma 402 frames) */
+  --list-heading-size: 1.75rem;
+  --list-heading-line: 1.39;
+  --list-card-title-size: 1.125rem;
+  --list-card-title-line: 1.39;
+  --list-panel-title-size: 1.75rem;
+  --list-panel-text-size: 0.75rem;
+  --list-stat-number-size: 5rem;
+  --list-stat-text-size: 1rem;
+  --list-kicker-size: 0.75rem;
+  --list-meta-size: 0.75rem;
+  --list-row-title-size: 1.75rem;
+  --list-feature-title-size: 2rem;
+  --list-card-padding: var(--space-400);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1000);
+}
+
+/* header: title and description, the CTA on the right */
+.card-list .list-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-300) var(--space-600);
+}
+
+.card-list .list-title-slot {
+  display: flex;
+  flex: 1 1 20rem;
+  flex-direction: column;
+  gap: var(--space-300);
+  min-width: 0;
+}
+
+.card-list .list-title {
+  margin: 0;
+  color: var(--color-text-default);
+  font-size: var(--list-heading-size);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--list-heading-line);
+  letter-spacing: calc(-0.025 * var(--list-heading-size));
+}
+
+.card-list .list-description {
+  color: var(--color-text-secondary);
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.39;
+}
+
+.card-list .list-description > * {
+  margin: 0;
+}
+
+.card-list .list-cta-slot {
+  display: flex;
+  align-items: center;
+}
+
+.card-list.header-center .list-header {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.card-list.header-center .list-title-slot {
+  flex-basis: auto;
+  align-items: center;
+}
+
+/* lists made before: a title with a CTA */
+.card-list.list-legacy .list-header {
+  align-items: flex-start;
+}
+
+.card-list.list-legacy .list-title {
+  font-size: var(--heading-font-size-xxl);
+  line-height: 1.2;
+  letter-spacing: calc(-0.03 * var(--heading-font-size-xxl));
+}
+
+/* the items: a grid, or a horizontal scroller (below) */
+.card-list .list-scroller {
+  position: relative;
+  container-type: inline-size;
+}
+
+.card-list .list-items {
+  display: grid;
+  grid-template-columns: repeat(var(--list-columns), minmax(0, 1fr));
+  align-items: start;
+  gap: var(--list-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card-list.stretch .list-items {
+  align-items: stretch;
+}
+
+.card-list.equal-height .list-items {
+  grid-auto-rows: 1fr;
+}
+
+.card-list .list-item {
+  display: flex;
+  min-width: 0;
+}
+
+.card-list .list-item > * {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* links (Display as teaser off): one row per line */
+.card-list.links .list-items {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* mobile scroll */
+.card-list.mobile-scroll .list-scroller {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.card-list.mobile-scroll .list-items {
+  display: flex;
+  width: max-content;
+}
+
+.card-list.mobile-scroll .list-item {
+  flex: 0 0 var(--list-item-size);
+  width: var(--list-item-size);
+}
+
+.card-list.snap .list-scroller {
+  scroll-snap-type: x mandatory;
+}
+
+.card-list.snap .list-item {
+  scroll-snap-align: start;
+}
+
+.card-list.snap.snap-center .list-item {
+  scroll-snap-align: center;
+}
+
+.card-list.hide-scrollbar .list-scroller {
+  scrollbar-width: none;
+}
+
+.card-list.hide-scrollbar .list-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.card-list.no-swipe .list-scroller {
+  touch-action: pan-y;
+}
+
+.card-list .list-scroller[data-overflow='true'] {
+  cursor: grab;
+}
+
+.card-list .list-scroller.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+
+.card-list .list-scroller:focus-visible {
+  outline: var(--border-width-200) solid var(--color-border-brand);
+  outline-offset: var(--space-100);
+}
+
+.card-list.edge-bleed.mobile-scroll {
+  --list-bleed: var(--section-padding-inline);
+}
+
+.card-list.edge-bleed.mobile-scroll .list-scroller {
+  margin-inline-end: calc(-1 * var(--section-padding-inline));
+}
+
+.card-list.edge-bleed.mobile-scroll .list-items {
+  padding-inline-end: var(--section-padding-inline);
+}
+
+/* previous / next and the scroll indicator: hidden unless the breakpoint scrolls with them */
+.card-list .list-nav {
+  display: none;
+  align-items: center;
+  gap: var(--space-600);
+  margin-top: calc(var(--space-600) * -1);
+}
+
+.card-list .list-indicator {
+  display: none;
+  flex: 1 1 auto;
+  overflow: hidden;
+  height: 0.25rem;
+  border-radius: 0.125rem;
+  background: var(--list-track);
+}
+
+.card-list .list-indicator-thumb {
+  display: block;
+  width: max(5rem, calc(var(--scroller-thumb-size, 1) * 100%));
+  height: 100%;
+  margin-left: calc(var(--scroller-thumb-offset, 0) * (100% - max(5rem, calc(var(--scroller-thumb-size, 1) * 100%))));
+  border-radius: inherit;
+  background: var(--list-thumb);
+}
+
+.card-list .list-controls {
+  display: none;
+  flex: none;
+  gap: var(--space-300);
+  margin-left: auto;
+}
+
+.card-list.mobile-scroll:is(.mobile-controls, .mobile-indicator) .list-nav {
+  display: flex;
+}
+
+.card-list.mobile-scroll.mobile-indicator .list-indicator {
+  display: block;
+}
+
+.card-list.mobile-scroll.mobile-controls .list-controls {
+  display: flex;
+}
+
+/* cards */
+.card-list .list-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-200);
+  min-width: 0;
+  color: var(--color-text-neutral);
+}
+
+.card-list .list-card-media {
+  overflow: hidden;
+  margin-bottom: var(--space-100);
+  border-radius: var(--radius-l);
+  background: var(--color-bg-tertiary);
+  aspect-ratio: 16 / 9;
+}
+
+.card-list.ratio-1-1 .list-card-media {
+  aspect-ratio: 1;
+}
+
+.card-list.ratio-4-3 .list-card-media {
+  aspect-ratio: 4 / 3;
+}
+
+.card-list.ratio-3-2 .list-card-media {
+  aspect-ratio: 3 / 2;
+}
+
+.card-list .list-card-media :is(picture, img) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* kicker (eyebrow, tags, reading time) and meta (content type, date): separated by bars */
+.card-list :is(.list-card-kicker, .list-card-meta) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-100) var(--space-200);
+  margin: 0;
+  font-size: var(--list-kicker-size);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.57;
+}
+
+.card-list .list-card-kicker {
+  color: var(--color-text-secondary);
+  letter-spacing: calc(0.01 * var(--list-kicker-size));
+  text-transform: uppercase;
+}
+
+.card-list :is(.list-card-kicker, .list-card-meta) > * + *::before {
+  content: '|' / '';
+  margin-right: var(--space-200);
+}
+
+.card-list .list-card-meta {
+  color: var(--black-500);
+  font-size: var(--list-meta-size);
+  font-weight: var(--font-weight-regular);
+}
+
+.card-list .list-card-title {
+  margin: 0;
+  color: inherit;
+  font-size: var(--list-card-title-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--list-card-title-line);
+  letter-spacing: calc(-0.025 * var(--list-card-title-size));
+}
+
+.card-list .list-card-description {
+  margin: 0;
+  color: var(--black-500);
+  font-size: var(--list-meta-size);
+  line-height: 1.5;
+}
+
+/* rich text descriptions (Cards): paragraphs and lists keep the description's type */
+.card-list .list-card-body > * {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.card-list .list-card-body > * + * {
+  margin-top: var(--space-200);
+}
+
+.card-list .list-card-body :is(ul, ol) {
+  padding-inline-start: var(--space-500);
+}
+
+/* links in a linked card's text stay clickable above the card's link */
+.card-list .list-card-body a {
+  position: relative;
+  z-index: 1;
+}
+
+.card-list .list-card-action {
+  margin: auto 0 0;
+  padding-top: var(--space-600);
+}
+
+/* the card's one link covers the card */
+.card-list :is(.list-card-title, .list-row-title, .list-feature-title) .list-card-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card-list .list-card-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.card-list .list-card-link:focus-visible {
+  outline: none;
+}
+
+.card-list .list-card-link:focus-visible::before {
+  border-radius: var(--radius-l);
+  outline: var(--border-width-200) solid var(--color-border-brand);
+  outline-offset: var(--space-100);
+}
+
+/* panel, report and statistic cards: a coloured panel, the action at the bottom */
+.card-list :is(.list-card-panel, .list-card-report, .list-card-stat) {
+  --list-card-bg: var(--list-dark);
+  --list-card-fg: var(--slate-100);
+  --list-card-muted: var(--white-500);
+
+  box-sizing: border-box;
+  overflow: hidden;
+  gap: var(--space-400);
+  padding: var(--list-card-padding);
+  border-radius: var(--radius-l);
+  background: var(--list-card-bg);
+  color: var(--list-card-fg);
+}
+
+.card-list.panel-portrait :is(.list-card-panel, .list-card-report, .list-card-stat) {
+  aspect-ratio: 2 / 3;
+}
+
+.card-list.panel-compact :is(.list-card-panel, .list-card-report, .list-card-stat) {
+  aspect-ratio: 9 / 10;
+}
+
+.card-list :is(.list-card-panel, .list-card-report, .list-card-stat) .list-card-kicker,
+.card-list :is(.list-card-panel, .list-card-report, .list-card-stat) .list-card-description {
+  color: var(--list-card-muted);
+}
+
+.card-list :is(.list-card-panel, .list-card-report) .list-card-title {
+  font-size: var(--list-panel-title-size);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.21;
+  letter-spacing: calc(-0.015 * var(--list-panel-title-size));
+}
+
+.card-list :is(.list-card-panel, .list-card-report) .list-card-description {
+  font-size: var(--list-panel-text-size);
+  line-height: 1.6;
+}
+
+.card-list .list-card-report {
+  --list-card-bg: var(--list-gradient);
+  --list-card-fg: var(--color-text-neutral);
+  --list-card-muted: var(--black-500);
+}
+
+.card-list .list-card-stat {
+  --list-card-bg: var(--color-bg-tertiary);
+  --list-card-fg: var(--black-1000);
+  --list-card-muted: var(--black-500);
+
+  container-type: inline-size;
+  justify-content: space-between;
+}
+
+.card-list .list-card-top,
+.card-list .list-card-bottom {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-list .list-card-top {
+  gap: var(--space-200);
+}
+
+.card-list .list-card-bottom {
+  gap: var(--space-400);
+}
+
+.card-list .list-card-stat .list-card-kicker {
+  color: var(--list-card-strong, var(--color-text-neutral));
+  font-size: calc(var(--list-kicker-size) + 0.125rem);
+}
+
+/* the number scales down to fit narrow cards */
+.card-list .list-card-stat .list-card-title {
+  --list-stat-size: min(var(--list-stat-number-size), 26cqi);
+
+  font-size: var(--list-stat-size);
+  line-height: 1.1;
+  letter-spacing: calc(-0.05 * var(--list-stat-size));
+  overflow-wrap: anywhere;
+}
+
+.card-list.stat-compact .list-card-stat .list-card-title {
+  --list-stat-size: calc(var(--list-stat-number-size) * 0.42);
+}
+
+.card-list .list-card-subtitle {
+  margin: 0;
+  font-size: var(--list-stat-text-size);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.6;
+}
+
+.card-list .list-card-stat .list-card-description {
+  color: var(--list-card-muted);
+  font-size: var(--list-stat-text-size);
+  line-height: 1.6;
+}
+
+/* the feature card (Figma variation 2): the image behind tags, title and author */
+.card-list .list-feature {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  min-height: 32.5rem;
+  border-radius: var(--radius-l);
+  background: var(--color-bg-secondary);
+}
+
+.card-list .list-feature > .list-card-media {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  border-radius: 0;
+  aspect-ratio: auto;
+}
+
+.card-list .list-feature > .list-card-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--white-800) 0%, var(--white-500) 55%, transparent 100%);
+}
+
+.card-list .list-feature-content {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-400);
+  padding: var(--space-600);
+}
+
+.card-list .list-feature-title {
+  max-width: 31.25rem;
+  margin: 0;
+  color: var(--black-1000);
+  font-size: var(--list-feature-title-size);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.2;
+  letter-spacing: calc(-0.03 * var(--list-feature-title-size));
+}
+
+.card-list .list-author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-300);
+  margin-top: auto;
+}
+
+.card-list .list-author .list-author-image img {
+  display: block;
+  width: var(--space-1000);
+  height: var(--space-1000);
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.card-list .list-author-details {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text-default);
+  font-size: var(--body-font-size-m);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.375;
+}
+
+.card-list :is(.list-author-name, .list-author-designation) {
+  margin: 0;
+}
+
+/* card colours */
+.card-list .list-card.theme-dark {
+  --list-card-bg: var(--list-dark);
+  --list-card-fg: var(--slate-100);
+  --list-card-muted: var(--white-500);
+  --list-card-strong: var(--slate-100);
+}
+
+.card-list .list-card.theme-navy {
+  --list-card-bg: var(--brand-600);
+  --list-card-fg: var(--slate-100);
+  --list-card-muted: var(--white-500);
+  --list-card-strong: var(--slate-100);
+}
+
+.card-list .list-card.theme-brand {
+  --list-card-bg: var(--color-bg-brand);
+  --list-card-fg: var(--white-1000);
+  --list-card-muted: var(--white-600);
+  --list-card-strong: var(--slate-100);
+}
+
+.card-list .list-card.theme-brand-light {
+  --list-card-bg: var(--brand-300);
+  --list-card-fg: var(--black-1000);
+  --list-card-muted: var(--black-500);
+}
+
+.card-list .list-card.theme-grey {
+  --list-card-bg: var(--color-bg-tertiary);
+  --list-card-fg: var(--black-1000);
+  --list-card-muted: var(--black-500);
+}
+
+.card-list .list-card.theme-mid-grey {
+  --list-card-bg: var(--grey-400);
+  --list-card-fg: var(--black-1000);
+  --list-card-muted: var(--black-600);
+}
+
+.card-list .list-card.theme-gradient {
+  --list-card-bg: var(--list-gradient);
+  --list-card-fg: var(--color-text-neutral);
+  --list-card-muted: var(--black-500);
+}
+
+.card-list .list-card.theme-image {
+  --list-card-bg: var(--color-bg-secondary);
+  --list-card-fg: var(--color-text-neutral);
+  --list-card-muted: var(--color-text-secondary);
+}
+
+.card-list .list-card.theme-image > .list-card-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  margin: 0;
+  border-radius: 0;
+  aspect-ratio: auto;
+}
+
+.card-list .list-card.theme-image > :not(.list-card-media) {
+  position: relative;
+}
+
+/* buttons on dark cards */
+.card-list .list-card:is(.list-card-panel, .theme-dark, .theme-navy, .theme-brand) .button.tertiary {
+  color: var(--list-card-fg);
+}
+
+.card-list .list-card:is(.theme-dark, .theme-navy, .theme-brand) .button.secondary {
+  border-color: var(--list-card-fg);
+  color: var(--list-card-fg);
+}
+
+/* inverse on hover and focus: the card's text colour as the fill, the card colour as the text */
+.card-list .list-card:is(.theme-dark, .theme-navy, .theme-brand) .button.secondary:is(:hover, :focus-visible) {
+  border-color: var(--list-card-fg);
+  background-color: var(--list-card-fg);
+  color: var(--list-card-bg);
+}
+
+/* rows of links (Figma variation 5): eyebrow and tag, a large title, an arrow */
+.card-list .list-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--space-1000);
+  align-items: start;
+  padding-block: var(--space-1000);
+  border-bottom: var(--border-width-100) solid var(--slate-400);
+}
+
+.card-list .list-row > :not(.list-row-arrow) {
+  grid-column: 1;
+}
+
+.card-list .list-row .list-card-kicker {
+  gap: var(--space-100) var(--space-400);
+}
+
+.card-list .list-row .list-card-kicker > * + * {
+  color: var(--color-text-default);
+  font-size: var(--body-font-size-m);
+  text-transform: none;
+}
+
+.card-list .list-row .list-card-kicker > * + *::before {
+  content: none;
+}
+
+.card-list .list-row-title {
+  margin: var(--space-300) 0 0;
+  color: var(--color-text-default);
+  font-size: var(--list-row-title-size);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.39;
+  letter-spacing: calc(-0.025 * var(--list-row-title-size));
+}
+
+.card-list .list-row-description {
+  margin: var(--space-400) 0 0;
+  color: var(--color-text-default);
+  font-size: var(--body-font-size-m);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.375;
+}
+
+.card-list .list-row .list-card-meta {
+  margin-top: var(--space-300);
+}
+
+.card-list .list-row-arrow {
+  grid-row: 1 / span 4;
+  grid-column: 2;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--color-icon-tertiary);
+  mask: url('/icons/arrow-right.svg') center / contain no-repeat;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.card-list .list-row:is(:hover, :focus-within) .list-row-arrow {
+  background-color: var(--color-icon-brand);
+  transform: translateX(var(--space-100));
+}
+
+/* hover: the title underlines */
+.card-list :is(.list-card-title, .list-row-title, .list-feature-title) .list-card-link:hover {
+  text-decoration: underline;
+}
+
+.card-list .list-empty {
+  margin: 0;
+  padding: var(--space-1000);
+  border-radius: var(--radius-l);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-neutral-secondary);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-list .list-row-arrow {
+    transition: none;
+  }
+}
+
+/* tablet (Figma 1024 frames) */
+@media (width >= 600px) {
+  .card-list {
+    --list-columns: var(--list-columns-tablet, 4);
+    --list-gap: var(--list-gap-tablet, 1.5rem);
+    --list-visible: var(--list-visible-tablet, 3.3);
+    --list-card-width: var(--list-card-width-tablet);
+    --list-heading-size: 2rem;
+    --list-heading-line: 1.4;
+    --list-card-title-size: 1.25rem;
+    --list-card-title-line: 1.4;
+    --list-panel-title-size: 1.5rem;
+    --list-panel-text-size: 0.875rem;
+    --list-stat-number-size: 4rem;
+    --list-kicker-size: 0.875rem;
+    --list-meta-size: 0.875rem;
+    --list-row-title-size: 2rem;
+    --list-feature-title-size: 2.5rem;
+
+    gap: var(--space-2000);
+  }
+
+  .card-list .list-row {
+    border-bottom-color: transparent;
+  }
+
+  .card-list.dividers .list-row {
+    border-bottom-color: var(--slate-400);
+  }
+
+  .card-list .list-row-arrow {
+    grid-row: 1 / span 4;
+    align-self: center;
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .card-list .list-feature {
+    min-height: 27.1875rem;
+  }
+
+  .card-list .list-feature-content {
+    padding: var(--space-1000);
+  }
+
+  .card-list.tablet-grid .list-scroller {
+    overflow-x: visible;
+  }
+
+  .card-list.tablet-grid .list-items {
+    display: grid;
+    width: auto;
+    padding-inline-end: 0;
+  }
+
+  .card-list.tablet-grid .list-item {
+    flex: initial;
+    width: auto;
+  }
+
+  .card-list.tablet-scroll .list-scroller {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  .card-list.tablet-scroll .list-items {
+    display: flex;
+    width: max-content;
+  }
+
+  .card-list.tablet-scroll .list-item {
+    flex: 0 0 var(--list-item-size);
+    width: var(--list-item-size);
+  }
+
+  .card-list.edge-bleed.tablet-scroll {
+    --list-bleed: var(--section-padding-inline);
+  }
+
+  .card-list.edge-bleed.tablet-scroll .list-scroller {
+    margin-inline-end: calc(-1 * var(--section-padding-inline));
+  }
+
+  .card-list.edge-bleed.tablet-scroll .list-items {
+    padding-inline-end: var(--section-padding-inline);
+  }
+
+  .card-list.edge-bleed.tablet-grid {
+    --list-bleed: 0rem;
+  }
+
+  .card-list.edge-bleed.tablet-grid .list-scroller {
+    margin-inline-end: 0;
+  }
+
+  .card-list.edge-bleed.tablet-grid .list-items {
+    padding-inline-end: 0;
+  }
+
+  .card-list .list-nav,
+  .card-list .list-indicator,
+  .card-list .list-controls {
+    display: none;
+  }
+
+  .card-list.tablet-scroll:is(.tablet-controls, .tablet-indicator) .list-nav {
+    display: flex;
+  }
+
+  .card-list.tablet-scroll.tablet-indicator .list-indicator {
+    display: block;
+  }
+
+  .card-list.tablet-scroll.tablet-controls .list-controls {
+    display: flex;
+  }
+}
+
+@media (width >= 900px) {
+  .card-list {
+    --list-card-padding: var(--space-600);
+  }
+}
+
+/* desktop (Figma 1440 frames) */
+@media (width >= 1200px) {
+  .card-list {
+    --list-columns: var(--list-columns-desktop, 4);
+    --list-gap: var(--list-gap-desktop, 1.5rem);
+    --list-visible: var(--list-visible-desktop, 4.2);
+    --list-card-width: var(--list-card-width-desktop);
+    --list-heading-size: 2.5rem;
+    --list-card-title-size: 1.5rem;
+    --list-card-title-line: 1.42;
+    --list-panel-title-size: 1.75rem;
+    --list-panel-text-size: 1rem;
+    --list-stat-number-size: 6rem;
+    --list-stat-text-size: 1.125rem;
+    --list-meta-size: 1rem;
+    --list-row-title-size: 2.5rem;
+  }
+
+  .card-list .list-row-title {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .card-list .list-feature {
+    min-height: 35.625rem;
+  }
+
+  .card-list.desktop-grid .list-scroller {
+    overflow-x: visible;
+  }
+
+  .card-list.desktop-grid .list-items {
+    display: grid;
+    width: auto;
+    padding-inline-end: 0;
+  }
+
+  .card-list.desktop-grid .list-item {
+    flex: initial;
+    width: auto;
+  }
+
+  .card-list.desktop-scroll .list-scroller {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  .card-list.desktop-scroll .list-items {
+    display: flex;
+    width: max-content;
+  }
+
+  .card-list.desktop-scroll .list-item {
+    flex: 0 0 var(--list-item-size);
+    width: var(--list-item-size);
+  }
+
+  .card-list.edge-bleed.desktop-scroll {
+    --list-bleed: var(--section-padding-inline);
+  }
+
+  .card-list.edge-bleed.desktop-scroll .list-scroller {
+    margin-inline-end: calc(-1 * var(--section-padding-inline));
+  }
+
+  .card-list.edge-bleed.desktop-scroll .list-items {
+    padding-inline-end: var(--section-padding-inline);
+  }
+
+  .card-list.edge-bleed.desktop-grid {
+    --list-bleed: 0rem;
+  }
+
+  .card-list.edge-bleed.desktop-grid .list-scroller {
+    margin-inline-end: 0;
+  }
+
+  .card-list.edge-bleed.desktop-grid .list-items {
+    padding-inline-end: 0;
+  }
+
+  .card-list .list-nav,
+  .card-list .list-indicator,
+  .card-list .list-controls {
+    display: none;
+  }
+
+  .card-list.desktop-scroll:is(.desktop-controls, .desktop-indicator) .list-nav {
+    display: flex;
+  }
+
+  .card-list.desktop-scroll.desktop-indicator .list-indicator {
+    display: block;
+  }
+
+  .card-list.desktop-scroll.desktop-controls .list-controls {
+    display: flex;
+  }
+}
+
+/* nothing to scroll (the cards fit): no buttons or indicator */
+.card-list .list-scroller:not([data-overflow='true']) + .list-nav.list-nav {
+  display: none;
+}

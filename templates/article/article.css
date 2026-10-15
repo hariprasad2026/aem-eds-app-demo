@@ -1,0 +1,51 @@
+/* Article template (also used by the blog template) */
+
+/* About the author (Authors data sheet) */
+main .template-author .author-bio {
+  display: grid;
+  gap: var(--space-500);
+  padding: var(--space-600);
+  border: 0.0625rem solid var(--color-border-default);
+  border-radius: var(--radius-m);
+}
+
+main .template-author .author-bio-image img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+main .template-author .author-bio-body > * {
+  margin: 0;
+}
+
+main .template-author .author-bio-heading {
+  margin-block-end: var(--space-300);
+  font-size: var(--heading-font-size-s);
+  letter-spacing: calc(-0.025 * var(--heading-font-size-s));
+}
+
+main .template-author .author-bio-name {
+  font-weight: var(--font-weight-semibold);
+}
+
+main .template-author .author-bio-designation {
+  font-size: var(--body-font-size-s);
+}
+
+main .template-author .author-bio-text {
+  margin-block-start: var(--space-300);
+}
+
+main .template-author .author-bio-linkedin {
+  display: inline-block;
+  margin-block-start: var(--space-300);
+}
+
+@media (width >= 600px) {
+  main .template-author .author-bio {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+  }
+}

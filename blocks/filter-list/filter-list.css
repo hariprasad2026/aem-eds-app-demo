@@ -1,0 +1,623 @@
+/*
+ * Filter List (TCS.com DS Figma "Explore the Agentic bank" / "Explore insights & opinions"):
+ * title and description, the filters (outline pills and the advanced filter button and panel),
+ * the result count, the hero spotlight, the cards in the layout (masonry, grid, list) and card
+ * style (default, compact, featured, mixed), the featured spotlights; Load more below.
+ */
+.filter-list {
+  --filter-list-dark: var(--brand-600);
+  --filter-list-report: linear-gradient(160deg, var(--brand-200) 0%, var(--color-bg-default) 70%);
+  --filter-list-gap: var(--space-1000);
+  --filter-list-columns: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1000);
+}
+
+/* header: title, description, filters, panel and count */
+.filter-list .filter-list-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-800);
+}
+
+.filter-list .filter-list-title {
+  margin: 0;
+  color: var(--color-text-default);
+  font-size: var(--display-font-size-2);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--display-line-height);
+  letter-spacing: calc(-0.02 * var(--display-font-size-2));
+}
+
+.filter-list .filter-list-description {
+  max-width: 50rem;
+  color: var(--color-text-neutral-secondary);
+  font-size: var(--body-font-size-l);
+  line-height: 1.5;
+}
+
+.filter-list .filter-list-description > * {
+  margin: 0;
+}
+
+.filter-list .filter-list-description > * + * {
+  margin-top: var(--space-400);
+}
+
+.filter-list .filter-list-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-400) var(--space-600);
+}
+
+.filter-list .filter-list-label {
+  margin: 0;
+  color: var(--color-text-default);
+  font-size: var(--label-font-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--label-line-height);
+}
+
+.filter-list .filter-list-filters {
+  display: flex;
+  flex: 1 1 100%;
+  flex-wrap: wrap;
+  gap: var(--space-300);
+  order: 1;
+}
+
+/* pills: outline, dark when selected */
+.filter-list .filter-list-filter {
+  min-height: var(--icon-button-size);
+  margin: 0;
+  padding: var(--space-200) var(--space-500);
+  border: var(--border-width-100) solid var(--color-border-secondary);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-default);
+  color: var(--color-text-default);
+  font: inherit;
+  font-size: var(--label-font-size);
+  line-height: var(--label-line-height);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.filter-list .filter-list-filter:hover {
+  border-color: var(--color-border-brand);
+  color: var(--color-text-brand);
+}
+
+.filter-list .filter-list-filter:focus-visible {
+  outline: var(--border-width-200) solid var(--color-border-brand);
+  outline-offset: var(--border-width-200);
+}
+
+.filter-list .filter-list-filter[aria-pressed='true'] {
+  border-color: var(--color-bg-neutral);
+  background: var(--color-bg-neutral);
+  color: var(--color-text-on-neutral);
+}
+
+/* the advanced filter button: a round brand outline icon button, with the selected count */
+.filter-list .filter-list-toggle.button.icon-button {
+  position: relative;
+  overflow: visible;
+  margin-left: auto;
+  border-color: var(--color-border-brand);
+  color: var(--color-icon-brand);
+}
+
+.filter-list .filter-list-toggle.button.icon-button[aria-expanded='true'] {
+  background-color: var(--color-bg-brand);
+  color: var(--color-icon-on-brand);
+}
+
+.filter-list .filter-list-toggle-count {
+  position: absolute;
+  top: calc(-1 * var(--space-100));
+  right: calc(-1 * var(--space-100));
+  min-width: 1.25rem;
+  padding: 0 var(--space-100);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-neutral);
+  color: var(--color-text-on-neutral);
+  font-size: var(--body-font-size-xs);
+  line-height: 1.25rem;
+  text-align: center;
+}
+
+.filter-list .filter-list-toggle-count:empty {
+  display: none;
+}
+
+/* the advanced filter panel: a fieldset of options per category */
+.filter-list .filter-list-panel {
+  display: grid;
+  gap: var(--space-600);
+  padding: var(--space-600);
+  border: var(--border-width-100) solid var(--color-border-default);
+  border-radius: var(--radius-l);
+  background: var(--color-bg-secondary);
+}
+
+.filter-list .filter-list-panel[hidden] {
+  display: none;
+}
+
+.filter-list .filter-list-panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-300);
+  grid-column: 1 / -1;
+}
+
+.filter-list .filter-list-panel-title {
+  margin: 0;
+  font-size: var(--heading-font-size-m);
+  font-weight: var(--font-weight-semibold);
+}
+
+.filter-list .filter-list-panel-header .button[hidden] {
+  display: none;
+}
+
+.filter-list .filter-list-category {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.filter-list .filter-list-category legend {
+  margin-bottom: var(--space-300);
+  padding: 0;
+  color: var(--color-text-default);
+  font-size: var(--label-font-size);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: calc(0.01 * var(--label-font-size));
+}
+
+.filter-list .filter-list-options {
+  display: grid;
+  gap: var(--space-200);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.filter-list .filter-list-options li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-200);
+}
+
+.filter-list .filter-list-options input {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0;
+  accent-color: var(--color-bg-brand);
+}
+
+.filter-list .filter-list-options label {
+  font-size: var(--body-font-size-m);
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.filter-list .filter-list-count {
+  margin: 0;
+  color: var(--color-text-neutral-secondary);
+  font-size: var(--label-font-size);
+}
+
+/* results: the hero spotlight, then the grid of cards */
+.filter-list .filter-list-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--filter-list-gap);
+}
+
+.filter-list .filter-list-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--filter-list-columns), minmax(0, 1fr));
+  gap: var(--filter-list-gap) var(--space-600);
+}
+
+/* masonry: items span rows by their height (decorators/masonry-decorator.js), or native */
+.filter-list .filter-list-grid.masonry-spans {
+  grid-auto-rows: 0.25rem;
+  row-gap: 0;
+  align-items: start;
+}
+
+.filter-list .filter-list-grid.masonry-spans > * {
+  margin-block-end: var(--filter-list-gap);
+}
+
+@supports (grid-template-rows: masonry) {
+  .filter-list .filter-list-grid.masonry-native {
+    /* stylelint-disable-next-line declaration-property-value-no-unknown */
+    grid-template-rows: masonry;
+  }
+}
+
+/* cards */
+.filter-list .filter-list-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-300);
+  min-width: 0;
+}
+
+.filter-list .filter-list-card-media {
+  overflow: hidden;
+  margin-bottom: var(--space-300);
+  border-radius: var(--radius-l);
+  background: var(--color-bg-secondary);
+  aspect-ratio: 4 / 3;
+}
+
+.filter-list .filter-list-card-media :is(picture, img) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+/* tags and reading time: uppercase grey, separated by bars */
+.filter-list :is(.filter-list-card-tags, .filter-list-card-meta) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-100) var(--space-200);
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--body-font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.57;
+}
+
+.filter-list .filter-list-card-tags {
+  letter-spacing: calc(0.01 * var(--body-font-size-xs));
+  text-transform: uppercase;
+}
+
+.filter-list :is(.filter-list-card-tags, .filter-list-card-meta) > * + *::before {
+  content: '|' / '';
+  margin-right: var(--space-200);
+}
+
+.filter-list .filter-list-card-meta {
+  color: var(--color-text-neutral-secondary);
+  font-weight: var(--font-weight-regular);
+}
+
+.filter-list .filter-list-card-title {
+  margin: 0;
+  color: var(--color-text-default);
+  font-size: var(--heading-font-size-l);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.33;
+  letter-spacing: calc(-0.02 * var(--heading-font-size-l));
+}
+
+.filter-list .filter-list-card-description {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: var(--color-text-neutral-secondary);
+  font-size: var(--body-font-size-m);
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* the card's link (title or call to action) covers the card */
+.filter-list .filter-list-card-title .filter-list-card-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.filter-list .filter-list-card-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.filter-list .filter-list-card-link:focus-visible {
+  outline: none;
+}
+
+.filter-list .filter-list-card-link:focus-visible::before {
+  border-radius: var(--radius-l);
+  outline: var(--border-width-200) solid var(--color-border-brand);
+  outline-offset: var(--space-100);
+}
+
+.filter-list .filter-list-card-action {
+  margin: auto 0 0;
+  padding-top: var(--space-400);
+}
+
+/* report and dark (mixed): a panel with the description and a button at the bottom */
+.filter-list :is(.filter-list-card-report, .filter-list-card-dark) {
+  gap: var(--space-400);
+  min-height: 22.5rem;
+  padding: var(--space-800) var(--space-600);
+  border-radius: var(--radius-l);
+}
+
+.filter-list .filter-list-card-report {
+  background: var(--filter-list-report);
+}
+
+.filter-list :is(.filter-list-card-report, .filter-list-card-dark, .filter-list-card-large) .filter-list-card-title {
+  font-weight: var(--font-weight-semibold);
+}
+
+.filter-list .filter-list-card-dark {
+  background: var(--filter-list-dark);
+  color: var(--color-text-on-neutral);
+}
+
+.filter-list .filter-list-card-dark .filter-list-card-tags {
+  color: var(--color-text-light-overlay);
+}
+
+.filter-list .filter-list-card-dark .filter-list-card-title {
+  color: var(--color-text-on-neutral);
+}
+
+.filter-list .filter-list-card-dark .filter-list-card-description {
+  color: var(--color-text-light-overlay);
+}
+
+.filter-list .filter-list-card-dark .button.tertiary {
+  color: var(--color-text-on-neutral);
+}
+
+/* compact: text only, outlined */
+.filter-list .filter-list-card-compact {
+  padding: var(--space-600);
+  border: var(--border-width-100) solid var(--color-border-default);
+  border-radius: var(--radius-l);
+}
+
+.filter-list .filter-list-card-compact .filter-list-card-title {
+  font-size: var(--heading-font-size-m);
+  letter-spacing: calc(-0.015 * var(--heading-font-size-m));
+}
+
+/* spotlight (hero and featured): full width, the image behind a light overlay */
+.filter-list .filter-list-card-spotlight {
+  grid-column: 1 / -1;
+  overflow: hidden;
+  min-height: 30rem;
+  border-radius: var(--radius-l);
+  background: var(--color-bg-secondary);
+}
+
+.filter-list .filter-list-card-hero {
+  min-height: 35rem;
+}
+
+.filter-list .filter-list-card-spotlight .filter-list-card-media {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  border-radius: 0;
+  aspect-ratio: auto;
+}
+
+.filter-list .filter-list-card-spotlight .filter-list-card-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--white-800) 0%, var(--white-500) 55%, transparent 100%);
+}
+
+.filter-list .filter-list-card-content {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-400);
+  padding: var(--space-800) var(--space-600);
+}
+
+.filter-list .filter-list-card-spotlight .filter-list-card-tags {
+  color: var(--color-text-neutral-secondary);
+}
+
+.filter-list .filter-list-card-spotlight .filter-list-card-title {
+  max-width: 50rem;
+  font-size: var(--display-font-size-3);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--display-line-height);
+  letter-spacing: calc(-0.02 * var(--display-font-size-3));
+}
+
+.filter-list .filter-list-card-spotlight .filter-list-card-description {
+  max-width: 40rem;
+  color: var(--color-text-default);
+}
+
+.filter-list .filter-list-card-spotlight .filter-list-card-link:focus-visible::before {
+  outline-offset: calc(-1 * var(--border-width-200));
+}
+
+.filter-list .filter-list-author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-300);
+  margin-top: auto;
+  padding-top: var(--space-1000);
+}
+
+.filter-list .filter-list-author .filter-list-author-image img {
+  display: block;
+  width: var(--space-1200);
+  height: var(--space-1200);
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.filter-list .filter-list-author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  color: var(--color-text-default);
+  font-size: var(--heading-font-size-xs);
+  line-height: 1.375;
+}
+
+.filter-list :is(.filter-list-author-name, .filter-list-author-designation) {
+  margin: 0;
+}
+
+.filter-list .filter-list-author-name {
+  font-weight: var(--font-weight-semibold);
+}
+
+.filter-list .filter-list-author-designation {
+  color: var(--color-text-neutral-secondary);
+}
+
+/* hover: the title underlines, the image zooms */
+.filter-list .filter-list-card-title .filter-list-card-link:hover {
+  text-decoration: underline;
+}
+
+.filter-list .filter-list-card:hover .filter-list-card-media img {
+  transform: scale(1.04);
+}
+
+/* list layout: one card per row, the image beside the text */
+.filter-list .filter-list-grid.layout-list .filter-list-card:not(.filter-list-card-spotlight) {
+  padding-bottom: var(--filter-list-gap);
+  border-bottom: var(--border-width-100) solid var(--color-border-default);
+}
+
+/* no results */
+.filter-list .filter-list-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-300);
+  padding: var(--space-1000);
+  border-radius: var(--radius-l);
+  background: var(--color-bg-secondary);
+  text-align: center;
+}
+
+.filter-list .filter-list-empty p {
+  margin: 0;
+}
+
+.filter-list .filter-list-empty-title {
+  color: var(--color-text-default);
+  font-size: var(--heading-font-size-m);
+  font-weight: var(--font-weight-semibold);
+}
+
+.filter-list .filter-list-empty-hint {
+  color: var(--color-text-neutral-secondary);
+}
+
+.filter-list .filter-list-empty .button {
+  margin-top: var(--space-300);
+}
+
+.filter-list .filter-list-more {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
+
+.filter-list .filter-list-more[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter-list .filter-list-card-media :is(picture, img) {
+    transition: none;
+  }
+}
+
+@media (width >= 600px) {
+  .filter-list:not(.layout-list) {
+    --filter-list-columns: 2;
+  }
+
+  .filter-list .filter-list-panel {
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  }
+
+  .filter-list .filter-list-grid.layout-list .filter-list-card:not(.filter-list-card-spotlight):has(.filter-list-card-media) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    align-content: start;
+    column-gap: var(--space-600);
+  }
+
+  .filter-list .filter-list-grid.layout-list .filter-list-card:has(.filter-list-card-media) > * {
+    grid-column: 2;
+  }
+
+  .filter-list .filter-list-grid.layout-list .filter-list-card > .filter-list-card-media {
+    grid-column: 1;
+    grid-row: 1 / span 6;
+    margin: 0;
+  }
+}
+
+@media (width >= 900px) {
+  .filter-list:not(.layout-list) {
+    --filter-list-columns: 3;
+  }
+
+  .filter-list.card-featured:not(.layout-list) {
+    --filter-list-columns: 2;
+  }
+
+  .filter-list .filter-list-title {
+    font-size: var(--display-font-size-1);
+    letter-spacing: calc(-0.02 * var(--display-font-size-1));
+  }
+
+  .filter-list .filter-list-filters {
+    flex: 0 1 auto;
+    order: 0;
+  }
+
+  .filter-list .filter-list-toggle.button.icon-button {
+    margin-left: 0;
+  }
+
+  .filter-list .filter-list-card-content {
+    padding: var(--space-1200);
+  }
+
+  .filter-list .filter-list-card-spotlight .filter-list-card-title {
+    font-size: 3rem;
+    letter-spacing: -0.06rem;
+  }
+}
+
+@media (width >= 1200px) {
+  .filter-list:is(.card-default, .card-compact, .card-mixed):not(.layout-list) {
+    --filter-list-columns: 4;
+  }
+
+  .filter-list.card-featured:not(.layout-list) {
+    --filter-list-columns: 3;
+  }
+}

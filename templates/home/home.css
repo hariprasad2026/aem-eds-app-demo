@@ -1,0 +1,8 @@
+/* Home template: the first section (usually the hero or a gen carousel) meets the header */
+body.home main > .section:first-of-type {
+  margin-block-start: 0;
+}
+
+body.home main > .section:first-of-type > div {
+  padding-block-start: 0;
+}

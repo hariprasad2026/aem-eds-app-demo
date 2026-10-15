@@ -1,0 +1,80 @@
+/* Anchor List (TCS.com DS Figma "Chapter Nav", 404-15450) */
+
+/* Sticky: pinned to the top of the screen by anchor-list.js once scrolled up to it */
+.anchor-list.sticky {
+  background-color: var(--color-bg-default);
+}
+
+.anchor-list.anchor-list-pinned {
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  padding-inline: var(--section-padding-inline, 0);
+}
+
+.anchor-list .anchor-list-items {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: none;
+}
+
+.anchor-list .anchor-list-items::-webkit-scrollbar {
+  display: none;
+}
+
+.anchor-list .anchor-list-items li {
+  flex: none;
+}
+
+/* tabs: grey text; the current chapter is dark with a 3px brand underline */
+.anchor-list .anchor-list-link {
+  display: block;
+  padding: var(--space-300) var(--space-600);
+  border-bottom: 0.1875rem solid transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--body-font-size-m);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.61;
+  letter-spacing: calc(-0.005 * var(--body-font-size-m));
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.anchor-list .anchor-list-link:hover,
+.anchor-list .anchor-list-link:focus-visible {
+  color: var(--color-text-default);
+  text-decoration: none;
+}
+
+.anchor-list .anchor-list-link:focus-visible {
+  outline: var(--border-width-200) solid var(--color-border-brand);
+  outline-offset: -0.1875rem;
+}
+
+.anchor-list .anchor-list-link[aria-current='location'] {
+  border-bottom-color: var(--color-border-brand);
+  color: var(--color-text-default);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: calc(0.005 * var(--body-font-size-m));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anchor-list .anchor-list-link {
+    transition: none;
+  }
+}
+
+@media (width >= 900px) {
+  .anchor-list .anchor-list-link {
+    padding: var(--space-300) var(--space-1000);
+  }
+}

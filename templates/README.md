@@ -1,6 +1,6 @@
 # Templates
 
-Code for the **Site Global Templates** (`/content/aem-eds-app-demo/site-global-templates/`): AEM pages
+Code for the **Site Global Templates** (`/content/aem-eds-xwalk/site-global-templates/`): AEM pages
 that authors copy to create pages of a kind (home, press release, blog, article, ...). The
 template pages are excluded from publishing in `paths.json`.
 

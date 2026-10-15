@@ -213,7 +213,7 @@ baseline used in #62), browser checks at 1440 / 1024 / 402, lint, PageSpeed.
 
 ### 7.2 Migrating G1 instances (enables the block dialog)
 
-1. **Inventory** — find Cards components without a model under `/content/aem-eds-app-demo`:
+1. **Inventory** — find Cards components without a model under `/content/aem-eds-xwalk`:
    query `sling:resourceType = core/franklin/components/block/v1/block` and `name = Cards`
    and no `model` property (AEM Query Builder or a Groovy console script, run by AMS).
 2. **Update** — for each node set `model = cards`, `key-value = true`, and

@@ -346,7 +346,7 @@ async function addErrorBackButton(main) {
   wrapper.append(back);
 }
 
-// Site Global Templates (/content/aem-eds-app-demo/site-global-templates) with template code in
+// Site Global Templates (/content/aem-eds-xwalk/site-global-templates) with template code in
 // templates/{name}/: the page's Page Type (page properties or the metadata sheet's page-type)
 const TEMPLATES = ['home', 'article', 'blog', 'press-release'];
 

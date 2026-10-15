@@ -50,6 +50,9 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   toggleAllNavSections(navSections, !expanded && !isDesktop.matches);
   button.setAttribute('aria-expanded', String(!expanded && !isDesktop.matches));
   button.setAttribute('aria-label', expanded ? t('openNavigation', 'Open navigation') : t('closeNavigation', 'Close navigation'));
+  // lets other page parts react to the mobile menu, e.g. the floating Canvas steps aside
+  const open = !expanded && !isDesktop.matches;
+  document.dispatchEvent(new CustomEvent('header:nav-toggle', { detail: { expanded: open } }));
 }
 
 /** Escape closes an open dropdown (desktop) or the menu (mobile), focus back on its button */

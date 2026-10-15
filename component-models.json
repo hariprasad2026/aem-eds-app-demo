@@ -3919,6 +3919,24 @@
       },
       {
         "component": "select",
+        "name": "classes_journey",
+        "label": "Floating",
+        "description": "Auto: once scrolled past, this Canvas floats at the bottom of the screen until the next Canvas (or the footer Canvas) comes into view. Stay in place: it never floats.",
+        "valueType": "string",
+        "value": "",
+        "options": [
+          {
+            "name": "Auto",
+            "value": ""
+          },
+          {
+            "name": "Stay in place",
+            "value": "canvas-static"
+          }
+        ]
+      },
+      {
+        "component": "select",
         "valueType": "string",
         "name": "bgStyle",
         "label": "BG Style",

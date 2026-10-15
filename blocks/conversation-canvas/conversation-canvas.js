@@ -15,6 +15,7 @@ import { normalizeKey as normalize, textOf } from '../../utils/properties.js';
 import { toSitePath } from '../../utils/urls.js';
 import { uniqueId } from '../../utils/ids.js';
 import { fillPlaceholder, getPlaceholders } from '../../utils/placeholders.js';
+import { registerCanvas } from './canvas-journey.js';
 
 // UI text from the placeholders sheet; English fallbacks until it's loaded in decorate()
 let t = (key, fallback, values) => fillPlaceholder(fallback, values);
@@ -560,62 +561,6 @@ export function setConversationCanvasSuggestions(block, suggestions = []) {
   docks.get(block)?.setSuggestions(suggestions);
 }
 
-/*
- * Floating: across all canvases on the page at most one floats at the bottom of the viewport,
- * and none while any canvas shows its search row in place (e.g. the canvas in the footer).
- * - primary (sticky): the whole canvas (dock) floats until the footer comes into view
- * - default / secondary: the search row floats once it is scrolled past its place
- */
-const floating = [];
-let floatFrame;
-
-function updateFloating() {
-  const vh = window.innerHeight;
-  const inView = (el) => {
-    const r = el.getBoundingClientRect();
-    return r.bottom > 0 && r.top < vh;
-  };
-  const footer = document.querySelector('footer');
-  const footerVisible = !!footer && inView(footer);
-  const inPlaceVisible = floating.some((c) => !c.primary && inView(c.slot));
-  let assigned = false;
-  floating.forEach((c) => {
-    let float = false;
-    if (!inPlaceVisible && !assigned) {
-      float = c.primary ? !footerVisible : c.slot.getBoundingClientRect().bottom < 0;
-    }
-    if (float) assigned = true;
-    if (c.primary) {
-      // hidden docks can't be reached by keyboard or screen readers
-      c.row.inert = !float;
-    } else if (float && !c.row.classList.contains('conversation-canvas-floating')) {
-      // keep the space of the row while it floats, so the page doesn't jump
-      c.slot.style.minHeight = `${c.slot.offsetHeight}px`;
-    }
-    c.row.classList.toggle('conversation-canvas-floating', float);
-    if (!float && !c.primary) c.slot.style.minHeight = '';
-  });
-}
-
-function scheduleFloating() {
-  cancelAnimationFrame(floatFrame);
-  floatFrame = requestAnimationFrame(updateFloating);
-}
-
-/**
- * Adds a canvas to the floating logic; listeners are attached for the first one.
- */
-function registerFloating(entry) {
-  floating.push(entry);
-  if (floating.length === 1) {
-    window.addEventListener('scroll', scheduleFloating, { passive: true });
-    window.addEventListener('resize', scheduleFloating);
-    // the footer and other sections load later and move the page
-    new ResizeObserver(scheduleFloating).observe(document.body);
-  }
-  scheduleFloating();
-}
-
 /**
  * Renders filter tags into the conversation canvas filter list (Secondary style). The tags are
  * dynamic, so the list is empty until a script supplies them, e.g. from a personalisation service.
@@ -665,7 +610,9 @@ export default async function decorate(block) {
   if (primary) {
     const dock = buildDock(config, id, block);
     block.replaceChildren(dock);
-    registerFloating({ row: dock, slot: null, primary });
+    registerCanvas({
+      block, row: dock, slot: null, id, primary,
+    });
     return;
   }
 
@@ -712,7 +659,7 @@ export default async function decorate(block) {
   }
   if (intro.children.length) content.append(intro);
 
-  // search row, in place; floats once scrolled past
+  // search row, in place; the Canvas journey floats it once scrolled past (canvas-journey.js)
   const slot = document.createElement('div');
   slot.className = 'conversation-canvas-search-slot';
   const row = buildSearch(config, id, block);
@@ -737,5 +684,7 @@ export default async function decorate(block) {
   }
 
   block.replaceChildren(...block.querySelectorAll(':scope > .conversation-canvas-background'), content);
-  registerFloating({ row, slot, primary });
+  registerCanvas({
+    block, row, slot, id, primary,
+  });
 }

@@ -256,6 +256,20 @@
 
   /* nav height */
   --nav-height: 4rem;
+
+  /* layering: page content < floating Canvas < its popovers < header (mobile menu) */
+  --z-index-canvas-floating: 100;
+  --z-index-canvas-popover: 101;
+
+  /* motion */
+  --motion-duration-short: 0.2s;
+  --motion-duration-medium: 0.3s;
+  --blur-glass: 1.25rem;
+}
+
+/* keyboard focus is never scrolled under the floating Canvas (set by the Canvas journey) */
+html {
+  scroll-padding-bottom: var(--canvas-floating-clearance, 0);
 }
 
 /* fallback fonts */

@@ -118,7 +118,7 @@ value applies only on its breakpoint; "As Appearance" (inherit) keeps the Appear
   hidden starting state only exists after the script added `animate-ready`, so a failure never
   hides the line. `?debug=separator` logs the configuration.
 - **Analytics**: with Analytics on, the Adobe Client Data Layer gets the separator's state
-  (`@type tcs-corp/components/separator`, variant, accessibility mode, theme, line style,
+  (`@type aem-eds-app-demo/components/separator`, variant, accessibility mode, theme, line style,
   visibility). No events: a separator has no interactions. Off by default (decorative content
   isn't tracked unless asked).
 - **Extension points**: `VARIANT_PRESETS` and the option lists in `separator-config.js`; a new

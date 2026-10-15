@@ -155,7 +155,7 @@ describe('animation, print and analytics', () => {
     assert.equal(config().analytics, false);
     const entry = analyticsEntry(config({ analyticsenabled: 'true', analyticslabel: 'Story end', showmobile: 'false' }), 'sep-1');
     assert.deepEqual(entry['sep-1'], {
-      '@type': 'tcs-corp/components/separator',
+      '@type': 'aem-eds-app-demo/components/separator',
       'dc:title': 'Story end',
       'xdm:variant': 'default',
       'xdm:accessibilityMode': 'decorative',

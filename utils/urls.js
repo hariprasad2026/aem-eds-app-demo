@@ -5,7 +5,7 @@ import { toPublishedPath } from './site.js';
 
 /**
  * Converts an AEM content path to the path the site serves (following the locale mappings
- * of paths.json, e.g. /content/tcs-corp/de/de-de/about.html: /de-de/about); other URLs pass
+ * of paths.json, e.g. /content/aem-eds-app-demo/de/de-de/about.html: /de-de/about); other URLs pass
  * through.
  * @param {string} path An AEM path or URL
  * @returns {string}

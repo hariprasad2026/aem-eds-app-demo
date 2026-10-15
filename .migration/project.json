@@ -1,0 +1,14 @@
+{
+  "sites": {
+    "aem-eds-app-demo": {
+      "previewOrg": "hariprasad2026",
+      "previewSite": "aem-eds-app-demo",
+      "contentHostUrl": "author-p220207-e2271469.adobeaemcloud.com",
+      "aemSitePath": "/content/aem-eds-xwalk",
+      "aemAssetsFolderPath": "/content/dam/aem-eds-xwalk",
+      "aemSiteName": "aem-eds-app-demo",
+      "aemSiteTitle": "TCS Corporate",
+      "baseUrl": "https://main--aem-eds-app-demo--hariprasad2026.aem.live"
+    }
+  }
+}

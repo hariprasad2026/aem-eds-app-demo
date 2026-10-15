@@ -176,7 +176,7 @@ export default async function decorate(block) {
   if (config.analytics) {
     trackCardList(block, {
       id,
-      type: 'tcs-corp/components/cards',
+      type: 'aem-eds-app-demo/components/cards',
       title: heading?.textContent.trim() || config.listLabel,
       cards,
       state: { 'xdm:variant': config.displayAsTeaser ? config.cardStyle : 'links' },

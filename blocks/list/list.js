@@ -195,7 +195,7 @@ export default async function decorate(block) {
   if (config.analytics) {
     trackCardList(block, {
       id,
-      type: 'tcs-corp/components/list',
+      type: 'aem-eds-app-demo/components/list',
       title: heading?.textContent.trim() || config.listLabel,
       cards,
       state: {

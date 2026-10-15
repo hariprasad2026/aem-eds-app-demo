@@ -2,10 +2,10 @@
  * Generates paths.json from the locale list in utils/site.js (LOCALES), so the published locale
  * paths and the code stay in sync. Run with `npm run build:paths` after changing LOCALES.
  *
- * Per locale (AEM /content/tcs-corp/{country}/{code}, published at /{code}):
- * - the locale page itself is the Home page: /content/tcs-corp/de/de-de:/de-de/ (published as
+ * Per locale (AEM /content/aem-eds-app-demo/{country}/{code}, published at /{code}):
+ * - the locale page itself is the Home page: /content/aem-eds-app-demo/de/de-de:/de-de/ (published as
  *   /de-de/index, served at /de-de/)
- * - the locale folder: /content/tcs-corp/de/de-de/:/de-de/
+ * - the locale folder: /content/aem-eds-app-demo/de/de-de/:/de-de/
  * - its spreadsheets (the system appends .json): …/data/authors:/de-de/data/authors
  * - its taxonomy page (not a spreadsheet): …/taxonomy:/de-de/taxonomy.json
  * - includes: the locale page and folder; excludes: its block library (author only)
@@ -13,8 +13,8 @@
  */
 import { readFile, writeFile } from 'node:fs/promises';
 
-const SITE = '/content/tcs-corp';
-const ASSETS = '/content/dam/tcs-corp/';
+const SITE = '/content/aem-eds-app-demo';
+const ASSETS = '/content/dam/aem-eds-app-demo/';
 const SHEETS = [
   'placeholders',
   'metadata',
@@ -45,7 +45,7 @@ const paths = {
     ]),
   ],
   // the locale page (Home) and everything below it; AEM Assets used on the pages (videos,
-  // PDFs) are published with them at their own path, e.g. /content/dam/tcs-corp/intro.mp4
+  // PDFs) are published with them at their own path, e.g. /content/dam/aem-eds-app-demo/intro.mp4
   includes: [...LOCALES.map((locale) => aemRoot(locale)), ASSETS],
   excludes: [
     ...LOCALES.flatMap((locale) => [

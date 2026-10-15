@@ -2,7 +2,7 @@
 
 Design proposals for the TCS Corporate website. A proposal describes the current state, the
 gaps and a target design for review; it changes no code. Accepted proposals are implemented in
-their own pull requests, and the handover (`docs/handover/TCS-CORP-HANDOVER.md`) and the block
+their own pull requests, and the handover (`docs/handover/aem-eds-app-demo-HANDOVER.md`) and the block
 READMEs are updated with them. The documents aren't served on the website (`docs/` is listed in
 `.hlxignore`).
 

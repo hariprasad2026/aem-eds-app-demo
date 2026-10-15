@@ -2,7 +2,7 @@ sitemaps:
   default:
     # the host of the sitemap URLs until a production domain (cdn.prod.host) is configured;
     # then replace it with that domain, or remove it
-    origin: https://main--tcs-corp--sradha-tcs.aem.live
+    origin: https://main--aem-eds-app-demo--hariprasad2026.aem.live
     source: /query-index.json
     destination: /sitemap.xml
     lastmod: YYYY-MM-DD

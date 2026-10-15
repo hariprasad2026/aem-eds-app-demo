@@ -307,8 +307,8 @@ entries pushed before it loads), following the Core Components data layer:
 
 ```js
 { component: {
-  'list-1': { '@type': 'tcs-corp/components/list', 'dc:title': 'Media Coverage', 'xdm:listSource': 'tags', 'xdm:variant': 'mixed' },
-  'list-1-item-hxobwp': { '@type': 'tcs-corp/components/list/item', parentId: 'list-1', 'dc:title': '…', 'xdm:linkURL': '/en/…', 'xdm:position': 1, 'repo:modifyDate': '2026-09-04' },
+  'list-1': { '@type': 'aem-eds-app-demo/components/list', 'dc:title': 'Media Coverage', 'xdm:listSource': 'tags', 'xdm:variant': 'mixed' },
+  'list-1-item-hxobwp': { '@type': 'aem-eds-app-demo/components/list/item', parentId: 'list-1', 'dc:title': '…', 'xdm:linkURL': '/en/…', 'xdm:position': 1, 'repo:modifyDate': '2026-09-04' },
 } }
 { event: 'cmp:click', eventInfo: { path: 'component.list-1-item-hxobwp', interaction: 'card', position: 1, 'dc:title': '…', 'xdm:linkURL': '…', 'xdm:linkType': 'other', breakpoint: 'desktop' } }
 { event: 'cmp:click', eventInfo: { path: 'component.list-1', interaction: 'next', 'dc:title': 'Next items', 'xdm:linkType': 'other', breakpoint: 'desktop' } }

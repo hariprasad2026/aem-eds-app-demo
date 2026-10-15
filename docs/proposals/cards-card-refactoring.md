@@ -48,7 +48,7 @@ Three verified causes, plus one that must be confirmed in Universal Editor:
 | C-3 | **The item's content model changed.** Originally one rich text cell (heading, text, link). Now title, description, link and call to action are separate fields; old rich text is interpreted (first heading = title, last lone link = CTA) | `blocks/cards/cards.js` `readLegacyText` | Editing an old card in the new dialog is confusing: the title appears in Description, not in Title |
 | C-4 | **To confirm in Universal Editor:** adding Card items to a key-value container | The pattern is documented ("a container block could have key-value properties at the block level, with simple or structured child items") and used by List; not verified in this program's editor | If the **+** doesn't offer Card in this environment, authors can't add cards to new Cards blocks |
 
-C-1 to C-4 are recorded in the project handover (`docs/handover/TCS-CORP-HANDOVER.md`, version 1.1) as
+C-1 to C-4 are recorded in the project handover (`docs/handover/aem-eds-app-demo-HANDOVER.md`, version 1.1) as
 findings F-34, F-41, F-42 and open item O-20, and in chapter 6.15 (Issues 6 and 11).
 
 > **Important:** Before implementation, confirm C-4 in Universal Editor on a test page: add a new
@@ -213,7 +213,7 @@ baseline used in #62), browser checks at 1440 / 1024 / 402, lint, PageSpeed.
 
 ### 7.2 Migrating G1 instances (enables the block dialog)
 
-1. **Inventory** — find Cards components without a model under `/content/tcs-corp`:
+1. **Inventory** — find Cards components without a model under `/content/aem-eds-app-demo`:
    query `sling:resourceType = core/franklin/components/block/v1/block` and `name = Cards`
    and no `model` property (AEM Query Builder or a Groovy console script, run by AMS).
 2. **Update** — for each node set `model = cards`, `key-value = true`, and
@@ -515,7 +515,7 @@ test/cards/, test/list/, test/card-sources/, test/card-filters/
   "backgroundImage": "", "icon": "arrow-right",
   "eyebrow": "Perspective", "category": "Banking", "badge": "New", "status": "new",
   "author": "Jane Doe", "date": "04 Sep 26", "dateISO": "2026-09-04",
-  "tagIds": ["tcs-corp:industry/banking"], "tags": ["Banking"],
+  "tagIds": ["aem-eds-app-demo:industry/banking"], "tags": ["Banking"],
   "ctaLabel": "Read more", "ctaStyle": "secondary", "openInNewTab": false,
   "kind": "", "theme": "",
   "analyticsLabel": "", "analyticsId": "", "audience": ["cfo"], "experienceId": "",
@@ -548,9 +548,9 @@ test/cards/, test/list/, test/card-sources/, test/card-filters/
 ### 18.3 Data layer
 
 ```json
-{ "component": { "cards-1": { "@type": "tcs-corp/components/cards", "xdm:variant": "carousel",
+{ "component": { "cards-1": { "@type": "aem-eds-app-demo/components/cards", "xdm:variant": "carousel",
   "xdm:source": "manual" },
-  "cards-1-item-2": { "@type": "tcs-corp/components/cards/item", "parentId": "cards-1",
+  "cards-1-item-2": { "@type": "aem-eds-app-demo/components/cards/item", "parentId": "cards-1",
   "dc:title": "The agentic bank", "xdm:position": 2, "xdm:audience": ["cfo"] } } }
 { "event": "cmp:change", "eventInfo": { "path": "component.cards-1", "interaction": "filter",
   "value": "Banking" } }

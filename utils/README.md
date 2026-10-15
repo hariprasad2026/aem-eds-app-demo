@@ -23,7 +23,7 @@ URLs, ids and checks of the browsing context. Elements are created by the
 | `cells.js` | `matchCells` (block item cells to model fields when AEM leaves out unset fields) | list, table-list, cards |
 | `card-list-config.js` | `normalizePresentation` (the card list settings of List and Cards, with defaults and validation), `PRESENTATION_PROPERTIES`, `kindOf`, `RESPONSIVE_DEFAULTS`, `CARD_STYLES` / `CARD_KINDS` / `CARD_THEMES` and the other options, `isSafeUrl`, `isExternal`, `toISODate`, `toSafeId`, `hash`, `normalizePath` | list, cards, card list decorator |
 | `tags.js` | `readTagValues`, `parseTag`, `readTags` (tag IDs; ID-derived labels as the taxonomy fallback) | teaser, filter-list, taxonomy util |
-| `urls.js` | `toSitePath` (AEM content paths to published paths, e.g. `/content/tcs-corp/de/de-de/x.html` → `/de-de/x`) | table-list, conversation-canvas |
+| `urls.js` | `toSitePath` (AEM content paths to published paths, e.g. `/content/aem-eds-app-demo/de/de-de/x.html` → `/de-de/x`) | table-list, conversation-canvas |
 | `ids.js` | `nextInstance`, `uniqueId`, `createIdFactory` (unique ids per block instance), `availableId` (an authored id kept, suffixed -2, -3, ... only when taken) | tabs, gen-carousel, page-header, filter-list, form-variations, conversation-canvas, header, block options decorator |
 | `environment.js` | `prefersReducedMotion`, `scrollBehavior`, `isEditing`, `isInEditor` | gen-carousel, tabs, hero, table-list, anchor-list, video, form-variations |
 | `viewport.js` | `onVisible` (once), `watchVisibility` (on / off screen), `currentBreakpoint` (mobile / tablet / desktop) | gen-carousel, hero, table-list, embed, video, data layer decorator |
@@ -32,7 +32,7 @@ URLs, ids and checks of the browsing context. Elements are created by the
 
 ## Site data
 
-Site data lives in each of the 13 locale sites (AEM `/content/tcs-corp/{country}/{language}/`,
+Site data lives in each of the 13 locale sites (AEM `/content/aem-eds-app-demo/{country}/{language}/`,
 published at `/{locale}/`, e.g. `/de-de/`): references (nav, footer, fragments), error pages,
 placeholders, metadata, taxonomy, redirects, the `data/` sheets and the block library. See
 "Site structure and site data" in [AGENTS.md](../AGENTS.md) for the locale table, the bulk

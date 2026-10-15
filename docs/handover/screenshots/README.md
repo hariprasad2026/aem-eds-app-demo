@@ -1,6 +1,6 @@
 # Handover screenshots
 
-The figures of the project handover (`../TCS-CORP-HANDOVER.md`, version 2.0), referenced as
+The figures of the project handover (`../aem-eds-app-demo-HANDOVER.md`, version 2.0), referenced as
 `screenshots/<file>.jpg`.
 
 | Kind | Files | Made from |

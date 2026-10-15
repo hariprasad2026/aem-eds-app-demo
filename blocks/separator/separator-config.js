@@ -192,7 +192,7 @@ export function classesOf(config) {
 /** the data layer entry of a separator (Core Components schema) */
 export const analyticsEntry = (config, id) => ({
   [id]: {
-    '@type': 'tcs-corp/components/separator',
+    '@type': 'aem-eds-app-demo/components/separator',
     'dc:title': config.analyticsLabel || undefined,
     'xdm:variant': config.variant,
     'xdm:accessibilityMode': config.mode,

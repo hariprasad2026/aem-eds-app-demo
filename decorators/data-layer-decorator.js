@@ -3,7 +3,7 @@
  * Layer (utils/analytics.js), following the AEM Core Components data layer, which Adobe Tags and
  * the Web SDK read (eventInfo maps to XDM web.webInteraction: name, URL, type).
  * - page: { page: { 'page-{hash}': { '@type', 'dc:title', 'xdm:language', 'xdm:template', ... } } }
- * - blocks: { component: { '{id}': { '@type': 'tcs-corp/components/{block}', parentId, ... } } }
+ * - blocks: { component: { '{id}': { '@type': 'aem-eds-app-demo/components/{block}', parentId, ... } } }
  *   once they're decorated; the id is the block's id, else '{block}-{n}' (data-cmp-id)
  * - events: cmp:click (links and buttons), cmp:show / cmp:hide (accordion items, dialogs),
  *   cmp:media (play, pause, ended), cmp:submit (forms: their id and field names, no values),
@@ -16,7 +16,7 @@ import { pushComponentEvent, pushComponents, pushToDataLayer } from '../utils/an
 import { getPageLanguage, getPageMetadata, getPageTags } from '../utils/metadata.js';
 import { currentBreakpoint } from '../utils/viewport.js';
 
-const TYPE = 'tcs-corp/components';
+const TYPE = 'aem-eds-app-demo/components';
 const FILE = /\.(pdf|docx?|xlsx?|pptx?|zip|csv|txt|mp3|mp4)(\?|#|$)/i;
 const counters = {};
 let pageId = '';

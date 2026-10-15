@@ -39,10 +39,10 @@ checks) live in [`../utils`](../utils/README.md).
 AEM Core Components schema, so Adobe Tags rules and the Web SDK (`xdm`) work without per-block
 code:
 
-- **Page**: `{ page: { 'page-{hash}': { '@type': 'tcs-corp/components/page', 'dc:title',
+- **Page**: `{ page: { 'page-{hash}': { '@type': 'aem-eds-app-demo/components/page', 'dc:title',
   'xdm:language', 'xdm:template' (Page Type), 'xdm:tags', 'repo:path' } } }`, once.
 - **Components**: every block, once loaded: `{ component: { '{id}': { '@type':
-  'tcs-corp/components/{block}', parentId, 'dc:title' } } }`. The id is the block's id (its
+  'aem-eds-app-demo/components/{block}', parentId, 'dc:title' } } }`. The id is the block's id (its
   Anchor ID or Component ID), else `{block}-{n}`, as `data-cmp-id`.
 - **Events** (`eventInfo.path` = `component.{id}`; `page.{id}` for links in default content):
   - `cmp:click`: links and buttons, with `interaction` (`data-cmp-interaction`, else link /

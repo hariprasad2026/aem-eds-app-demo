@@ -7,8 +7,8 @@ Editor). The documents aren't served on the website (`docs/` is listed in `.hlxi
 
 | File | Description |
 |---|---|
-| [TCS-CORP-HANDOVER.pdf](TCS-CORP-HANDOVER.pdf) | The official project handover, version 2.0, 14 October 2026 (3,398 pages; one table of contents with 1,226 linked entries, one page numbering, PDF bookmarks down to the variations). It serves as handover document, technical architecture and solution design document, authoring guide, training workbook, AMS handover guide, support runbook, operations guide, new joiner onboarding guide and component specification guide. Every screenshot (596) has callout letters on its fields and is followed by Screenshot Details, a **Field Entry Table** (Callout, Field Name, Example Value, Mandatory, Business Purpose, What Author Should Enter, Validation Rules), Expected Page Output, Business Rules, Common Authoring Mistakes and Troubleshooting; every variation with a screenshot has a step-by-step walkthrough (461); every component (31) has its variations, field specification, specification, input / output models, business rules, troubleshooting, support runbook, common authoring mistakes, author quick reference guide and an execution example |
-| [TCS-CORP-HANDOVER.md](TCS-CORP-HANDOVER.md) | The editable source of the PDF (Markdown) |
+| [aem-eds-app-demo-HANDOVER.pdf](aem-eds-app-demo-HANDOVER.pdf) | The official project handover, version 2.0, 14 October 2026 (3,398 pages; one table of contents with 1,226 linked entries, one page numbering, PDF bookmarks down to the variations). It serves as handover document, technical architecture and solution design document, authoring guide, training workbook, AMS handover guide, support runbook, operations guide, new joiner onboarding guide and component specification guide. Every screenshot (596) has callout letters on its fields and is followed by Screenshot Details, a **Field Entry Table** (Callout, Field Name, Example Value, Mandatory, Business Purpose, What Author Should Enter, Validation Rules), Expected Page Output, Business Rules, Common Authoring Mistakes and Troubleshooting; every variation with a screenshot has a step-by-step walkthrough (461); every component (31) has its variations, field specification, specification, input / output models, business rules, troubleshooting, support runbook, common authoring mistakes, author quick reference guide and an execution example |
+| [aem-eds-app-demo-HANDOVER.md](aem-eds-app-demo-HANDOVER.md) | The editable source of the PDF (Markdown) |
 | [screenshots/](screenshots/README.md) | The 628 figures of the document (596 screenshots, 32 dialog references) |
 | [../proposals/](../proposals/README.md) | Design proposals that follow up on the handover (e.g. the Cards and Card refactoring) |
 
@@ -30,7 +30,7 @@ Editor). The documents aren't served on the website (`docs/` is listed in `.hlxi
 
 ### Updating the document
 
-Edit `TCS-CORP-HANDOVER.md`, then regenerate the PDF with pandoc and typst using the Adobe
+Edit `aem-eds-app-demo-HANDOVER.md`, then regenerate the PDF with pandoc and typst using the Adobe
 whitepaper template (the project-management whitepaper tooling). The whole document needs more
 memory than typst gets in a 4 GB container, so the PDF is built in 13 volumes of up to about
 13,000 Markdown lines each and merged into one document with a single cover, table of contents
@@ -59,10 +59,10 @@ options `cover: false`, `toc: false`, `first-page` and `total-pages`, which also
 headings with their pages as `<handover-headings>` metadata):
 
 ```bash
-pandoc TCS-CORP-HANDOVER-Vol-1.md -f markdown-citations -t typst --standalone \
+pandoc aem-eds-app-demo-HANDOVER-Vol-1.md -f markdown-citations -t typst --standalone \
   -V template="adobe-whitepaper.typ" -V mainfont="Adobe Clean" -V fontsize=10pt -V papersize=a4 \
-  -o TCS-CORP-HANDOVER-Vol-1.typ
-typst compile -j 1 TCS-CORP-HANDOVER-Vol-1.typ TCS-CORP-HANDOVER-Vol-1.pdf
+  -o aem-eds-app-demo-HANDOVER-Vol-1.typ
+typst compile -j 1 aem-eds-app-demo-HANDOVER-Vol-1.typ aem-eds-app-demo-HANDOVER-Vol-1.pdf
 ```
 
 Then, in this order:

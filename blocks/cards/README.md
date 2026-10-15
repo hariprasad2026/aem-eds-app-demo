@@ -115,8 +115,8 @@ Home, End); `<time datetime>`; decorative images `alt=""`.
 
 ```js
 { component: {
-  'cards-1': { '@type': 'tcs-corp/components/cards', parentId: 'page-…', 'dc:title': 'Our services', 'xdm:variant': 'image' },
-  'cards-1-item-1': { '@type': 'tcs-corp/components/cards/item', parentId: 'cards-1', 'dc:title': 'Consulting', 'xdm:linkURL': '/en/consulting', 'xdm:position': 1 },
+  'cards-1': { '@type': 'aem-eds-app-demo/components/cards', parentId: 'page-…', 'dc:title': 'Our services', 'xdm:variant': 'image' },
+  'cards-1-item-1': { '@type': 'aem-eds-app-demo/components/cards/item', parentId: 'cards-1', 'dc:title': 'Consulting', 'xdm:linkURL': '/en/consulting', 'xdm:position': 1 },
 } }
 { event: 'cmp:click', eventInfo: { path: 'component.cards-1-item-1', interaction: 'card', 'dc:title': '…', 'xdm:linkURL': '…', 'xdm:linkType': 'other', breakpoint: 'desktop' } }
 ```

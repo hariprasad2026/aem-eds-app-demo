@@ -390,7 +390,7 @@ export function cardListId(config, block, prefix) {
  * pushed by the data layer decorator from the data-cmp-* attributes.
  * @param {Element} block
  * @param {{ id: string, type: string, title: string, cards: Object[], state?: Object }} options
- *   type: the component type, e.g. tcs-corp/components/list; state: more list properties
+ *   type: the component type, e.g. aem-eds-app-demo/components/list; state: more list properties
  */
 export function trackCardList(block, {
   id, type, title, cards, state = {},

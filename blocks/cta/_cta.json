@@ -40,9 +40,26 @@
       "value": ""
     },
     {
+      "component": "select",
+      "valueType": "string",
+      "name": "linkTarget",
+      "label": "CTA Link Type",
+      "value": "default",
+      "options": [
+        {
+          "name": "Default",
+          "value": "default"
+        },
+        {
+          "name": "Open In New Window",
+          "value": "new-window"
+        }
+      ]
+    },
+    {
       "component": "tab",
       "name": "linkIconSection",
-      "label": "Link & Icon"
+      "label": "Icon"
     },
     {
       "component": "reference",
@@ -68,23 +85,6 @@
         {
           "name": "After Text",
           "value": "after"
-        }
-      ]
-    },
-    {
-      "component": "select",
-      "valueType": "string",
-      "name": "linkTarget",
-      "label": "CTA Link Type",
-      "value": "default",
-      "options": [
-        {
-          "name": "Default",
-          "value": "default"
-        },
-        {
-          "name": "Open In New Window",
-          "value": "new-window"
         }
       ]
     },
@@ -126,6 +126,52 @@
         {
           "name": "48 x 48",
           "value": "48"
+        }
+      ]
+    },
+    {
+      "component": "select",
+      "valueType": "string",
+      "name": "iconColor",
+      "label": "Icon Color",
+      "value": "black",
+      "options": [
+        {
+          "name": "Black",
+          "value": "black"
+        },
+        {
+          "name": "Gray",
+          "value": "gray"
+        },
+        {
+          "name": "White",
+          "value": "white"
+        }
+      ]
+    },
+    {
+      "component": "select",
+      "valueType": "string",
+      "name": "hoverIconColor",
+      "label": "Hover Icon Color",
+      "value": "",
+      "options": [
+        {
+          "name": "Same as Icon Color",
+          "value": ""
+        },
+        {
+          "name": "Black",
+          "value": "black"
+        },
+        {
+          "name": "Gray",
+          "value": "gray"
+        },
+        {
+          "name": "White",
+          "value": "white"
         }
       ]
     },
@@ -173,35 +219,6 @@
         {
           "name": "Black",
           "value": "#0C0C0D"
-        },
-        {
-          "name": "White",
-          "value": "#FFFFFF"
-        }
-      ]
-    },
-    {
-      "component": "select",
-      "valueType": "string",
-      "name": "textColor",
-      "label": "Text Color",
-      "value": "",
-      "options": [
-        {
-          "name": "Variant Default",
-          "value": ""
-        },
-        {
-          "name": "Black",
-          "value": "#0C0C0D"
-        },
-        {
-          "name": "Dark Gray",
-          "value": "#303030"
-        },
-        {
-          "name": "Off White",
-          "value": "#F3F3F3"
         },
         {
           "name": "White",
@@ -296,6 +313,23 @@
     {
       "component": "select",
       "valueType": "string",
+      "name": "buttonSize",
+      "label": "Button Size",
+      "value": "default",
+      "options": [
+        {
+          "name": "Default (50px)",
+          "value": "default"
+        },
+        {
+          "name": "Small (46px)",
+          "value": "small"
+        }
+      ]
+    },
+    {
+      "component": "select",
+      "valueType": "string",
       "name": "backdropBlur",
       "label": "Backdrop Blur",
       "value": "8",
@@ -307,6 +341,128 @@
         {
           "name": "8px",
           "value": "8"
+        }
+      ]
+    },
+    {
+      "component": "tab",
+      "name": "layout",
+      "label": "Layout"
+    },
+    {
+      "component": "select",
+      "valueType": "string",
+      "name": "contentLayout",
+      "label": "Content Layout",
+      "value": "normal",
+      "options": [
+        {
+          "name": "Normal",
+          "value": "normal"
+        },
+        {
+          "name": "Space Between",
+          "value": "space-between"
+        }
+      ]
+    },
+    {
+      "component": "select",
+      "valueType": "string",
+      "name": "alignment",
+      "label": "Alignment",
+      "value": "left",
+      "options": [
+        {
+          "name": "Left",
+          "value": "left"
+        },
+        {
+          "name": "Center",
+          "value": "center"
+        },
+        {
+          "name": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    {
+      "component": "select",
+      "valueType": "string",
+      "name": "ctaWidth",
+      "label": "Width",
+      "value": "auto",
+      "options": [
+        {
+          "name": "Auto",
+          "value": "auto"
+        },
+        {
+          "name": "Half Width",
+          "value": "half"
+        },
+        {
+          "name": "Full Width",
+          "value": "full"
+        }
+      ]
+    },
+    {
+      "component": "tab",
+      "name": "typographySection",
+      "label": "Typography"
+    },
+    {
+      "component": "select",
+      "valueType": "string",
+      "name": "typographyStyle",
+      "label": "Text Size",
+      "value": "default",
+      "options": [
+        {
+          "name": "Default (16px)",
+          "value": "default"
+        },
+        {
+          "name": "Compact (14px)",
+          "value": "compact"
+        }
+      ]
+    },
+    {
+      "component": "boolean",
+      "valueType": "boolean",
+      "name": "bold",
+      "label": "Bold",
+      "value": false
+    },
+    {
+      "component": "select",
+      "valueType": "string",
+      "name": "textColor",
+      "label": "Text Color",
+      "value": "",
+      "options": [
+        {
+          "name": "Variant Default",
+          "value": ""
+        },
+        {
+          "name": "Black",
+          "value": "#0C0C0D"
+        },
+        {
+          "name": "Dark Gray",
+          "value": "#303030"
+        },
+        {
+          "name": "Off White",
+          "value": "#F3F3F3"
+        },
+        {
+          "name": "White",
+          "value": "#FFFFFF"
         }
       ]
     },
@@ -338,162 +494,6 @@
           "value": "#FFFFFF"
         }
       ]
-    },
-    {
-      "component": "tab",
-      "name": "layoutIconSection",
-      "label": "Layout & Icon Styling"
-    },
-    {
-      "component": "select",
-      "valueType": "string",
-      "name": "ctaWidth",
-      "label": "Width",
-      "value": "auto",
-      "options": [
-        {
-          "name": "Auto",
-          "value": "auto"
-        },
-        {
-          "name": "Half Width",
-          "value": "half"
-        },
-        {
-          "name": "Full Width",
-          "value": "full"
-        }
-      ]
-    },
-    {
-      "component": "select",
-      "valueType": "string",
-      "name": "alignment",
-      "label": "Alignment",
-      "value": "left",
-      "options": [
-        {
-          "name": "Left",
-          "value": "left"
-        },
-        {
-          "name": "Center",
-          "value": "center"
-        },
-        {
-          "name": "Right",
-          "value": "right"
-        }
-      ]
-    },
-    {
-      "component": "select",
-      "valueType": "string",
-      "name": "iconColor",
-      "label": "Icon Color",
-      "value": "black",
-      "options": [
-        {
-          "name": "Black",
-          "value": "black"
-        },
-        {
-          "name": "Gray",
-          "value": "gray"
-        },
-        {
-          "name": "White",
-          "value": "white"
-        }
-      ]
-    },
-    {
-      "component": "select",
-      "valueType": "string",
-      "name": "hoverIconColor",
-      "label": "Hover Icon Color",
-      "value": "",
-      "options": [
-        {
-          "name": "Same as Icon Color",
-          "value": ""
-        },
-        {
-          "name": "Black",
-          "value": "black"
-        },
-        {
-          "name": "Gray",
-          "value": "gray"
-        },
-        {
-          "name": "White",
-          "value": "white"
-        }
-      ]
-    },
-    {
-      "component": "select",
-      "valueType": "string",
-      "name": "contentLayout",
-      "label": "Content Layout",
-      "value": "normal",
-      "options": [
-        {
-          "name": "Normal",
-          "value": "normal"
-        },
-        {
-          "name": "Space Between",
-          "value": "space-between"
-        }
-      ]
-    },
-    {
-      "component": "tab",
-      "name": "typographySection",
-      "label": "Typography"
-    },
-    {
-      "component": "select",
-      "valueType": "string",
-      "name": "buttonSize",
-      "label": "Button Size",
-      "value": "default",
-      "options": [
-        {
-          "name": "Default (50px)",
-          "value": "default"
-        },
-        {
-          "name": "Small (46px)",
-          "value": "small"
-        }
-      ]
-    },
-    {
-      "component": "select",
-      "valueType": "string",
-      "name": "typographyStyle",
-      "label": "Text Size",
-      "value": "default",
-      "options": [
-        {
-          "name": "Default (16px)",
-          "value": "default"
-        },
-        {
-          "name": "Compact (14px)",
-          "value": "compact"
-        }
-      ]
-    },
-    {
-      "component": "boolean",
-      "valueType": "boolean",
-      "name": "bold",
-      "label": "Bold",
-      "value": false
     }
       ]
     }

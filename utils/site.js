@@ -1,6 +1,6 @@
 /**
  * Site utils: the TCS Corporate site structure. Each locale site lives in AEM under
- * /content/aem-eds-app-demo/{country}/{language} (e.g. /content/aem-eds-app-demo/de/de-de) and is published at
+ * /content/aem-eds-xwalk/{country}/{language} (e.g. /content/aem-eds-xwalk/de/de-de) and is published at
  * a language-only path (e.g. /de-de, see paths.json). Every locale site holds its pages and its
  * own references, error pages, sheets and block library:
  *
@@ -57,7 +57,7 @@ const startsWithFolder = (path, folder) => path === folder || path.startsWith(`$
 const localeOfSitePath = (path) => LOCALES
   .find((locale) => startsWithFolder(path.toLowerCase(), rootOf(locale)));
 
-/** the locale whose AEM folders (/de/de-de, below /content/aem-eds-app-demo) start the path */
+/** the locale whose AEM folders (/de/de-de, below /content/aem-eds-xwalk) start the path */
 const localeOfAemPath = (path) => LOCALES
   .find((locale) => startsWithFolder(path.toLowerCase(), aemRootOf(locale)));
 
@@ -69,7 +69,7 @@ const localeOfAemPath = (path) => LOCALES
  * }} Locale
  * code: the published path segment (e.g. de-de); lang: the language tag (de-DE); language: the
  * ISO 639-1 language (de); root: the published root (/de-de); aemRoot: the AEM folders below the
- * site root (/de/de-de); contentRoot: the AEM site root (/content/aem-eds-app-demo) when editing,
+ * site root (/de/de-de); contentRoot: the AEM site root (/content/aem-eds-xwalk) when editing,
  * otherwise ''
  */
 
@@ -94,8 +94,8 @@ export function getLocale(pathname = window.location.pathname) {
 /**
  * The parent pages of a page up to its locale's Home page (the locale page itself), nearest
  * first, as the URLs to load: published paths (/de-de/insights/blogs, /de-de/insights,
- * /de-de/), or AEM page URLs when editing (/content/aem-eds-app-demo/de/de-de/insights.html, …,
- * /content/aem-eds-app-demo/de/de-de.html). Empty for the Home page and for pages outside a locale.
+ * /de-de/), or AEM page URLs when editing (/content/aem-eds-xwalk/de/de-de/insights.html, …,
+ * /content/aem-eds-xwalk/de/de-de.html). Empty for the Home page and for pages outside a locale.
  * @param {string} [pathname] defaults to the current page
  * @returns {string[]}
  */
@@ -119,7 +119,7 @@ export function getParentPages(pathname = window.location.pathname) {
 }
 
 /**
- * Converts an AEM page path (/content/aem-eds-app-demo/de/de-de/about) to its published path
+ * Converts an AEM page path (/content/aem-eds-xwalk/de/de-de/about) to its published path
  * (/de-de/about), following paths.json; other paths are returned unchanged.
  * @param {string} pathname
  * @returns {string}
@@ -135,10 +135,10 @@ export function toPublishedPath(pathname) {
 
 /**
  * Converts a published path (/de-de/about) to its AEM page path
- * (/content/aem-eds-app-demo/de/de-de/about) below the given site root; AEM paths are returned
+ * (/content/aem-eds-xwalk/de/de-de/about) below the given site root; AEM paths are returned
  * unchanged.
  * @param {string} pathname
- * @param {string} contentRoot e.g. /content/aem-eds-app-demo
+ * @param {string} contentRoot e.g. /content/aem-eds-xwalk
  * @returns {string}
  */
 export function toAemPath(pathname, contentRoot) {
@@ -150,7 +150,7 @@ export function toAemPath(pathname, contentRoot) {
 
 /**
  * The path of a page in the current locale, e.g. references/nav: /de-de/references/nav
- * (/content/aem-eds-app-demo/de/de-de/references/nav when editing in AEM).
+ * (/content/aem-eds-xwalk/de/de-de/references/nav when editing in AEM).
  * @param {string} path relative to the locale root
  * @param {string} [pathname] a page of the locale to use, defaults to the current page
  */
@@ -162,7 +162,7 @@ export function localePagePath(path, pathname = window.location.pathname) {
 
 /**
  * The path of a configured page (e.g. the nav or footer metadata), else of the locale's default
- * page. A configured value may be an AEM path (/content/aem-eds-app-demo/de/de-de/references/nav-jobs),
+ * page. A configured value may be an AEM path (/content/aem-eds-xwalk/de/de-de/references/nav-jobs),
  * a published path (/de-de/references/nav-jobs) or a path relative to the locale root
  * (references/nav-jobs); it's returned as the path to fetch here: the AEM path when editing,
  * the published path on the site.

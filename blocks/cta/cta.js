@@ -93,6 +93,37 @@ function createIcon(icon, size, iconColor, hoverIconColor) {
 }
 
 function readBlockContent(block) {
+  const hasReorderedFields = ['default', 'new-window'].includes(
+    getFieldValue(block, 2, ''),
+  ) && ['before', 'after'].includes(getFieldValue(block, 4, ''));
+
+  if (hasReorderedFields) {
+    return {
+      textcta: getFieldValue(block, 0, ''),
+      ctaLink: getLinkFieldValue(block, 1, ''),
+      linkTarget: getFieldValue(block, 2, 'default'),
+      icon: block.children[3]?.querySelector('img'),
+      iconPosition: getFieldValue(block, 4, 'before'),
+      iconSize: normalizeIconSize(getFieldValue(block, 5, '24')),
+      iconColor: getFieldValue(block, 6, 'black'),
+      hoverIconColor: getFieldValue(block, 7, ''),
+      shape: normalizeShape(getFieldValue(block, 8, 'rectangle')),
+      backgroundColor: getFieldValue(block, 9, ''),
+      borderColor: getFieldValue(block, 10, ''),
+      hoverBackgroundColor: getFieldValue(block, 11, ''),
+      borderWidth: getFieldValue(block, 12, '1'),
+      buttonSize: getFieldValue(block, 13, 'default'),
+      backdropBlur: getFieldValue(block, 14, '8'),
+      ctaWidth: getFieldValue(block, 15, 'auto'),
+      contentLayout: getFieldValue(block, 16, 'normal'),
+      alignment: getFieldValue(block, 17, 'left'),
+      typographyStyle: normalizeTypographyStyle(getFieldValue(block, 18, 'default')),
+      bold: getFieldValue(block, 19, 'false') === 'true',
+      textColor: getFieldValue(block, 20, ''),
+      hoverTextColor: getFieldValue(block, 21, ''),
+    };
+  }
+
   const legacyView = [
     'default',
     'primary',

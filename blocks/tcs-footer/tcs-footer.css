@@ -72,9 +72,16 @@
   margin: 0;
 }
 
-/* Floating Navigation Control Bar */
+/* Floating Navigation Control Bar Container Anchor */
+.tcs-footer-nav-anchor {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .tcs-footer-floating-nav {
-  position: relative; /* REQUIRED: Anchor absolute submenu without pushing layout */
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -108,12 +115,18 @@
   align-items: center;
 }
 
-/* Docked state inside canvas-block-search-slot */
-.canvas-block-search-slot {
+.tcs-footer-hamburger-wrapper.hidden {
+  display: none !important;
+}
+
+/* Docked state inside search slots */
+.canvas-block-search-slot,
+.canvas-search-slot {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin-top: 24px;
 }
 
 .tcs-footer-floating-nav.is-docked-slot {
@@ -161,7 +174,7 @@
   border-color: rgb(0 0 0 / 20%);
 }
 
-/* Search Container */
+/* Search Box Container */
 .tcs-footer-search-box {
   position: relative;
   box-sizing: border-box;
@@ -261,9 +274,43 @@
   background: #3b71e6;
 }
 
+/* Shared/Lower Specificity SVG Rule Placement First */
+.tcs-nav-back-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: #4e82f7;
+}
+
 .tcs-footer-search-actions .submit-btn svg {
   width: 18px;
   height: 18px;
+  stroke: #fff;
+}
+
+/* Circle Back Arrow Button */
+.tcs-nav-back-btn {
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid rgb(0 0 0 / 12%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 5%);
+}
+
+.tcs-nav-back-btn:hover {
+  background: #4e82f7;
+  border-color: #4e82f7;
+}
+
+.tcs-nav-back-btn:hover svg {
   stroke: #fff;
 }
 
@@ -272,10 +319,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   flex-wrap: wrap;
   width: 100%;
-  min-height: 48px; /* FIXED HEIGHT: Prevents layout twitching on hover */
+  min-height: 48px;
   padding: 6px 0;
   box-sizing: border-box;
 }
@@ -287,25 +334,26 @@
   justify-content: center;
 }
 
+/* Navigation Pills */
 .tcs-nav-pill {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  height: 32px;
-  padding: 0 14px;
+  height: 36px;
+  padding: 0 16px;
   background-color: #f3f3f3;
   border: 1px solid #e5e5e5;
   border-radius: 999px;
   font-family: Inter, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 1;
   color: #4a4a4a;
   cursor: pointer;
-  flex-shrink: 0; /* LOCK WIDTH: Prevents pill size jumps */
-  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
 .tcs-nav-pill .tcs-pill-link {
@@ -331,10 +379,11 @@
   transition: transform 0.25s ease;
 }
 
-/* Active State */
+/* Active Pill State */
 .tcs-nav-pill.active {
   background: #4e82f7;
   color: #fff;
+  border-color: #4e82f7;
 }
 
 .tcs-nav-pill.active .chevron-icon {
@@ -344,13 +393,31 @@
 
 .tcs-nav-pill:not(.active):hover {
   color: #000;
-  background: rgb(0 0 0 / 4%);
+  background: #e9e9e9;
 }
 
-/* Submenu Panel (Absolute Overlay Fix) */
+/* L3 Suggestions Wrapper & Back Button Beside Pills */
+.tcs-l3-suggestions-wrapper {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  width: 100%;
+}
+
+.tcs-l3-pills-group {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap;
+}
+
+/* Submenu Panel (Overlay Grid) */
 .tcs-footer-submenu-panel {
-  position: absolute; /* ABSOLUTE: Completely isolates panel from document flow */
-  bottom: 100%; /* Docks panel directly above the pills */
+  position: absolute;
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -415,6 +482,15 @@
   box-shadow: 0 2px 8px rgb(0 0 0 / 3%);
 }
 
+.tcs-footer-cta-btn:hover,
+.tcs-footer-cta-btn:focus {
+  background: #1e2222;
+  color: #fff !important;
+  border-color: #1e2222;
+  text-decoration: none !important;
+}
+
+/* Shared/Lower Specificity Span Rules First */
 .tcs-footer-cta-btn span {
   color: inherit !important;
   background: transparent !important;
@@ -423,12 +499,8 @@
   padding: 0 !important;
 }
 
-.tcs-footer-cta-btn:hover,
-.tcs-footer-cta-btn:focus {
-  background: #1e2222;
-  color: #fff !important;
-  border-color: #1e2222;
-  text-decoration: none !important;
+.tcs-submenu-item span {
+  color: inherit !important;
 }
 
 .tcs-submenu-item,
@@ -446,10 +518,6 @@
   text-decoration: none !important;
   background: transparent !important;
   transition: color 0.2s ease, border-color 0.2s ease;
-}
-
-.tcs-submenu-item span {
-  color: inherit !important;
 }
 
 .tcs-submenu-item:hover,
@@ -518,21 +586,6 @@
   text-decoration: none !important;
 }
 
-.canvas-search-slot {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-top: 24px;
-}
-
-.canvas-search-slot .tcs-footer-floating-nav {
-  position: relative;
-  bottom: auto;
-  left: auto;
-  transform: none;
-}
-
 .hero-banner-sticky {
   display: flex !important;
   justify-content: center;
@@ -574,7 +627,7 @@
   }
 
   .tcs-footer-nav-pills-row {
-    justify-content: flex-start;
+    justify-content: center;
     overflow-x: auto;
     padding: 8px 0;
     scrollbar-width: none;
@@ -613,10 +666,6 @@
   .tcs-footer-heading {
     font-size: 30px;
     line-height: 125%;
-  }
-
-  .tcs-footer-hamburger-wrapper {
-    display: none !important;
   }
 
   .tcs-footer-search-row {

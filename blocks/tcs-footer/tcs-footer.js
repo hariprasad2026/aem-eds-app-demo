@@ -10,24 +10,74 @@ const getChevronSvg = () => `
 `;
 
 /**
- * Resolves content paths for AEM authoring/publishing environments
+ * SVG Left Arrow Icon Helper
+ */
+const getArrowLeftSvg = () => `
+  <svg class="arrow-left-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12"></line>
+    <polyline points="12 19 5 12 12 5"></polyline>
+  </svg>
+`;
+
+/**
+ * Resolves content paths cleanly to /[pagename] without .html extension
  */
 function formatHtmlPath(path) {
   if (!path || path === '/') return path || '#';
 
-  let resolvedPath = path;
+  let resolvedPath = path.startsWith('/') ? path : `/${path}`;
+  resolvedPath = resolvedPath.replace(/\.html$/, '');
 
-  if (!resolvedPath.startsWith('/content/')) {
-    resolvedPath = `/content/2026/39/briskdeer43959${
-      resolvedPath.startsWith('/') ? '' : '/'
-    }${resolvedPath}`;
+  if (resolvedPath.includes('/content/')) {
+    const parts = resolvedPath.split('/').filter(Boolean);
+    const lastPart = parts[parts.length - 1];
+    resolvedPath = `/${lastPart}`;
   }
 
-  return resolvedPath.endsWith('.html') ? resolvedPath : `${resolvedPath}.html`;
+  return resolvedPath;
 }
 
 /**
- * Parses query-index.json into a flexible multi-level tree structure.
+ * Helper to determine current page level (L1, L2, or L3) and path segments
+ */
+function getCurrentPageInfo() {
+  const path = window.location.pathname.replace(/\.html$/, '');
+  const segments = path.split('/').filter(Boolean);
+
+  let locale = '';
+  if (segments[0] && segments[0].length === 2) {
+    locale = segments.shift();
+  }
+
+  const contentIdx = segments.indexOf('content');
+  if (contentIdx !== -1) {
+    segments.splice(0, contentIdx + 4);
+  }
+
+  const depth = segments.length;
+  let level = 'L1';
+  if (depth === 2) level = 'L2';
+  if (depth >= 3) level = 'L3';
+
+  // Construct parent path for page redirection
+  const parentPath = segments.length > 1
+    ? formatHtmlPath(`/${locale ? `${locale}/` : ''}${segments.slice(0, -1).join('/')}`)
+    : '/';
+
+  return {
+    level,
+    depth,
+    segments,
+    locale,
+    parentPath,
+    l1Key: segments[0] || '',
+    l2Key: segments[1] || '',
+    l3Key: segments[2] || '',
+  };
+}
+
+/**
+ * Parses query-index.json into L1, L2, and L3 multi-level hierarchy
  */
 async function fetchHierarchicalNavData() {
   try {
@@ -68,16 +118,22 @@ async function fetchHierarchicalNavData() {
 
       if (segments.length === 0) return;
 
-      const lastSegment = segments[segments.length - 1].toLowerCase().replace(/\s+/g, '-');
+      const lastSegment = segments[segments.length - 1]
+        .toLowerCase()
+        .replace(/\s+/g, '-');
       if (excludedPages.includes(lastSegment)) return;
 
       const l1Key = segments[0];
       if (excludedPages.includes(l1Key.toLowerCase())) return;
 
       if (!navTree[l1Key]) {
+        const titleVal = item.title && segments.length === 1
+          ? item.title
+          : l1Key.replace(/-/g, ' ');
+
         navTree[l1Key] = {
           key: l1Key,
-          title: item.title && segments.length === 1 ? item.title : l1Key.replace(/-/g, ' '),
+          title: titleVal,
           path: formatHtmlPath(`/${locale ? `${locale}/` : ''}${l1Key}`),
           children: {},
         };
@@ -88,9 +144,13 @@ async function fetchHierarchicalNavData() {
         if (excludedPages.includes(l2Key.toLowerCase())) return;
 
         if (!navTree[l1Key].children[l2Key]) {
+          const l2TitleVal = item.title && segments.length === 2
+            ? item.title
+            : l2Key.replace(/-/g, ' ');
+
           navTree[l1Key].children[l2Key] = {
             key: l2Key,
-            title: item.title && segments.length === 2 ? item.title : l2Key.replace(/-/g, ' '),
+            title: l2TitleVal,
             path: formatHtmlPath(`/${locale ? `${locale}/` : ''}${l1Key}/${l2Key}`),
             children: [],
           };
@@ -103,7 +163,9 @@ async function fetchHierarchicalNavData() {
           navTree[l1Key].children[l2Key].children.push({
             key: l3Key,
             title: item.title || l3Key.replace(/-/g, ' '),
-            path: formatHtmlPath(`/${locale ? `${locale}/` : ''}${l1Key}/${l2Key}/${l3Key}`),
+            path: formatHtmlPath(
+              `/${locale ? `${locale}/` : ''}${l1Key}/${l2Key}/${l3Key}`,
+            ),
           });
         }
       }
@@ -126,7 +188,7 @@ async function fetchHierarchicalNavData() {
 export default function decorate(block) {
   const blockRows = [...block.children];
 
-  // 1. Heading Title (First row of block)
+  // Heading Title
   const mainTitleRow = blockRows.shift();
   const rawTitle = mainTitleRow?.textContent.trim();
   const titleText = rawTitle
@@ -142,13 +204,19 @@ export default function decorate(block) {
   footerContainer.append(heading);
 
   // Floating Control Bar Containers
-  const floatingNav = document.createElement('div');
+  const floatingNav = document.createElement('nav');
   floatingNav.className = 'tcs-footer-floating-nav';
+  floatingNav.setAttribute('aria-label', 'Footer Navigation');
+
+  const navAnchorNode = document.createElement('div');
+  navAnchorNode.className = 'tcs-footer-nav-anchor';
+  footerContainer.append(navAnchorNode);
 
   const searchRow = document.createElement('div');
   searchRow.className = 'tcs-footer-search-row';
 
   const navPillsRow = document.createElement('div');
+  navPillsRow.id = 'tcs-footer-nav-pills';
   navPillsRow.className = 'tcs-footer-nav-pills-row hidden';
 
   const subMenuPanel = document.createElement('div');
@@ -169,7 +237,6 @@ export default function decorate(block) {
   let isNavOpen = false;
   let navTreeData = null;
 
-  let currentViewLevel = 'L1';
   let searchQueryVariable = '';
 
   const getModelType = (row, index) => {
@@ -178,13 +245,28 @@ export default function decorate(block) {
 
     const text = row.textContent.trim().toLowerCase();
 
-    if (text.includes('both') || text.includes('text-only') || text.includes('voice-only') || text.includes('ask canvas') || text.includes('ask us')) {
+    if (
+      text.includes('both')
+      || text.includes('text-only')
+      || text.includes('voice-only')
+      || text.includes('ask canvas')
+      || text.includes('ask us')
+    ) {
       return 'tcs-footer-search';
     }
-    if (text.includes('©') || text.includes('tata consultancy') || text.includes('all rights reserved')) {
+    if (
+      text.includes('©')
+      || text.includes('tata consultancy')
+      || text.includes('all rights reserved')
+    ) {
       return 'tcs-footer-copyright';
     }
-    if (text.includes('privacy') || text.includes('terms') || text.includes('cookie') || text.includes('legal')) {
+    if (
+      text.includes('privacy')
+      || text.includes('terms')
+      || text.includes('cookie')
+      || text.includes('legal')
+    ) {
       return 'tcs-footer-legal-item';
     }
 
@@ -205,12 +287,17 @@ export default function decorate(block) {
     if (model === 'tcs-footer-hamburger' && !hamburgerWrapperNode) {
       const authoredImg = cells[0]?.querySelector('img');
       const authoredIconSrc = authoredImg ? authoredImg.src : cells[0]?.textContent.trim();
-      const ariaLabel = cells[1]?.textContent.trim() || cells[0]?.textContent.trim() || 'Open navigation menu';
+      const ariaLabel = cells[1]?.textContent.trim()
+        || cells[0]?.textContent.trim()
+        || 'Open navigation menu';
 
-      const hamburgerIconContent = authoredIconSrc && (authoredImg || authoredIconSrc.startsWith('/') || authoredIconSrc.startsWith('http'))
-        ? `<img src="${authoredIconSrc}" alt="${ariaLabel}" class="custom-hamburger-icon" />`
+      const isExternalOrPath = authoredIconSrc
+        && (authoredImg || authoredIconSrc.startsWith('/') || authoredIconSrc.startsWith('http'));
+
+      const hamburgerIconContent = authoredIconSrc && isExternalOrPath
+        ? `<img src="${authoredIconSrc}" alt="" class="custom-hamburger-icon" />`
         : `
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -219,12 +306,12 @@ export default function decorate(block) {
 
       row.className = 'tcs-footer-hamburger-wrapper';
       row.innerHTML = `
-        <button class="tcs-footer-hamburger" aria-label="${ariaLabel}" aria-expanded="false">
+        <button class="tcs-footer-hamburger" aria-label="${ariaLabel}" aria-expanded="false" aria-controls="tcs-footer-nav-pills">
           <span class="icon-hamburger">
             ${hamburgerIconContent}
           </span>
           <span class="icon-close hidden">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
@@ -243,11 +330,12 @@ export default function decorate(block) {
       const formEl = document.createElement('form');
       formEl.className = 'tcs-search-form';
       formEl.action = '#';
+      formEl.setAttribute('role', 'search');
 
       let contentHtml = '';
 
       if (variation !== 'voice-only') {
-        contentHtml += `<input type="text" class="tcs-search-input" placeholder="${placeholder}" aria-label="Ask Canvas Search">`;
+        contentHtml += `<input type="text" class="tcs-search-input" placeholder="${placeholder}" aria-label="${placeholder}">`;
       }
 
       contentHtml += '<div class="tcs-footer-search-actions">';
@@ -255,7 +343,7 @@ export default function decorate(block) {
       if (variation === 'both' || variation === 'voice-only') {
         contentHtml += `
           <button type="button" class="mic-btn" aria-label="Voice Search">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
               <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
               <line x1="12" y1="19" x2="12" y2="23"></line>
@@ -266,7 +354,7 @@ export default function decorate(block) {
 
       contentHtml += `
         <button type="submit" class="submit-btn" aria-label="Submit Search">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" aria-hidden="true">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
@@ -303,7 +391,11 @@ export default function decorate(block) {
           micBtn.addEventListener('click', (e) => {
             e.preventDefault();
             micBtn.classList.add('listening');
-            recognition.start();
+            try {
+              recognition.start();
+            } catch (err) {
+              micBtn.classList.remove('listening');
+            }
           });
 
           const stopListening = () => micBtn.classList.remove('listening');
@@ -317,6 +409,8 @@ export default function decorate(block) {
 
           recognition.onerror = stopListening;
           recognition.onend = stopListening;
+        } else {
+          micBtn.style.display = 'none';
         }
       }
     } else if (model === 'tcs-footer-cta') {
@@ -329,7 +423,7 @@ export default function decorate(block) {
       ctaBtn.className = 'tcs-footer-cta-btn';
       ctaBtn.href = link;
       ctaBtn.target = target;
-      ctaBtn.innerHTML = `<span>${label}</span><span class="arrow">→</span>`;
+      ctaBtn.innerHTML = `<span>${label}</span><span class="arrow" aria-hidden="true">→</span>`;
 
       if (cells[0]) moveInstrumentation(cells[0], ctaBtn);
       row.innerHTML = '';
@@ -358,7 +452,6 @@ export default function decorate(block) {
     }
   });
 
-  // Nest SubMenu Panel INSIDE floatingNav
   if (subMenuPanel) floatingNav.append(subMenuPanel);
   if (hamburgerWrapperNode) searchRow.append(hamburgerWrapperNode);
   if (searchBoxWrapperNode) searchRow.append(searchBoxWrapperNode);
@@ -367,10 +460,9 @@ export default function decorate(block) {
   floatingNav.append(navPillsRow);
 
   if (floatingNav.children.length > 0) {
-    footerContainer.append(floatingNav);
+    navAnchorNode.append(floatingNav);
   }
 
-  // Static Bottom Items
   if (ctaRow.children.length > 0) footerContainer.append(ctaRow);
   if (legalNav.children.length > 0) bottomRow.append(legalNav);
   if (bottomRow.children.length > 0) footerContainer.append(bottomRow);
@@ -378,6 +470,37 @@ export default function decorate(block) {
   block.textContent = '';
   block.append(footerContainer);
 
+  /**
+   * Updates button states
+   */
+  const updateButtonStateAndPosition = (level) => {
+    if (!hamburgerBtnNode || !hamburgerWrapperNode) return;
+
+    const hamburgerIcon = hamburgerBtnNode.querySelector('.icon-hamburger');
+    const closeIcon = hamburgerBtnNode.querySelector('.icon-close');
+
+    if (level === 'L1') {
+      hamburgerWrapperNode.classList.remove('hidden');
+      searchRow.prepend(hamburgerWrapperNode);
+      if (hamburgerIcon) hamburgerIcon.classList.add('hidden');
+      if (closeIcon) closeIcon.classList.remove('hidden');
+    } else if (level === 'L2') {
+      hamburgerWrapperNode.classList.remove('hidden');
+      navPillsRow.prepend(hamburgerWrapperNode);
+      if (hamburgerIcon) hamburgerIcon.classList.remove('hidden');
+      if (closeIcon) closeIcon.classList.add('hidden');
+    } else if (level === 'L3') {
+      hamburgerWrapperNode.classList.add('hidden');
+    }
+
+    if (searchBoxWrapperNode) {
+      searchBoxWrapperNode.classList.remove('hidden');
+    }
+  };
+
+  /**
+   * Submenu Panel Renderer (Displays L3 Options on L2 Hover/Selection)
+   */
   const renderSubmenuCard = (items) => {
     if (!items || items.length === 0) {
       subMenuPanel.classList.add('hidden');
@@ -391,36 +514,26 @@ export default function decorate(block) {
       (item) => `
           <a href="${item.path}" class="tcs-submenu-item">
             <span>${item.title}</span>
-            <span class="arrow">→</span>
+            <span class="arrow" aria-hidden="true">→</span>
           </a>
         `,
     )
     .join('')}
       </div>
     `;
+
     subMenuPanel.classList.remove('hidden');
+
+    subMenuPanel.querySelectorAll('.tcs-submenu-item').forEach((link) => {
+      link.addEventListener('click', () => {
+        subMenuPanel.classList.add('hidden');
+      });
+    });
   };
 
-  const updateButtonStateAndPosition = (level) => {
-    currentViewLevel = level;
-    if (!hamburgerBtnNode || !hamburgerWrapperNode) return;
-
-    const hamburgerIcon = hamburgerBtnNode.querySelector('.icon-hamburger');
-    const closeIcon = hamburgerBtnNode.querySelector('.icon-close');
-
-    if (level === 'L1') {
-      searchRow.prepend(hamburgerWrapperNode);
-      if (searchBoxWrapperNode) searchBoxWrapperNode.classList.remove('hidden');
-      if (hamburgerIcon) hamburgerIcon.classList.add('hidden');
-      if (closeIcon) closeIcon.classList.remove('hidden');
-    } else {
-      navPillsRow.prepend(hamburgerWrapperNode);
-      if (searchBoxWrapperNode) searchBoxWrapperNode.classList.add('hidden');
-      if (hamburgerIcon) hamburgerIcon.classList.remove('hidden');
-      if (closeIcon) closeIcon.classList.add('hidden');
-    }
-  };
-
+  /**
+   * Requirement 2: L2 Navigation View
+   */
   const renderL2SubNavigation = (l1Data) => {
     navPillsRow.innerHTML = '';
     subMenuPanel.classList.add('hidden');
@@ -434,19 +547,43 @@ export default function decorate(block) {
       l2Pill.className = 'tcs-nav-pill l2-pill';
       const hasL3 = l2.children && l2.children.length > 0;
 
+      const chevIconHtml = hasL3
+        ? `<button class="chevron-btn" aria-label="Expand subpages for ${l2.title}">${getChevronSvg()}</button>`
+        : '';
+
       l2Pill.innerHTML = `
         <a href="${l2.path}" class="tcs-pill-link">${l2.title}</a>
-        ${hasL3 ? `<button class="chevron-btn" aria-label="Expand subpages">${getChevronSvg()}</button>` : ''}
+        ${chevIconHtml}
       `;
 
-      l2Pill.addEventListener('mouseenter', () => {
-        l2Group.querySelectorAll('.tcs-nav-pill').forEach((p) => p.classList.remove('active'));
-        l2Pill.classList.add('active');
-
+      const toggleSubmenu = (e) => {
         if (hasL3) {
+          e?.preventDefault();
+          const isActive = l2Pill.classList.contains('active');
+          l2Group
+            .querySelectorAll('.tcs-nav-pill')
+            .forEach((p) => p.classList.remove('active'));
+
+          if (isActive) {
+            subMenuPanel.classList.add('hidden');
+          } else {
+            l2Pill.classList.add('active');
+            renderSubmenuCard(l2.children);
+          }
+        }
+      };
+
+      l2Pill.addEventListener('mouseenter', () => {
+        if (hasL3) {
+          l2Group.querySelectorAll('.tcs-nav-pill').forEach((p) => p.classList.remove('active'));
+          l2Pill.classList.add('active');
           renderSubmenuCard(l2.children);
-        } else {
-          subMenuPanel.classList.add('hidden');
+        }
+      });
+
+      l2Pill.addEventListener('click', (e) => {
+        if (hasL3 && !e.target.closest('a')) {
+          toggleSubmenu(e);
         }
       });
 
@@ -454,7 +591,7 @@ export default function decorate(block) {
       if (chevronBtn) {
         chevronBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          if (hasL3) renderSubmenuCard(l2.children);
+          toggleSubmenu(e);
         });
       }
 
@@ -465,6 +602,9 @@ export default function decorate(block) {
     navPillsRow.classList.remove('hidden');
   };
 
+  /**
+   * Requirement 1: L1 Navigation View
+   */
   const renderL1ParentNavigation = async () => {
     navPillsRow.innerHTML = '';
     subMenuPanel.classList.add('hidden');
@@ -477,28 +617,13 @@ export default function decorate(block) {
     navTreeData.forEach((l1) => {
       const l1Pill = document.createElement('div');
       l1Pill.className = 'tcs-nav-pill';
-      const hasL2 = l1.children && l1.children.length > 0;
 
-      l1Pill.innerHTML = `
-        <a href="${l1.path}" class="tcs-pill-link">${l1.title}</a>
-        ${hasL2 ? `<button class="chevron-btn" aria-label="Expand subpages">${getChevronSvg()}</button>` : ''}
-      `;
+      l1Pill.innerHTML = `<a href="${l1.path}" class="tcs-pill-link">${l1.title}</a>`;
 
-      l1Pill.addEventListener('mouseenter', () => {
-        navPillsRow.querySelectorAll('.tcs-nav-pill').forEach((p) => p.classList.remove('active'));
-        l1Pill.classList.add('active');
-        if (hasL2) {
-          renderSubmenuCard(l1.children);
-        } else {
-          subMenuPanel.classList.add('hidden');
-        }
-      });
-
-      const chevronBtn = l1Pill.querySelector('.chevron-btn');
-      if (chevronBtn) {
-        chevronBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (hasL2) renderL2SubNavigation(l1);
+      const linkEl = l1Pill.querySelector('.tcs-pill-link');
+      if (linkEl) {
+        linkEl.addEventListener('click', () => {
+          window.location.href = l1.path;
         });
       }
 
@@ -508,9 +633,109 @@ export default function decorate(block) {
     navPillsRow.classList.remove('hidden');
   };
 
+  /**
+   * Requirement 3: L3 Page Behavior
+   * - Places Back Arrow horizontally beside suggestion pills in the same row (fig-2)
+   */
+  const renderL3SuggestionsView = (suggestionsList = []) => {
+    navPillsRow.innerHTML = '';
+    subMenuPanel.classList.add('hidden');
+    updateButtonStateAndPosition('L3');
+
+    const l3Container = document.createElement('div');
+    l3Container.className = 'tcs-l3-suggestions-wrapper';
+    l3Container.style.display = 'flex';
+    l3Container.style.alignItems = 'center';
+    l3Container.style.justifyContent = 'center';
+    l3Container.style.gap = '12px';
+
+    const backBtn = document.createElement('button');
+    backBtn.className = 'tcs-nav-back-btn';
+    backBtn.setAttribute('aria-label', 'Return to parent page');
+    backBtn.innerHTML = getArrowLeftSvg();
+
+    backBtn.addEventListener('click', () => {
+      const pageInfo = getCurrentPageInfo();
+      if (pageInfo.parentPath) {
+        window.location.href = pageInfo.parentPath;
+      } else {
+        window.history.back();
+      }
+    });
+
+    l3Container.append(backBtn);
+
+    const pillsGroup = document.createElement('div');
+    pillsGroup.className = 'tcs-l3-pills-group';
+    pillsGroup.style.display = 'flex';
+    pillsGroup.style.alignItems = 'center';
+    pillsGroup.style.gap = '8px';
+
+    suggestionsList.forEach((suggestion) => {
+      const sugText = typeof suggestion === 'string' ? suggestion : (suggestion.title || suggestion.key || '');
+      if (!sugText) return;
+
+      const sugPill = document.createElement('button');
+      sugPill.className = 'tcs-nav-pill l3-suggestion-pill';
+      sugPill.type = 'button';
+      sugPill.textContent = sugText;
+
+      sugPill.addEventListener('click', () => {
+        const searchInput = searchBoxWrapperNode?.querySelector('.tcs-search-input');
+        if (searchInput) {
+          searchInput.value = sugText;
+          searchQueryVariable = sugText;
+          searchInput.focus();
+        }
+      });
+
+      pillsGroup.append(sugPill);
+    });
+
+    l3Container.append(pillsGroup);
+    navPillsRow.append(l3Container);
+    navPillsRow.classList.remove('hidden');
+  };
+
+  /**
+   * Auto-detect level and render corresponding navigation view based on URL path
+   */
+  const renderCurrentPageNavigation = async () => {
+    if (!navTreeData) {
+      navTreeData = await fetchHierarchicalNavData();
+    }
+
+    const { depth, l1Key, l2Key } = getCurrentPageInfo();
+
+    if (depth >= 3) {
+      const matchedL1 = navTreeData.find((l1) => l1.key === l1Key) || navTreeData[0];
+      let suggestions = [];
+
+      if (matchedL1) {
+        const matchedL2 = matchedL1.children.find((l2) => l2.key === l2Key)
+          || matchedL1.children[0];
+        if (matchedL2 && matchedL2.children && matchedL2.children.length > 0) {
+          suggestions = matchedL2.children;
+        } else if (matchedL1.children && matchedL1.children.length > 0) {
+          suggestions = matchedL1.children;
+        }
+      }
+
+      renderL3SuggestionsView(suggestions);
+    } else if (depth === 1 || depth === 2) {
+      const matchedL1 = navTreeData.find((l1) => l1.key === l1Key) || navTreeData[0];
+      if (matchedL1 && matchedL1.children && matchedL1.children.length > 0) {
+        renderL2SubNavigation(matchedL1);
+      } else {
+        await renderL1ParentNavigation();
+      }
+    } else {
+      await renderL1ParentNavigation();
+    }
+  };
+
   const closeAllNavigation = () => {
     isNavOpen = false;
-    currentViewLevel = 'L1';
 
     if (hamburgerWrapperNode) {
       searchRow.prepend(hamburgerWrapperNode);
@@ -529,27 +754,49 @@ export default function decorate(block) {
 
   if (hamburgerBtnNode) {
     hamburgerBtnNode.addEventListener('click', async () => {
-      if (currentViewLevel === 'L2' || currentViewLevel === 'L3') {
-        await renderL1ParentNavigation();
+      const { depth, parentPath } = getCurrentPageInfo();
+
+      if (depth >= 1 && isNavOpen) {
+        window.location.href = parentPath;
         return;
       }
 
       if (!isNavOpen) {
         isNavOpen = true;
         hamburgerBtnNode.setAttribute('aria-expanded', 'true');
-        await renderL1ParentNavigation();
+        await renderCurrentPageNavigation();
       } else {
         closeAllNavigation();
       }
     });
   }
 
-  floatingNav.addEventListener('mouseleave', () => {
-    subMenuPanel.classList.add('hidden');
-    navPillsRow.querySelectorAll('.tcs-nav-pill').forEach((p) => p.classList.remove('active'));
+  const initAutoNav = async () => {
+    const { depth } = getCurrentPageInfo();
+    if (depth >= 1) {
+      isNavOpen = true;
+      if (hamburgerBtnNode) hamburgerBtnNode.setAttribute('aria-expanded', 'true');
+      await renderCurrentPageNavigation();
+    }
+  };
+  initAutoNav();
+
+  floatingNav.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isNavOpen) {
+      closeAllNavigation();
+      hamburgerBtnNode?.focus();
+    }
   });
 
-  // Smooth Scroll & Instant Dock/Float State Monitor
+  document.addEventListener('click', (e) => {
+    if (!floatingNav.contains(e.target)) {
+      subMenuPanel.classList.add('hidden');
+      navPillsRow
+        .querySelectorAll('.tcs-nav-pill')
+        .forEach((p) => p.classList.remove('active'));
+    }
+  });
+
   let ticking = false;
 
   const handleScroll = () => {
@@ -559,9 +806,7 @@ export default function decorate(block) {
 
         const heroSlotEl = document.querySelector('.hero-banner-sticky');
         const canvasSlotEl = document.querySelector('.canvas-block-search-slot');
-        const footerEl = block;
 
-        // Precise boundary check: determines if slot container is actively visible in viewport
         const isSlotVisible = (el) => {
           if (!el) return false;
           const rect = el.getBoundingClientRect();
@@ -571,33 +816,29 @@ export default function decorate(block) {
         const isHeroDocked = isSlotVisible(heroSlotEl);
         const isCanvasDocked = !isHeroDocked && isSlotVisible(canvasSlotEl);
 
-        const footerRect = footerEl.getBoundingClientRect();
+        const footerRect = block.getBoundingClientRect();
         const isAtFooter = footerRect.top < windowHeight - 140;
 
         if (isHeroDocked && heroSlotEl) {
-          // 1. DOCK inside Hero Banner Slot
           if (floatingNav.parentElement !== heroSlotEl) {
             heroSlotEl.append(floatingNav);
           }
           floatingNav.classList.remove('is-fixed');
           floatingNav.classList.add('is-docked-slot');
         } else if (isCanvasDocked && canvasSlotEl) {
-          // 2. DOCK inside Canvas Block Search Slot
           if (floatingNav.parentElement !== canvasSlotEl) {
             canvasSlotEl.append(floatingNav);
           }
           floatingNav.classList.remove('is-fixed');
           floatingNav.classList.add('is-docked-slot');
         } else if (isAtFooter) {
-          // 3. UN-FIXED inside Footer Container
-          if (floatingNav.parentElement !== footerContainer) {
-            footerContainer.insertBefore(floatingNav, ctaRow);
+          if (floatingNav.parentElement !== navAnchorNode) {
+            navAnchorNode.append(floatingNav);
           }
           floatingNav.classList.remove('is-fixed', 'is-docked-slot');
         } else {
-          // 4. FLOATING FIXED state (Instant switch as soon as user scrolls past slot)
-          if (floatingNav.parentElement !== footerContainer) {
-            footerContainer.insertBefore(floatingNav, ctaRow);
+          if (floatingNav.parentElement !== navAnchorNode) {
+            navAnchorNode.append(floatingNav);
           }
           floatingNav.classList.add('is-fixed');
           floatingNav.classList.remove('is-docked-slot');

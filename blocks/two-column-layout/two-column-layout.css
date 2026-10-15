@@ -119,6 +119,13 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.two-column-layout-default .cta-link,
+.two-column-layout-centered .cta-link,
+.two-column-layout-default .cta-link:any-link,
+.two-column-layout-centered .cta-link:any-link {
+  padding-left: 0;
+}
+
 /* ========================================
    CTA - Centered Variant
    ======================================== */

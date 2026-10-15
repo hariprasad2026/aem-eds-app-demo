@@ -41,6 +41,7 @@
       "tcs-footer",
       "tcs-header",
       "teaser-v1",
+      "teaser-v3",
       "testimonial",
       "text-with-link",
       "title-with-column",
@@ -218,6 +219,12 @@
     "components": [
       "teaser-v1-cta",
       "teaser-v1-image"
+    ]
+  },
+  {
+    "id": "teaser-v3",
+    "components": [
+      "teaser-v3-cta"
     ]
   },
   {

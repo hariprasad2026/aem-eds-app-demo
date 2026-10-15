@@ -4891,6 +4891,327 @@
     ]
   },
   {
+    "id": "teaser-v3",
+    "fields": [
+      {
+        "component": "text",
+        "name": "eyebrow",
+        "label": "Eyebrow",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "titleType",
+        "label": "Title Type",
+        "valueType": "string",
+        "value": "h2",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "shortDescription",
+        "label": "Short Description",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "description": "Select the main image used by the selected Teaser layout.",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "description": "Describe the meaningful content of the image. Leave this empty only when the image is decorative.",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "number",
+        "name": "imageOpacity",
+        "label": "Image Opacity",
+        "description": "Enter a percentage from 0 to 100. Use 100 for full opacity and 50 for half opacity.",
+        "valueType": "number",
+        "value": 100,
+        "validation": {
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      {
+        "component": "number",
+        "name": "imageBorderRadius",
+        "label": "Image Border Radius",
+        "description": "Enter the image corner radius in pixels. For example: 0, 8, 16, 24 or 32.",
+        "valueType": "number",
+        "value": 16,
+        "validation": {
+          "minimum": 0,
+          "maximum": 9999
+        }
+      },
+      {
+        "component": "select",
+        "name": "imageMode",
+        "label": "Image Mode",
+        "description": "Display the image normally or apply a black-and-white treatment.",
+        "valueType": "string",
+        "value": "normal",
+        "options": [
+          {
+            "name": "Normal",
+            "value": "normal"
+          },
+          {
+            "name": "Black and White",
+            "value": "black-white"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "viewAllText",
+        "label": "View All Text",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "aem-content",
+        "name": "viewAllLink",
+        "label": "View All Link",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "style",
+        "label": "Layout Variant",
+        "description": "Select the predefined Teaser layout.",
+        "valueType": "string",
+        "value": "split-image-content",
+        "options": [
+          {
+            "name": "Split Image and Content",
+            "value": "split-image-content"
+          },
+          {
+            "name": "Split Feature",
+            "value": "split-feature"
+          },
+          {
+            "name": "Background Hero",
+            "value": "background-hero"
+          },
+          {
+            "name": "No Image, Right Content",
+            "value": "no-image-right-desc-links"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "name": "personalizationEnabled",
+        "label": "Personalization",
+        "description": "Enable personalized Teaser content.",
+        "valueType": "boolean",
+        "value": false
+      },
+      {
+        "component": "select",
+        "name": "backgroundColor",
+        "label": "Background Color",
+        "description": "Select the background treatment for supported layouts.",
+        "valueType": "string",
+        "value": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Grey",
+            "value": "grey"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          },
+          {
+            "name": "White",
+            "value": "white"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "imagePosition",
+        "label": "Image Position",
+        "description": "Place the image on the left or right in supported split layouts.",
+        "valueType": "string",
+        "value": "right",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "name": "showEyebrow",
+        "label": "Show Eyebrow",
+        "valueType": "boolean",
+        "value": true
+      },
+      {
+        "component": "boolean",
+        "name": "hideTitle",
+        "label": "Hide Title",
+        "valueType": "boolean",
+        "value": false
+      },
+      {
+        "component": "boolean",
+        "name": "showDescription",
+        "label": "Show Description",
+        "valueType": "boolean",
+        "value": true
+      },
+      {
+        "component": "boolean",
+        "name": "hideImage",
+        "label": "Hide Image",
+        "valueType": "boolean",
+        "value": false
+      },
+      {
+        "component": "boolean",
+        "name": "showDate",
+        "label": "Show Date",
+        "valueType": "boolean",
+        "value": false
+      },
+      {
+        "component": "select",
+        "name": "textAlignment",
+        "label": "Text Alignment",
+        "description": "Controls the alignment of the Teaser text content in supported layouts.",
+        "valueType": "string",
+        "value": "left",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          },
+          {
+            "name": "Justify",
+            "value": "justify"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "date",
+        "label": "Date",
+        "description": "Enter the date in YYYY-MM-DD format.",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "dateFormat",
+        "label": "Date Format",
+        "valueType": "string",
+        "value": "mmm-d-yyyy",
+        "options": [
+          {
+            "name": "DD-MM-YYYY",
+            "value": "dd-mm-yyyy"
+          },
+          {
+            "name": "MM-DD-YYYY",
+            "value": "mm-dd-yyyy"
+          },
+          {
+            "name": "MMM d, yyyy",
+            "value": "mmm-d-yyyy"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "name": "displayTags",
+        "label": "Display Tags",
+        "valueType": "boolean",
+        "value": false
+      },
+      {
+        "component": "text",
+        "name": "tags",
+        "label": "Tags",
+        "description": "Enter comma-separated tags.",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
     "id": "testimonial",
     "fields": [
       {

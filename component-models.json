@@ -1603,6 +1603,11 @@
     "id": "cta",
     "fields": [
       {
+        "component": "tab",
+        "name": "contentSection",
+        "label": "Content"
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "text_cta",
@@ -1615,6 +1620,11 @@
         "name": "ctaLink",
         "label": "CTA Link",
         "value": ""
+      },
+      {
+        "component": "tab",
+        "name": "linkIconSection",
+        "label": "Link & Icon"
       },
       {
         "component": "reference",
@@ -1700,6 +1710,11 @@
             "value": "48"
           }
         ]
+      },
+      {
+        "component": "tab",
+        "name": "buttonStylingSection",
+        "label": "Button Styling"
       },
       {
         "component": "select",
@@ -1906,6 +1921,11 @@
         ]
       },
       {
+        "component": "tab",
+        "name": "layoutIconSection",
+        "label": "Layout & Icon Styling"
+      },
+      {
         "component": "select",
         "valueType": "string",
         "name": "ctaWidth",
@@ -2009,6 +2029,11 @@
             "value": "space-between"
           }
         ]
+      },
+      {
+        "component": "tab",
+        "name": "typographySection",
+        "label": "Typography"
       },
       {
         "component": "select",

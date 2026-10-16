@@ -1,17 +1,14 @@
 # Canvas journey: validation page in Universal Editor
 
-Creates the validation page with every Canvas variation on the AEM author instance
-(`/content/aem-eds-xwalk`, Sites console path from the request:
-`/ui#/aem/sites.html/content/content/aem-eds-xwalk`). The same structure exists as local
-drafts for development: `/drafts/canvas-journey*` (run `aem up --html-folder drafts`).
-
-> Check the site root first: `paths.json` and `utils/site.js` map `/content/aem-eds-app-demo`,
-> while the request names `/content/aem-eds-xwalk`. Pages outside the mapped root won't resolve
-> their locale (header/footer fall back to the defaults).
+Creates the validation page with every Canvas variation on the AEM author instance, in the
+site root `/content/aem-eds-xwalk` (Sites console: `/ui#/aem/sites.html/content/aem-eds-xwalk`).
+The same structure exists as local drafts for development: `/drafts/canvas-journey*`
+(run `aem up --html-folder drafts`; the draft header/footer fragments load only locally).
 
 ## 1. Pages to create
 
-Under the English site (e.g. `…/en/`), create a folder `canvas-journey` with:
+Under the English site `/content/aem-eds-xwalk/us/en` (published at `/en/`, see `paths.json`),
+create a folder `canvas-journey` with:
 
 | Page | Purpose |
 | --- | --- |

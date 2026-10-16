@@ -1,24 +1,25 @@
-import { loadFragment } from '../fragment/fragment.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 import { removeButtonDecoration } from '../../decorators/button-decorator.js';
 import { fromCell } from '../../decorators/content-decorator.js';
 import { setLinkTarget } from '../../decorators/link-decorator.js';
 import { buildSocialLinks } from '../../decorators/social-links-decorator.js';
 import { getSocialLinks } from '../../utils/data.js';
-import { getInheritedMetadata } from '../../utils/inherited-metadata.js';
+import { getLayoutConfig, loadLayoutCanvas, loadLayoutFragment } from '../../utils/layout.js';
 import { readLinkItems } from '../../utils/links.js';
 import { getPlaceholders } from '../../utils/placeholders.js';
-import { resolvePagePath } from '../../utils/site.js';
 
 /*
  * Footer: two roles with one block name.
- * - The page footer (built by aem.js in <footer>): loads the footer page (references/footer by
- *   default, see below) as a fragment.
- * - The authored Footer block on that footer page (blocks/footer/_footer.json): the
- *   Conversation Canvas Page (a page with the conversation-canvas block, loaded as a fragment)
- *   above the bottom bar with the Copyright Text (rich text; {year} becomes the current year)
- *   and the Link List (Link Title, Link Path, Link Type: Default / Open in new window).
- * Figma "Footer - Desktop / Tablet / Mobile" (2496-91965, 2496-94560, 2496-94602).
+ * - The page footer (built by aem.js in <footer>): the shell. Loads the shared footer page of
+ *   the page's template (utils/layout.js: the page's own Footer property where allowed, else
+ *   the template's, a parent page's, the locale's references/footer or the default locale's)
+ *   as a fragment, applies the template's footer variation and adds the Social Links.
+ * - The authored Footer block on that footer page (blocks/footer/_footer.json): the content.
+ *   The Conversation Canvas Page (an independent conversation-canvas page, the final stop of the
+ *   Canvas journey; the template's Footer Canvas replaces or switches it off) above the bottom
+ *   bar with the Copyright Text (rich text; {year} becomes the current year) and the Link List
+ *   (Link Title, Link Path, Link Type: Default / Open in new window).
+ * Figma "Footer - Desktop / Tablet / Mobile" (2496-91965, 4347-44552, 4347-44593). README.md.
  */
 
 /** replaces {year} in the copyright text with the current year */
@@ -49,12 +50,26 @@ function buildLinkList(cell, label) {
   return nav;
 }
 
-/** the conversation canvas page of the Conversation Canvas Page property, as a fragment */
+// a canvas page is loaded by one footer bar at a time: a canvas page that contains a Footer
+// block (e.g. the footer page itself) doesn't load its canvas again
+let loadingCanvas = false;
+
+/**
+ * The footer canvas page as a fragment: the template's Footer Canvas, else the Conversation
+ * Canvas Page property; "none" in the template switches it off.
+ */
 async function buildCanvas(cell) {
-  const value = cell?.querySelector('a[href]')?.getAttribute('href') || cell?.textContent.trim();
-  if (!value) return null;
-  const fragment = await loadFragment(resolvePagePath(value, ''));
-  if (!fragment?.children.length) return null;
+  if (loadingCanvas) return null;
+  const authored = cell?.querySelector('a[href]')?.getAttribute('href') || cell?.textContent.trim();
+  loadingCanvas = true;
+  let fragment;
+  try {
+    const { footerCanvas } = await getLayoutConfig();
+    fragment = await loadLayoutCanvas(footerCanvas, authored || '');
+  } finally {
+    loadingCanvas = false;
+  }
+  if (!fragment) return null;
   const canvas = document.createElement('div');
   canvas.className = 'footer-canvas';
   moveInstrumentation(cell, canvas);
@@ -83,7 +98,8 @@ async function decorateFooterBar(block) {
   const links = buildLinkList(linksRow?.firstElementChild, t('footerLinks', 'Footer links'));
   if (links) bar.append(links);
 
-  block.replaceChildren(...[canvas, bar].filter(Boolean));
+  // an empty bar (no copyright, no links) isn't rendered
+  block.replaceChildren(...[canvas, bar.children.length ? bar : null].filter(Boolean));
 }
 
 /**
@@ -91,14 +107,20 @@ async function decorateFooterBar(block) {
  * @param {Element} block
  */
 async function decoratePageFooter(block) {
-  // the Footer page property of the page or, inherited, of its nearest parent page up to Home
-  // (or the metadata sheet's footer column), else the locale's references/footer
-  const footerPath = resolvePagePath(await getInheritedMetadata('footer'), 'references/footer');
-  const [fragment, socialLinks, t] = await Promise.all([
-    loadFragment(footerPath), getSocialLinks(), getPlaceholders(),
+  const [{
+    config, disabled, source, fragment,
+  }, socialLinks, t] = await Promise.all([
+    loadLayoutFragment('footer'), getSocialLinks(), getPlaceholders(),
   ]);
 
   block.textContent = '';
+  block.dataset.layoutSource = source;
+  // switched off by the template (Show Footer: no) or the page (Footer: none)
+  if (disabled) {
+    block.closest('footer')?.setAttribute('hidden', '');
+    return;
+  }
+  block.closest('footer')?.classList.add(`footer-${config.footerVariation}`);
   const footer = document.createElement('div');
   while (fragment?.firstElementChild) footer.append(fragment.firstElementChild);
 

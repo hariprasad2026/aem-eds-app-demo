@@ -1,8 +1,9 @@
 /*
- * Footer (Figma "Footer - Desktop / Tablet / Mobile": 229-37226, 4347-44552, 4347-44593; 1440 × 802,
- * 1024 × 956, 399 × 800). The page footer holds the sections of
- * the footer page (e.g. a conversation canvas, then the Footer bar) on a white background with
- * soft brand and warning glows at the bottom.
+ * Footer (Figma "Footer - Desktop / Tablet / Mobile": 2496-91965, 4347-44552, 4347-44593).
+ * The page footer holds the sections of the shared footer page (e.g. a conversation canvas,
+ * then the Footer bar) on a white background with soft brand and warning glows at the bottom.
+ * Variation "plain" (Page Templates sheet: footer-variation; Figma "Canvas Entry / Footer"
+ * 1734-35296): the same layout without the glows.
  */
 footer {
   /* component tokens (Figma: TB Padding, LR Padding, Large-Spacing, Body/Inter-16) */
@@ -36,7 +37,9 @@ footer {
 
   /* Figma "Button" in the footer canvas */
   --footer-button-background: var(--color-bg-default);
-  --footer-button-border: 0.125rem solid #494c4e;
+
+  /* the border colour is the canvas's outline (Figma: the same #494c4d/#494c4e as its search) */
+  --footer-button-border-width: var(--border-width-200);
   --footer-button-color: var(--color-text-default);
   --footer-button-weight: var(--font-weight-medium);
 
@@ -130,7 +133,9 @@ footer .footer-canvas .conversation-canvas .conversation-canvas-content {
 footer .footer-canvas .conversation-canvas .conversation-canvas-title {
   max-width: var(--footer-canvas-title-max-width);
   margin-inline: auto;
-  color: #1e2222;
+
+  /* Figma #1e2222; the nearest token (one shade apart) */
+  color: var(--grey-900);
   font-size: var(--footer-canvas-title-size);
   font-weight: var(--font-weight-medium);
   line-height: var(--footer-canvas-title-line-height);
@@ -172,7 +177,7 @@ footer .footer-canvas .conversation-canvas a.button.secondary {
 }
 
 footer .footer-canvas .conversation-canvas a.button.secondary:not(:hover, :focus-visible) {
-  border: var(--footer-button-border);
+  border: var(--footer-button-border-width) solid var(--conversation-canvas-outline);
   padding: var(--footer-button-padding);
   background-color: var(--footer-button-background);
   color: var(--footer-button-color);
@@ -247,7 +252,8 @@ footer .footer .footer-social img {
   height: 1.5rem;
 }
 
-/* tablet (Figma 1024): 120 / 20 / 40 padding, 96 / 115 title, 16 / 22 text, the menu button */
+/* tablet: 120 / 20 / 40 padding (80px sides from 900px), 96 / 115 title, 16 / 22 text, the menu
+   button */
 @media (width >= 600px) {
   footer {
     --footer-padding-block-start: var(--space-3000);
@@ -269,13 +275,22 @@ footer .footer .footer-social img {
   }
 }
 
+/* Figma tablet 1024 (4347-44552) and desktop: 80px sides (864px content at 1024) */
+@media (width >= 900px) {
+  footer {
+    --footer-padding-inline: var(--space-2000);
+  }
+}
+
 /* desktop (Figma 1440): 802px tall, 120px top, 80px sides, 40px bottom; the title on two lines */
 @media (width >= 1200px) {
   footer {
-    --footer-padding-block-start: var(--space-3000);
-    --footer-padding-inline: var(--space-2000);
-    --footer-padding-block-end: var(--space-1000);
     --footer-canvas-min-height: 50.125rem;
     --footer-canvas-title-max-width: 61.5rem;
   }
+}
+
+/* variation "plain": no glows */
+footer.footer-plain {
+  background-image: none;
 }

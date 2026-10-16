@@ -1,8 +1,8 @@
 /**
  * Site utils: the TCS Corporate site structure. Each locale site lives in AEM under
- * /content/aem-eds-xwalk/{country}/{language} (e.g. /content/aem-eds-xwalk/de/de-de) and is published at
- * a language-only path (e.g. /de-de, see paths.json). Every locale site holds its pages and its
- * own references, error pages, sheets and block library:
+ * /content/aem-eds-xwalk/{country}/{language} (e.g. /content/aem-eds-xwalk/de/de-de) and is
+ * published at a language-only path (e.g. /de-de, see paths.json). Every locale site holds its
+ * pages and its own references, error pages, sheets and block library:
  *
  *   /de-de/                       Home (the locale page itself) and the content pages
  *   /de-de/references/            Header (nav), Footer (footer) and other fragments
@@ -162,8 +162,9 @@ export function localePagePath(path, pathname = window.location.pathname) {
 
 /**
  * The path of a configured page (e.g. the nav or footer metadata), else of the locale's default
- * page. A configured value may be an AEM path (/content/aem-eds-xwalk/de/de-de/references/nav-jobs),
- * a published path (/de-de/references/nav-jobs) or a path relative to the locale root
+ * page. A configured value may be an AEM path
+ * (/content/aem-eds-xwalk/de/de-de/references/nav-jobs), a published path
+ * (/de-de/references/nav-jobs) or a path relative to the locale root
  * (references/nav-jobs); it's returned as the path to fetch here: the AEM path when editing,
  * the published path on the site.
  * @param {string} value the configured path, may be empty

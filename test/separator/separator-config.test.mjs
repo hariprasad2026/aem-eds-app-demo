@@ -110,7 +110,10 @@ describe('width and alignment', () => {
 
 describe('responsive', () => {
   const bps = ['desktop', 'tablet', 'mobile'];
-  [[1, 1, 1], [1, 0, 0], [0, 1, 0], [0, 0, 1], [1, 1, 0], [1, 0, 1], [0, 1, 1], [0, 0, 0]].forEach((shown) => {
+  const combinations = [
+    [1, 1, 1], [1, 0, 0], [0, 1, 0], [0, 0, 1], [1, 1, 0], [1, 0, 1], [0, 1, 1], [0, 0, 0],
+  ];
+  combinations.forEach((shown) => {
     it(`visibility desktop/tablet/mobile = ${shown.join('/')}`, () => {
       const raw = {};
       bps.forEach((bp, i) => { raw[`show${bp}`] = shown[i] ? 'true' : 'false'; });

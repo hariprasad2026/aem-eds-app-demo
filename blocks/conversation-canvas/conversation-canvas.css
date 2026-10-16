@@ -246,7 +246,7 @@
   position: absolute;
   bottom: calc(100% + var(--space-300));
   left: 0;
-  z-index: 101;
+  z-index: var(--z-index-canvas-popover);
   box-sizing: border-box;
   min-width: 15rem;
   max-width: min(22.5rem, calc(100vw - 2 * var(--space-600)));
@@ -296,22 +296,37 @@
   color: var(--color-text-secondary);
 }
 
-/* floating at the bottom of the viewport while the page is scrolled */
+/*
+ * Canvas journey (canvas-journey.js): the search row of the Canvas scrolled past floats at the
+ * bottom of the viewport (glass skin, Figma "Floating menu" in "Bottom Menu - Desktop") until
+ * the next Canvas or the footer Canvas docks in view. Mobile: a compact bar without the menu
+ * button (the site menu is in the header).
+ */
+.conversation-canvas.conversation-canvas-floating-owner {
+  z-index: var(--z-index-canvas-floating);
+}
+
 .conversation-canvas .conversation-canvas-search.conversation-canvas-floating {
   position: fixed;
-  bottom: var(--space-600);
+  bottom: calc(var(--space-400) + env(safe-area-inset-bottom, 0px));
   left: 50%;
-  z-index: 100;
-  width: min(42.875rem, calc(100vw - 2 * var(--space-600)));
+  z-index: var(--z-index-canvas-floating);
+  width: min(21.25rem, calc(100vw - 2 * var(--space-400)));
   transform: translateX(-50%);
-  animation: conversation-canvas-float-in 0.3s ease-out;
+  animation: conversation-canvas-float-in var(--motion-duration-medium) ease-out;
 }
 
 .conversation-canvas .conversation-canvas-search.conversation-canvas-floating .conversation-canvas-menu-toggle,
 .conversation-canvas .conversation-canvas-search.conversation-canvas-floating .conversation-canvas-search-form {
-  background-color: rgb(255 255 255 / 90%);
-  backdrop-filter: blur(var(--blur-100));
+  border-color: var(--color-border-default);
+  background-color: var(--color-bg-opacity);
+  backdrop-filter: blur(var(--blur-glass));
   box-shadow: var(--shadow-300);
+}
+
+/* compact on mobile: the header holds the site menu */
+.conversation-canvas .conversation-canvas-search.conversation-canvas-floating .conversation-canvas-menu-toggle {
+  display: none;
 }
 
 @keyframes conversation-canvas-float-in {
@@ -323,6 +338,17 @@
   to {
     opacity: 1;
     transform: translate(-50%, 0);
+  }
+}
+
+@media (width >= 600px) {
+  .conversation-canvas .conversation-canvas-search.conversation-canvas-floating {
+    bottom: calc(var(--space-600) + env(safe-area-inset-bottom, 0px));
+    width: min(42.875rem, calc(100vw - 2 * var(--space-600)));
+  }
+
+  .conversation-canvas .conversation-canvas-search.conversation-canvas-floating .conversation-canvas-menu-toggle {
+    display: grid;
   }
 }
 
@@ -479,7 +505,7 @@ main > .section:has(> .conversation-canvas-wrapper:only-child > .conversation-ca
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 100;
+  z-index: var(--z-index-canvas-floating);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -489,14 +515,14 @@ main > .section:has(> .conversation-canvas-wrapper:only-child > .conversation-ca
   pointer-events: none;
   transform: translateY(var(--space-600));
   visibility: hidden;
-  transition: opacity 0.3s, transform 0.3s, visibility 0s 0.3s;
+  transition: opacity var(--motion-duration-medium), transform var(--motion-duration-medium), visibility 0s var(--motion-duration-medium);
 }
 
 .conversation-canvas .conversation-canvas-dock.conversation-canvas-floating {
   opacity: 1;
   transform: none;
   visibility: visible;
-  transition: opacity 0.3s, transform 0.3s;
+  transition: opacity var(--motion-duration-medium), transform var(--motion-duration-medium);
 }
 
 /* the fade is decorative: only the controls take clicks */

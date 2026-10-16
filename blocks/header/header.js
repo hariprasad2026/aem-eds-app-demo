@@ -1,15 +1,16 @@
-import { loadFragment } from '../fragment/fragment.js';
 import { removeButtonDecoration } from '../../decorators/button-decorator.js';
 import { createIdFactory } from '../../utils/ids.js';
+import { loadLayoutCanvas, loadLayoutFragment } from '../../utils/layout.js';
 import { fillPlaceholder, getPlaceholders } from '../../utils/placeholders.js';
-import { getInheritedMetadata } from '../../utils/inherited-metadata.js';
-import { resolvePagePath } from '../../utils/site.js';
+import { getLocale } from '../../utils/site.js';
 
 /*
- * Header: the Navigation page (the page's Navigation property, inherited from its parent pages,
- * else the locale's references/nav) as brand, sections and tools. Mobile: a menu button opens the
- * sections; desktop: each section with a sub-list opens it as a dropdown. The controls are
- * buttons with aria-expanded / aria-controls; the open state is data-expanded for the CSS.
+ * Header: the shared Navigation page as brand, sections and tools. Which Navigation page, the
+ * header variation and the Header Canvas come from the page's template (utils/layout.js): the
+ * page's own Navigation property where allowed, else the template's, a parent page's, the
+ * locale's references/nav or the default locale's. Mobile: a menu button opens the sections;
+ * desktop: each section with a sub-list opens it as a dropdown. The controls are buttons with
+ * aria-expanded / aria-controls; the open state is data-expanded for the CSS. See README.md.
  */
 
 // UI text from the placeholders sheet; English fallbacks until it's loaded in decorate()
@@ -131,21 +132,58 @@ function buildHamburger(nav, navSections) {
   return hamburger;
 }
 
+/** minimal header when no Navigation page loads: a link to the locale's Home page */
+function buildFallbackNav() {
+  const nav = document.createElement('nav');
+  nav.className = 'nav-fallback';
+  nav.setAttribute('aria-label', t('mainNavigation', 'Main navigation'));
+  const home = document.createElement('a');
+  home.href = `${getLocale().root}/`;
+  home.textContent = t('home', 'Home');
+  nav.append(home);
+  const navWrapper = document.createElement('div');
+  navWrapper.className = 'nav-wrapper';
+  navWrapper.append(nav);
+  return navWrapper;
+}
+
+/** the template's Header Canvas page (e.g. a Primary canvas: the floating site navigation) */
+async function buildHeaderCanvas(config) {
+  const fragment = await loadLayoutCanvas(config.headerCanvas);
+  if (!fragment) return null;
+  const host = document.createElement('div');
+  host.className = 'header-canvas';
+  host.append(...fragment.children);
+  return host;
+}
+
 /**
  * loads and decorates the header, mainly the nav
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
   t = await getPlaceholders();
-  // load nav as fragment: the Navigation page property of the page or, inherited, of its nearest
-  // parent page up to Home (or the metadata sheet's nav column), else the locale's references/nav
-  const navPath = resolvePagePath(await getInheritedMetadata('nav'), 'references/nav');
-  const fragment = await loadFragment(navPath);
+  const {
+    config, disabled, source, fragment,
+  } = await loadLayoutFragment('nav');
 
   // decorate nav DOM
   block.textContent = '';
-  // no nav page published (e.g. a new locale): leave the header empty
-  if (!fragment) return;
+  block.dataset.layoutSource = source;
+  // switched off by the template (Show Header: no) or the page (Navigation: none)
+  if (disabled) {
+    block.closest('header')?.setAttribute('hidden', '');
+    return;
+  }
+  block.classList.add(`header-${config.headerVariation}`);
+  const canvas = buildHeaderCanvas(config);
+  // no Navigation page published (e.g. a new locale): a minimal header with the Home link
+  if (!fragment) {
+    block.append(buildFallbackNav());
+    const host = await canvas;
+    if (host) block.append(host);
+    return;
+  }
   const nav = document.createElement('nav');
   nav.id = 'nav';
   nav.setAttribute('aria-label', t('mainNavigation', 'Main navigation'));
@@ -182,4 +220,8 @@ export default async function decorate(block) {
   navWrapper.className = 'nav-wrapper';
   navWrapper.append(nav);
   block.append(navWrapper);
+
+  // the Header Canvas (independent Canvas block, the start of the Canvas journey) after the nav
+  const host = await canvas;
+  if (host) block.append(host);
 }

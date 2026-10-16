@@ -19,6 +19,7 @@ import { buildImage } from '../decorators/responsive-image-decorator.js';
 import { decorateButton } from '../decorators/button-decorator.js';
 import { decorateButtons } from '../decorators/content-buttons-decorator.js';
 import { decorateHead } from '../decorators/seo-decorator.js';
+import { getPageType } from '../utils/metadata.js';
 import {
   DEFAULT_LOCALE, getLocale, localePagePath, resolvePagePath,
 } from '../utils/site.js';
@@ -351,7 +352,7 @@ async function addErrorBackButton(main) {
 const TEMPLATES = ['home', 'article', 'blog', 'press-release'];
 
 /** the Page Type (page properties or the metadata sheet), else the Template metadata */
-const pageTypeOf = () => toClassName(getMetadata('page-type') || getMetadata('template'));
+const pageTypeOf = getPageType;
 
 /**
  * Adds the Page Type as a body class, like Template and Theme.

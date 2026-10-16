@@ -13,19 +13,35 @@ import {
   loadSections,
 } from '../../scripts/aem.js';
 
+const pagePath = (path) => path.replace(/(\.plain)?\.html$/, '').replace(/(.)\/$/, '$1');
+
+// fragment markup per path, fetched once per page view (e.g. a canvas page used by the header
+// and the footer); each caller still gets its own decorated copy
+const markup = new Map();
+
+function fetchMarkup(path) {
+  if (!markup.has(path)) {
+    markup.set(path, fetch(`${path}.plain.html`)
+      .then((resp) => (resp.ok ? resp.text() : null))
+      .catch(() => null));
+  }
+  return markup.get(path);
+}
+
 /**
- * Loads a fragment.
+ * Loads a fragment. The page itself is never loaded as its own fragment (no endless nesting).
  * @param {string} path The path to the fragment
- * @returns {HTMLElement} The root element of the fragment
+ * @returns {Promise<HTMLElement | null>} The root element of the fragment
  */
 export async function loadFragment(path) {
   if (path && path.startsWith('/') && !path.startsWith('//')) {
     // eslint-disable-next-line no-param-reassign
     path = path.replace(/(\.plain)?\.html/, '');
-    const resp = await fetch(`${path}.plain.html`);
-    if (resp.ok) {
+    if (pagePath(path) === pagePath(window.location.pathname)) return null;
+    const html = await fetchMarkup(path);
+    if (html !== null) {
       const main = document.createElement('main');
-      main.innerHTML = await resp.text();
+      main.innerHTML = html;
 
       // reset base path for media to fragment base
       const resetAttributeBase = (tag, attr) => {

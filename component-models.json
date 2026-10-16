@@ -26,7 +26,7 @@
         "valueType": "string",
         "name": "page-type",
         "label": "Page Type",
-        "description": "The Site Global Template of the page (layout and template code). Overrides the page-type column of the metadata sheet.",
+        "description": "The Site Global Template of the page (layout and template code). It also selects the template's default Navigation, Footer, header and footer variations and Canvas pages (the locale's Page Templates sheet, data/page-templates). Overrides the page-type column of the metadata sheet.",
         "value": "",
         "options": [
           {
@@ -56,14 +56,14 @@
         "valueType": "string",
         "name": "nav",
         "label": "Navigation",
-        "description": "The header (nav) page of this page and, unless they set their own, its child pages. Empty: the nearest parent page's Navigation (or the metadata sheet's nav column), else the locale's references/nav."
+        "description": "Leave empty to use the shared header of the page's template (Page Templates sheet), else the nearest parent page's Navigation, else the locale's references/nav. Set only to override it for this page and, unless they set their own, its child pages (if the template allows page overrides). 'none' hides the header."
       },
       {
         "component": "aem-content",
         "valueType": "string",
         "name": "footer",
         "label": "Footer",
-        "description": "The footer page of this page and, unless they set their own, its child pages. Empty: the nearest parent page's Footer (or the metadata sheet's footer column), else the locale's references/footer."
+        "description": "Leave empty to use the shared footer of the page's template (Page Templates sheet), else the nearest parent page's Footer, else the locale's references/footer. Set only to override it for this page and, unless they set their own, its child pages (if the template allows page overrides). 'none' hides the footer."
       },
       {
         "component": "aem-content",

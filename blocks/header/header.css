@@ -284,3 +284,52 @@ header nav .nav-sections ul > li > ul > li {
 header nav .nav-tools {
   grid-area: tools;
 }
+
+/*
+ * Header variation "overlay" (Page Templates sheet: header-variation), Figma desktop logo bar
+ * over dark heroes (e.g. "L1 What we do"): from 900px the header is transparent over the top
+ * of the page with light text. Below 900px the menu bar keeps its background (it stays fixed
+ * while the page scrolls under it).
+ */
+@media (width >= 900px) {
+  header:has(.header.header-overlay) {
+    position: relative;
+    z-index: 2;
+    height: 0;
+  }
+
+  header .header.header-overlay .nav-wrapper {
+    background-color: transparent;
+    color: var(--color-text-on-neutral);
+  }
+
+  header .header.header-overlay .nav-brand img {
+    filter: brightness(0) invert(1);
+  }
+}
+
+/* minimal header when no Navigation page is published: the Home link */
+header .nav-fallback {
+  display: flex;
+  align-items: center;
+}
+
+header .nav-fallback a:any-link {
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+header .nav-fallback a:hover,
+header .nav-fallback a:focus-visible {
+  text-decoration: underline;
+}
+
+/*
+ * Header Canvas (Page Templates sheet: header-canvas): an independent Conversation Canvas page,
+ * normally a Primary (sticky) canvas, which floats at the bottom of the viewport and takes no
+ * space in the header. Its sections have no own spacing here.
+ */
+header .header-canvas .section {
+  margin: 0;
+  padding: 0;
+}

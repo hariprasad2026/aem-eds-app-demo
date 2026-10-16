@@ -12,7 +12,7 @@
  *
  * The SEO and social columns are applied to the document head by decorators/seo-decorator.js.
  */
-import { getMetadata } from '../scripts/aem.js';
+import { getMetadata, toClassName } from '../scripts/aem.js';
 import { getLocale } from './site.js';
 
 /** the first non-empty metadata value of the names */
@@ -24,6 +24,16 @@ const AUTHORED = {
   title: getMetadata('og:title') || document.title,
   description: getMetadata('description'),
 };
+
+/**
+ * The Page Type of the page (page properties or the metadata sheet's page-type), else its
+ * Template metadata: it selects the template code (templates/{name}) and the template row of
+ * the Page Templates sheet (utils/layout.js).
+ * @returns {string} e.g. home, article; '' if none
+ */
+export function getPageType() {
+  return toClassName(getMetadata('page-type') || getMetadata('template'));
+}
 
 /** true for yes / true / 1 / on */
 const isYes = (value) => ['yes', 'true', '1', 'on', 'y'].includes(value.trim().toLowerCase());

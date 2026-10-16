@@ -24,6 +24,7 @@ const SHEETS = [
   'data/partners',
   'data/social-links',
   'data/media-contacts',
+  'data/page-templates',
 ];
 
 const root = new URL('../../', import.meta.url);

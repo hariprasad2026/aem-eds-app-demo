@@ -6,8 +6,9 @@
  * (footer) and 404 Page (error-page) page properties. On a 404 page, the missing page has no
  * properties, so the lookup starts at its nearest existing parent.
  *
- * Parent pages are loaded in parallel, once per page and URL, and their values are cached for
- * the browser session (a changed parent property shows in a new session).
+ * Parent pages are loaded in parallel, once per page and URL, and their values are cached in
+ * the browser session for up to CACHE_TTL (a changed parent property shows after that, or in a
+ * new session).
  */
 import { getMetadata } from '../scripts/aem.js';
 import { getParentPages } from './site.js';
@@ -15,7 +16,8 @@ import { getParentPages } from './site.js';
 /** the metadata names that are inherited: Navigation, Footer and 404 Page */
 export const INHERITED_METADATA = ['nav', 'footer', 'error-page'];
 
-const CACHE_KEY = 'tcs-inherited-metadata';
+const CACHE_KEY = 'tcs-inherited-metadata-v2';
+const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 const pages = new Map();
 
 function readCache() {
@@ -26,9 +28,16 @@ function readCache() {
   }
 }
 
+/** the cached values of a page, unless they are older than CACHE_TTL */
+function cachedValues(url) {
+  const entry = readCache()[url];
+  return entry && Date.now() - entry.time < CACHE_TTL ? entry.values : null;
+}
+
 function writeCache(url, values) {
   try {
-    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ...readCache(), [url]: values }));
+    const entry = { values, time: Date.now() };
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ...readCache(), [url]: entry }));
   } catch {
     // storage unavailable or full: values are loaded again next time
   }
@@ -37,7 +46,7 @@ function writeCache(url, values) {
 /** the inherited metadata of a page as { nav, footer, error-page }; empty for a missing page */
 function loadPageMetadata(url) {
   if (!pages.has(url)) {
-    const cached = readCache()[url];
+    const cached = cachedValues(url);
     pages.set(url, cached ? Promise.resolve(cached) : fetch(url)
       .then((response) => (response.ok ? response.text() : ''))
       .then((html) => {
@@ -54,6 +63,17 @@ function loadPageMetadata(url) {
 }
 
 /**
+ * The value of an inherited metadata from the nearest parent page that sets it (not the
+ * page's own), else ''.
+ * @param {string} name e.g. nav or footer
+ * @returns {Promise<string>}
+ */
+export async function getParentMetadata(name) {
+  const parents = await Promise.all(getParentPages().map(loadPageMetadata));
+  return parents.find((values) => values[name])?.[name] || '';
+}
+
+/**
  * The value of an inherited metadata: the page's own (page properties, or a column of the bulk
  * metadata sheet), else the nearest parent page's up to the locale's Home page, else ''.
  * @param {string} name e.g. nav or footer
@@ -62,6 +82,5 @@ function loadPageMetadata(url) {
 export async function getInheritedMetadata(name) {
   const own = getMetadata(name);
   if (own) return own;
-  const parents = await Promise.all(getParentPages().map(loadPageMetadata));
-  return parents.find((values) => values[name])?.[name] || '';
+  return getParentMetadata(name);
 }

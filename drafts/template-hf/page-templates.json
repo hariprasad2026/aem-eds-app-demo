@@ -1,0 +1,80 @@
+{
+ "total": 6,
+ "offset": 0,
+ "limit": 6,
+ ":type": "sheet",
+ "data": [
+  {
+   "page-type": "default",
+   "nav": "/drafts/template-hf/references/nav-corp",
+   "footer": "/drafts/template-hf/references/footer-corp",
+   "header-variation": "",
+   "footer-variation": "",
+   "show-header": "",
+   "show-footer": "",
+   "header-canvas": "",
+   "footer-canvas": "",
+   "page-override": ""
+  },
+  {
+   "page-type": "home",
+   "nav": "",
+   "footer": "",
+   "header-variation": "overlay",
+   "footer-variation": "",
+   "show-header": "",
+   "show-footer": "",
+   "header-canvas": "/drafts/template-hf/references/canvas-dock",
+   "footer-canvas": "",
+   "page-override": ""
+  },
+  {
+   "page-type": "article",
+   "nav": "",
+   "footer": "/drafts/template-hf/references/footer-compact",
+   "header-variation": "",
+   "footer-variation": "plain",
+   "show-header": "",
+   "show-footer": "",
+   "header-canvas": "",
+   "footer-canvas": "none",
+   "page-override": ""
+  },
+  {
+   "page-type": "press-release",
+   "nav": "",
+   "footer": "/drafts/template-hf/references/footer-compact",
+   "header-variation": "",
+   "footer-variation": "",
+   "show-header": "",
+   "show-footer": "",
+   "header-canvas": "",
+   "footer-canvas": "",
+   "page-override": "not allowed"
+  },
+  {
+   "page-type": "campaign",
+   "nav": "/drafts/template-hf/references/nav-campaign",
+   "footer": "/drafts/template-hf/references/footer-campaign",
+   "header-variation": "",
+   "footer-variation": "plain",
+   "show-header": "",
+   "show-footer": "",
+   "header-canvas": "",
+   "footer-canvas": "",
+   "page-override": ""
+  },
+  {
+   "page-type": "broken",
+   "nav": "/drafts/template-hf/references/missing-nav",
+   "footer": "/drafts/template-hf/references/footer-loop",
+   "header-variation": "",
+   "footer-variation": "",
+   "show-header": "",
+   "show-footer": "no",
+   "header-canvas": "",
+   "footer-canvas": "",
+   "page-override": ""
+  }
+ ]
+}
